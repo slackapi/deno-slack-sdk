@@ -12,32 +12,6 @@ import {
 } from "./types.ts";
 import { SlackProject } from "../project.ts";
 
-// TODO: This name is awful, but I didn't want to keep thinking about it
-// This is intended to create a non-runnable SlackFunction definition, and would be what
-// you ultimately import when pulling in external functions, i.e. from other apps or slack built-ins
-// Need to come up with a bit more of a cohesive API for creating different entities in general
-export const DefineFunctionStatic = <
-  InputParameters extends ParameterSetDefinition,
-  OutputParameters extends ParameterSetDefinition,
-  RequiredInput extends RequiredParameters<InputParameters>,
-  RequiredOutput extends RequiredParameters<OutputParameters>,
->(
-  id: string,
-  definition: FunctionDefinitionArgs<
-    InputParameters,
-    OutputParameters,
-    RequiredInput,
-    RequiredOutput
-  >,
-): SlackFunction<
-  InputParameters,
-  OutputParameters,
-  RequiredInput,
-  RequiredOutput
-> => {
-  return new SlackFunction(id, definition);
-};
-
 /**
  * Define a function and its input and output parameters for use in a Slack application.
  * @param {string} id Unique string identifier for the function; must be unique in your application (cannot be reused by other functions)

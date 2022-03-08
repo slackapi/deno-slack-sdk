@@ -4,7 +4,7 @@ import SlackSchema from "./slack/mod.ts";
 const Schema = {
   // Contains primitive types
   types: SchemaTypes,
-  // Contains slack-specific schema types/functions
+  // Contains slack-specific schema types
   slack: SlackSchema,
 } as const;
 
