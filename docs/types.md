@@ -46,7 +46,7 @@ Project({
 ```
 
 ### Referencing Types
-To use a type as a [workflow][workflows] or [function][functions] parameter, set the parameter's `type` property to the Type it should reference.
+To use a type as a [function][functions] parameter, set the parameter's `type` property to the Type it should reference.
 
 ```js
 input_parameters: {
@@ -60,6 +60,5 @@ input_parameters: {
 ```
 _In the provided example the title from the Custom Type is being overridden_
 
-[workflows]: ./workflows.md
 [functions]: ./functions.md
 [project]: ./project.md

@@ -4,13 +4,7 @@ import {
 } from "https://deno.land/std@0.99.0/testing/asserts.ts";
 import { SlackProjectType } from "./types.ts";
 import { SlackProject } from "./project.ts";
-import {
-  DefineFunction,
-  DefineTable,
-  DefineType,
-  DefineWorkflow,
-  Schema,
-} from "./mod.ts";
+import { DefineFunction, DefineTable, DefineType, Schema } from "./mod.ts";
 
 Deno.test("SlackProject.export() project definition to manifest property mappings", () => {
   const definition: SlackProjectType = {
@@ -128,77 +122,6 @@ Deno.test("SlackProject.export() project exports table columns correctly", () =>
   assertEquals(manifest.tables, { ["dinos"]: Dinos.export() });
 });
 
-Deno.test("SlackProject automatically registers functions used by workflows", () => {
-  const functionId = "test_function";
-  const Func = DefineFunction(functionId, {
-    title: "Function title",
-  }, async () => {
-    return await {
-      outputs: {},
-    };
-  });
-  const Workflow = DefineWorkflow("test_workflow", {
-    title: "Workflow title",
-  });
-  Workflow.addStep(Func, {});
-
-  const definition: SlackProjectType = {
-    name: "Name",
-    description: "Description",
-    icon: "icon.png",
-    longDescription: "LongDescription",
-    runtime: "deno",
-    botScopes: [],
-    workflows: [Workflow],
-  };
-  const project = new SlackProject(definition);
-  const manifest = project.export();
-  assertEquals(definition.functions, [Func]);
-  assertEquals(manifest.functions, { [functionId]: Func.export() });
-});
-
-Deno.test("SlackProject automatically registers types used by workflow input and output parameters", () => {
-  const inputTypeId = "test_input_type";
-  const outputTypeId = "test_output_type";
-
-  const CustomInputType = DefineType(inputTypeId, {
-    type: Schema.types.string,
-  });
-
-  const CustomOutputType = DefineType(outputTypeId, {
-    type: Schema.types.number,
-  });
-
-  const Workflow = DefineWorkflow("test_workflow", {
-    title: "Workflow title",
-    input_parameters: {
-      properties: { aType: { type: CustomInputType } },
-      required: [],
-    },
-    output_parameters: {
-      properties: { aType: { type: CustomOutputType } },
-      required: [],
-    },
-  });
-
-  const definition: SlackProjectType = {
-    name: "Name",
-    description: "Description",
-    icon: "icon.png",
-    longDescription: "LongDescription",
-    runtime: "deno",
-    botScopes: [],
-    workflows: [Workflow],
-  };
-  const project = new SlackProject(definition);
-  const manifest = project.export();
-  assertEquals(definition.types, [CustomInputType, CustomOutputType]);
-  assertEquals(manifest.types, {
-    [inputTypeId]: CustomInputType.definition,
-    [outputTypeId]: CustomOutputType.definition,
-  });
-});
-
 Deno.test("SlackProject automatically registers types used by function input and output parameters", () => {
   const inputTypeId = "test_input_type";
   const outputTypeId = "test_output_type";
@@ -300,7 +223,6 @@ Deno.test("SlackProject automatically registers types referenced by other types"
 
 Deno.test("Project registration functions don't allow duplicates", () => {
   const functionId = "test_function";
-  const workflowId = "test_workflow";
   const objectTypeId = "test_object_type";
   const stringTypeId = "test_string_type";
 
@@ -325,10 +247,6 @@ Deno.test("Project registration functions don't allow duplicates", () => {
     };
   });
 
-  const Workflow = DefineWorkflow(workflowId, {
-    title: "Workflow title",
-  });
-
   const definition: SlackProjectType = {
     name: "Name",
     description: "Description",
@@ -336,15 +254,12 @@ Deno.test("Project registration functions don't allow duplicates", () => {
     longDescription: "LongDescription",
     runtime: "deno",
     botScopes: [],
-    workflows: [Workflow],
     functions: [Func],
     types: [CustomObjectType],
   };
   const project = new SlackProject(definition);
   project.registerFunction(Func);
   project.registerFunction(Func);
-  project.registerWorkflow(Workflow);
-  project.registerWorkflow(Workflow);
   project.registerType(CustomObjectType);
   project.registerType(CustomObjectType);
   project.registerType(CustomStringType);
@@ -352,8 +267,6 @@ Deno.test("Project registration functions don't allow duplicates", () => {
 
   assertEquals(definition.functions, [Func]);
   assertEquals(manifest.functions, { [functionId]: Func.export() });
-  assertEquals(definition.workflows, [Workflow]);
-  assertEquals(manifest.workflows, { [workflowId]: Workflow.export() });
   assertEquals(definition.types, [CustomObjectType, CustomStringType]);
   assertEquals(manifest.types, {
     [objectTypeId]: CustomObjectType.definition,

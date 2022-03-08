@@ -6,7 +6,6 @@ import { handleViewSubmission } from "./handlers/handle-view_submission.ts";
 import {
   InvocationPayload,
   ISlackProject,
-  IWorkflowDefinition,
   ManifestSchema,
   ProjectFunction,
   SlackProjectType,
@@ -44,12 +43,6 @@ export class SlackProject implements ISlackProject {
   }
 
   private registerFeatures() {
-    // Loop through workflows to automatically register any referenced functions and types
-    this.definition.workflows?.forEach((workflow) => {
-      workflow.registerStepFunctions(this);
-      workflow.registerParameterTypes(this);
-    });
-
     // Loop through functions to automatically register any referenced types
     this.definition.functions?.forEach((func) => {
       func.registerParameterTypes(this);
@@ -68,14 +61,6 @@ export class SlackProject implements ISlackProject {
     else if (this.definition.functions.some((f) => func.id === f.id)) return;
     // Add function to project
     this.definition.functions.push(func);
-  }
-
-  registerWorkflow(workflow: IWorkflowDefinition) {
-    if (!this.definition?.workflows) this.definition.workflows = [];
-    // Check to make sure workflow doesn't already exist on project
-    if (this.definition.workflows.some((wf) => workflow.id === wf.id)) return;
-    // Add workflow to project
-    this.definition.workflows.push(workflow);
   }
 
   // Loop through a ParameterSetDefinition to register each individual type
@@ -232,13 +217,6 @@ export class SlackProject implements ISlackProject {
         acc[fn.id] = fn.export();
         return acc;
       }, {} as ManifestSchema["functions"]);
-    }
-
-    if (def.workflows) {
-      manifest.workflows = def.workflows?.reduce((acc = {}, workflow) => {
-        acc[workflow.id] = workflow.export();
-        return acc;
-      }, {} as ManifestSchema["workflows"]);
     }
 
     if (def.tables) {

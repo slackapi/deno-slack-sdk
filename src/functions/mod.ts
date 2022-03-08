@@ -1,7 +1,6 @@
 import { ManifestFunctionSchema } from "../types.ts";
 import {
   ParameterSetDefinition,
-  ParameterVariableType,
   RequiredParameters,
 } from "../parameters/mod.ts";
 import {
@@ -12,10 +11,6 @@ import {
   IRunnableSlackFunction,
 } from "./types.ts";
 import { SlackProject } from "../project.ts";
-
-// TODO: This is the same as WorkflowInputOutputDefinition, consider generalizing and using aliases
-type FunctionInputOutputDefinition<Parameters extends ParameterSetDefinition> =
-  { [name in keyof Parameters]: ParameterVariableType<Parameters[name]> };
 
 // TODO: This name is awful, but I didn't want to keep thinking about it
 // This is intended to create a non-runnable SlackFunction definition, and would be what
@@ -45,7 +40,7 @@ export const DefineFunctionStatic = <
 
 /**
  * Define a function and its input and output parameters for use in a Slack application.
- * @param {string} id Unique string identifier for the function; must be unique in your application (cannot be reused by other functions or workflows)
+ * @param {string} id Unique string identifier for the function; must be unique in your application (cannot be reused by other functions)
  * @param {FunctionDefinitionArgs<InputParameters, OutputParameters, RequiredInput, RequiredOutput>} definition Defines information about your function (title, description) as well as formalizes the input and output parameters of your function
  * @param {FunctionHandler<InputParameters, OutputParameters, RequiredInput, RequiredOutput>} handler The logic comprising your function.
  * @returns {RunnableSlackFunction}
