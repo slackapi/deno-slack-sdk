@@ -1,4 +1,3 @@
-import { SlackProject } from "./project.ts";
 import { IRunnableSlackFunction } from "./functions/types.ts";
 import {
   ParameterDefinition,
@@ -21,7 +20,6 @@ export type SlackProjectType = {
   runtime: string;
   botScopes: Array<string>;
   functions?: ProjectFunction[];
-  workflows?: IWorkflowDefinition[];
   // deno-lint-ignore no-explicit-any
   tables?: ISlackTable<any>[];
   outgoingDomains?: Array<string>;
@@ -56,17 +54,6 @@ export type InvocationPayload<Body> = {
 };
 
 // ----------------------------------------------------------------------------
-// Workflows
-// ----------------------------------------------------------------------------
-
-export interface IWorkflowDefinition {
-  id: string;
-  export: () => ManifestWorkflowSchema;
-  registerStepFunctions: (project: SlackProject) => void;
-  registerParameterTypes: (project: SlackProject) => void;
-}
-
-// ----------------------------------------------------------------------------
 // Tables
 // ----------------------------------------------------------------------------
 
@@ -99,21 +86,6 @@ export type ManifestFunctionSchema = {
   "output_parameters": ManifestFunctionParameters;
 };
 
-export type ManifestWorkflowStepSchema = {
-  id: string;
-  "function_id": string;
-  inputs: {
-    [name: string]: unknown;
-  };
-};
-
-export type ManifestWorkflowSchema = {
-  title?: string;
-  description?: string;
-  "input_parameters"?: ManifestFunctionParameters;
-  steps: ManifestWorkflowStepSchema[];
-};
-
 export type ManifestCustomTypeSchema = ParameterDefinition;
 
 export type ManifestMetadata = {
@@ -143,9 +115,6 @@ export type ManifestSchema = {
   runtime?: string;
   functions?: {
     [key: string]: ManifestFunctionSchema;
-  };
-  workflows?: {
-    [key: string]: ManifestWorkflowSchema;
   };
   tables?: {
     [key: string]: ManifestTableSchema;

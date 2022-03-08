@@ -197,19 +197,3 @@ export type FunctionDefinitionArgsWithOptional<
     properties: OutputParameters;
   };
 };
-
-export type WorkflowDefinitionArgs<
-  InputParameters extends ParameterSetDefinition,
-  OutputParameters extends ParameterSetDefinition,
-> = {
-  title: string;
-  description?: string;
-  "input_parameters"?: {
-    required: RequiredParameters<ParameterSetDefinition>;
-    properties: InputParameters;
-  };
-  "output_parameters"?: {
-    required: RequiredParameters<ParameterSetDefinition>;
-    properties: OutputParameters;
-  };
-};

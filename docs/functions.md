@@ -1,6 +1,6 @@
 ## Functions
 
-Functions are the core of your Slack app: they accept one or more input parameters, execute some logic and return one or more output parameters. Your application's [Workflow][workflows] combines one or more Functions together, binding the output of one Function to the input of another.
+Functions are the core of your Slack app: they accept one or more input parameters, execute some logic and return one or more output parameters. 
 
 ### Defining a Function
 
@@ -39,7 +39,7 @@ Let's go over each of the three arguments that must be provided to `DefineFuncti
 
 #### Function ID
 
-The first argument is the `id` of the function, a unique string identifier representing the function (`"dino"` in the above example). It must be unique in your application; no other functions or [workflows][workflows] may be named identically.
+The first argument is the `id` of the function, a unique string identifier representing the function (`"dino"` in the above example). It must be unique in your application; no other functions may be named identically.
 
 #### Function Definition
 
@@ -81,12 +81,11 @@ Once you have defined a function, don't forget to include it in your [`Project`]
     Project({
       name: "heuristic-tortoise",
       description:
-        "A demo showing how to use Slack workflows and functions",
+        "A demo showing how to use Slack functions",
       icon: "assets/icon.png",
       runtime: "deno1.x",
       botScopes: ["commands", "chat:write", "chat:write.public"],
       functions: [ReverseString], // <-- don't forget this!
     });
 
-[workflows]: ./workflows.md
 [project]: ./project.md
