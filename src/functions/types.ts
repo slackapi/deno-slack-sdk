@@ -9,6 +9,7 @@ import {
   TypedObjectParameterDefinition,
 } from "../parameters/types.ts";
 import SchemaTypes from "../schema/schema_types.ts";
+import SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackProject } from "../project.ts";
 
 export type FunctionInvocationBody = {
@@ -72,6 +73,12 @@ type FunctionInputRuntimeType<Param extends ParameterDefinition> =
       ? Param extends TypedObjectParameterDefinition
         ? TypedObjectFunctionInputRuntimeType<Param>
       : UnknownRuntimeType
+    : // TODO: Look at moving these slack runtime type declarations into the slack type definitions once we have DefineType and can use it there
+    Param["type"] extends
+      | typeof SlackSchemaTypes.user_id
+      | typeof SlackSchemaTypes.channel_id
+      | typeof SlackSchemaTypes.usergroup_id ? string
+    : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
     : UnknownRuntimeType;
 
 // deno-lint-ignore no-explicit-any
