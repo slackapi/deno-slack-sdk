@@ -30,10 +30,10 @@ jobs:
 
       # Uncomment this step to verify the use of 'deno fmt' on each commit.
       - name: Verify formatting
-        run: deno fmt --check
+        run: deno fmt --check src
 
       - name: Run linter
-        run: deno lint
+        run: deno lint src
 
       - name: Run tests
-        run: deno test -A --unstable
+        run: deno test src
