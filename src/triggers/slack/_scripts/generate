@@ -1,9 +1,0 @@
-#!/bin/bash
-#SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-cd "$(dirname "$0")"
-
-deno run --quiet --allow-read --allow-write ./generate_types.ts
-echo "Formatting Slack function files..."
-deno fmt ../events/*.ts ../../../schema/slack/events/mod.ts
-echo "Linting Slack function files..."
-deno lint ../events/*.ts ../../../schema/slack/events/mod.ts

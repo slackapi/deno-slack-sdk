@@ -1,6 +1,0 @@
-environments:
-- name: ""
-  hash: ""
-  image_hash: ""
-  variables: {}
-  triggers: {}

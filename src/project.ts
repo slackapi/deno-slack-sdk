@@ -11,7 +11,6 @@ import {
   ProjectFunction,
   SlackProjectType,
 } from "./types.ts";
-import { IExportableTrigger, TriggerDefinition } from "./triggers/types.ts";
 import { ParameterSetDefinition } from "./parameters/mod.ts";
 import { ICustomType } from "./types/types.ts";
 
@@ -31,14 +30,6 @@ export const Project = (definition: SlackProjectType) => {
     return;
   }
 
-  // Check for cli args
-  const outputTriggers = Deno.args.indexOf("--triggers") >= 0;
-  if (outputTriggers) {
-    const env = Deno.args[Deno.args.indexOf("--triggers") + 1];
-    console.log(JSON.stringify(project.exportTriggers(env)));
-    return;
-  }
-
   // Run the project
   project.run();
 };
@@ -53,13 +44,6 @@ export class SlackProject implements ISlackProject {
   }
 
   private registerFeatures() {
-    // Loop through triggers to automatically register any referenced workflows
-    this.definition.triggers?.forEach((trigger) => {
-      if ("workflow" in trigger) {
-        this.registerWorkflow(trigger.workflow);
-      }
-    });
-
     // Loop through workflows to automatically register any referenced functions and types
     this.definition.workflows?.forEach((workflow) => {
       workflow.registerStepFunctions(this);
@@ -274,40 +258,4 @@ export class SlackProject implements ISlackProject {
 
     return manifest;
   }
-
-  exportTriggers(teamId: string) {
-    const triggers = this.definition.triggers || [];
-    const exportedTriggers: TriggerDefinition[] = triggers.map((t) =>
-      exportTrigger(t, teamId)
-    )
-      .filter((t) => t !== null) as TriggerDefinition[];
-
-    const keys: string[] = [];
-    exportedTriggers.forEach((t) => {
-      if (keys.indexOf(t.key) >= 0) {
-        const msg = `Duplicate entry found for trigger where key=${t.key}`;
-        throw new Error(msg);
-      }
-      keys.push(t.key);
-    });
-    return exportedTriggers;
-  }
 }
-
-type ExportTriggerFn = {
-  (
-    trigger: TriggerDefinition | IExportableTrigger,
-    teamId: string,
-  ): TriggerDefinition | null;
-  (trigger: IExportableTrigger, teamId: string): TriggerDefinition | null;
-  (trigger: TriggerDefinition, teamId: string): TriggerDefinition | null;
-};
-// This can receive an object w/ an export() fn, or a raw object, and passes it through
-// typed to any to accomodate that
-// deno-lint-ignore no-explicit-any
-const exportTrigger: ExportTriggerFn = (trigger: any, teamId: string) => {
-  if (trigger.export) {
-    return trigger.export(teamId);
-  }
-  return trigger as TriggerDefinition;
-};

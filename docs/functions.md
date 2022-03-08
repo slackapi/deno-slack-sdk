@@ -39,7 +39,7 @@ Let's go over each of the three arguments that must be provided to `DefineFuncti
 
 #### Function ID
 
-The first argument is the `id` of the function, a unique string identifier representing the function (`"dino"` in the above example). It must be unique in your application; no other functions, [workflows][workflows] or [triggers][triggers] may be named identically.
+The first argument is the `id` of the function, a unique string identifier representing the function (`"dino"` in the above example). It must be unique in your application; no other functions or [workflows][workflows] may be named identically.
 
 #### Function Definition
 
@@ -81,13 +81,12 @@ Once you have defined a function, don't forget to include it in your [`Project`]
     Project({
       name: "heuristic-tortoise",
       description:
-        "A demo showing how to use Slack workflows, functions, and triggers",
+        "A demo showing how to use Slack workflows and functions",
       icon: "assets/icon.png",
       runtime: "deno1.x",
       botScopes: ["commands", "chat:write", "chat:write.public"],
       functions: [ReverseString], // <-- don't forget this!
     });
 
-[triggers]: ./triggers.md
 [workflows]: ./workflows.md
 [project]: ./project.md
