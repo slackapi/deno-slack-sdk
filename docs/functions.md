@@ -66,12 +66,6 @@ The single argument to your function is an object composed of several properties
   1. `method`: a string which defines which API method you wish to invoke.
   2. `data`: a JSON object representing parameter data to be passed to the API method you wish to invoke; the client will handle serializing it appropriately.
 
-### Built-in Functions
-
-We also provide several built-in functions, encapsulating common interactions with the Slack API.
-
-For the full list of built-in function provided so far, check out [`src/schema/slack/functions/mod.ts`](../src/schema/slack/functions/mod.ts).
-
 ### Adding Functions to Projects
 
 Once you have defined a function, don't forget to include it in your [`Project`][project] definition!
