@@ -4,9 +4,7 @@ import {
   ParameterSetDefinition,
 } from "./parameters/mod.ts";
 import { ISlackTable, ManifestTableSchema } from "./tables/types.ts";
-import { ViewSubmissionDefinition } from "./handlers/types.ts";
 import { ICustomType } from "./types/types.ts";
-import { IBlockAction } from "./block-actions/types.ts";
 
 // SlackProjectType is the top level type that imports all resources for the project
 // An app manifest is generated based on what this project has defined in it
@@ -23,8 +21,6 @@ export type SlackProjectType = {
   // deno-lint-ignore no-explicit-any
   tables?: ISlackTable<any>[];
   outgoingDomains?: Array<string>;
-  _actions?: IBlockAction[];
-  _viewSubmissions?: ViewSubmissionDefinition[];
   types?: ICustomType[];
 };
 

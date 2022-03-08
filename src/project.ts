@@ -1,8 +1,6 @@
 import { readAll } from "https://deno.land/std@0.99.0/io/util.ts";
 import { SlackAPIClient } from "./client.ts";
 import { handleFunction } from "./handlers/handle-function.ts";
-import { handleAction } from "./handlers/handle-block-action.ts";
-import { handleViewSubmission } from "./handlers/handle-view_submission.ts";
 import {
   InvocationPayload,
   ISlackProject,
@@ -114,24 +112,6 @@ export class SlackProject implements ISlackProject {
       case "function_executed": {
         // TODO: update this once we move calls to functions.completeSuccess out of runtime and into SDK
         body = await handleFunction({
-          payload,
-          client,
-          project: this.definition,
-          env,
-        });
-        break;
-      }
-      case "block_actions": {
-        body = await handleAction({
-          payload,
-          client,
-          actions: this.definition?._actions ?? [],
-          env,
-        });
-        break;
-      }
-      case "view_submission": {
-        body = await handleViewSubmission({
           payload,
           client,
           project: this.definition,
