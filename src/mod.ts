@@ -5,11 +5,5 @@ export { SlackAPIClient } from "./client.ts";
 export { DefineFunction } from "./functions/mod.ts";
 export { DefineWorkflow } from "./workflows.ts";
 export { DefineTable } from "./tables/mod.ts";
-export {
-  DefineTrigger,
-  TriggerEventTypes,
-  TriggerTypes,
-} from "./triggers/mod.ts";
-export { FrequencyType, Weekday } from "./triggers/slack/mod.ts";
 export { DefineType } from "./types/mod.ts";
 export { default as Schema } from "./schema/mod.ts";

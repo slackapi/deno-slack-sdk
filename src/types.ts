@@ -1,11 +1,6 @@
 import { SlackProject } from "./project.ts";
 import { IRunnableSlackFunction } from "./functions/types.ts";
 import {
-  IExportableTrigger,
-  TriggerDefinition,
-  UnknownTriggerDefinition,
-} from "./triggers/types.ts";
-import {
   ParameterDefinition,
   ParameterSetDefinition,
 } from "./parameters/mod.ts";
@@ -29,7 +24,6 @@ export type SlackProjectType = {
   workflows?: IWorkflowDefinition[];
   // deno-lint-ignore no-explicit-any
   tables?: ISlackTable<any>[];
-  triggers?: ProjectTrigger[];
   outgoingDomains?: Array<string>;
   _actions?: IBlockAction[];
   _viewSubmissions?: ViewSubmissionDefinition[];
@@ -40,11 +34,6 @@ export type SlackProjectType = {
 // This is to work around an issue TS has with resolving the generics across the hierarchy
 // deno-lint-ignore no-explicit-any
 export type ProjectFunction = IRunnableSlackFunction<any, any, any, any>;
-export type ProjectTrigger = (
-  | IExportableTrigger
-  | TriggerDefinition
-  | UnknownTriggerDefinition
-);
 
 export interface ISlackProject {
   runtime(): string;

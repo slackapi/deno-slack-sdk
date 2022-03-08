@@ -44,7 +44,7 @@ Let's go over the two arguments to `DefineWorkflow`.
 
 #### Workflow ID
 
-The first argument is the `id` of the workflow, a unique string identifier representing the workflow (`"reverse_echo"` in the above example). It must be unique in your application; no other [functions][functions], workflows or [triggers][triggers] may use the same identifier.
+The first argument is the `id` of the workflow, a unique string identifier representing the workflow (`"reverse_echo"` in the above example). It must be unique in your application; no other [functions][functions] or workflows may use the same identifier.
 
 #### Workflow Definition
 
@@ -61,7 +61,7 @@ Once you have defined a workflow, don't forget to include it in your [`Project`]
     Project({
       name: "heuristic-tortoise",
       description:
-        "A demo showing how to use Slack workflows, functions, and triggers",
+        "A demo showing how to use Slack workflows and functions",
       icon: "assets/icon.png",
       runtime: "deno1.x",
       botScopes: ["commands", "chat:write", "chat:write.public"],
@@ -86,7 +86,6 @@ The first parameter, the function reference, is the imported [function][function
 The second parameter is an object mapping any inputs to the [function][functions]. The keys of this object should match the names of the [function definition's input parameter names][function-defn]. The values can be any value you wish, though typically when sequencing functions together, you want to use the values of either the workflow's inputs, or the previous function's outputs. You can use the `inputs` property on your original [Workflow definition](#workflow-definition) to get a reference to the Workflow inputs (just like the first use of `addStep` in the above example). You can also use the `outputs` property of any functions wrapped with `addStep` (just like the second use of `addStep` in the above example).
 
 [functions]: ./functions.md
-[triggers]: ./triggers.md
 [project]: ./project.md
 [builtin-functions]: ./functions.md#built-in-functions
 [function-defn]: ./functions.md#function-definition

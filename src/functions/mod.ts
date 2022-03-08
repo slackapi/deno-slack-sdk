@@ -45,7 +45,7 @@ export const DefineFunctionStatic = <
 
 /**
  * Define a function and its input and output parameters for use in a Slack application.
- * @param {string} id Unique string identifier for the function; must be unique in your application (cannot be reused by other functions, workflows or triggers)
+ * @param {string} id Unique string identifier for the function; must be unique in your application (cannot be reused by other functions or workflows)
  * @param {FunctionDefinitionArgs<InputParameters, OutputParameters, RequiredInput, RequiredOutput>} definition Defines information about your function (title, description) as well as formalizes the input and output parameters of your function
  * @param {FunctionHandler<InputParameters, OutputParameters, RequiredInput, RequiredOutput>} handler The logic comprising your function.
  * @returns {RunnableSlackFunction}

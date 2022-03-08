@@ -7,12 +7,9 @@ import { SlackProject } from "./project.ts";
 import {
   DefineFunction,
   DefineTable,
-  DefineTrigger,
   DefineType,
   DefineWorkflow,
   Schema,
-  TriggerEventTypes,
-  TriggerTypes,
 } from "./mod.ts";
 
 Deno.test("SlackProject.export() project definition to manifest property mappings", () => {
@@ -129,33 +126,6 @@ Deno.test("SlackProject.export() project exports table columns correctly", () =>
   const manifest = project.export();
   console.log(manifest.tables, { ["dinos"]: Dinos.export() });
   assertEquals(manifest.tables, { ["dinos"]: Dinos.export() });
-});
-
-Deno.test("SlackProject automatically registers workflows used by triggers", () => {
-  const workflowId = "test_workflow";
-  const triggerId = "test_trigger";
-  const Workflow = DefineWorkflow(workflowId, {
-    title: "Workflow title",
-  });
-  const Trigger = DefineTrigger(triggerId, {
-    type: TriggerTypes.Event,
-    event_type: TriggerEventTypes.ReactionAdded,
-  }).runs(Workflow);
-
-  const definition: SlackProjectType = {
-    name: "Name",
-    description: "Description",
-    icon: "icon.png",
-    longDescription: "LongDescription",
-    runtime: "deno",
-    botScopes: [],
-    triggers: [Trigger],
-  };
-
-  const project = new SlackProject(definition);
-  const manifest = project.export();
-  console.log(manifest.workflows, { [workflowId]: Workflow.export() });
-  assertEquals(manifest.workflows, { [workflowId]: Workflow.export() });
 });
 
 Deno.test("SlackProject automatically registers functions used by workflows", () => {
