@@ -6,9 +6,10 @@ import {
 import { ISlackTable, ManifestTableSchema } from "./tables/types.ts";
 import { ICustomType } from "./types/types.ts";
 
-// SlackProjectType is the top level type that imports all resources for the project
-// An app manifest is generated based on what this project has defined in it
-export type SlackProjectType = {
+// SlackManifestType is the top level type that imports all resources for the project
+// An app manifest is generated based on what this has defined in it
+
+export type SlackManifestType = {
   name: string;
   backgroundColor?: string;
   description: string;
@@ -17,7 +18,7 @@ export type SlackProjectType = {
   longDescription?: string;
   runtime: string;
   botScopes: Array<string>;
-  functions?: ProjectFunction[];
+  functions?: ManifestFunction[];
   // deno-lint-ignore no-explicit-any
   tables?: ISlackTable<any>[];
   outgoingDomains?: Array<string>;
@@ -27,7 +28,7 @@ export type SlackProjectType = {
 // Both of these are typed liberally at this level but more specifically down further
 // This is to work around an issue TS has with resolving the generics across the hierarchy
 // deno-lint-ignore no-explicit-any
-export type ProjectFunction = ISlackFunction<any, any, any, any>;
+export type ManifestFunction = ISlackFunction<any, any, any, any>;
 
 export interface ISlackProject {
   runtime(): string;

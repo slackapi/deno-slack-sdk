@@ -1,5 +1,5 @@
+import { SlackManifest } from "../manifest.ts";
 import { TypedParameterDefinition } from "../parameters/types.ts";
-import { SlackProject } from "../project.ts";
 import { ICustomType } from "./types.ts";
 
 export const DefineType = <Def extends TypedParameterDefinition>(
@@ -35,17 +35,17 @@ export class CustomType<Def extends TypedParameterDefinition>
     return this.generateReferenceString();
   }
 
-  registerParameterTypes(project: SlackProject) {
+  registerParameterTypes(manifest: SlackManifest) {
     if ("items" in this.definition) {
       // Register the item if its a type
       if (this.definition.items.type instanceof Object) {
-        project.registerType(this.definition.items.type);
+        manifest.registerType(this.definition.items.type);
       }
     } else if ("properties" in this.definition) {
       // Loop through the properties and register any types
       Object.values(this.definition.properties)?.forEach((property) => {
         if ("type" in property && property.type instanceof Object) {
-          project.registerType(property.type);
+          manifest.registerType(property.type);
         }
       });
     }

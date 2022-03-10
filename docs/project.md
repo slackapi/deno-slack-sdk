@@ -20,7 +20,7 @@ Project({
   botScopes: ["commands", "chat:write", "chat:write.public"],
   functions: [ReverseString],
   tables: [],
-  outgoingDomains: [],
+  outgoing_domains: [],
 });
 ```
 
@@ -35,6 +35,7 @@ for the full list of attributes it supports, but the minimum required properties
 |`runtime`|string|Which runtime this application can execute in. Only acceptable value at this point in time is `deno1.x`.|
 |`botScopes`|Array<string>|A list of [scopes][scopes], or permissions, the bot requires to function.|
 
+<!-- TODO: Update `SlackProjectType` -->
 Furthermore, to set up how your application works, you would create
 [functions][functions], and register them in the Project using the `functions` property
 of [`SlackProjectType`][project-type] argument used when creating a new `Project`.

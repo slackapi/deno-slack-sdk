@@ -1,9 +1,9 @@
 import { TypedParameterDefinition } from "../parameters/types.ts";
-import { SlackProject } from "../project.ts";
+import { SlackManifest } from "../manifest.ts";
 
 export interface ICustomType {
   id: string;
   definition: TypedParameterDefinition;
   description?: string;
-  registerParameterTypes: (project: SlackProject) => void;
+  registerParameterTypes: (manifest: SlackManifest) => void;
 }
