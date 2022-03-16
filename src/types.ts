@@ -6,7 +6,7 @@ import {
 import { ISlackTable, ManifestTableSchema } from "./tables/types.ts";
 import { ICustomType } from "./types/types.ts";
 
-// SlackManifestType is the top level type that imports all resources for the project
+// SlackManifestType is the top level type that imports all resources for the app
 // An app manifest is generated based on what this has defined in it
 
 export type SlackManifestType = {
@@ -29,11 +29,6 @@ export type SlackManifestType = {
 // This is to work around an issue TS has with resolving the generics across the hierarchy
 // deno-lint-ignore no-explicit-any
 export type ManifestFunction = ISlackFunction<any, any, any, any>;
-
-export interface ISlackProject {
-  runtime(): string;
-  export(): ManifestSchema;
-}
 
 // ----------------------------------------------------------------------------
 // Invocation
@@ -62,7 +57,7 @@ export type Env = Record<string, string>;
 // ----------------------------------------------------------------------------
 // Manifest Schema Types
 // These types should reflect exactly what we expect in the manifest schema
-// and are what are exported from other parts of the project
+// and are what are exported from other parts of the app
 // ----------------------------------------------------------------------------
 
 // These map directly to our internal types, basically a pass-through

@@ -33,12 +33,12 @@ const IncidentType = DefineType('incident', {
 ```
 
 ### Registering a Type to the App
-To register the newly defined type, add it to the array assigned to the `types` parameter while defining the [`Project`][project].
+To register the newly defined type, add it to the array assigned to the `types` parameter while defining the [`Manifest`][manifest].
 
-Note: All Custom Types **must** be registered to the [Project][project] in order for them to be used.
+Note: All Custom Types **must** be registered to the [Manifest][manifest] in order for them to be used.
 
 ```ts
-Project({
+Manifest({
   ...
   types: [IncidentType],
 });
@@ -61,4 +61,4 @@ input_parameters: {
 _In the provided example the title from the Custom Type is being overridden_
 
 [functions]: ./functions.md
-[project]: ./project.md
+[manifest]: ./manifest.md

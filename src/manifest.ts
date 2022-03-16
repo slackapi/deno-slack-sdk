@@ -85,9 +85,9 @@ export class SlackManifest {
 
   registerFunction(func: ManifestFunction) {
     if (!this.definition.functions) this.definition.functions = [];
-    // Check to make sure function doesn't already exist on project
+    // Check to make sure function doesn't already exist on manifest
     else if (this.definition.functions.some((f) => func.id === f.id)) return;
-    // Add function to project
+    // Add function to manifest
     this.definition.functions.push(func);
   }
 
@@ -102,11 +102,11 @@ export class SlackManifest {
 
   registerType(customType: ICustomType) {
     if (!this.definition.types) this.definition.types = [];
-    // Check to make sure type doesn't already exist on project
+    // Check to make sure type doesn't already exist on manifest
     if (this.definition.types.some((type) => type.id === customType.id)) {
       return;
     }
-    // Add type to project
+    // Add type to manifest
     this.definition.types.push(customType);
   }
 
