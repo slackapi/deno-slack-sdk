@@ -42,6 +42,17 @@ export type FunctionHandler<
     FunctionHandlerReturnArgs<OutputParameters, RequiredOutputs>
   >;
 };
+
+// TODO: Type the outputs similar to the inputs
+export type FunctionHandlerReturnArgs<
+  OutputParameters extends ParameterSetDefinition,
+  RequiredOutputs extends RequiredParameters<OutputParameters>,
+> = {
+  completed?: boolean;
+  outputs?: FunctionInputs<OutputParameters, RequiredOutputs>;
+  error?: string;
+};
+
 export type FunctionContext<
   InputParameters extends ParameterSetDefinition,
   RequiredInputs extends RequiredParameters<InputParameters>,
@@ -50,6 +61,7 @@ export type FunctionContext<
   /** A map of string keys to string values containing any environment variables available and provided to your function handler's execution context. */
   env: Env;
   /** The inputs to the function as defined by your function definition. */
+  // TODO: Support types generated from manifest
   inputs: FunctionInputs<
     InputParameters,
     RequiredInputs
@@ -58,6 +70,8 @@ export type FunctionContext<
   client: ISlackAPIClient;
   executionId: string;
 };
+
+/* START TODO: Remove Runtime Generic Typing in favor of Generated Types */
 
 type FunctionInputRuntimeType<Param extends ParameterDefinition> =
   Param["type"] extends typeof SchemaTypes.string ? string
@@ -115,15 +129,7 @@ type FunctionInputs<
     >;
   };
 
-// TODO: Type the outputs similar to the inputs
-export type FunctionHandlerReturnArgs<
-  OutputParameters extends ParameterSetDefinition,
-  RequiredOutputs extends RequiredParameters<OutputParameters>,
-> = {
-  completed?: boolean;
-  outputs?: FunctionInputs<OutputParameters, RequiredOutputs>;
-  error?: string;
-};
+/* END TODO: Remove Runtime Generic Typing in favor of Generated Types */
 
 export interface ISlackFunction<
   InputParameters extends ParameterSetDefinition,
@@ -138,23 +144,6 @@ export interface ISlackFunction<
     RequiredInput,
     RequiredOutputs
   >;
-}
-
-export interface IRunnableSlackFunction<
-  InputParameters extends ParameterSetDefinition,
-  OutputParameters extends ParameterSetDefinition,
-  RequiredInputs extends RequiredParameters<InputParameters>,
-  RequiredOutputs extends RequiredParameters<OutputParameters>,
-> extends
-  ISlackFunction<
-    InputParameters,
-    OutputParameters,
-    RequiredInputs,
-    RequiredOutputs
-  > {
-  run: (
-    context: FunctionContext<InputParameters, RequiredInputs>,
-  ) => Promise<FunctionHandlerReturnArgs<OutputParameters, RequiredOutputs>>;
   export: () => ManifestFunctionSchema;
   registerParameterTypes: (project: SlackProject) => void;
 }
@@ -167,6 +156,7 @@ export type FunctionDefinitionArgs<
 > = {
   /** A title for your function. */
   title: string;
+  source_file: string;
   /** An optional description for your function. */
   description?: string;
   /** An optional map of input parameter names containing information about their type, title, description, required and (additional) properties. */
@@ -177,23 +167,6 @@ export type FunctionDefinitionArgs<
   /** An optional map of output parameter names containing information about their type, title, description, required and (additional) properties. */
   "output_parameters"?: {
     required: RequiredOutputs;
-    properties: OutputParameters;
-  };
-};
-
-export type FunctionDefinitionArgsWithOptional<
-  InputParameters extends ParameterSetDefinition,
-  OutputParameters extends ParameterSetDefinition,
-  RequiredInput extends RequiredParameters<InputParameters>,
-> = {
-  title: string;
-  description?: string;
-  "input_parameters"?: {
-    required: RequiredInput;
-    properties: InputParameters;
-  };
-  "output_parameters"?: {
-    required: RequiredParameters<OutputParameters>;
     properties: OutputParameters;
   };
 };

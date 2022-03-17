@@ -1,5 +1,4 @@
 import { readAll } from "https://deno.land/std@0.99.0/io/util.ts";
-import { SlackAPIClient } from "./client.ts";
 import { handleFunction } from "./handlers/handle-function.ts";
 import {
   InvocationPayload,
@@ -100,23 +99,11 @@ export class SlackProject implements ISlackProject {
     // eventually we could type all of these
     // deno-lint-ignore no-explicit-any
     let body: any = {};
-    const env = payload.context.variables || {};
-
-    const baseURL = env["SLACK_API_URL"] || "https://slack.com/api/";
-    const client = new SlackAPIClient(
-      payload.context.bot_access_token,
-      baseURL,
-    );
 
     switch (eventType) {
       case "function_executed": {
         // TODO: update this once we move calls to functions.completeSuccess out of runtime and into SDK
-        body = await handleFunction({
-          payload,
-          client,
-          project: this.definition,
-          env,
-        });
+        body = await handleFunction();
         break;
       }
       default:

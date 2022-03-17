@@ -142,6 +142,7 @@ Deno.test("SlackProject automatically registers types used by function input and
 
   const Function = DefineFunction("test_function", {
     title: "Function title",
+    source_file: "functions/test_function.ts",
     input_parameters: {
       properties: { aType: { type: CustomInputType } },
       required: [],
@@ -150,10 +151,6 @@ Deno.test("SlackProject automatically registers types used by function input and
       properties: { aType: { type: CustomOutputType } },
       required: [],
     },
-  }, async () => {
-    return await {
-      outputs: {},
-    };
   });
 
   const definition: SlackProjectType = {
@@ -241,10 +238,7 @@ Deno.test("Project registration functions don't allow duplicates", () => {
 
   const Func = DefineFunction(functionId, {
     title: "Function title",
-  }, async () => {
-    return await {
-      outputs: {},
-    };
+    source_file: `functions/${functionId}.ts`,
   });
 
   const definition: SlackProjectType = {

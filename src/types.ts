@@ -1,4 +1,4 @@
-import { IRunnableSlackFunction } from "./functions/types.ts";
+import { ISlackFunction } from "./functions/types.ts";
 import {
   ParameterDefinition,
   ParameterSetDefinition,
@@ -27,7 +27,7 @@ export type SlackProjectType = {
 // Both of these are typed liberally at this level but more specifically down further
 // This is to work around an issue TS has with resolving the generics across the hierarchy
 // deno-lint-ignore no-explicit-any
-export type ProjectFunction = IRunnableSlackFunction<any, any, any, any>;
+export type ProjectFunction = ISlackFunction<any, any, any, any>;
 
 export interface ISlackProject {
   runtime(): string;
@@ -78,6 +78,7 @@ export type ManifestFunctionParameters = {
 export type ManifestFunctionSchema = {
   title?: string;
   description?: string;
+  source_file: string;
   "input_parameters": ManifestFunctionParameters;
   "output_parameters": ManifestFunctionParameters;
 };
