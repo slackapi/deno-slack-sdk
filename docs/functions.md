@@ -43,7 +43,7 @@ The second argument is the `definition` of the function, an object with a few pr
 
 - `title`: A pretty string to nicely identify the function.
 - `description`: A short-and-sweet string description of your function succinctly summarizing what your function does.
-- `source file`: The relative path from the project root to the function `handler` file.
+- `source_file`: The relative path from the project root to the function `handler` file.
 - `input_parameters`: Itself an object which describes one or more input parameters that will be available to your function. Each top-level property of this object defines the name of one input parameter which will become available to your function. The value for this property needs to be an object with further sub-properties:
   - `type`: The type of the input parameter. The supported types are `string`, `integer`, `boolean`, `number`, `object` and `array`.
   - `description`: A string description of the input parameter.
