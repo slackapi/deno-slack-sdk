@@ -3,7 +3,6 @@ import {
   ParameterDefinition,
   ParameterSetDefinition,
 } from "./parameters/mod.ts";
-import { ISlackTable, ManifestTableSchema } from "./tables/types.ts";
 import { ICustomType } from "./types/types.ts";
 
 // SlackManifestType is the top level type that imports all resources for the app
@@ -19,8 +18,6 @@ export type SlackManifestType = {
   runtime: string;
   botScopes: Array<string>;
   functions?: ManifestFunction[];
-  // deno-lint-ignore no-explicit-any
-  tables?: ISlackTable<any>[];
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
 };
@@ -44,10 +41,6 @@ export type InvocationPayload<Body> = {
     "variables": Record<string, string>;
   };
 };
-
-// ----------------------------------------------------------------------------
-// Tables
-// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 // Env
@@ -108,9 +101,6 @@ export type ManifestSchema = {
   runtime?: string;
   functions?: {
     [key: string]: ManifestFunctionSchema;
-  };
-  tables?: {
-    [key: string]: ManifestTableSchema;
   };
   "outgoing_domains"?: string[];
   types?: {

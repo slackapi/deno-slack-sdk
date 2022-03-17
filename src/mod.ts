@@ -3,6 +3,5 @@
 export { Manifest } from "./manifest.ts";
 export { SlackAPIClient } from "./client.ts";
 export { DefineFunction } from "./functions/mod.ts";
-export { DefineTable } from "./tables/mod.ts";
 export { DefineType } from "./types/mod.ts";
 export { default as Schema } from "./schema/mod.ts";

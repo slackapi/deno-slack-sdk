@@ -1,11 +1,8 @@
-import {
-  assertEquals,
-  assertThrows,
-} from "https://deno.land/std@0.99.0/testing/asserts.ts";
+import { assertEquals } from "https://deno.land/std@0.99.0/testing/asserts.ts";
 import { SlackManifestType } from "./types.ts";
 
 import { Manifest, SlackManifest } from "./manifest.ts";
-import { DefineFunction, DefineTable, DefineType, Schema } from "./mod.ts";
+import { DefineFunction, DefineType, Schema } from "./mod.ts";
 
 Deno.test("Manifest() property mappings", () => {
   const definition: SlackManifestType = {
@@ -43,79 +40,8 @@ Deno.test("Manifest() property mappings", () => {
   );
 });
 
-Deno.test("Manifest() generation fails due to dup table names", () => {
-  const definition: SlackManifestType = {
-    name: "fear and loathing in las vegas",
-    description:
-      "fear and loathing in las vegas: a savage journey to the heart of the american dream",
-    displayName: "fear and loathing",
-    icon: "icon.png",
-    runtime: "deno",
-    botScopes: [],
-    tables: [
-      DefineTable("dup", {
-        primary_key: "channel",
-        columns: {
-          channel: {
-            type: Schema.slack.types.channel_id,
-          },
-        },
-      }),
-      DefineTable("dup", {
-        primary_key: "channel",
-        columns: {
-          channel: {
-            type: Schema.slack.types.channel_id,
-          },
-        },
-      }),
-    ],
-  };
-  assertThrows(
-    () => {
-      Manifest(definition);
-    },
-    Error,
-    "Duplicate entry found for table where name=dup",
-  );
-});
-
-Deno.test("Manifest() generates table columns correctly", () => {
-  const Dinos = DefineTable("dinos", {
-    primary_key: "id",
-    columns: {
-      id: {
-        type: Schema.types.integer,
-      },
-      related_dinos: {
-        type: Schema.types.array,
-        items: {
-          type: Schema.types.integer,
-        },
-      },
-      dino_metadata: {
-        type: Schema.types.object,
-        properties: {
-          "is_herbivore": {
-            type: Schema.types.boolean,
-          },
-        },
-      },
-    },
-  });
-  const definition: SlackManifestType = {
-    name: "Dinos",
-    description: "Life finds a way",
-    displayName: "Jussaric Park Dinos",
-    icon: "icon.png",
-    runtime: "deno",
-    botScopes: [],
-    tables: [Dinos],
-  };
-  const manifest = Manifest(definition);
-  console.log(manifest.tables, { ["dinos"]: Dinos.export() });
-  assertEquals(manifest.tables, { ["dinos"]: Dinos.export() });
-});
+// TODO: Re-add test to catch dup datastore names
+// TODO: Re-add test for datastore columns
 
 Deno.test("Manifest() automatically registers types used by function input and output parameters", () => {
   const inputTypeId = "test_input_type";

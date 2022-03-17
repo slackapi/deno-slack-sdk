@@ -52,20 +52,14 @@ export class SlackManifest {
       }, {} as ManifestSchema["functions"]);
     }
 
-    if (def.tables) {
-      this.checkDupTableNames();
-      manifest.tables = def.tables?.reduce((acc = {}, table) => {
-        acc[table.name] = table.export();
-        return acc;
-      }, {} as ManifestSchema["tables"]);
-    }
-
     if (def.types) {
       manifest.types = def.types?.reduce((acc = {}, customType) => {
         acc[customType.id] = customType.definition;
         return acc;
       }, {} as ManifestSchema["types"]);
     }
+
+    //TODO: Add support for datastores
 
     return manifest;
   }
@@ -112,29 +106,8 @@ export class SlackManifest {
 
   private ensureBotScopes(): string[] {
     const includedScopes = this.definition.botScopes || [];
-
-    // Tables need tables:read and tables:write scopes
-    if (Object.keys(this.definition.tables || {}).length > 0) {
-      if (!includedScopes.includes("tables:read")) {
-        includedScopes.push("tables:read");
-      }
-      if (!includedScopes.includes("tables:write")) {
-        includedScopes.push("tables:write");
-      }
-    }
+    // TODO: Add datastore scopes
 
     return includedScopes;
-  }
-
-  checkDupTableNames() {
-    const tables = this.definition.tables || [];
-    const names: string[] = [];
-    tables.forEach((t) => {
-      if (names.indexOf(t.name) >= 0) {
-        const msg = `Duplicate entry found for table where name=${t.name}`;
-        throw new Error(msg);
-      }
-      names.push(t.name);
-    });
   }
 }
