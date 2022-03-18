@@ -1,0 +1,165 @@
+import { assertEquals } from "https://deno.land/std@0.99.0/testing/asserts.ts";
+import SchemaTypes from "../schema/schema_types.ts";
+import { ParameterVariable } from "./mod.ts";
+import { DefineType } from "../types/mod.ts";
+
+Deno.test("ParameterVariable string", () => {
+  const param = ParameterVariable("", "incident_name", {
+    type: SchemaTypes.string,
+  });
+
+  assertEquals(`${param}`, "{{incident_name}}");
+});
+
+Deno.test("ParameterVariable typed object", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.object,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+  });
+
+  assertEquals(`${param}`, "{{incident}}");
+  assertEquals(`${param.id}`, "{{incident.id}}");
+  assertEquals(`${param.name}`, "{{incident.name}}");
+});
+
+Deno.test("ParameterVariable typed object with additional properties", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.object,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    additionalProperties: true,
+  });
+
+  assertEquals(`${param}`, "{{incident}}");
+  assertEquals(`${param.id}`, "{{incident.id}}");
+  assertEquals(`${param.name}`, "{{incident.name}}");
+  assertEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable untyped object", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.object,
+  });
+
+  assertEquals(`${param}`, "{{incident}}");
+  assertEquals(`${param.id}`, "{{incident.id}}");
+  assertEquals(`${param.name}`, "{{incident.name}}");
+  assertEquals(`${param.name.foo.bar}`, "{{incident.name.foo.bar}}");
+});
+
+Deno.test("ParameterVariable array of strings", () => {
+  const param = ParameterVariable("", "myArray", {
+    type: SchemaTypes.array,
+    items: {
+      type: SchemaTypes.string,
+    },
+  });
+
+  assertEquals(`${param}`, "{{myArray}}");
+});
+
+Deno.test("ParameterVariable using CustomType string", () => {
+  const customType = DefineType("customTypeString", {
+    type: SchemaTypes.string,
+  });
+  const param = ParameterVariable("", "myCustomTypeString", {
+    type: customType,
+  });
+
+  assertEquals(`${param}`, "{{myCustomTypeString}}");
+});
+
+Deno.test("ParameterVariable using Custom Type typed object", () => {
+  const customType = DefineType("customType", {
+    type: SchemaTypes.object,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: customType,
+  });
+
+  assertEquals(`${param}`, "{{myCustomType}}");
+  assertEquals(`${param.aString}`, "{{myCustomType.aString}}");
+});
+
+Deno.test("ParameterVariable using Custom Type untyped object", () => {
+  const customType = DefineType("customTypeObject", {
+    type: SchemaTypes.object,
+  });
+  const param = ParameterVariable("", "myCustomTypeObject", {
+    type: customType,
+  });
+
+  assertEquals(`${param}`, "{{myCustomTypeObject}}");
+  assertEquals(`${param.foo}`, "{{myCustomTypeObject.foo}}");
+  assertEquals(`${param.foo.bar}`, "{{myCustomTypeObject.foo.bar}}");
+  assertEquals(`${param.foo.bar.baz}`, "{{myCustomTypeObject.foo.bar.baz}}");
+});
+
+Deno.test("ParameterVariable using Custom Type array", () => {
+  const customType = DefineType("customTypeArray", {
+    type: SchemaTypes.array,
+  });
+  const param = ParameterVariable("", "myCustomTypeArray", {
+    type: customType,
+  });
+
+  assertEquals(`${param}`, "{{myCustomTypeArray}}");
+});
+
+Deno.test("ParameterVariable using Custom Type object referencing another Custom Type", () => {
+  const StringType = DefineType("stringType", {
+    type: SchemaTypes.string,
+    minLength: 2,
+  });
+  const customType = DefineType("customTypeWithCustomType", {
+    type: SchemaTypes.object,
+    properties: {
+      customType: {
+        type: StringType,
+      },
+    },
+  });
+  const param = ParameterVariable("", "myNestedCustomType", {
+    type: customType,
+  });
+
+  assertEquals(`${param}`, "{{myNestedCustomType}}");
+  assertEquals(`${param.customType}`, "{{myNestedCustomType.customType}}");
+});
+
+Deno.test("ParameterVariable typed object with Custom Type property", () => {
+  const StringType = DefineType("stringType", {
+    type: SchemaTypes.string,
+    minLength: 2,
+  });
+
+  const param = ParameterVariable("", "myObjectParam", {
+    type: SchemaTypes.object,
+    properties: {
+      aString: {
+        type: StringType,
+      },
+    },
+  });
+
+  assertEquals(`${param}`, "{{myObjectParam}}");
+  assertEquals(`${param.aString}`, "{{myObjectParam.aString}}");
+});
