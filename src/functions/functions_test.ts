@@ -7,7 +7,8 @@ import Schema from "../schema/mod.ts";
 const emptyParameterObject = Object.freeze({ required: [], properties: {} });
 
 Deno.test("Function sets appropriate defaults", () => {
-  const Func = DefineFunction("my_function", {
+  const Func = DefineFunction({
+    callback_id: "my_function",
     title: "My function",
     source_file: "functions/dino.ts",
   });
@@ -19,7 +20,8 @@ Deno.test("Function sets appropriate defaults", () => {
 });
 
 Deno.test("Function with required params", () => {
-  const AllTypesFunction = DefineFunction("my_function", {
+  const AllTypesFunction = DefineFunction({
+    callback_id: "my_function",
     title: "All Types Function",
     source_file: "functions/example.ts",
     input_parameters: {
@@ -60,7 +62,8 @@ Deno.test("Function with required params", () => {
 });
 
 Deno.test("Function without input and output parameters", () => {
-  const NoParamFunction = DefineFunction("no_params", {
+  const NoParamFunction = DefineFunction({
+    callback_id: "no_params",
     title: "No Parameter Function",
     source_file: "functions/no_params.ts",
   });
@@ -79,7 +82,8 @@ Deno.test("Function with input parameters but no output parameters", () => {
       aString: { type: Schema.types.string },
     },
   };
-  const NoOutputParamFunction = DefineFunction("input_params_only", {
+  const NoOutputParamFunction = DefineFunction({
+    callback_id: "input_params_only",
     title: "No Parameter Function",
     source_file: "functions/input_params_only.ts",
     input_parameters: inputParameters,
@@ -104,7 +108,8 @@ Deno.test("Function with output parameters but no input parameters", () => {
       aString: { type: Schema.types.string },
     },
   };
-  const NoInputParamFunction = DefineFunction("output_params_only", {
+  const NoInputParamFunction = DefineFunction({
+    callback_id: "output_params_only",
     title: "No Parameter Function",
     source_file: "functions/output_params_only.ts",
     output_parameters: outputParameters,

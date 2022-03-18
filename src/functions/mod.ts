@@ -18,7 +18,6 @@ export const DefineFunction = <
   RequiredInput extends RequiredParameters<InputParameters>,
   RequiredOutput extends RequiredParameters<OutputParameters>,
 >(
-  id: string,
   definition: FunctionDefinitionArgs<
     InputParameters,
     OutputParameters,
@@ -26,7 +25,7 @@ export const DefineFunction = <
     RequiredOutput
   >,
 ) => {
-  return new SlackFunction(id, definition);
+  return new SlackFunction(definition);
 };
 
 export class SlackFunction<
@@ -35,8 +34,9 @@ export class SlackFunction<
   RequiredInput extends RequiredParameters<InputParameters>,
   RequiredOutput extends RequiredParameters<OutputParameters>,
 > {
+  public id: string;
+
   constructor(
-    public id: string,
     public definition: FunctionDefinitionArgs<
       InputParameters,
       OutputParameters,
@@ -44,7 +44,7 @@ export class SlackFunction<
       RequiredOutput
     >,
   ) {
-    this.id = id;
+    this.id = definition.callback_id;
     this.definition = definition;
   }
 

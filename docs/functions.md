@@ -9,38 +9,33 @@ Functions can be defined with the top level `DefineFunction` export. Below is an
 ```ts
 import { DefineFunction, Schema } from "slack-cloud-sdk/mod.ts";
 
-export const DinoFunction = DefineFunction(
-  "dino",
-  {
-    title: "Dino",
-    description: "Turns a name into a dinosaur name",
-    source_file: "functions/dino.ts",
-    input_parameters: {
-      name: {
-        type: Schema.types.string,
-        description: "The provided name",
-      },
+export const DinoFunction = DefineFunction({
+  callback_id: "dino",
+  title: "Dino",
+  description: "Turns a name into a dinosaur name",
+  source_file: "functions/dino.ts",
+  input_parameters: {
+    name: {
+      type: Schema.types.string,
+      description: "The provided name",
     },
-    output_parameters: {
-      dinoname: {
-        type: Schema.types.string,
-        description: "The new dinosaur name",
-      },
+  },
+  output_parameters: {
+    dinoname: {
+      type: Schema.types.string,
+      description: "The new dinosaur name",
     },
-  }
-);
+  },
+});
 ```
 
 Let's go over each of the arguments that must be provided to `DefineFunction`.
-
-#### Function ID
-
-The first argument is the `id` of the function, a unique string identifier representing the function (`"dino"` in the above example). It must be unique in your application; no other functions may be named identically.
 
 #### Function Definition
 
 The second argument is the `definition` of the function, an object with a few properties that help to describe and define the function in more detail. In particular, the required properties of the object are:
 
+- `callback_id`: A unique string identifier representing the function (`"dino"` in the above example). It must be unique in your application; no other functions may be named identically.
 - `title`: A pretty string to nicely identify the function.
 - `description`: A short-and-sweet string description of your function succinctly summarizing what your function does.
 - `source_file`: The relative path from the project root to the function `handler` file.

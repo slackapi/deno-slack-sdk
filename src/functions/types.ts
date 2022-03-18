@@ -154,6 +154,7 @@ export type FunctionDefinitionArgs<
   RequiredInput extends RequiredParameters<InputParameters>,
   RequiredOutputs extends RequiredParameters<OutputParameters>,
 > = {
+  callback_id: string;
   /** A title for your function. */
   title: string;
   source_file: string;

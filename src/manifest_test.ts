@@ -135,18 +135,21 @@ Deno.test("Manifest() automatically registers types used by function input and o
     type: Schema.types.boolean,
   });
 
-  const Function = DefineFunction("test_function", {
-    title: "Function title",
-    source_file: "functions/test_function.ts",
-    input_parameters: {
-      properties: { aType: { type: CustomInputType } },
-      required: [],
+  const Function = DefineFunction(
+    {
+      callback_id: "test_function",
+      title: "Function title",
+      source_file: "functions/test_function.ts",
+      input_parameters: {
+        properties: { aType: { type: CustomInputType } },
+        required: [],
+      },
+      output_parameters: {
+        properties: { aType: { type: CustomOutputType } },
+        required: [],
+      },
     },
-    output_parameters: {
-      properties: { aType: { type: CustomOutputType } },
-      required: [],
-    },
-  });
+  );
 
   const definition: SlackManifestType = {
     name: "Name",
@@ -229,7 +232,8 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
     },
   });
 
-  const Func = DefineFunction(functionId, {
+  const Func = DefineFunction({
+    callback_id: functionId,
     title: "Function title",
     source_file: `functions/${functionId}.ts`,
   });
