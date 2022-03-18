@@ -10,7 +10,7 @@ import {
 } from "../parameters/types.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import SlackSchemaTypes from "../schema/slack/schema_types.ts";
-import { SlackProject } from "../project.ts";
+import { SlackManifest } from "../manifest.ts";
 
 export type FunctionInvocationBody = {
   "team_id": string;
@@ -145,7 +145,7 @@ export interface ISlackFunction<
     RequiredOutputs
   >;
   export: () => ManifestFunctionSchema;
-  registerParameterTypes: (project: SlackProject) => void;
+  registerParameterTypes: (manifest: SlackManifest) => void;
 }
 
 export type FunctionDefinitionArgs<

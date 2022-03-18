@@ -4,7 +4,7 @@ import {
   RequiredParameters,
 } from "../parameters/mod.ts";
 import { FunctionDefinitionArgs } from "./types.ts";
-import { SlackProject } from "../project.ts";
+import { SlackManifest } from "../manifest.ts";
 
 /**
  * Define a function and its input and output parameters for use in a Slack application.
@@ -48,11 +48,11 @@ export class SlackFunction<
     this.definition = definition;
   }
 
-  registerParameterTypes(project: SlackProject) {
+  registerParameterTypes(manifest: SlackManifest) {
     const { input_parameters: inputParams, output_parameters: outputParams } =
       this.definition;
-    project.registerTypes(inputParams?.properties ?? {});
-    project.registerTypes(outputParams?.properties ?? {});
+    manifest.registerTypes(inputParams?.properties ?? {});
+    manifest.registerTypes(outputParams?.properties ?? {});
   }
 
   export(): ManifestFunctionSchema {

@@ -66,13 +66,13 @@ The single argument to your function is an object composed of several properties
   1. `method`: a string which defines which API method you wish to invoke.
   2. `data`: a JSON object representing parameter data to be passed to the API method you wish to invoke; the client will handle serializing it appropriately.
 
-### Adding Functions to Projects
+### Adding Functions to the Manifest
 
-Once you have defined a function, don't forget to include it in your [`Project`][project] definition!
+Once you have defined a function, don't forget to include it in your [`Manifest`][manifest] definition!
 
     import { ReverseString } from "./functions/reverse.ts";
 
-    Project({
+    Manifest({
       name: "heuristic-tortoise",
       description:
         "A demo showing how to use Slack functions",
@@ -82,4 +82,4 @@ Once you have defined a function, don't forget to include it in your [`Project`]
       functions: [ReverseString], // <-- don't forget this!
     });
 
-[project]: ./project.md
+[manifest]: ./manifest.md

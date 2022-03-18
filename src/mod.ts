@@ -1,6 +1,6 @@
 // TODO: need to work on a more explicit public api for this sdk module
 // Current pass is mostly just exporting everything we want to iterate on
-export { Project } from "./project.ts";
+export { Manifest } from "./manifest.ts";
 export { SlackAPIClient } from "./client.ts";
 export { DefineFunction } from "./functions/mod.ts";
 export { DefineTable } from "./tables/mod.ts";
