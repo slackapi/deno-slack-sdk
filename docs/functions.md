@@ -33,7 +33,7 @@ Let's go over each of the arguments that must be provided to `DefineFunction`.
 
 #### Function Definition
 
-The second argument is the `definition` of the function, an object with a few properties that help to describe and define the function in more detail. In particular, the required properties of the object are:
+The first argument is the `definition` of the function, an object with a few properties that help to describe and define the function in more detail. In particular, the required properties of the object are:
 
 - `callback_id`: A unique string identifier representing the function (`"dino"` in the above example). It must be unique in your application; no other functions may be named identically. Changing a function's `callback_id` is not recommended as it means that the function will be removed from the app and created under the new `callback_id`, which will break any workflows referencing the old function.
 - `title`: A pretty string to nicely identify the function.
