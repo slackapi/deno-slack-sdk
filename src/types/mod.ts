@@ -1,24 +1,22 @@
 import { SlackManifest } from "../manifest.ts";
-import { TypedParameterDefinition } from "../parameters/types.ts";
-import { ICustomType } from "./types.ts";
+import { CustomTypeDefinition, ICustomType } from "./types.ts";
 
-export const DefineType = <Def extends TypedParameterDefinition>(
-  id: string,
+export const DefineType = <Def extends CustomTypeDefinition>(
   definition: Def,
 ) => {
-  return new CustomType(id, definition);
+  return new CustomType(definition);
 };
 
-export class CustomType<Def extends TypedParameterDefinition>
+export class CustomType<Def extends CustomTypeDefinition>
   implements ICustomType {
+  public id: string;
   public title: string | undefined;
   public description: string | undefined;
 
   constructor(
-    public id: string,
     public definition: Def,
   ) {
-    this.id = id;
+    this.id = definition.callback_id;
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;

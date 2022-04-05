@@ -72,7 +72,8 @@ Deno.test("ParameterVariable array of strings", () => {
 });
 
 Deno.test("ParameterVariable using CustomType string", () => {
-  const customType = DefineType("customTypeString", {
+  const customType = DefineType({
+    callback_id: "customTypeString",
     type: SchemaTypes.string,
   });
   const param = ParameterVariable("", "myCustomTypeString", {
@@ -83,7 +84,8 @@ Deno.test("ParameterVariable using CustomType string", () => {
 });
 
 Deno.test("ParameterVariable using Custom Type typed object", () => {
-  const customType = DefineType("customType", {
+  const customType = DefineType({
+    callback_id: "customType",
     type: SchemaTypes.object,
     properties: {
       aString: {
@@ -100,7 +102,8 @@ Deno.test("ParameterVariable using Custom Type typed object", () => {
 });
 
 Deno.test("ParameterVariable using Custom Type untyped object", () => {
-  const customType = DefineType("customTypeObject", {
+  const customType = DefineType({
+    callback_id: "customTypeObject",
     type: SchemaTypes.object,
   });
   const param = ParameterVariable("", "myCustomTypeObject", {
@@ -114,7 +117,8 @@ Deno.test("ParameterVariable using Custom Type untyped object", () => {
 });
 
 Deno.test("ParameterVariable using Custom Type array", () => {
-  const customType = DefineType("customTypeArray", {
+  const customType = DefineType({
+    callback_id: "customTypeArray",
     type: SchemaTypes.array,
   });
   const param = ParameterVariable("", "myCustomTypeArray", {
@@ -125,11 +129,13 @@ Deno.test("ParameterVariable using Custom Type array", () => {
 });
 
 Deno.test("ParameterVariable using Custom Type object referencing another Custom Type", () => {
-  const StringType = DefineType("stringType", {
+  const StringType = DefineType({
+    callback_id: "stringType",
     type: SchemaTypes.string,
     minLength: 2,
   });
-  const customType = DefineType("customTypeWithCustomType", {
+  const customType = DefineType({
+    callback_id: "customTypeWithCustomType",
     type: SchemaTypes.object,
     properties: {
       customType: {
@@ -146,7 +152,8 @@ Deno.test("ParameterVariable using Custom Type object referencing another Custom
 });
 
 Deno.test("ParameterVariable typed object with Custom Type property", () => {
-  const StringType = DefineType("stringType", {
+  const StringType = DefineType({
+    callback_id: "stringType",
     type: SchemaTypes.string,
     minLength: 2,
   });

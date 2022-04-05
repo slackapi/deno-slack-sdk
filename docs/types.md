@@ -6,7 +6,8 @@ Custom Types provide a way to introduce reusable, sharable types to Apps.
 Types can be defined with the top level `DefineType` export. Below is an example of setting up a Custom Type object that usable for incidents.
 
 ```ts
-const IncidentType = DefineType('incident', {
+const IncidentType = DefineType({
+  callback_id: 'incident',
   title: "Incident Ticket",
   description: "Use this to enter an Incident Ticket",
   type: Schema.types.object,
