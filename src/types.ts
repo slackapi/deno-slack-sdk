@@ -15,7 +15,6 @@ export type SlackManifestType = {
   displayName?: string;
   icon: string;
   longDescription?: string;
-  runtime: string;
   botScopes: Array<string>;
   functions?: ManifestFunction[];
   outgoingDomains?: Array<string>;
@@ -98,7 +97,6 @@ export type ManifestSchema = {
       "display_name": string;
     };
   };
-  runtime?: string;
   functions?: {
     [key: string]: ManifestFunctionSchema;
   };

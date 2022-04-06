@@ -72,7 +72,6 @@ Once you have defined a function, don't forget to include it in your [`Manifest`
       description:
         "A demo showing how to use Slack functions",
       icon: "assets/icon.png",
-      runtime: "deno1.x",
       botScopes: ["commands", "chat:write", "chat:write.public"],
       functions: [ReverseString], // <-- don't forget this!
     });
