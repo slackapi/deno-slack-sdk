@@ -1,4 +1,4 @@
-import { Env, ISlackAPIClient, ManifestFunctionSchema } from "../types.ts";
+import { Env, ManifestFunctionSchema } from "../types.ts";
 import {
   ParameterDefinition,
   ParameterSetDefinition,
@@ -66,8 +66,6 @@ export type FunctionContext<
     InputParameters,
     RequiredInputs
   >;
-  /** A Slack API client pre-configured with your application's access token */
-  client: ISlackAPIClient;
   executionId: string;
 };
 
