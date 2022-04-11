@@ -48,16 +48,19 @@ Deno.test("Manifest() automatically registers types used by function input and o
   const outputTypeId = "test_output_type";
   const stringTypeId = "test_string_type";
 
-  const CustomStringType = DefineType(stringTypeId, {
+  const CustomStringType = DefineType({
+    callback_id: stringTypeId,
     type: Schema.types.string,
   });
 
-  const CustomInputType = DefineType(inputTypeId, {
+  const CustomInputType = DefineType({
+    callback_id: inputTypeId,
     type: Schema.types.object,
     properties: { aString: { type: CustomStringType } },
   });
 
-  const CustomOutputType = DefineType(outputTypeId, {
+  const CustomOutputType = DefineType({
+    callback_id: outputTypeId,
     type: Schema.types.boolean,
   });
 
@@ -104,18 +107,21 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
   const stringTypeId = "test_string_type";
   const arrayTypeId = "test_array_type";
 
-  const StringType = DefineType(stringTypeId, {
+  const StringType = DefineType({
+    callback_id: stringTypeId,
     type: Schema.types.string,
   });
 
-  const ObjectType = DefineType(objectTypeId, {
+  const ObjectType = DefineType({
+    callback_id: objectTypeId,
     type: Schema.types.object,
     properties: {
       aString: { type: StringType },
     },
   });
 
-  const ArrayType = DefineType(arrayTypeId, {
+  const ArrayType = DefineType({
+    callback_id: arrayTypeId,
     type: Schema.types.array,
     items: {
       type: ObjectType,
@@ -145,11 +151,13 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
   const objectTypeId = "test_object_type";
   const stringTypeId = "test_string_type";
 
-  const CustomStringType = DefineType(stringTypeId, {
+  const CustomStringType = DefineType({
+    callback_id: stringTypeId,
     type: Schema.types.string,
   });
 
-  const CustomObjectType = DefineType(objectTypeId, {
+  const CustomObjectType = DefineType({
+    callback_id: objectTypeId,
     type: Schema.types.object,
     properties: {
       aString: {
