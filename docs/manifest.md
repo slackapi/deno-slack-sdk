@@ -19,7 +19,7 @@ Manifest({
   runtime: "deno1.x",
   botScopes: ["commands", "chat:write", "chat:write.public"],
   functions: [ReverseString],
-  tables: [],
+  datastores: [],
   outgoing_domains: [],
 });
 ```
