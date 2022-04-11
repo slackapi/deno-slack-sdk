@@ -57,9 +57,6 @@ The single argument to your function is an object composed of several properties
 
 - `env`: represents environment variables available to your function's execution context.
 - `inputs`: an object containing the input parameters you defined as part of your Function Definition. In the example above, the `name` input parameter is available on the `inputs` property of our function handler context.
-- `client`: a pre-configured instance of a Slack API Client. The API client has an async `call` function which accepts two arguments:
-  1. `method`: a string which defines which API method you wish to invoke.
-  2. `data`: a JSON object representing parameter data to be passed to the API method you wish to invoke; the client will handle serializing it appropriately.
 
 ### Adding Functions to the Manifest
 
