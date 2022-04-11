@@ -7,7 +7,7 @@ Types can be defined with the top level `DefineType` export. Below is an example
 
 ```ts
 const IncidentType = DefineType({
-  callback_id: 'incident',
+  callback_id: "incident",
   title: "Incident Ticket",
   description: "Use this to enter an Incident Ticket",
   type: Schema.types.object,
