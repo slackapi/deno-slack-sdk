@@ -7,7 +7,7 @@ export type PrimitiveParameterDefinition =
   // | NumberParameterDefinition
   // | IntegerParameterDefinition
   | BaseParameterDefinition<AllValues>
-  | UntypedArrayParameterDefinition
+  // | UntypedArrayParameterDefinition
   | TypedArrayParameterDefinition;
 
 export type TypedParameterDefinition =
