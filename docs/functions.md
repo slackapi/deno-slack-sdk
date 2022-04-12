@@ -57,6 +57,8 @@ The single argument to your function is an object composed of several properties
 
 - `env`: represents environment variables available to your function's execution context.
 - `inputs`: an object containing the input parameters you defined as part of your Function Definition. In the example above, the `name` input parameter is available on the `inputs` property of our function handler context.
+- `token`: Your application's access token
+- `event`: The full event object
 
 ### Adding Functions to the Manifest
 
