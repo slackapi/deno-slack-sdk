@@ -1,4 +1,5 @@
 import { ISlackFunction } from "./functions/types.ts";
+import { ISlackDatastore } from "./datastore/types.ts";
 import {
   ParameterDefinition,
   ParameterSetDefinition,
@@ -20,12 +21,18 @@ export type SlackManifestType = {
   functions?: ManifestFunction[];
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
+  datastores?: ManifestDatastore[];
 };
 
 // Both of these are typed liberally at this level but more specifically down further
 // This is to work around an issue TS has with resolving the generics across the hierarchy
 // deno-lint-ignore no-explicit-any
 export type ManifestFunction = ISlackFunction<any, any, any, any>;
+
+// Both of these are typed liberally at this level but more specifically down further
+// This is to work around an issue TS has with resolving the generics across the hierarchy
+// deno-lint-ignore no-explicit-any
+export type ManifestDatastore = ISlackDatastore<any>;
 
 // ----------------------------------------------------------------------------
 // Invocation
@@ -72,6 +79,19 @@ export type ManifestFunctionSchema = {
   "output_parameters": ManifestFunctionParameters;
 };
 
+export type ManifestDatastoreSchema = {
+  "primary_key": string;
+  attributes: {
+    [key: string]: {
+      type: string | ICustomType;
+      items?: ManifestCustomTypeSchema;
+      properties?: {
+        [key: string]: ManifestCustomTypeSchema;
+      };
+    };
+  };
+};
+
 export type ManifestCustomTypeSchema = ParameterDefinition;
 
 export type ManifestMetadata = {
@@ -105,5 +125,8 @@ export type ManifestSchema = {
   "outgoing_domains"?: string[];
   types?: {
     [key: string]: ManifestCustomTypeSchema;
+  };
+  datastores?: {
+    [key: string]: ManifestDatastoreSchema;
   };
 };

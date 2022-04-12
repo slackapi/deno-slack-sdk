@@ -59,7 +59,12 @@ export class SlackManifest {
       }, {} as ManifestSchema["types"]);
     }
 
-    //TODO: Add support for datastores
+    if (def.datastores) {
+      manifest.datastores = def.datastores?.reduce((acc = {}, datastore) => {
+        acc[datastore.name] = datastore.export();
+        return acc;
+      }, {} as ManifestSchema["datastores"]);
+    }
 
     return manifest;
   }
