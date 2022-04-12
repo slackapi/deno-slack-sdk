@@ -14,7 +14,6 @@ Deno.test("Manifest() property mappings", () => {
       "The book is a roman à clef, rooted in autobiographical incidents. The story follows its protagonist, Raoul Duke, and his attorney, Dr. Gonzo, as they descend on Las Vegas to chase the American Dream...",
     displayName: "fear and loathing",
     icon: "icon.png",
-    runtime: "deno",
     botScopes: [],
   };
   let manifest = Manifest(definition);
@@ -84,7 +83,6 @@ Deno.test("Manifest() automatically registers types used by function input and o
     description: "Description",
     icon: "icon.png",
     longDescription: "LongDescription",
-    runtime: "deno",
     botScopes: [],
     functions: [Function],
   };
@@ -144,7 +142,6 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
     description: "Description",
     icon: "icon.png",
     longDescription: "LongDescription",
-    runtime: "deno",
     botScopes: [],
     types: [ArrayType, CustomType],
   };
@@ -206,7 +203,6 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
     description: "Description",
     icon: "icon.png",
     longDescription: "LongDescription",
-    runtime: "deno",
     botScopes: [],
     functions: [Func],
     types: [CustomArrayType],

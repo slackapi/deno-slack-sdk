@@ -41,7 +41,6 @@ export class SlackManifest {
             def.name,
         },
       },
-      runtime: def.runtime,
       "outgoing_domains": def.outgoingDomains || [],
     } as ManifestSchema;
 

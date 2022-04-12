@@ -16,7 +16,6 @@ Manifest({
   description:
     "A demo showing how to use Slack functions",
   icon: "assets/icon.png",
-  runtime: "deno1.x",
   botScopes: ["commands", "chat:write", "chat:write.public"],
   functions: [ReverseString],
   datastores: [],
@@ -32,7 +31,6 @@ for the full list of attributes it supports, but the minimum required properties
 |`name`|string|Your Slack application name.|
 |`description`|string|A short sentence describing your application.|
 |`icon`|string|A relative path to an image asset to use for the application's icon.|
-|`runtime`|string|Which runtime this application can execute in. Only acceptable value at this point in time is `deno1.x`.|
 |`botScopes`|Array<string>|A list of [scopes][scopes], or permissions, the bot requires to function.|
 
 Furthermore, to set up how your application works, you would create
