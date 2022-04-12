@@ -1,5 +1,5 @@
 import { ICustomType } from "../types/types.ts";
-import { PrimitiveParameterDefinition } from "../parameters/types.ts";
+import { ManifestDatastoreSchema } from "../types.ts";
 
 export type SlackDatastoreAttribute = {
   // supports custom types, primitive types, inline objects and lists
@@ -11,6 +11,7 @@ export type SlackDatastoreAttributes = Record<string, SlackDatastoreAttribute>;
 export type SlackDatastoreDefinition<
   Attributes extends SlackDatastoreAttributes,
 > = {
+  name: string;
   "primary_key": keyof Attributes;
   attributes: Attributes;
 };
@@ -30,19 +31,6 @@ export type SlackDatastoreItem<Attributes extends SlackDatastoreAttributes> = {
 export type PartialSlackDatastoreItem<
   Attributes extends SlackDatastoreAttributes,
 > = OptionalPartial<Attributes>;
-
-export type ManifestDatastoreSchema = {
-  "primary_key": string;
-  attributes: {
-    [key: string]: {
-      type: string | ICustomType;
-      items?: PrimitiveParameterDefinition;
-      properties?: {
-        [key: string]: PrimitiveParameterDefinition;
-      };
-    };
-  };
-};
 
 // deno-lint-ignore no-explicit-any
 type OptionalPartial<T extends any> = {

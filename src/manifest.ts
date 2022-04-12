@@ -61,7 +61,6 @@ export class SlackManifest {
 
     if (def.datastores) {
       manifest.datastores = def.datastores?.reduce((acc = {}, datastore) => {
-        datastore.name;
         acc[datastore.name] = datastore.export();
         return acc;
       }, {} as ManifestSchema["datastores"]);

@@ -1,25 +1,29 @@
+import { ManifestDatastoreSchema } from "../types.ts";
 import {
   ISlackDatastore,
-  ManifestDatastoreSchema,
   SlackDatastoreAttributes,
   SlackDatastoreDefinition,
 } from "./types.ts";
+
+/**
+ * Define a datastore and primary key and attributes for use in a Slack application.
+ * @param {SlackDatastoreDefinition<SlackDatastoreAttributes>} definition Defines information about your datastore.
+ * @returns {SlackDatastore}
+ */
 export const DefineDatastore = <Attributes extends SlackDatastoreAttributes>(
-  name: string,
   definition: SlackDatastoreDefinition<Attributes>,
 ) => {
-  return new SlackDatastore(name, definition);
+  return new SlackDatastore(definition);
 };
 
-class SlackDatastore<Attributes extends SlackDatastoreAttributes>
+export class SlackDatastore<Attributes extends SlackDatastoreAttributes>
   implements ISlackDatastore<Attributes> {
   public name: string;
-
   private definition: SlackDatastoreDefinition<Attributes>;
 
-  constructor(name: string, definition: SlackDatastoreDefinition<Attributes>) {
-    this.name = name;
+  constructor(definition: SlackDatastoreDefinition<Attributes>) {
     this.definition = definition;
+    this.name = definition.name;
   }
 
   export(): ManifestDatastoreSchema {

@@ -9,7 +9,8 @@ const customType = DefineType({
 });
 
 Deno.test("Datastore sets appropriate defaults", () => {
-  const datastore = DefineDatastore("dinos", {
+  const datastore = DefineDatastore({
+    name: "dinos",
     primary_key: "attr1",
     attributes: {
       attr1: {
