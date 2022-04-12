@@ -19,10 +19,8 @@ export const DefineDatastore = <Attributes extends SlackDatastoreAttributes>(
 export class SlackDatastore<Attributes extends SlackDatastoreAttributes>
   implements ISlackDatastore<Attributes> {
   public name: string;
-  private definition: SlackDatastoreDefinition<Attributes>;
 
-  constructor(definition: SlackDatastoreDefinition<Attributes>) {
-    this.definition = definition;
+  constructor(private definition: SlackDatastoreDefinition<Attributes>) {
     this.name = definition.name;
   }
 

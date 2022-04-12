@@ -17,7 +17,7 @@ Deno.test("Datastore sets appropriate defaults", () => {
         type: SchemaTypes.string,
       },
       attr2: {
-        type: SchemaTypes.integer,
+        type: SchemaTypes.boolean,
       },
       attr3: {
         type: customType,
@@ -28,5 +28,6 @@ Deno.test("Datastore sets appropriate defaults", () => {
   const exported = datastore.export();
   assertEquals(exported.primary_key, "attr1");
   assertEquals(exported.attributes.attr1.type, SchemaTypes.string);
-  assertEquals(exported.attributes.attr2.type, SchemaTypes.integer);
+  assertEquals(exported.attributes.attr2.type, SchemaTypes.boolean);
+  assertEquals(exported.attributes.attr3.type, customType);
 });
