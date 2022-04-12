@@ -24,15 +24,12 @@ export type SlackManifestType = {
   datastores?: ManifestDatastore[];
 };
 
-// Both of these are typed liberally at this level but more specifically down further
+export type ManifestDatastore = ISlackDatastore;
+
+// This is typed liberally at this level but more specifically down further
 // This is to work around an issue TS has with resolving the generics across the hierarchy
 // deno-lint-ignore no-explicit-any
 export type ManifestFunction = ISlackFunction<any, any, any, any>;
-
-// Both of these are typed liberally at this level but more specifically down further
-// This is to work around an issue TS has with resolving the generics across the hierarchy
-// deno-lint-ignore no-explicit-any
-export type ManifestDatastore = ISlackDatastore<any>;
 
 // ----------------------------------------------------------------------------
 // Invocation
