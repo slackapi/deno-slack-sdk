@@ -1,14 +1,15 @@
-import { ISlackFunction } from "./functions/types.ts";
-import { ISlackDatastore } from "./datastore/types.ts";
-import {
+import type { ISlackFunction } from "./functions/types.ts";
+import type { ISlackDatastore } from "./datastore/types.ts";
+import type {
   ParameterDefinition,
   ParameterSetDefinition,
 } from "./parameters/mod.ts";
-import { ICustomType } from "./types/types.ts";
+import type { ICustomType } from "./types/types.ts";
 
 // SlackManifestType is the top level type that imports all resources for the app
 // An app manifest is generated based on what this has defined in it
 
+export type { FunctionHandler } from "./functions/types.ts";
 export type SlackManifestType = {
   name: string;
   backgroundColor?: string;
