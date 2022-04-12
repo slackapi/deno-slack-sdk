@@ -1,8 +1,8 @@
-import { assertEquals } from "https://deno.land/std@0.99.0/testing/asserts.ts";
 import { SlackManifestType } from "./types.ts";
 
 import { Manifest, SlackManifest } from "./manifest.ts";
 import { DefineFunction, DefineType, Schema } from "./mod.ts";
+import { assertEquals } from "./dev_deps.ts";
 
 Deno.test("Manifest() property mappings", () => {
   const definition: SlackManifestType = {

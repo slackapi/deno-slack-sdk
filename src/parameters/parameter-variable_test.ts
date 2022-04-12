@@ -1,7 +1,7 @@
-import { assertEquals } from "https://deno.land/std@0.99.0/testing/asserts.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import { ParameterVariable } from "./mod.ts";
 import { DefineType } from "../types/mod.ts";
+import { assertEquals } from "../dev_deps.ts";
 
 Deno.test("ParameterVariable string", () => {
   const param = ParameterVariable("", "incident_name", {
