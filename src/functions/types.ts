@@ -43,6 +43,7 @@ export type FunctionContext<InputParameters> = {
   // TODO: Support types generated from manifest
   inputs: InputParameters;
   token: string;
+  event: FunctionInvocationBody["event"];
 };
 export interface ISlackFunction<
   InputParameters extends ParameterSetDefinition,
