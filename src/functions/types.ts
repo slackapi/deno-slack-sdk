@@ -6,7 +6,7 @@ import {
 } from "../parameters/mod.ts";
 import {
   TypedArrayParameterDefinition,
-  TypedObjectParameterDefinition,
+  // TypedObjectParameterDefinition,
 } from "../parameters/types.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import SlackSchemaTypes from "../schema/slack/schema_types.ts";
@@ -73,40 +73,40 @@ export type FunctionContext<
 
 type FunctionInputRuntimeType<Param extends ParameterDefinition> =
   Param["type"] extends typeof SchemaTypes.string ? string
-    : Param["type"] extends
-      | typeof SchemaTypes.integer
-      | typeof SchemaTypes.number ? number
-    : Param["type"] extends typeof SchemaTypes.boolean ? boolean
+    : // : Param["type"] extends
+    //   | typeof SchemaTypes.integer
+    //   | typeof SchemaTypes.number ? number
+    Param["type"] extends typeof SchemaTypes.boolean ? boolean
     : Param["type"] extends typeof SchemaTypes.array
       ? Param extends TypedArrayParameterDefinition
         ? TypedArrayFunctionInputRuntimeType<Param>
       : UnknownRuntimeType[]
-    : Param["type"] extends typeof SchemaTypes.object
-      ? Param extends TypedObjectParameterDefinition
-        ? TypedObjectFunctionInputRuntimeType<Param>
-      : UnknownRuntimeType
-    : // TODO: Look at moving these slack runtime type declarations into the slack type definitions once we have DefineType and can use it there
+    : // : Param["type"] extends typeof SchemaTypes.object
+    //   ? Param extends TypedObjectParameterDefinition
+    //     ? TypedObjectFunctionInputRuntimeType<Param>
+    //   : UnknownRuntimeType
+    // TODO: Look at moving these slack runtime type declarations into the slack type definitions once we have DefineType and can use it there
     Param["type"] extends
       | typeof SlackSchemaTypes.user_id
-      | typeof SlackSchemaTypes.channel_id
-      | typeof SlackSchemaTypes.usergroup_id ? string
-    : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
-    : UnknownRuntimeType;
+      | typeof SlackSchemaTypes.channel_id ? // | typeof SlackSchemaTypes.usergroup_id
+    string
+    : // : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
+    UnknownRuntimeType;
 
 // deno-lint-ignore no-explicit-any
 type UnknownRuntimeType = any;
 
-type TypedObjectFunctionInputRuntimeType<
-  Param extends TypedObjectParameterDefinition,
-> =
-  & {
-    [k in keyof Param["properties"]]: FunctionInputRuntimeType<
-      Param["properties"][k]
-    >;
-  }
-  & {
-    [key: string]: UnknownRuntimeType;
-  };
+// type TypedObjectFunctionInputRuntimeType<
+//   Param extends TypedObjectParameterDefinition,
+// > =
+//   & {
+//     [k in keyof Param["properties"]]: FunctionInputRuntimeType<
+//       Param["properties"][k]
+//     >;
+//   }
+//   & {
+//     [key: string]: UnknownRuntimeType;
+//   };
 
 type TypedArrayFunctionInputRuntimeType<
   Param extends TypedArrayParameterDefinition,

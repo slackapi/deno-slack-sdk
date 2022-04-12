@@ -55,8 +55,7 @@ Deno.test("Manifest() automatically registers types used by function input and o
 
   const CustomInputType = DefineType({
     callback_id: inputTypeId,
-    type: Schema.types.object,
-    properties: { aString: { type: CustomStringType } },
+    type: CustomStringType,
   });
 
   const CustomOutputType = DefineType({
@@ -103,28 +102,40 @@ Deno.test("Manifest() automatically registers types used by function input and o
 });
 
 Deno.test("Manifest() automatically registers types referenced by other types", () => {
-  const objectTypeId = "test_object_type";
+  // const objectTypeId = "test_object_type";
   const stringTypeId = "test_string_type";
+  const booleanTypeId = "test_boolean_type";
   const arrayTypeId = "test_array_type";
+  const customTypeId = "test_custom_type";
+
+  const BooleanType = DefineType({
+    callback_id: booleanTypeId,
+    type: Schema.types.boolean,
+  });
 
   const StringType = DefineType({
     callback_id: stringTypeId,
     type: Schema.types.string,
   });
 
-  const ObjectType = DefineType({
-    callback_id: objectTypeId,
-    type: Schema.types.object,
-    properties: {
-      aString: { type: StringType },
-    },
+  const CustomType = DefineType({
+    callback_id: customTypeId,
+    type: BooleanType,
   });
+
+  // const ObjectType = DefineType(objectTypeId, {
+  //   type: Schema.types.object,
+  //   properties: {
+  //     aString: { type: StringType },
+  //   },
+  // });
 
   const ArrayType = DefineType({
     callback_id: arrayTypeId,
     type: Schema.types.array,
     items: {
-      type: ObjectType,
+      // type: ObjectType,
+      type: StringType,
     },
   });
 
@@ -135,20 +146,30 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
     longDescription: "LongDescription",
     runtime: "deno",
     botScopes: [],
-    types: [ArrayType],
+    types: [ArrayType, CustomType],
   };
   const manifest = Manifest(definition);
-  assertEquals(definition.types, [ArrayType, ObjectType, StringType]);
+
+  assertEquals(definition.types, [
+    ArrayType,
+    CustomType,
+    StringType,
+    // ObjectType,
+    BooleanType,
+  ]);
   assertEquals(manifest.types, {
     [arrayTypeId]: ArrayType.definition,
-    [objectTypeId]: ObjectType.definition,
+    [customTypeId]: CustomType.definition,
+    // [objectTypeId]: ObjectType.definition,
     [stringTypeId]: StringType.definition,
+    [booleanTypeId]: BooleanType.definition,
   });
 });
 
 Deno.test("SlackManifest() registration functions don't allow duplicates", () => {
   const functionId = "test_function";
-  const objectTypeId = "test_object_type";
+  const arrayTypeId = "test_array_type";
+  // const objectTypeId = "test_object_type";
   const stringTypeId = "test_string_type";
 
   const CustomStringType = DefineType({
@@ -156,13 +177,21 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
     type: Schema.types.string,
   });
 
-  const CustomObjectType = DefineType({
-    callback_id: objectTypeId,
-    type: Schema.types.object,
-    properties: {
-      aString: {
-        type: CustomStringType,
-      },
+  // const CustomObjectType = DefineType({
+  //   callback_id: objectTypeId,
+  //   type: Schema.types.object,
+  //   properties: {
+  //     aString: {
+  //       type: CustomStringType,
+  //     },
+  //   },
+  // });
+
+  const CustomArrayType = DefineType({
+    callback_id: arrayTypeId,
+    type: Schema.types.array,
+    items: {
+      type: CustomStringType,
     },
   });
 
@@ -180,24 +209,26 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
     runtime: "deno",
     botScopes: [],
     functions: [Func],
-    types: [CustomObjectType],
+    types: [CustomArrayType],
+    // types: [CustomObjectType],
   };
 
   const Manifest = new SlackManifest(definition);
 
   Manifest.registerFunction(Func);
   Manifest.registerFunction(Func);
-  Manifest.registerType(CustomObjectType);
-  Manifest.registerType(CustomObjectType);
+  // Manifest.registerType(CustomObjectType);
+  // Manifest.registerType(CustomObjectType);
+  Manifest.registerType(CustomArrayType);
   Manifest.registerType(CustomStringType);
 
   const exportedManifest = Manifest.export();
 
   assertEquals(definition.functions, [Func]);
   assertEquals(exportedManifest.functions, { [functionId]: Func.export() });
-  assertEquals(definition.types, [CustomObjectType, CustomStringType]);
+  assertEquals(definition.types, [CustomArrayType, CustomStringType]);
   assertEquals(exportedManifest.types, {
-    [objectTypeId]: CustomObjectType.definition,
+    [arrayTypeId]: CustomArrayType.definition,
     [stringTypeId]: CustomStringType.definition,
   });
 });
