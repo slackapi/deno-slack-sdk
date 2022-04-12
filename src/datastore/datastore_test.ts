@@ -3,16 +3,9 @@ import { DefineDatastore } from "./mod.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import { DefineType } from "../types/mod.ts";
 
-const customType = DefineType("custom_type", {
-  type: SchemaTypes.object,
-  properties: {
-    id: {
-      type: SchemaTypes.string,
-    },
-    user_id: {
-      type: SchemaTypes.string,
-    },
-  },
+const customType = DefineType({
+  callback_id: "custom_type",
+  type: SchemaTypes.boolean,
 });
 
 Deno.test("Datastore sets appropriate defaults", () => {
@@ -20,10 +13,10 @@ Deno.test("Datastore sets appropriate defaults", () => {
     primary_key: "attr1",
     attributes: {
       attr1: {
-        type: "string",
+        type: SchemaTypes.string,
       },
       attr2: {
-        type: "int",
+        type: SchemaTypes.integer,
       },
       attr3: {
         type: customType,
@@ -32,9 +25,7 @@ Deno.test("Datastore sets appropriate defaults", () => {
   });
 
   const exported = datastore.export();
-  console.log(exported);
   assertEquals(exported.primary_key, "attr1");
-  assertEquals(exported.attributes.attr1.type, "string");
-  assertEquals(exported.attributes.attr2.type, "int");
-  assertEquals(exported.attributes.attr3.type, customType);
+  assertEquals(exported.attributes.attr1.type, SchemaTypes.string);
+  assertEquals(exported.attributes.attr2.type, SchemaTypes.integer);
 });
