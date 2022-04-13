@@ -38,12 +38,12 @@ export type FunctionHandlerReturnArgs<OutputParameters> = {
 
 export type FunctionContext<InputParameters> = {
   /** A map of string keys to string values containing any environment variables available and provided to your function handler's execution context. */
-  env: Env;
+  env?: Env;
   /** The inputs to the function as defined by your function definition. */
   // TODO: Support types generated from manifest
   inputs: InputParameters;
-  token: string;
-  event: FunctionInvocationBody["event"];
+  token?: string;
+  event?: FunctionInvocationBody["event"];
 };
 export interface ISlackFunction<
   InputParameters extends ParameterSetDefinition,
