@@ -41,7 +41,6 @@ export class SlackManifest {
             def.name,
         },
       },
-      runtime: def.runtime,
       "outgoing_domains": def.outgoingDomains || [],
     } as ManifestSchema;
 
@@ -59,7 +58,12 @@ export class SlackManifest {
       }, {} as ManifestSchema["types"]);
     }
 
-    //TODO: Add support for datastores
+    if (def.datastores) {
+      manifest.datastores = def.datastores?.reduce((acc = {}, datastore) => {
+        acc[datastore.name] = datastore.export();
+        return acc;
+      }, {} as ManifestSchema["datastores"]);
+    }
 
     return manifest;
   }
@@ -68,6 +72,11 @@ export class SlackManifest {
     // Loop through functions to automatically register any referenced types
     this.definition.functions?.forEach((func) => {
       func.registerParameterTypes(this);
+    });
+
+    // Loop through datastores to automatically register any referenced types
+    this.definition.datastores?.forEach((datastore) => {
+      datastore.registerAttributeTypes(this);
     });
 
     // Loop through types to automatically register any referenced sub-types
@@ -106,7 +115,16 @@ export class SlackManifest {
 
   private ensureBotScopes(): string[] {
     const includedScopes = this.definition.botScopes || [];
-    // TODO: Add datastore scopes
+
+    // Add datastore scopes if necessary
+    if (Object.keys(this.definition.datastores ?? {}).length > 0) {
+      const datastoreScopes = ["datastore:read", "datastore:write"];
+      datastoreScopes.forEach((scope) => {
+        if (!includedScopes.includes(scope)) {
+          includedScopes.push(scope);
+        }
+      });
+    }
 
     return includedScopes;
   }

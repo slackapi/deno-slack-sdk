@@ -57,6 +57,8 @@ The single argument to your function is an object composed of several properties
 
 - `env`: represents environment variables available to your function's execution context.
 - `inputs`: an object containing the input parameters you defined as part of your Function Definition. In the example above, the `name` input parameter is available on the `inputs` property of our function handler context.
+- `token`: your application's access token.
+- `event`: an object containing the full incoming event details.
 
 ### Adding Functions to the Manifest
 
@@ -69,7 +71,6 @@ Once you have defined a function, don't forget to include it in your [`Manifest`
       description:
         "A demo showing how to use Slack functions",
       icon: "assets/icon.png",
-      runtime: "deno1.x",
       botScopes: ["commands", "chat:write", "chat:write.public"],
       functions: [ReverseString], // <-- don't forget this!
     });

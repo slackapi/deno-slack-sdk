@@ -25,28 +25,32 @@ Deno.test("Function with required params", () => {
     title: "All Types Function",
     source_file: "functions/example.ts",
     input_parameters: {
-      required: ["myString", "myNumber"],
+      required: ["myString" /* , "myNumber" */],
       properties: {
         myString: {
           type: Schema.types.string,
           title: "My string",
           description: "a really neat value",
         },
-        integer: {
-          type: Schema.types.integer,
-          description: "integer",
+        myBoolean: {
+          type: Schema.types.boolean,
+          title: "My boolean",
         },
-        myNumber: {
-          type: Schema.types.number,
-          description: "number",
-        },
+        // integer: {
+        //   type: Schema.types.integer,
+        //   description: "integer",
+        // },
+        // myNumber: {
+        //   type: Schema.types.number,
+        //   description: "number",
+        // },
       },
     },
     output_parameters: {
       required: ["out"],
       properties: {
         out: {
-          type: Schema.types.integer,
+          type: Schema.types.string,
         },
       },
     },
@@ -54,7 +58,7 @@ Deno.test("Function with required params", () => {
 
   assertEquals(AllTypesFunction.definition.input_parameters?.required, [
     "myString",
-    "myNumber",
+    // "myNumber",
   ]);
   assertEquals(AllTypesFunction.definition.output_parameters?.required, [
     "out",

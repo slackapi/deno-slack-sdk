@@ -1,13 +1,15 @@
-import { ISlackFunction } from "./functions/types.ts";
-import {
+import type { ISlackFunction } from "./functions/types.ts";
+import type { ISlackDatastore } from "./datastore/types.ts";
+import type {
   ParameterDefinition,
   ParameterSetDefinition,
 } from "./parameters/mod.ts";
-import { ICustomType } from "./types/types.ts";
+import type { ICustomType } from "./types/types.ts";
 
 // SlackManifestType is the top level type that imports all resources for the app
 // An app manifest is generated based on what this has defined in it
 
+export type { FunctionHandler } from "./functions/types.ts";
 export type SlackManifestType = {
   name: string;
   backgroundColor?: string;
@@ -15,14 +17,16 @@ export type SlackManifestType = {
   displayName?: string;
   icon: string;
   longDescription?: string;
-  runtime: string;
   botScopes: Array<string>;
   functions?: ManifestFunction[];
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
+  datastores?: ManifestDatastore[];
 };
 
-// Both of these are typed liberally at this level but more specifically down further
+export type ManifestDatastore = ISlackDatastore;
+
+// This is typed liberally at this level but more specifically down further
 // This is to work around an issue TS has with resolving the generics across the hierarchy
 // deno-lint-ignore no-explicit-any
 export type ManifestFunction = ISlackFunction<any, any, any, any>;
@@ -72,6 +76,19 @@ export type ManifestFunctionSchema = {
   "output_parameters": ManifestFunctionParameters;
 };
 
+export type ManifestDatastoreSchema = {
+  "primary_key": string;
+  attributes: {
+    [key: string]: {
+      type: string | ICustomType;
+      items?: ManifestCustomTypeSchema;
+      properties?: {
+        [key: string]: ManifestCustomTypeSchema;
+      };
+    };
+  };
+};
+
 export type ManifestCustomTypeSchema = ParameterDefinition;
 
 export type ManifestMetadata = {
@@ -98,12 +115,14 @@ export type ManifestSchema = {
       "display_name": string;
     };
   };
-  runtime?: string;
   functions?: {
     [key: string]: ManifestFunctionSchema;
   };
   "outgoing_domains"?: string[];
   types?: {
     [key: string]: ManifestCustomTypeSchema;
+  };
+  datastores?: {
+    [key: string]: ManifestDatastoreSchema;
   };
 };
