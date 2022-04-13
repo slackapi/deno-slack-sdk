@@ -118,7 +118,6 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
     name: "Name",
     description: "Description",
     icon: "icon.png",
-    runtime: "deno",
     botScopes: [],
     datastores: [Store],
   };
@@ -273,7 +272,6 @@ Deno.test("SlackManifest.export() ensures datastore scopes if they are not prese
     description: "Description",
     icon: "icon.png",
     longDescription: "LongDescription",
-    runtime: "deno",
     botScopes: [],
     datastores: [Store],
   };
@@ -301,7 +299,6 @@ Deno.test("SlackManifest.export() will not duplicate datastore scopes if they're
     description: "Description",
     icon: "icon.png",
     longDescription: "LongDescription",
-    runtime: "deno",
     botScopes: ["datastore:read", "datastore:write"],
     datastores: [Store],
   };
