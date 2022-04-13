@@ -1,3 +1,4 @@
+import { SlackManifest } from "../manifest.ts";
 import { ManifestDatastoreSchema } from "../types.ts";
 import {
   ISlackDatastore,
@@ -17,11 +18,19 @@ export const DefineDatastore = <Attributes extends SlackDatastoreAttributes>(
 };
 
 export class SlackDatastore<Attributes extends SlackDatastoreAttributes>
-  implements ISlackDatastore<Attributes> {
+  implements ISlackDatastore {
   public name: string;
 
   constructor(private definition: SlackDatastoreDefinition<Attributes>) {
     this.name = definition.name;
+  }
+
+  registerAttributeTypes(manifest: SlackManifest) {
+    Object.values(this.definition.attributes ?? {})?.forEach((attribute) => {
+      if (attribute.type instanceof Object) {
+        manifest.registerType(attribute.type);
+      }
+    });
   }
 
   export(): ManifestDatastoreSchema {

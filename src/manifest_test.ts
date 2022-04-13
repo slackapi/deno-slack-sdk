@@ -2,7 +2,7 @@ import { assertEquals } from "https://deno.land/std@0.99.0/testing/asserts.ts";
 import { SlackManifestType } from "./types.ts";
 
 import { Manifest, SlackManifest } from "./manifest.ts";
-import { DefineFunction, DefineType, Schema } from "./mod.ts";
+import { DefineDatastore, DefineFunction, DefineType, Schema } from "./mod.ts";
 
 Deno.test("Manifest() property mappings", () => {
   const definition: SlackManifestType = {
@@ -97,6 +97,34 @@ Deno.test("Manifest() automatically registers types used by function input and o
     [stringTypeId]: CustomStringType.definition,
     [outputTypeId]: CustomOutputType.definition,
   });
+});
+
+Deno.test("Manifest() automatically registers types referenced by datastores", () => {
+  const stringTypeId = "test_string_type";
+  const StringType = DefineType({
+    callback_id: stringTypeId,
+    type: Schema.types.string,
+  });
+
+  const Store = DefineDatastore({
+    name: "Test store",
+    attributes: {
+      aString: { type: StringType },
+    },
+    primary_key: "aString",
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    runtime: "deno",
+    botScopes: [],
+    datastores: [Store],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(definition.types, [StringType]);
+  assertEquals(manifest.types, { [stringTypeId]: StringType.definition });
 });
 
 Deno.test("Manifest() automatically registers types referenced by other types", () => {
@@ -227,4 +255,66 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
     [arrayTypeId]: CustomArrayType.definition,
     [stringTypeId]: CustomStringType.definition,
   });
+});
+
+Deno.test("SlackManifest.export() ensures datastore scopes if they are not present", () => {
+  const Store = DefineDatastore({
+    name: "test store",
+    attributes: {
+      attr: {
+        type: Schema.types.string,
+      },
+    },
+    primary_key: "attr",
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    runtime: "deno",
+    botScopes: [],
+    datastores: [Store],
+  };
+
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+  const botScopes = exportedManifest.oauth_config.scopes.bot;
+  assertEquals(botScopes.includes("datastore:read"), true);
+  assertEquals(botScopes.includes("datastore:write"), true);
+});
+
+Deno.test("SlackManifest.export() will not duplicate datastore scopes if they're already present", () => {
+  const Store = DefineDatastore({
+    name: "test store",
+    attributes: {
+      attr: {
+        type: Schema.types.string,
+      },
+    },
+    primary_key: "attr",
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    runtime: "deno",
+    botScopes: ["datastore:read", "datastore:write"],
+    datastores: [Store],
+  };
+
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+  const botScopes = exportedManifest.oauth_config.scopes.bot;
+  assertEquals(
+    botScopes.filter((scope) => scope === "datastore:read").length,
+    1,
+  );
+  assertEquals(
+    botScopes.filter((scope) => scope === "datastore:write").length,
+    1,
+  );
 });
