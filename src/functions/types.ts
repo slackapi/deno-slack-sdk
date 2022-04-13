@@ -1,15 +1,8 @@
 import { Env, ManifestFunctionSchema } from "../types.ts";
 import {
-  ParameterDefinition,
   ParameterSetDefinition,
   RequiredParameters,
 } from "../parameters/mod.ts";
-import {
-  TypedArrayParameterDefinition,
-  // TypedObjectParameterDefinition,
-} from "../parameters/types.ts";
-import SchemaTypes from "../schema/schema_types.ts";
-import SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackManifest } from "../manifest.ts";
 
 export type FunctionInvocationBody = {
@@ -31,104 +24,27 @@ export type FunctionInvocationBody = {
   };
 };
 
-export type FunctionHandler<
-  InputParameters extends ParameterSetDefinition,
-  OutputParameters extends ParameterSetDefinition,
-  RequiredInput extends RequiredParameters<InputParameters>,
-  RequiredOutputs extends RequiredParameters<OutputParameters>,
-> = {
-  // TODO: Type the return args of promise more
-  (context: FunctionContext<InputParameters, RequiredInput>): Promise<
-    FunctionHandlerReturnArgs<OutputParameters, RequiredOutputs>
-  >;
+export type FunctionHandler<InputParameters, OutputParameters> = {
+  (
+    context: FunctionContext<InputParameters>,
+  ): Promise<FunctionHandlerReturnArgs<OutputParameters>>;
 };
 
-// TODO: Type the outputs similar to the inputs
-export type FunctionHandlerReturnArgs<
-  OutputParameters extends ParameterSetDefinition,
-  RequiredOutputs extends RequiredParameters<OutputParameters>,
-> = {
+export type FunctionHandlerReturnArgs<OutputParameters> = {
   completed?: boolean;
-  outputs?: FunctionInputs<OutputParameters, RequiredOutputs>;
+  outputs: OutputParameters;
   error?: string;
 };
 
-export type FunctionContext<
-  InputParameters extends ParameterSetDefinition,
-  RequiredInputs extends RequiredParameters<InputParameters>,
-> = {
-  // TODO: Type the values to our supported types?
+export type FunctionContext<InputParameters> = {
   /** A map of string keys to string values containing any environment variables available and provided to your function handler's execution context. */
   env: Env;
   /** The inputs to the function as defined by your function definition. */
   // TODO: Support types generated from manifest
-  inputs: FunctionInputs<
-    InputParameters,
-    RequiredInputs
-  >;
-  executionId: string;
+  inputs: InputParameters;
+  token: string;
+  event: FunctionInvocationBody["event"];
 };
-
-/* START TODO: Remove Runtime Generic Typing in favor of Generated Types */
-
-type FunctionInputRuntimeType<Param extends ParameterDefinition> =
-  Param["type"] extends typeof SchemaTypes.string ? string
-    : // : Param["type"] extends
-    //   | typeof SchemaTypes.integer
-    //   | typeof SchemaTypes.number ? number
-    Param["type"] extends typeof SchemaTypes.boolean ? boolean
-    : Param["type"] extends typeof SchemaTypes.array
-      ? Param extends TypedArrayParameterDefinition
-        ? TypedArrayFunctionInputRuntimeType<Param>
-      : UnknownRuntimeType[]
-    : // : Param["type"] extends typeof SchemaTypes.object
-    //   ? Param extends TypedObjectParameterDefinition
-    //     ? TypedObjectFunctionInputRuntimeType<Param>
-    //   : UnknownRuntimeType
-    // TODO: Look at moving these slack runtime type declarations into the slack type definitions once we have DefineType and can use it there
-    Param["type"] extends
-      | typeof SlackSchemaTypes.user_id
-      | typeof SlackSchemaTypes.channel_id ? // | typeof SlackSchemaTypes.usergroup_id
-    string
-    : // : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
-    UnknownRuntimeType;
-
-// deno-lint-ignore no-explicit-any
-type UnknownRuntimeType = any;
-
-// type TypedObjectFunctionInputRuntimeType<
-//   Param extends TypedObjectParameterDefinition,
-// > =
-//   & {
-//     [k in keyof Param["properties"]]: FunctionInputRuntimeType<
-//       Param["properties"][k]
-//     >;
-//   }
-//   & {
-//     [key: string]: UnknownRuntimeType;
-//   };
-
-type TypedArrayFunctionInputRuntimeType<
-  Param extends TypedArrayParameterDefinition,
-> = FunctionInputRuntimeType<Param["items"]>[];
-
-type FunctionInputs<
-  InputParameters extends ParameterSetDefinition,
-  RequiredInputs extends RequiredParameters<InputParameters>,
-> =
-  & {
-    [k in RequiredInputs[number]]: FunctionInputRuntimeType<
-      InputParameters[k]
-    >;
-  }
-  & {
-    [k in keyof InputParameters]?: FunctionInputRuntimeType<
-      InputParameters[k]
-    >;
-  };
-
-/* END TODO: Remove Runtime Generic Typing in favor of Generated Types */
-
 export interface ISlackFunction<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
