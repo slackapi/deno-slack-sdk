@@ -1,12 +1,8 @@
 import { SlackManifestType } from "./types.ts";
 
 import { Manifest, SlackManifest } from "./manifest.ts";
-<<<<<<< deps
-import { DefineFunction, DefineType, Schema } from "./mod.ts";
-import { assertEquals } from "./dev_deps.ts";
-=======
 import { DefineDatastore, DefineFunction, DefineType, Schema } from "./mod.ts";
->>>>>>> main
+import { assertEquals } from "./dev_deps.ts";
 
 Deno.test("Manifest() property mappings", () => {
   const definition: SlackManifestType = {
