@@ -76,12 +76,12 @@ export type FunctionDefinitionArgs<
   description?: string;
   /** An optional map of input parameter names containing information about their type, title, description, required and (additional) properties. */
   "input_parameters"?: {
-    required: RequiredInput;
     properties: InputParameters;
+    required: RequiredInput;
   };
   /** An optional map of output parameter names containing information about their type, title, description, required and (additional) properties. */
   "output_parameters"?: {
-    required: RequiredOutputs;
     properties: OutputParameters;
+    required: RequiredOutputs;
   };
 };
