@@ -4,6 +4,7 @@ import {
   ManifestSchema,
   SlackManifestType,
 } from "./types.ts";
+import { ManifestOAuth2ProviderSchema } from "./providers/oauth2/types.ts";
 import { ICustomType } from "./types/types.ts";
 
 export const Manifest = (definition: SlackManifestType) => {
@@ -57,6 +58,18 @@ export class SlackManifest {
         acc[customType.id] = customType.definition;
         return acc;
       }, {} as ManifestSchema["types"]);
+    }
+
+    if (def.oauth2_providers) {
+      manifest.third_party_auth_providers = {
+        "oauth2": def.oauth2_providers?.reduce(
+          (acc = {}, oauth2_provider) => {
+            acc[oauth2_provider.id] = oauth2_provider.export();
+            return acc;
+          },
+          {} as { [key: string]: ManifestOAuth2ProviderSchema },
+        ),
+      };
     }
 
     //TODO: Add support for datastores

@@ -1,4 +1,6 @@
 import { ISlackFunction } from "./functions/types.ts";
+import { OAuth2Provider } from "./providers/oauth2/mod.ts";
+import { ManifestOAuth2ProviderSchema } from "./providers/oauth2/types.ts";
 import {
   ParameterDefinition,
   ParameterSetDefinition,
@@ -20,6 +22,7 @@ export type SlackManifestType = {
   functions?: ManifestFunction[];
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
+  oauth2_providers?: OAuth2Provider[];
 };
 
 // Both of these are typed liberally at this level but more specifically down further
@@ -105,6 +108,9 @@ export type ManifestSchema = {
   "outgoing_domains"?: string[];
   types?: {
     [key: string]: ManifestCustomTypeSchema;
+  };
+  "third_party_auth_providers"?: {
+    oauth2?: { [key: string]: ManifestOAuth2ProviderSchema };
   };
 };
 

@@ -5,6 +5,7 @@ import {
   RequiredParameters,
 } from "../parameters/mod.ts";
 import {
+  OAuth2ParameterDefinition,
   TypedArrayParameterDefinition,
   TypedObjectParameterDefinition,
 } from "../parameters/types.ts";
@@ -91,9 +92,13 @@ type FunctionInputRuntimeType<Param extends ParameterDefinition> =
     Param["type"] extends
       | typeof SlackSchemaTypes.user_id
       | typeof SlackSchemaTypes.channel_id
-      | typeof SlackSchemaTypes.usergroup_id ? string
+      | typeof SlackSchemaTypes.usergroup_id
+      | typeof SlackSchemaTypes.oauth2 ? string
     : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
-    : UnknownRuntimeType;
+    : // : Param["type"] extends typeof SlackSchemaTypes.oauth2
+    //   ? (Param extends OAuth2ParameterDefinition ? OAuth2ParameterDefinition
+    //     : UnknownRuntimeType)
+    UnknownRuntimeType;
 
 // deno-lint-ignore no-explicit-any
 type UnknownRuntimeType = any;
