@@ -30,19 +30,19 @@ export type FunctionHandler<InputParameters, OutputParameters> = {
   ): Promise<FunctionHandlerReturnArgs<OutputParameters>>;
 };
 
-type ReturnArgs<OutputParameters> = {
+type FunctionReturnArgs<OutputParameters> = {
   completed: boolean;
   outputs: OutputParameters;
   error: string;
 };
 
 type SuccessfulFunctionReturnArgs<OutputParameters> =
-  & Partial<ReturnArgs<OutputParameters>>
-  & Required<Pick<ReturnArgs<OutputParameters>, "outputs">>;
+  & Partial<FunctionReturnArgs<OutputParameters>>
+  & Required<Pick<FunctionReturnArgs<OutputParameters>, "outputs">>;
 
 type ErroredFunctionReturnArgs<OutputParameters> =
-  & Partial<ReturnArgs<OutputParameters>>
-  & Required<Pick<ReturnArgs<OutputParameters>, "error">>;
+  & Partial<FunctionReturnArgs<OutputParameters>>
+  & Required<Pick<FunctionReturnArgs<OutputParameters>, "error">>;
 
 export type FunctionHandlerReturnArgs<OutputParameters> =
   | SuccessfulFunctionReturnArgs<OutputParameters>
