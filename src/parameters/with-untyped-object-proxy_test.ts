@@ -1,5 +1,5 @@
-import { assertEquals } from "https://deno.land/std@0.99.0/testing/asserts.ts";
 import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
+import { assertEquals } from "../dev_deps.ts";
 
 Deno.test("WithUntypedObjectProxy", () => {
   const ctx = WithUntypedObjectProxy({});

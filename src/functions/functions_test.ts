@@ -1,6 +1,6 @@
-import { assertEquals } from "https://deno.land/std@0.99.0/testing/asserts.ts";
 import { DefineFunction } from "./mod.ts";
 import Schema from "../schema/mod.ts";
+import { assertEquals } from "../dev_deps.ts";
 
 // TODO: Re-add tests to validate function execution when we've determined how to execute functions locally
 
