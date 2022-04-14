@@ -1,12 +1,9 @@
-import { Env } from "../types.ts";
-import { FunctionContext, FunctionInvocationBody } from "./types.ts";
-
-type SlackFunctionTesterArgs<InputParameters> = {
-  inputs: InputParameters;
-  env?: Env;
-  token?: string;
-  event?: FunctionInvocationBody["event"];
-};
+import type { FunctionContext } from "./types.ts";
+type SlackFunctionTesterArgs<InputParameters> =
+  & Partial<FunctionContext<InputParameters>>
+  & {
+    inputs: InputParameters;
+  };
 
 export const SlackFunctionTester = (callbackId: string) => {
   const now = new Date();
