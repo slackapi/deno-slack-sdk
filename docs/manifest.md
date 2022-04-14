@@ -7,14 +7,13 @@ aspects like what [functions][functions] it contains.
 
 A Manifest can be defined with the top level `Manifest` export. Below is an example, taken from the template application:
 
-```
+```ts
 import { Manifest } from "slack-cloud-sdk/mod.ts";
 import { ReverseString } from "./functions/reverse.ts";
 
 Manifest({
   name: "heuristic-tortoise-312",
-  description:
-    "A demo showing how to use Slack functions",
+  description: "A demo showing how to use Slack functions",
   icon: "assets/icon.png",
   botScopes: ["commands", "chat:write", "chat:write.public"],
   functions: [ReverseString],
