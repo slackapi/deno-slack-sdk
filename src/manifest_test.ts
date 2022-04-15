@@ -2,7 +2,7 @@ import { SlackManifestType } from "./types.ts";
 
 import { Manifest, SlackManifest } from "./manifest.ts";
 import { DefineDatastore, DefineFunction, DefineType, Schema } from "./mod.ts";
-import { assertEquals } from "./dev_deps.ts";
+import { assertEquals, assertStrictEquals } from "./dev_deps.ts";
 
 Deno.test("Manifest() property mappings", () => {
   const definition: SlackManifestType = {
@@ -24,8 +24,8 @@ Deno.test("Manifest() property mappings", () => {
     long_description: definition.longDescription,
     short_description: definition.description,
   });
-  assertEquals(manifest.icon, definition.icon);
-  assertEquals(
+  assertStrictEquals(manifest.icon, definition.icon);
+  assertStrictEquals(
     manifest.features.bot_user.display_name,
     definition.displayName,
   );
@@ -33,7 +33,7 @@ Deno.test("Manifest() property mappings", () => {
   // If display_name is not defined on definition, should fall back to name
   delete definition.displayName;
   manifest = Manifest(definition);
-  assertEquals(
+  assertStrictEquals(
     manifest.features.bot_user.display_name,
     definition.name,
   );
@@ -279,8 +279,8 @@ Deno.test("SlackManifest.export() ensures datastore scopes if they are not prese
   const Manifest = new SlackManifest(definition);
   const exportedManifest = Manifest.export();
   const botScopes = exportedManifest.oauth_config.scopes.bot;
-  assertEquals(botScopes.includes("datastore:read"), true);
-  assertEquals(botScopes.includes("datastore:write"), true);
+  assertStrictEquals(botScopes.includes("datastore:read"), true);
+  assertStrictEquals(botScopes.includes("datastore:write"), true);
 });
 
 Deno.test("SlackManifest.export() will not duplicate datastore scopes if they're already present", () => {
@@ -306,11 +306,11 @@ Deno.test("SlackManifest.export() will not duplicate datastore scopes if they're
   const Manifest = new SlackManifest(definition);
   const exportedManifest = Manifest.export();
   const botScopes = exportedManifest.oauth_config.scopes.bot;
-  assertEquals(
+  assertStrictEquals(
     botScopes.filter((scope) => scope === "datastore:read").length,
     1,
   );
-  assertEquals(
+  assertStrictEquals(
     botScopes.filter((scope) => scope === "datastore:write").length,
     1,
   );

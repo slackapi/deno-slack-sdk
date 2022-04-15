@@ -1,14 +1,14 @@
 import SchemaTypes from "../schema/schema_types.ts";
 import { ParameterVariable } from "./mod.ts";
 import { DefineType } from "../types/mod.ts";
-import { assertEquals } from "../dev_deps.ts";
+import { assertStrictEquals } from "../dev_deps.ts";
 
 Deno.test("ParameterVariable string", () => {
   const param = ParameterVariable("", "incident_name", {
     type: SchemaTypes.string,
   });
 
-  assertEquals(`${param}`, "{{incident_name}}");
+  assertStrictEquals(`${param}`, "{{incident_name}}");
 });
 
 // Deno.test("ParameterVariable typed object", () => {
@@ -68,7 +68,7 @@ Deno.test("ParameterVariable array of strings", () => {
     },
   });
 
-  assertEquals(`${param}`, "{{myArray}}");
+  assertStrictEquals(`${param}`, "{{myArray}}");
 });
 
 Deno.test("ParameterVariable using CustomType string", () => {
@@ -80,7 +80,7 @@ Deno.test("ParameterVariable using CustomType string", () => {
     type: customType,
   });
 
-  assertEquals(`${param}`, "{{myCustomTypeString}}");
+  assertStrictEquals(`${param}`, "{{myCustomTypeString}}");
 });
 
 // Deno.test("ParameterVariable using Custom Type typed object", () => {
@@ -125,7 +125,7 @@ Deno.test("ParameterVariable using Custom Type array", () => {
     type: customType,
   });
 
-  assertEquals(`${param}`, "{{myCustomTypeArray}}");
+  assertStrictEquals(`${param}`, "{{myCustomTypeArray}}");
 });
 
 // Deno.test("ParameterVariable using Custom Type object referencing another Custom Type", () => {

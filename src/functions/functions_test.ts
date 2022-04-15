@@ -1,6 +1,6 @@
 import { DefineFunction } from "./mod.ts";
 import Schema from "../schema/mod.ts";
-import { assertEquals } from "../dev_deps.ts";
+import { assertEquals, assertStrictEquals } from "../dev_deps.ts";
 
 // TODO: Re-add tests to validate function execution when we've determined how to execute functions locally
 
@@ -14,7 +14,7 @@ Deno.test("Function sets appropriate defaults", () => {
   });
 
   const exportedFunc = Func.export();
-  assertEquals(exportedFunc.source_file, "functions/dino.ts");
+  assertStrictEquals(exportedFunc.source_file, "functions/dino.ts");
   assertEquals(exportedFunc.input_parameters, emptyParameterObject);
   assertEquals(exportedFunc.output_parameters, emptyParameterObject);
 });
@@ -95,7 +95,7 @@ Deno.test("Function with input parameters but no output parameters", () => {
 
   NoOutputParamFunction.export();
 
-  assertEquals(
+  assertStrictEquals(
     inputParameters,
     NoOutputParamFunction.definition.input_parameters,
   );
@@ -123,7 +123,7 @@ Deno.test("Function with output parameters but no input parameters", () => {
     emptyParameterObject,
     NoInputParamFunction.export().input_parameters,
   );
-  assertEquals(
+  assertStrictEquals(
     outputParameters,
     NoInputParamFunction.definition.output_parameters,
   );

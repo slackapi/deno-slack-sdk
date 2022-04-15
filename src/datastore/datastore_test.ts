@@ -1,4 +1,4 @@
-import { assertEquals } from "https://deno.land/std@0.99.0/testing/asserts.ts";
+import { assertStrictEquals } from "../dev_deps.ts";
 import { DefineDatastore } from "./mod.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import { DefineType } from "../types/mod.ts";
@@ -26,8 +26,8 @@ Deno.test("Datastore sets appropriate defaults", () => {
   });
 
   const exported = datastore.export();
-  assertEquals(exported.primary_key, "attr1");
-  assertEquals(exported.attributes.attr1.type, SchemaTypes.string);
-  assertEquals(exported.attributes.attr2.type, SchemaTypes.boolean);
-  assertEquals(exported.attributes.attr3.type, customType);
+  assertStrictEquals(exported.primary_key, "attr1");
+  assertStrictEquals(exported.attributes.attr1.type, SchemaTypes.string);
+  assertStrictEquals(exported.attributes.attr2.type, SchemaTypes.boolean);
+  assertStrictEquals(exported.attributes.attr3.type, customType);
 });
