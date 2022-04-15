@@ -30,11 +30,19 @@ export type FunctionHandler<InputParameters, OutputParameters> = {
   ): Promise<FunctionHandlerReturnArgs<OutputParameters>>;
 };
 
-export type FunctionHandlerReturnArgs<OutputParameters> = {
+type SuccessfulFunctionReturnArgs<OutputParameters> = {
   completed?: boolean;
   outputs: OutputParameters;
   error?: string;
 };
+
+type ErroredFunctionReturnArgs<OutputParameters> =
+  & Partial<SuccessfulFunctionReturnArgs<OutputParameters>>
+  & Required<Pick<SuccessfulFunctionReturnArgs<OutputParameters>, "error">>;
+
+export type FunctionHandlerReturnArgs<OutputParameters> =
+  | SuccessfulFunctionReturnArgs<OutputParameters>
+  | ErroredFunctionReturnArgs<OutputParameters>;
 
 export type FunctionContext<InputParameters> = {
   /** A map of string keys to string values containing any environment variables available and provided to your function handler's execution context. */
