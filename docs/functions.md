@@ -64,15 +64,16 @@ The single argument to your function is an object composed of several properties
 
 Once you have defined a function, don't forget to include it in your [`Manifest`][manifest] definition!
 
-    import { ReverseString } from "./functions/reverse.ts";
+```ts
+import { ReverseString } from "./functions/reverse.ts";
 
-    Manifest({
-      name: "heuristic-tortoise",
-      description:
-        "A demo showing how to use Slack functions",
-      icon: "assets/icon.png",
-      botScopes: ["commands", "chat:write", "chat:write.public"],
-      functions: [ReverseString], // <-- don't forget this!
-    });
+Manifest({
+  name: "heuristic-tortoise",
+  description: "A demo showing how to use Slack functions",
+  icon: "assets/icon.png",
+  botScopes: ["commands", "chat:write", "chat:write.public"],
+  functions: [ReverseString], // <-- don't forget this!
+});
+```
 
 [manifest]: ./manifest.md

@@ -57,8 +57,8 @@ input_parameters: {
   }
    ...
 }
-
 ```
+
 _In the provided example the title from the Custom Type is being overridden_
 
 [functions]: ./functions.md
