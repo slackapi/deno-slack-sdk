@@ -24,11 +24,21 @@ export type FunctionInvocationBody = {
   };
 };
 
-export type FunctionHandler<InputParameters, OutputParameters> = {
+type AsyncFunctionHandler<InputParameters, OutputParameters> = {
   (
     context: FunctionContext<InputParameters>,
   ): Promise<FunctionHandlerReturnArgs<OutputParameters>>;
 };
+
+type SyncFunctionHandler<InputParameters, OutputParameters> = {
+  (
+    context: FunctionContext<InputParameters>,
+  ): FunctionHandlerReturnArgs<OutputParameters>;
+};
+
+export type FunctionHandler<InputParameters, OutputParameters> =
+  | AsyncFunctionHandler<InputParameters, OutputParameters>
+  | SyncFunctionHandler<InputParameters, OutputParameters>;
 
 type SuccessfulFunctionReturnArgs<OutputParameters> = {
   completed?: boolean;
