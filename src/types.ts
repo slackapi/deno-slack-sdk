@@ -109,7 +109,7 @@ export type ManifestSchema = {
   types?: {
     [key: string]: ManifestCustomTypeSchema;
   };
-  "third_party_auth_providers"?: {
+  "external_auth_providers"?: {
     oauth2?: { [key: string]: ManifestOAuth2ProviderSchema };
   };
 };

@@ -3,7 +3,7 @@ import { OAuth2ProviderTypes } from "./mod.ts";
 export type ManifestOAuth2ProviderSchema = {
   // provider_key: string;
   provider_type: OAuth2ProviderTypes;
-  opts: {
+  options: {
     // deno-lint-ignore no-explicit-any
     [key: string]: any;
   };

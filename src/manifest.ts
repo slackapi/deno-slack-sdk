@@ -61,7 +61,7 @@ export class SlackManifest {
     }
 
     if (def.oauth2_providers) {
-      manifest.third_party_auth_providers = {
+      manifest.external_auth_providers = {
         "oauth2": def.oauth2_providers?.reduce(
           (acc = {}, oauth2_provider) => {
             acc[oauth2_provider.id] = oauth2_provider.export();
