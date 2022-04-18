@@ -88,7 +88,7 @@ type IntegerParameterDefinition = BaseParameterDefinition<number> & {
 
 export type OAuth2ParameterDefinition = BaseParameterDefinition<string> & {
   type: typeof SlackTypes.oauth2;
-  third_party_auth_provider_key: OAuth2Provider;
+  oauth2_provider_key: string;
 };
 
 type NumberParameterDefinition = BaseParameterDefinition<number> & {
