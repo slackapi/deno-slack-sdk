@@ -1,7 +1,6 @@
 import SchemaTypes from "../schema/schema_types.ts";
 import SlackTypes from "../schema/slack/schema_types.ts";
 import { ICustomType } from "../types/types.ts";
-import { OAuth2Provider } from "../providers/oauth2/mod.ts";
 
 export type PrimitiveParameterDefinition =
   | BooleanParameterDefinition

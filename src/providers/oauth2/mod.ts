@@ -37,7 +37,6 @@ export class OAuth2Provider {
 
   export(): ManifestOAuth2ProviderSchema {
     return {
-      // provider_key: this.id,
       provider_type: this.provider_type,
       options: this.options,
     };
