@@ -36,10 +36,6 @@ Deno.test("Manifest() property mappings", () => {
     manifest.features.bot_user.display_name,
     definition.displayName,
   );
-  assertEquals(
-    manifest.external_auth_providers,
-    undefined,
-  );
 
   // If display_name is not defined on definition, should fall back to name
   delete definition.displayName;
@@ -234,4 +230,21 @@ Deno.test("SlackManifest() oauth2 providers get set properly", () => {
   assertEquals(exportedManifest.external_auth_providers?.oauth2, {
     [providerKey]: Provider.export(),
   });
+});
+
+Deno.test("SlackManifest() oauth2 providers are undefined when not configured", () => {
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    runtime: "deno",
+    botScopes: [],
+  };
+
+  const Manifest = new SlackManifest(definition);
+
+  const exportedManifest = Manifest.export();
+
+  assertEquals(definition.oauth2_providers, undefined);
+  assertEquals(exportedManifest.external_auth_providers?.oauth2, undefined);
 });
