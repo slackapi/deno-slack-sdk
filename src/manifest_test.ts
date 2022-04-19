@@ -2,7 +2,13 @@ import { assertEquals } from "https://deno.land/std@0.99.0/testing/asserts.ts";
 import { SlackManifestType } from "./types.ts";
 
 import { Manifest, SlackManifest } from "./manifest.ts";
-import { DefineFunction, DefineType, Schema } from "./mod.ts";
+import {
+  DefineFunction,
+  DefineOAuth2Provider,
+  DefineType,
+  OAuth2ProviderTypes,
+  Schema,
+} from "./mod.ts";
 
 Deno.test("Manifest() property mappings", () => {
   const definition: SlackManifestType = {
@@ -29,6 +35,10 @@ Deno.test("Manifest() property mappings", () => {
   assertEquals(
     manifest.features.bot_user.display_name,
     definition.displayName,
+  );
+  assertEquals(
+    manifest.external_auth_providers,
+    undefined,
   );
 
   // If display_name is not defined on definition, should fall back to name
@@ -191,5 +201,37 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
   assertEquals(exportedManifest.types, {
     [objectTypeId]: CustomObjectType.definition,
     [stringTypeId]: CustomStringType.definition,
+  });
+});
+
+Deno.test("SlackManifest() oauth2 providers get set properly", () => {
+  const providerKey = "test_provider";
+
+  const Provider = DefineOAuth2Provider({
+    provider_key: providerKey,
+    provider_type: OAuth2ProviderTypes.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "client_secret": "secret",
+      "scope": ["scope_a", "scope_b"],
+    },
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    runtime: "deno",
+    botScopes: [],
+    oauth2_providers: [Provider],
+  };
+
+  const Manifest = new SlackManifest(definition);
+
+  const exportedManifest = Manifest.export();
+
+  assertEquals(definition.oauth2_providers, [Provider]);
+  assertEquals(exportedManifest.external_auth_providers?.oauth2, {
+    [providerKey]: Provider.export(),
   });
 });
