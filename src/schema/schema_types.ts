@@ -1,9 +1,9 @@
 const SchemaTypes = {
   string: "string",
-  integer: "integer",
   boolean: "boolean",
-  number: "number",
-  object: "object",
+  // integer: "integer",
+  // number: "number",
+  // object: "object",
   array: "array",
 } as const;
 

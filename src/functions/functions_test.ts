@@ -1,6 +1,6 @@
-import { assertEquals } from "https://deno.land/std@0.99.0/testing/asserts.ts";
 import { DefineFunction } from "./mod.ts";
 import Schema from "../schema/mod.ts";
+import { assertEquals, assertStrictEquals } from "../dev_deps.ts";
 
 // TODO: Re-add tests to validate function execution when we've determined how to execute functions locally
 
@@ -14,7 +14,7 @@ Deno.test("Function sets appropriate defaults", () => {
   });
 
   const exportedFunc = Func.export();
-  assertEquals(exportedFunc.source_file, "functions/dino.ts");
+  assertStrictEquals(exportedFunc.source_file, "functions/dino.ts");
   assertEquals(exportedFunc.input_parameters, emptyParameterObject);
   assertEquals(exportedFunc.output_parameters, emptyParameterObject);
 });
@@ -25,36 +25,40 @@ Deno.test("Function with required params", () => {
     title: "All Types Function",
     source_file: "functions/example.ts",
     input_parameters: {
-      required: ["myString", "myNumber"],
       properties: {
         myString: {
           type: Schema.types.string,
           title: "My string",
           description: "a really neat value",
         },
-        integer: {
-          type: Schema.types.integer,
-          description: "integer",
+        myBoolean: {
+          type: Schema.types.boolean,
+          title: "My boolean",
         },
-        myNumber: {
-          type: Schema.types.number,
-          description: "number",
-        },
+        // integer: {
+        //   type: Schema.types.integer,
+        //   description: "integer",
+        // },
+        // myNumber: {
+        //   type: Schema.types.number,
+        //   description: "number",
+        // },
       },
+      required: ["myString" /* , "myNumber" */],
     },
     output_parameters: {
-      required: ["out"],
       properties: {
         out: {
-          type: Schema.types.integer,
+          type: Schema.types.string,
         },
       },
+      required: ["out"],
     },
   });
 
   assertEquals(AllTypesFunction.definition.input_parameters?.required, [
     "myString",
-    "myNumber",
+    // "myNumber",
   ]);
   assertEquals(AllTypesFunction.definition.output_parameters?.required, [
     "out",
@@ -77,10 +81,10 @@ Deno.test("Function without input and output parameters", () => {
 
 Deno.test("Function with input parameters but no output parameters", () => {
   const inputParameters = {
-    required: [],
     properties: {
       aString: { type: Schema.types.string },
     },
+    required: [],
   };
   const NoOutputParamFunction = DefineFunction({
     callback_id: "input_params_only",
@@ -91,7 +95,7 @@ Deno.test("Function with input parameters but no output parameters", () => {
 
   NoOutputParamFunction.export();
 
-  assertEquals(
+  assertStrictEquals(
     inputParameters,
     NoOutputParamFunction.definition.input_parameters,
   );
@@ -103,10 +107,10 @@ Deno.test("Function with input parameters but no output parameters", () => {
 
 Deno.test("Function with output parameters but no input parameters", () => {
   const outputParameters = {
-    required: [],
     properties: {
       aString: { type: Schema.types.string },
     },
+    required: [],
   };
   const NoInputParamFunction = DefineFunction({
     callback_id: "output_params_only",
@@ -119,7 +123,7 @@ Deno.test("Function with output parameters but no input parameters", () => {
     emptyParameterObject,
     NoInputParamFunction.export().input_parameters,
   );
-  assertEquals(
+  assertStrictEquals(
     outputParameters,
     NoInputParamFunction.definition.output_parameters,
   );

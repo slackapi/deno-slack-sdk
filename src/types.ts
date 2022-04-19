@@ -1,15 +1,17 @@
-import { ISlackFunction } from "./functions/types.ts";
+import type { ISlackFunction } from "./functions/types.ts";
+import type { ISlackDatastore } from "./datastore/types.ts";
 import { OAuth2Provider } from "./providers/oauth2/mod.ts";
 import { ManifestOAuth2ProviderSchema } from "./providers/oauth2/types.ts";
-import {
+import type {
   ParameterDefinition,
   ParameterSetDefinition,
 } from "./parameters/mod.ts";
-import { ICustomType } from "./types/types.ts";
+import type { ICustomType } from "./types/types.ts";
 
 // SlackManifestType is the top level type that imports all resources for the app
 // An app manifest is generated based on what this has defined in it
 
+export type { FunctionHandler } from "./functions/types.ts";
 export type SlackManifestType = {
   name: string;
   backgroundColor?: string;
@@ -17,15 +19,17 @@ export type SlackManifestType = {
   displayName?: string;
   icon: string;
   longDescription?: string;
-  runtime: string;
   botScopes: Array<string>;
   functions?: ManifestFunction[];
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
+  datastores?: ManifestDatastore[];
   oauth2_providers?: OAuth2Provider[];
 };
 
-// Both of these are typed liberally at this level but more specifically down further
+export type ManifestDatastore = ISlackDatastore;
+
+// This is typed liberally at this level but more specifically down further
 // This is to work around an issue TS has with resolving the generics across the hierarchy
 // deno-lint-ignore no-explicit-any
 export type ManifestFunction = ISlackFunction<any, any, any, any>;
@@ -75,6 +79,19 @@ export type ManifestFunctionSchema = {
   "output_parameters": ManifestFunctionParameters;
 };
 
+export type ManifestDatastoreSchema = {
+  "primary_key": string;
+  attributes: {
+    [key: string]: {
+      type: string | ICustomType;
+      items?: ManifestCustomTypeSchema;
+      properties?: {
+        [key: string]: ManifestCustomTypeSchema;
+      };
+    };
+  };
+};
+
 export type ManifestCustomTypeSchema = ParameterDefinition;
 
 export type ManifestMetadata = {
@@ -101,7 +118,6 @@ export type ManifestSchema = {
       "display_name": string;
     };
   };
-  runtime?: string;
   functions?: {
     [key: string]: ManifestFunctionSchema;
   };
@@ -109,45 +125,10 @@ export type ManifestSchema = {
   types?: {
     [key: string]: ManifestCustomTypeSchema;
   };
+  datastores?: {
+    [key: string]: ManifestDatastoreSchema;
+  };
   "external_auth_providers"?: {
     oauth2?: { [key: string]: ManifestOAuth2ProviderSchema };
   };
-};
-
-export interface ISlackAPIClient {
-  /**
-   * Calls a Slack API method.
-   * @param {string} method The API method name to invoke, i.e. `chat.postMessage`.
-   * @param {Object} data Object representing the data you wish to send along to the Slack API method.
-   * @returns {Promise<BaseResponse>} A Promise that resolves to the data the API responded with.
-   * @throws {Error} Throws an Error if the API response was not OK or a network error occurred.
-   */
-  call(method: string, data: Record<string, unknown>): Promise<BaseResponse>;
-  /**
-   * Calls a Slack API method, to be used in conjunction with Slack Events that send a `response_url` property: {@link https://api.slack.com/interactivity/handling#message_responses}.
-   *
-   * @param {string} url The fully-qualified URL (including protocol, domain and path) of the API to send a request to; typically used for Slack Event API payloads that provide a `response_url` property: {@link https://api.slack.com/interactivity/handling#message_responses}.
-   * @param {Object} data Object representing the data you wish to send along to the API method.
-   * @returns {Promise<BaseResponse>} A Promise that resolves to the data the API responded with.
-   * @throws {Error} Throws an Error if the API response was not OK or a network error occurred.
-   */
-  response(
-    url: string,
-    data: Record<string, unknown>,
-  ): Promise<BaseResponse>;
-}
-
-export type BaseResponse = {
-  /** `true` if the response from the server was successful, `false` otherwise. */
-  ok: boolean;
-  /** Optional error description returned by the server. */
-  error?: string;
-  /** Optional list of warnings returned by the server. */
-  warnings?: Array<string>;
-  /** Optional metadata about the response returned by the server. */
-  "response_metadata"?: {
-    warnings?: Array<string>;
-    messages?: Array<string>;
-  };
-  [otherOptions: string]: unknown;
 };

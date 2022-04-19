@@ -1,24 +1,22 @@
 import { SlackManifest } from "../manifest.ts";
-import { TypedParameterDefinition } from "../parameters/types.ts";
-import { ICustomType } from "./types.ts";
+import { CustomTypeDefinition, ICustomType } from "./types.ts";
 
-export const DefineType = <Def extends TypedParameterDefinition>(
-  id: string,
+export const DefineType = <Def extends CustomTypeDefinition>(
   definition: Def,
 ) => {
-  return new CustomType(id, definition);
+  return new CustomType(definition);
 };
 
-export class CustomType<Def extends TypedParameterDefinition>
+export class CustomType<Def extends CustomTypeDefinition>
   implements ICustomType {
+  public id: string;
   public title: string | undefined;
   public description: string | undefined;
 
   constructor(
-    public id: string,
     public definition: Def,
   ) {
-    this.id = id;
+    this.id = definition.callback_id;
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;
@@ -41,13 +39,16 @@ export class CustomType<Def extends TypedParameterDefinition>
       if (this.definition.items.type instanceof Object) {
         manifest.registerType(this.definition.items.type);
       }
-    } else if ("properties" in this.definition) {
-      // Loop through the properties and register any types
-      Object.values(this.definition.properties)?.forEach((property) => {
-        if ("type" in property && property.type instanceof Object) {
-          manifest.registerType(property.type);
-        }
-      });
+      // } else if ("properties" in this.definition) {
+      //   // Loop through the properties and register any types
+      //   Object.values(this.definition.properties)?.forEach((property) => {
+      //     if ("type" in property && property.type instanceof Object) {
+      //       manifest.registerType(property.type);
+      //     }
+      //   });
+    } else if (this.definition.type instanceof Object) {
+      // The referenced type is a Custom Type
+      manifest.registerType(this.definition.type);
     }
   }
 }
