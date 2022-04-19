@@ -27,7 +27,7 @@ export type OAuth2ProviderOptions = {
   /** Display name for your provider. Required for CUSTOM provider types. */
   "provider_name"?: string;
   /** Authorization url for your provider. Required for CUSTOM provider types. */
-  "authorization_url": string;
+  "authorization_url?": string;
   /** Token url for your provider. Required for CUSTOM provider types. */
   "token_url"?: string;
   /** Identity configuration for your provider. Required for CUSTOM provider types. */
