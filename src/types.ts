@@ -1,12 +1,12 @@
 import type { ISlackFunction } from "./functions/types.ts";
 import type { ISlackDatastore } from "./datastore/types.ts";
 import { OAuth2Provider } from "./providers/oauth2/mod.ts";
-import { ManifestOAuth2ProviderSchema } from "./providers/oauth2/types.ts";
 import type {
   ParameterDefinition,
   ParameterSetDefinition,
 } from "./parameters/mod.ts";
-import type { ICustomType } from "./types/types.ts";
+import { ICustomType } from "./types/types.ts";
+import { OAuth2ProviderTypeValues } from "./schema/providers/oauth2/types.ts";
 
 // SlackManifestType is the top level type that imports all resources for the app
 // An app manifest is generated based on what this has defined in it
@@ -129,6 +129,18 @@ export type ManifestSchema = {
     [key: string]: ManifestDatastoreSchema;
   };
   "external_auth_providers"?: {
-    oauth2?: { [key: string]: ManifestOAuth2ProviderSchema };
+    oauth2?: ManifestOAuth2Schema;
+  };
+};
+
+export type ManifestOAuth2Schema = {
+  [key: string]: ManifestOAuth2ProviderSchema;
+};
+
+export type ManifestOAuth2ProviderSchema = {
+  provider_type: OAuth2ProviderTypeValues;
+  options: {
+    // deno-lint-ignore no-explicit-any
+    [key: string]: any;
   };
 };

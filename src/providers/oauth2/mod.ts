@@ -1,7 +1,10 @@
 import {
-  ManifestOAuth2ProviderSchema,
+  OAuth2ProviderDefinitionArgs,
   OAuth2ProviderOptions,
 } from "./types.ts";
+
+import { OAuth2ProviderTypeValues } from "../../schema/providers/oauth2/types.ts";
+import { ManifestOAuth2ProviderSchema } from "../../types.ts";
 
 export const DefineOAuth2Provider = (
   definition: OAuth2ProviderDefinitionArgs,
@@ -9,22 +12,9 @@ export const DefineOAuth2Provider = (
   return new OAuth2Provider(definition);
 };
 
-export enum OAuth2ProviderTypes {
-  CUSTOM = "CUSTOM",
-}
-
-export type OAuth2ProviderDefinitionArgs = {
-  /** A unique name for your provider */
-  provider_key: string;
-  /** Type of your provider */
-  provider_type: OAuth2ProviderTypes;
-  /** OAuth2 Configuration options for your provider */
-  options: OAuth2ProviderOptions;
-};
-
 export class OAuth2Provider {
   public id: string;
-  public provider_type: OAuth2ProviderTypes;
+  public provider_type: OAuth2ProviderTypeValues;
   public options: OAuth2ProviderOptions;
 
   constructor(

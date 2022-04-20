@@ -6,7 +6,6 @@ import {
   DefineFunction,
   DefineOAuth2Provider,
   DefineType,
-  OAuth2ProviderTypes,
   Schema,
 } from "./mod.ts";
 import { assertEquals, assertStrictEquals } from "./dev_deps.ts";
@@ -328,7 +327,7 @@ Deno.test("SlackManifest() oauth2 providers get set properly", () => {
 
   const Provider = DefineOAuth2Provider({
     provider_key: providerKey,
-    provider_type: OAuth2ProviderTypes.CUSTOM,
+    provider_type: Schema.providers.oauth2.CUSTOM,
     options: {
       "client_id": "123.456",
       "client_secret": "secret",

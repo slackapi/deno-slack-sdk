@@ -1,10 +1,10 @@
 import { ParameterSetDefinition } from "./parameters/mod.ts";
 import {
   ManifestFunction,
+  ManifestOAuth2Schema,
   ManifestSchema,
   SlackManifestType,
 } from "./types.ts";
-import { ManifestOAuth2ProviderSchema } from "./providers/oauth2/types.ts";
 import { ICustomType } from "./types/types.ts";
 
 export const Manifest = (definition: SlackManifestType) => {
@@ -74,9 +74,9 @@ export class SlackManifest {
             acc[oauth2_provider.id] = oauth2_provider.export();
             return acc;
           },
-          {} as { [key: string]: ManifestOAuth2ProviderSchema },
+          {} as ManifestOAuth2Schema,
         ),
-      };
+      } as ManifestSchema["external_auth_providers"];
     }
 
     return manifest;
