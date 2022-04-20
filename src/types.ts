@@ -24,7 +24,8 @@ export type SlackManifestType = {
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
   datastores?: ManifestDatastore[];
-  oauth2_providers?: OAuth2Provider[];
+  // In the future, there can be other types of providers
+  externalAuthProviders?: (OAuth2Provider /*|OAuth1Provider*/)[];
 };
 
 export type ManifestDatastore = ISlackDatastore;

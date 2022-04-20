@@ -6,6 +6,7 @@ import {
   SlackManifestType,
 } from "./types.ts";
 import { ICustomType } from "./types/types.ts";
+import { OAuth2Provider } from "./providers/oauth2/mod.ts";
 
 export const Manifest = (definition: SlackManifestType) => {
   const manifest = new SlackManifest(definition);
@@ -67,11 +68,13 @@ export class SlackManifest {
       }, {} as ManifestSchema["datastores"]);
     }
 
-    if (def.oauth2_providers) {
+    if (def.externalAuthProviders) {
       manifest.external_auth_providers = {
-        "oauth2": def.oauth2_providers?.reduce(
-          (acc = {}, oauth2_provider) => {
-            acc[oauth2_provider.id] = oauth2_provider.export();
+        "oauth2": def.externalAuthProviders?.reduce(
+          (acc = {}, provider) => {
+            if (provider instanceof OAuth2Provider) {
+              acc[provider.definition.provider_key] = provider.export();
+            }
             return acc;
           },
           {} as ManifestOAuth2Schema,

@@ -340,16 +340,16 @@ Deno.test("SlackManifest() oauth2 providers get set properly", () => {
     description: "Description",
     icon: "icon.png",
     botScopes: [],
-    oauth2_providers: [Provider],
+    externalAuthProviders: [Provider],
   };
 
   const Manifest = new SlackManifest(definition);
 
   const exportedManifest = Manifest.export();
 
-  assertEquals(definition.oauth2_providers, [Provider]);
-  assertEquals(exportedManifest.external_auth_providers?.oauth2, {
-    [providerKey]: Provider.export(),
+  assertEquals(definition.externalAuthProviders, [Provider]);
+  assertEquals(exportedManifest.external_auth_providers, {
+    "oauth2": { "test_provider": Provider.export() },
   });
 });
 
@@ -365,6 +365,6 @@ Deno.test("SlackManifest() oauth2 providers are undefined when not configured", 
 
   const exportedManifest = Manifest.export();
 
-  assertEquals(definition.oauth2_providers, undefined);
-  assertEquals(exportedManifest.external_auth_providers?.oauth2, undefined);
+  assertEquals(definition.externalAuthProviders, undefined);
+  assertEquals(exportedManifest.external_auth_providers, undefined);
 });
