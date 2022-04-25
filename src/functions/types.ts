@@ -1,8 +1,12 @@
 import { Env, ManifestFunctionSchema } from "../types.ts";
 import {
+  ParameterDefinition,
   ParameterSetDefinition,
   RequiredParameters,
 } from "../parameters/mod.ts";
+import { TypedArrayParameterDefinition } from "../parameters/types.ts";
+import type SchemaTypes from "../schema/schema_types.ts";
+import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackManifest } from "../manifest.ts";
 
 export type FunctionInvocationBody = {
@@ -24,6 +28,49 @@ export type FunctionInvocationBody = {
   };
 };
 
+type FunctionInputRuntimeType<Param extends ParameterDefinition> =
+  Param["type"] extends typeof SchemaTypes.string ? string
+    : // : Param["type"] extends
+    //   | typeof SchemaTypes.integer
+    //   | typeof SchemaTypes.number ? number
+    Param["type"] extends typeof SchemaTypes.boolean ? boolean
+    : Param["type"] extends typeof SchemaTypes.array
+      ? Param extends TypedArrayParameterDefinition
+        ? TypedArrayFunctionInputRuntimeType<Param>
+      : UnknownRuntimeType[]
+    : // : Param["type"] extends typeof SchemaTypes.object
+    //   ? Param extends TypedObjectParameterDefinition
+    //     ? TypedObjectFunctionInputRuntimeType<Param>
+    //   : UnknownRuntimeType
+    Param["type"] extends
+      | typeof SlackSchemaTypes.user_id
+      // | typeof SlackSchemaTypes.usergroup_id
+      | typeof SlackSchemaTypes.channel_id ? string
+    : // : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
+    UnknownRuntimeType;
+
+// deno-lint-ignore no-explicit-any
+type UnknownRuntimeType = any;
+
+type TypedArrayFunctionInputRuntimeType<
+  Param extends TypedArrayParameterDefinition,
+> = FunctionInputRuntimeType<Param["items"]>[];
+
+type FunctionRuntimeParameters<
+  Parameters extends ParameterSetDefinition,
+  RequiredInputs extends RequiredParameters<Parameters>,
+> =
+  & {
+    [k in RequiredInputs[number]]: FunctionInputRuntimeType<
+      Parameters[k]
+    >;
+  }
+  & {
+    [k in keyof Parameters]?: FunctionInputRuntimeType<
+      Parameters[k]
+    >;
+  };
+
 type AsyncFunctionHandler<InputParameters, OutputParameters> = {
   (
     context: FunctionContext<InputParameters>,
@@ -36,7 +83,24 @@ type SyncFunctionHandler<InputParameters, OutputParameters> = {
   ): FunctionHandlerReturnArgs<OutputParameters>;
 };
 
-export type FunctionHandler<InputParameters, OutputParameters> =
+/**
+ * @description Slack Function handler from a function definition
+ */
+export type SlackFunctionHandler<Definition> = Definition extends
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
+  ? BaseSlackFunctionHandler<
+    FunctionRuntimeParameters<I, RI>,
+    FunctionRuntimeParameters<O, RO>
+  >
+  : never;
+
+/**
+ * @description Slack Function handler from input and output types directly
+ */
+export type BaseSlackFunctionHandler<
+  InputParameters,
+  OutputParameters,
+> =
   | AsyncFunctionHandler<InputParameters, OutputParameters>
   | SyncFunctionHandler<InputParameters, OutputParameters>;
 
@@ -45,6 +109,18 @@ type SuccessfulFunctionReturnArgs<OutputParameters> = {
   outputs: OutputParameters;
   error?: string;
 };
+
+// Exporting this alias for backwards compatability
+/**
+ * @deprecated Use either SlackFunctionHandler or BaseSlackFunctionHandler instead
+ */
+export type FunctionHandler<
+  InputParameters,
+  OutputParameters,
+> = BaseSlackFunctionHandler<
+  InputParameters,
+  OutputParameters
+>;
 
 type ErroredFunctionReturnArgs<OutputParameters> =
   & Partial<SuccessfulFunctionReturnArgs<OutputParameters>>
