@@ -20,8 +20,8 @@ export const SlackFunctionTester = (callbackId: string) => {
 
     return {
       inputs: (args.inputs || {}) as InputParameters,
-      token: args.token || "slack-function-test-token",
       env: args.env || {},
+      token: args.token || "slack-function-test-token",
       event: args.event || {
         type: "function_executed",
         event_ts: `${ts.getTime()}`,
