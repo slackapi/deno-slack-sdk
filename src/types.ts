@@ -10,9 +10,12 @@ import type { ICustomType } from "./types/types.ts";
 // An app manifest is generated based on what this has defined in it
 
 export type {
+  BaseSlackFunctionHandler,
+  //Deprecated - use either SlackFunctionHandler<Definition> or BaseSlackFunctionHandler<Inputs, Outputs>
   FunctionHandler,
   SlackFunctionHandler,
 } from "./functions/types.ts";
+
 export type SlackManifestType = {
   name: string;
   backgroundColor?: string;

@@ -18,3 +18,16 @@ Deno.test("SlackFunctionTester.createContext", () => {
   assertEquals(ctx.event.type, "function_executed");
   assertEquals(ctx.event.function.callback_id, callbackId);
 });
+
+Deno.test("SlackFunctionTester.createContext with empty inputs", () => {
+  const callbackId = "my_callback_id";
+  const { createContext } = SlackFunctionTester(callbackId);
+
+  const ctx = createContext({ inputs: {} });
+
+  assertEquals(ctx.inputs, {});
+  assertEquals(ctx.env, {});
+  assertEquals(typeof ctx.token, "string");
+  assertEquals(ctx.event.type, "function_executed");
+  assertEquals(ctx.event.function.callback_id, callbackId);
+});
