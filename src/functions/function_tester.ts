@@ -1,6 +1,10 @@
 import type { FunctionContext } from "./types.ts";
-type SlackFunctionTesterArgs<InputParameters> =
-  & Partial<FunctionContext<InputParameters>>
+type SlackFunctionTesterArgs<
+  InputParameters,
+> =
+  & Partial<
+    FunctionContext<InputParameters>
+  >
   & {
     inputs: InputParameters;
   };
@@ -15,7 +19,7 @@ export const SlackFunctionTester = (callbackId: string) => {
     const ts = new Date();
 
     return {
-      inputs: args.inputs,
+      inputs: (args.inputs || {}) as InputParameters,
       env: args.env || {},
       token: args.token || "slack-function-test-token",
       event: args.event || {
