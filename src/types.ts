@@ -11,8 +11,7 @@ import type { ICustomType } from "./types/types.ts";
 
 export type {
   BaseSlackFunctionHandler,
-  //Deprecated - use either SlackFunctionHandler<Definition> or BaseSlackFunctionHandler<Inputs, Outputs>
-  FunctionHandler,
+  FunctionHandler, // Deprecated
   SlackFunctionHandler,
 } from "./functions/types.ts";
 

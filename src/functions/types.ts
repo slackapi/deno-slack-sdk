@@ -104,14 +104,14 @@ export type SlackFunctionHandler<Definition> = Definition extends
  * @description Slack Function handler from input and output types directly
  */
 export type BaseSlackFunctionHandler<
-  InputParameters extends FunctionInputOutputParameters,
-  OutputParameters extends FunctionInputOutputParameters,
+  InputParameters extends FunctionParameters,
+  OutputParameters extends FunctionParameters,
 > =
   | AsyncFunctionHandler<InputParameters, OutputParameters>
   | SyncFunctionHandler<InputParameters, OutputParameters>;
 
 type SuccessfulFunctionReturnArgs<
-  OutputParameters extends FunctionInputOutputParameters,
+  OutputParameters extends FunctionParameters,
 > = {
   completed?: boolean;
   // Allow function to return an empty object if no outputs are defined
@@ -137,7 +137,7 @@ export type FunctionHandlerReturnArgs<
   | ErroredFunctionReturnArgs<OutputParameters>;
 
 export type FunctionContext<
-  InputParameters extends FunctionInputOutputParameters,
+  InputParameters extends FunctionParameters,
 > = {
   /**
    * @description A map of string keys to string values containing any environment variables available and provided to your function handler's execution context.
@@ -152,7 +152,7 @@ export type FunctionContext<
 };
 
 // Allow undefined here for functions that have no inputs and/or outputs
-export type FunctionInputOutputParameters = {
+export type FunctionParameters = {
   // deno-lint-ignore no-explicit-any
   [key: string]: any;
 } | undefined;
