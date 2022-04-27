@@ -69,16 +69,17 @@ export class SlackManifest {
     }
 
     if (def.externalAuthProviders) {
-      manifest.external_auth_providers = def.externalAuthProviders?.reduce(
-        (acc, provider) => {
-          if (provider instanceof OAuth2Provider) {
-            acc["oauth2"] = acc["oauth2"] ?? {};
-            acc["oauth2"][provider.definition.provider_key] = provider.export();
-          }
-          return acc;
-        },
-        {} as NonNullable<ManifestSchema["external_auth_providers"]>,
-      );
+      manifest.external_auth_providers = {
+        "oauth2": def.externalAuthProviders?.reduce(
+          (acc = {}, provider) => {
+            if (provider instanceof OAuth2Provider) {
+              acc[provider.definition.provider_key] = provider.export();
+            }
+            return acc;
+          },
+          {} as ManifestOAuth2Schema,
+        ),
+      } as ManifestSchema["external_auth_providers"];
     }
 
     return manifest;
