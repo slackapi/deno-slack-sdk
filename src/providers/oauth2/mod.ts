@@ -13,9 +13,9 @@ export const DefineOAuth2Provider = (
 };
 
 export class OAuth2Provider {
-  public id: string;
-  public provider_type: OAuth2ProviderTypeValues;
-  public options: OAuth2ProviderOptions;
+  private id: string;
+  private provider_type: OAuth2ProviderTypeValues;
+  private options: OAuth2ProviderOptions;
 
   constructor(
     public definition: OAuth2ProviderDefinitionArgs,
