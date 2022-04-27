@@ -1,11 +1,12 @@
 import { assertEquals } from "../dev_deps.ts";
+import { SlackFunctionTester } from "./function_tester.ts";
 import { DefineFunction } from "./mod.ts";
 import { SlackFunctionHandler } from "./types.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
 // Any "failures" here will most likely be reflected in Type errors
 
-Deno.test("SlackFunctionHandler types", () => {
+Deno.test("SlackFunctionHandler with inputs and outputs", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -36,7 +37,47 @@ Deno.test("SlackFunctionHandler types", () => {
       },
     };
   };
-  assertEquals(typeof handler, "function");
+  const { createContext } = SlackFunctionTester("test");
+  const inputs = { in: "test" };
+  const result = handler(createContext({ inputs }));
+  assertEquals(result.outputs?.out, inputs.in);
+});
+
+Deno.test("SlackFunctionHandler with optional input", () => {
+  const TestFn = DefineFunction({
+    callback_id: "test",
+    title: "test fn",
+    source_file: "test.ts",
+    input_parameters: {
+      properties: {
+        in: {
+          type: "string",
+        },
+      },
+      required: [],
+    },
+    output_parameters: {
+      properties: {
+        out: {
+          type: "string",
+        },
+      },
+      required: ["out"],
+    },
+  });
+  const handler: SlackFunctionHandler<typeof TestFn.definition> = (
+    { inputs },
+  ) => {
+    return {
+      outputs: {
+        out: inputs.in || "default",
+      },
+    };
+  };
+  const { createContext } = SlackFunctionTester("test");
+  const inputs = {};
+  const result = handler(createContext({ inputs }));
+  assertEquals(result.outputs?.out, "default");
 });
 
 Deno.test("SlackFunctionHandler with no inputs or outputs", () => {
@@ -50,7 +91,9 @@ Deno.test("SlackFunctionHandler with no inputs or outputs", () => {
       outputs: {},
     };
   };
-  assertEquals(typeof handler, "function");
+  const { createContext } = SlackFunctionTester("test");
+  const result = handler(createContext({ inputs: {} }));
+  assertEquals(result.outputs, {});
 });
 
 Deno.test("SlackFunctionHandler with undefined inputs and outputs", () => {
@@ -66,7 +109,9 @@ Deno.test("SlackFunctionHandler with undefined inputs and outputs", () => {
       outputs: {},
     };
   };
-  assertEquals(typeof handler, "function");
+  const { createContext } = SlackFunctionTester("test");
+  const result = handler(createContext({ inputs: {} }));
+  assertEquals(result.outputs, {});
 });
 
 Deno.test("SlackFunctionHandler with empty inputs and outputs", () => {
@@ -82,7 +127,9 @@ Deno.test("SlackFunctionHandler with empty inputs and outputs", () => {
       outputs: {},
     };
   };
-  assertEquals(typeof handler, "function");
+  const { createContext } = SlackFunctionTester("test");
+  const result = handler(createContext({ inputs: {} }));
+  assertEquals(result.outputs, {});
 });
 
 Deno.test("SlackFunctionHandler with only inputs", () => {
@@ -108,7 +155,10 @@ Deno.test("SlackFunctionHandler with only inputs", () => {
       outputs: {},
     };
   };
-  assertEquals(typeof handler, "function");
+  const { createContext } = SlackFunctionTester("test");
+  const inputs = { in: "test" };
+  const result = handler(createContext({ inputs }));
+  assertEquals(result.outputs, {});
 });
 
 Deno.test("SlackFunctionHandler with only outputs", () => {
@@ -132,5 +182,7 @@ Deno.test("SlackFunctionHandler with only outputs", () => {
       },
     };
   };
-  assertEquals(typeof handler, "function");
+  const { createContext } = SlackFunctionTester("test");
+  const result = handler(createContext({ inputs: {} }));
+  assertEquals(result.outputs?.out, "test");
 });
