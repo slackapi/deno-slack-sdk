@@ -2,11 +2,8 @@ import {
   ParameterSetDefinition,
   RequiredParameters,
 } from "../parameters/mod.ts";
-import type {
-  FunctionContext,
-  FunctionDefinitionArgs,
-  FunctionRuntimeParameters,
-} from "./types.ts";
+import { SlackFunction } from "./mod.ts";
+import type { FunctionContext, FunctionRuntimeParameters } from "./types.ts";
 type SlackFunctionTesterArgs<
   InputParameters,
 > =
@@ -23,7 +20,7 @@ export const SlackFunctionTester = <
   RequiredInput extends RequiredParameters<InputParameters>,
   RequiredOutput extends RequiredParameters<OutputParameters>,
 >(
-  definition: FunctionDefinitionArgs<
+  func: SlackFunction<
     InputParameters,
     OutputParameters,
     RequiredInput,
@@ -32,7 +29,6 @@ export const SlackFunctionTester = <
 ) => {
   const now = new Date();
   const testFnID = `fn${now.getTime()}`;
-
   const createContext = (
     args: SlackFunctionTesterArgs<
       FunctionRuntimeParameters<InputParameters, RequiredInput> | undefined
@@ -56,7 +52,7 @@ export const SlackFunctionTester = <
         inputs: args.inputs as Record<string, unknown>,
         function: {
           id: testFnID,
-          callback_id: definition.callback_id,
+          callback_id: func.definition.callback_id,
           title: "Function Test Title",
         },
       },

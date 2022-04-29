@@ -15,7 +15,7 @@ Deno.test("SlackFunctionTester.createContext", () => {
       required: ["myValue"],
     },
   });
-  const { createContext } = SlackFunctionTester(TestFunction.definition);
+  const { createContext } = SlackFunctionTester(TestFunction);
 
   const inputs = {
     myValue: "some value",
@@ -38,7 +38,7 @@ Deno.test("SlackFunctionTester.createContext with empty inputs", () => {
     source_file: "test",
     title: "Test",
   });
-  const { createContext } = SlackFunctionTester(TestFunction.definition);
+  const { createContext } = SlackFunctionTester(TestFunction);
 
   const ctx = createContext({ inputs: {} });
 
