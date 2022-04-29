@@ -1,5 +1,6 @@
 import { assertEquals } from "../dev_deps.ts";
 import { SlackFunctionTester } from "./function_tester.ts";
+import { DefineFunction } from "./mod.ts";
 import { BaseSlackFunctionHandler } from "./types.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
@@ -21,7 +22,18 @@ Deno.test("BaseSlackFunctionHandler types", () => {
       },
     };
   };
-  const { createContext } = SlackFunctionTester("test");
+  const TestFunction = DefineFunction({
+    callback_id: "callbackId",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        in: { type: "string" },
+      },
+      required: ["in"],
+    },
+  });
+  const { createContext } = SlackFunctionTester(TestFunction.definition);
   const inputs = { in: "test" };
   const result = handler(createContext({ inputs }));
   assertEquals(result.outputs?.out, inputs.in);
@@ -35,20 +47,30 @@ Deno.test("BaseSlackFunctionHandler with empty inputs and outputs", () => {
       outputs: {},
     };
   };
-  const { createContext } = SlackFunctionTester("test");
+  const TestFunction = DefineFunction({
+    callback_id: "callbackId",
+    source_file: "test",
+    title: "Test",
+  });
+  const { createContext } = SlackFunctionTester(TestFunction.definition);
   const result = handler(createContext({ inputs: {} }));
   assertEquals(result.outputs, {});
 });
 
 Deno.test("BaseSlackFunctionHandler with undefined inputs and outputs", () => {
-  type Inputs = undefined;
+  type Inputs = Record<never, never> | undefined;
   type Outputs = undefined;
   const handler: BaseSlackFunctionHandler<Inputs, Outputs> = () => {
     return {
       outputs: {},
     };
   };
-  const { createContext } = SlackFunctionTester("test");
+  const TestFunction = DefineFunction({
+    callback_id: "callbackId",
+    source_file: "test",
+    title: "Test",
+  });
+  const { createContext } = SlackFunctionTester(TestFunction.definition);
   const result = handler(createContext({ inputs: undefined }));
   assertEquals(result.outputs, {});
 });
@@ -65,7 +87,18 @@ Deno.test("BaseSlackFunctionHandler with inputs and empty outputs", () => {
       outputs: {},
     };
   };
-  const { createContext } = SlackFunctionTester("test");
+  const TestFunction = DefineFunction({
+    callback_id: "callbackId",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        in: { type: "string" },
+      },
+      required: ["in"],
+    },
+  });
+  const { createContext } = SlackFunctionTester(TestFunction.definition);
   const inputs = { in: "test" };
   const result = handler(createContext({ inputs }));
   assertEquals(result.outputs, {});
@@ -83,7 +116,12 @@ Deno.test("BaseSlackFunctionHandler with empty inputs and outputs", () => {
       },
     };
   };
-  const { createContext } = SlackFunctionTester("test");
+  const TestFunction = DefineFunction({
+    callback_id: "callbackId",
+    source_file: "test",
+    title: "Test",
+  });
+  const { createContext } = SlackFunctionTester(TestFunction.definition);
   const result = handler(createContext({ inputs: {} }));
   assertEquals(result.outputs?.out, "test");
 });
@@ -97,7 +135,16 @@ Deno.test("BaseSlackFunctionHandler with any inputs and any outputs", () => {
       },
     };
   };
-  const { createContext } = SlackFunctionTester("test");
+  const TestFunction = DefineFunction({
+    callback_id: "callbackId",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: { in: { type: "string" } },
+      required: [],
+    },
+  });
+  const { createContext } = SlackFunctionTester(TestFunction.definition);
   const inputs = { in: "test" };
   const result = handler(createContext({ inputs }));
   assertEquals(result.outputs?.out, inputs.in);
@@ -115,7 +162,16 @@ Deno.test("BaseSlackFunctionHandler with set inputs and any outputs", () => {
       },
     };
   };
-  const { createContext } = SlackFunctionTester("test");
+  const TestFunction = DefineFunction({
+    callback_id: "callbackId",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: { in: { type: "string" } },
+      required: ["in"],
+    },
+  });
+  const { createContext } = SlackFunctionTester(TestFunction.definition);
   const inputs = { in: "test" };
   const result = handler(createContext({ inputs }));
   assertEquals(result.outputs?.out, inputs.in);

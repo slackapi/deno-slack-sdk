@@ -1,9 +1,21 @@
 import { assertEquals } from "../dev_deps.ts";
 import { SlackFunctionTester } from "./function_tester.ts";
+import { DefineFunction } from "./mod.ts";
 
 Deno.test("SlackFunctionTester.createContext", () => {
   const callbackId = "my_callback_id";
-  const { createContext } = SlackFunctionTester(callbackId);
+  const TestFunction = DefineFunction({
+    callback_id: callbackId,
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        myValue: { type: "string" },
+      },
+      required: ["myValue"],
+    },
+  });
+  const { createContext } = SlackFunctionTester(TestFunction.definition);
 
   const inputs = {
     myValue: "some value",
@@ -21,7 +33,12 @@ Deno.test("SlackFunctionTester.createContext", () => {
 
 Deno.test("SlackFunctionTester.createContext with empty inputs", () => {
   const callbackId = "my_callback_id";
-  const { createContext } = SlackFunctionTester(callbackId);
+  const TestFunction = DefineFunction({
+    callback_id: callbackId,
+    source_file: "test",
+    title: "Test",
+  });
+  const { createContext } = SlackFunctionTester(TestFunction.definition);
 
   const ctx = createContext({ inputs: {} });
 

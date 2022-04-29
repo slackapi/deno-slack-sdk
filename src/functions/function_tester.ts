@@ -1,4 +1,12 @@
-import type { FunctionContext } from "./types.ts";
+import {
+  ParameterSetDefinition,
+  RequiredParameters,
+} from "../parameters/mod.ts";
+import type {
+  FunctionContext,
+  FunctionDefinitionArgs,
+  FunctionRuntimeParameters,
+} from "./types.ts";
 type SlackFunctionTesterArgs<
   InputParameters,
 > =
@@ -9,17 +17,36 @@ type SlackFunctionTesterArgs<
     inputs: InputParameters;
   };
 
-export const SlackFunctionTester = (callbackId: string) => {
+export const SlackFunctionTester = <
+  InputParameters extends ParameterSetDefinition,
+  OutputParameters extends ParameterSetDefinition,
+  RequiredInput extends RequiredParameters<InputParameters>,
+  RequiredOutput extends RequiredParameters<OutputParameters>,
+>(
+  definition: FunctionDefinitionArgs<
+    InputParameters,
+    OutputParameters,
+    RequiredInput,
+    RequiredOutput
+  >,
+) => {
   const now = new Date();
   const testFnID = `fn${now.getTime()}`;
 
-  const createContext = <InputParameters>(
-    args: SlackFunctionTesterArgs<InputParameters>,
-  ): FunctionContext<InputParameters> => {
+  const createContext = (
+    args: SlackFunctionTesterArgs<
+      FunctionRuntimeParameters<InputParameters, RequiredInput> | undefined
+    >,
+  ): FunctionContext<
+    FunctionRuntimeParameters<InputParameters, RequiredInput>
+  > => {
     const ts = new Date();
 
     return {
-      inputs: (args.inputs || {}) as InputParameters,
+      inputs: (args.inputs || {}) as FunctionRuntimeParameters<
+        InputParameters,
+        RequiredInput
+      >,
       env: args.env || {},
       token: args.token || "slack-function-test-token",
       event: args.event || {
@@ -29,7 +56,7 @@ export const SlackFunctionTester = (callbackId: string) => {
         inputs: args.inputs as Record<string, unknown>,
         function: {
           id: testFnID,
-          callback_id: callbackId,
+          callback_id: definition.callback_id,
           title: "Function Test Title",
         },
       },

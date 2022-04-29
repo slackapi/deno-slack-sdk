@@ -63,7 +63,7 @@ type TypedArrayFunctionInputRuntimeType<
 /**
  * @description Converts a ParameterSetDefinition, and list of required params into an object type used for runtime inputs and outputs
  */
-type FunctionRuntimeParameters<
+export type FunctionRuntimeParameters<
   Params extends ParameterSetDefinition,
   RequiredParams extends PossibleParameterKeys<Params>,
 > =
