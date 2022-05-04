@@ -17,9 +17,7 @@ export type ParameterSetDefinition = {
 
 export type RequiredParameters<
   ParameterSetInternal extends ParameterSetDefinition,
-> = {
-  [index: number]: keyof ParameterSetInternal;
-};
+> = (keyof ParameterSetInternal)[];
 
 export type ParameterPropertiesDefinition<
   Parameters extends ParameterSetDefinition,

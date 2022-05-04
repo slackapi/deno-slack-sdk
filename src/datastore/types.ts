@@ -10,10 +10,12 @@ export type SlackDatastoreAttribute = {
 export type SlackDatastoreAttributes = Record<string, SlackDatastoreAttribute>;
 
 export type SlackDatastoreDefinition<
+  Name extends string,
   Attributes extends SlackDatastoreAttributes,
+  PrimaryKey extends keyof Attributes,
 > = {
-  name: string;
-  "primary_key": keyof Attributes;
+  name: Name;
+  "primary_key": PrimaryKey;
   attributes: Attributes;
 };
 

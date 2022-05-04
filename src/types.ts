@@ -11,7 +11,12 @@ import { OAuth2ProviderTypeValues } from "./schema/providers/oauth2/types.ts";
 // SlackManifestType is the top level type that imports all resources for the app
 // An app manifest is generated based on what this has defined in it
 
-export type { FunctionHandler } from "./functions/types.ts";
+export type {
+  BaseSlackFunctionHandler,
+  FunctionHandler, // Deprecated
+  SlackFunctionHandler,
+} from "./functions/types.ts";
+
 export type SlackManifestType = {
   name: string;
   backgroundColor?: string;

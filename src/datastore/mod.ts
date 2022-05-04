@@ -8,20 +8,29 @@ import {
 
 /**
  * Define a datastore and primary key and attributes for use in a Slack application.
- * @param {SlackDatastoreDefinition<SlackDatastoreAttributes>} definition Defines information about your datastore.
+ * @param {SlackDatastoreDefinition<string, SlackDatastoreAttributes, string>} definition Defines information about your datastore.
  * @returns {SlackDatastore}
  */
-export const DefineDatastore = <Attributes extends SlackDatastoreAttributes>(
-  definition: SlackDatastoreDefinition<Attributes>,
+export const DefineDatastore = <
+  Name extends string,
+  Attributes extends SlackDatastoreAttributes,
+  PrimaryKey extends keyof Attributes,
+>(
+  definition: SlackDatastoreDefinition<Name, Attributes, PrimaryKey>,
 ) => {
   return new SlackDatastore(definition);
 };
 
-export class SlackDatastore<Attributes extends SlackDatastoreAttributes>
-  implements ISlackDatastore {
-  public name: string;
+export class SlackDatastore<
+  Name extends string,
+  Attributes extends SlackDatastoreAttributes,
+  PrimaryKey extends keyof Attributes,
+> implements ISlackDatastore {
+  public name: Name;
 
-  constructor(private definition: SlackDatastoreDefinition<Attributes>) {
+  constructor(
+    public definition: SlackDatastoreDefinition<Name, Attributes, PrimaryKey>,
+  ) {
     this.name = definition.name;
   }
 

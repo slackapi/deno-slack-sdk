@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "test": "deno test src && deno fmt --check src && deno lint src",
+    "coverage": "deno test --allow-read --coverage=.coverage && deno coverage --exclude=fixtures|test .coverage"
+  }
+}
