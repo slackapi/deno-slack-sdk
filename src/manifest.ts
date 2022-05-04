@@ -71,7 +71,7 @@ export class SlackManifest {
         (acc, provider) => {
           if (provider instanceof OAuth2Provider) {
             acc["oauth2"] = acc["oauth2"] ?? {};
-            acc["oauth2"][provider.definition.provider_key] = provider.export();
+            acc["oauth2"][provider.id] = provider.export();
           }
           return acc;
         },
