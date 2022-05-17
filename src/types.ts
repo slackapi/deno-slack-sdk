@@ -1,4 +1,5 @@
 import type { ISlackFunction } from "./functions/types.ts";
+import type { ISlackWorkflow } from "./workflows/types.ts";
 import type { ISlackDatastore } from "./datastore/types.ts";
 import type {
   ParameterDefinition,
@@ -24,6 +25,7 @@ export type SlackManifestType = {
   longDescription?: string;
   botScopes: Array<string>;
   functions?: ManifestFunction[];
+  workflows?: ManifestWorkflow[];
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
   datastores?: ManifestDatastore[];
@@ -35,6 +37,8 @@ export type ManifestDatastore = ISlackDatastore;
 // This is to work around an issue TS has with resolving the generics across the hierarchy
 // deno-lint-ignore no-explicit-any
 export type ManifestFunction = ISlackFunction<any, any, any, any>;
+
+export type ManifestWorkflow = ISlackWorkflow;
 
 // ----------------------------------------------------------------------------
 // Invocation
@@ -94,6 +98,21 @@ export type ManifestDatastoreSchema = {
   };
 };
 
+export type ManifestWorkflowStepSchema = {
+  id: string;
+  "function_id": string;
+  inputs: {
+    [name: string]: unknown;
+  };
+};
+
+export type ManifestWorkflowSchema = {
+  title?: string;
+  description?: string;
+  "input_parameters"?: ManifestFunctionParameters;
+  steps: ManifestWorkflowStepSchema[];
+};
+
 export type ManifestCustomTypeSchema = ParameterDefinition;
 
 export type ManifestMetadata = {
@@ -122,6 +141,9 @@ export type ManifestSchema = {
   };
   functions?: {
     [key: string]: ManifestFunctionSchema;
+  };
+  workflows?: {
+    [key: string]: ManifestWorkflowSchema;
   };
   "outgoing_domains"?: string[];
   types?: {
