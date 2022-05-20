@@ -69,6 +69,10 @@ export class SlackManifest {
   }
 
   private registerFeatures() {
+    this.definition.workflows?.forEach((workflow) => {
+      workflow.registerStepFunctions(this);
+      workflow.registerParameterTypes(this);
+    });
     // Loop through functions to automatically register any referenced types
     this.definition.functions?.forEach((func) => {
       func.registerParameterTypes(this);

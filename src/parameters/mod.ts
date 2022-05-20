@@ -6,7 +6,7 @@ import type {
   // UntypedObjectParameterDefinition,
 } from "./types.ts";
 import { ParamReference } from "./param.ts";
-// import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
+import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 
 export type ParameterDefinition = TypedParameterDefinition;
 
@@ -39,7 +39,7 @@ export type ParameterVariableType<Def extends ParameterDefinition> = Def extends
 type SingleParameterVariable = {};
 
 // // deno-lint-ignore no-explicit-any
-// type UntypedObjectParameterVariableType = any;
+type UntypedObjectParameterVariableType = any;
 
 // type ObjectParameterPropertyTypes<Def extends TypedObjectParameterDefinition> =
 //   {
@@ -124,16 +124,16 @@ export const ParameterVariable = <P extends ParameterDefinition>(
 //   ) as ObjectParameterVariableType<P>;
 // };
 
-// const CreateUntypedObjectParameterVariable = (
-//   namespace: string,
-//   paramName: string,
-// ): UntypedObjectParameterVariableType => {
-//   return WithUntypedObjectProxy(
-//     {},
-//     namespace,
-//     paramName,
-//   ) as UntypedObjectParameterVariableType;
-// };
+export const CreateUntypedObjectParameterVariable = (
+  namespace: string,
+  paramName: string,
+): UntypedObjectParameterVariableType => {
+  return WithUntypedObjectProxy(
+    {},
+    namespace,
+    paramName,
+  ) as UntypedObjectParameterVariableType;
+};
 
 const CreateSingleParameterVariable = (
   namespace: string,

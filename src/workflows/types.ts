@@ -19,6 +19,7 @@ export type SlackWorkflowDefinitionArgs<
   RequiredInputs extends RequiredParameters<InputParameters>,
   RequiredOutputs extends RequiredParameters<OutputParameters>,
 > = {
+  callback_id: string;
   title: string;
   description?: string;
   "input_parameters"?: {
