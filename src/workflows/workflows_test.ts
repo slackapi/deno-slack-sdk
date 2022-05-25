@@ -44,15 +44,18 @@ Deno.test("WorkflowStep export input values", () => {
     },
   });
 
+  // Add a DefineFunction result as a step
   const step1 = workflow.addStep(TestFunction, {
     email: workflow.inputs.email,
     name: `A name: ${workflow.inputs.name}`,
   });
 
+  // add a manually configured step
   const step2 = workflow.addStep("slack#/functions/create_channel", {
-    channel_name: `test-channel-${workflow.inputs.name}`,
+    channel_name: `test-channel-${workflow.inputs.name}-${step1.outputs.url}`,
   });
 
+  // another manually configured step, reyling on outputs of another manually configured step
   workflow.addStep("slack#/functions/send_message", {
     channel_id: "C123123",
     message: `Channel Created <#${step2.outputs.channel_id}>`,
@@ -74,7 +77,10 @@ Deno.test("WorkflowStep export input values", () => {
   assertEquals(`${step1Inputs.name}`, "A name: {{inputs.name}}");
   assertEquals(`${step1.outputs.url}`, "{{steps.0.url}}");
 
-  assertEquals(`${step2Inputs.channel_name}`, "test-channel-{{inputs.name}}");
+  assertEquals(
+    `${step2Inputs.channel_name}`,
+    "test-channel-{{inputs.name}}-{{steps.0.url}}",
+  );
 
   assertEquals(`${step3Inputs.channel_id}`, "C123123");
   assertEquals(

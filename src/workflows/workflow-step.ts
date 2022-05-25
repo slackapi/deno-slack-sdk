@@ -20,11 +20,13 @@ export abstract class BaseWorkflowStepDefinition {
 
   protected functionReference: string;
 
+  // deno-lint-ignore no-explicit-any
   protected inputs: WorkflowStepInputs<any, any>;
 
   constructor(
     stepId: string,
     functionReference: string,
+    // deno-lint-ignore no-explicit-any
     inputs: WorkflowStepInputs<any, any>,
   ) {
     this.stepId = stepId;
@@ -133,6 +135,7 @@ export class UntypedWorkflowStepDefinition extends BaseWorkflowStepDefinition {
   constructor(
     stepId: string,
     functionReference: string,
+    // deno-lint-ignore no-explicit-any
     inputs: WorkflowStepInputs<any, any>,
   ) {
     super(stepId, functionReference, inputs);

@@ -107,11 +107,19 @@ export class WorkflowDefinition<
     }
   }
 
+  // Supports adding an untyped step by using a plain function reference string and input configuration
+  // This won't support any typed inputs or outputs on the step, but can be useful when adding a step w/o the type definition available
   addStep(
     functionReference: string,
-    inputs: any,
+    // This is essentially an untyped step input configuration
+    inputs: WorkflowStepInputs<
+      ParameterSetDefinition,
+      RequiredParameters<ParameterSetDefinition>
+    >,
   ): UntypedWorkflowStepDefinition;
 
+  // Supports adding a typed step where an ISlackFunction reference is used, which produces typed inputs and outputs
+  // and the functionReference string can be rerived from that ISlackFunction reference
   addStep<
     StepInputs extends ParameterSetDefinition,
     StepOutputs extends ParameterSetDefinition,
@@ -132,6 +140,7 @@ export class WorkflowDefinition<
     RequiredStepOutputs
   >;
 
+  // The runtime implementation of addStep handles both signatures (straight function-reference & config, or ISlackFunction)
   addStep<
     StepInputs extends ParameterSetDefinition,
     StepOutputs extends ParameterSetDefinition,
@@ -176,37 +185,6 @@ export class WorkflowDefinition<
 
     return newStep;
   }
-  // addStep<
-  //   StepInputs extends ParameterSetDefinition,
-  //   StepOutputs extends ParameterSetDefinition,
-  //   RequiredStepInputs extends RequiredParameters<StepInputs>,
-  //   RequiredStepOutputs extends RequiredParameters<StepOutputs>,
-  // >(
-  //   slackFunction: ISlackFunction<
-  //     StepInputs,
-  //     StepOutputs,
-  //     RequiredStepInputs,
-  //     RequiredStepOutputs
-  //   >,
-  //   inputs: WorkflowStepInputs<StepInputs, RequiredStepInputs>,
-  // ): WorkflowStepDefinition<
-  //   StepInputs,
-  //   StepOutputs,
-  //   RequiredStepInputs,
-  //   RequiredStepOutputs
-  // > {
-  //   const stepId = `${this.steps.length}`;
-
-  //   const newStep = new WorkflowStepDefinition(
-  //     stepId,
-  //     slackFunction,
-  //     inputs,
-  //   );
-
-  //   this.steps.push(newStep);
-
-  //   return newStep;
-  // }
 
   export(): ManifestWorkflowSchema {
     return {
@@ -232,116 +210,3 @@ export class WorkflowDefinition<
     return this.export();
   }
 }
-
-// class WorkflowStepDefinition<
-//   InputParameters extends ParameterSetDefinition,
-//   OutputParameters extends ParameterSetDefinition,
-//   RequiredInputs extends RequiredParameters<InputParameters>,
-//   RequiredOutputs extends RequiredParameters<OutputParameters>,
-// > {
-//   private stepId: string;
-
-//   public definition: ISlackFunction<
-//     InputParameters,
-//     OutputParameters,
-//     RequiredInputs,
-//     RequiredOutputs
-//   >;
-
-//   private inputs: WorkflowStepInputs<InputParameters, RequiredInputs>;
-
-//   public outputs: WorkflowInputsOutputsDefinition<
-//     OutputParameters
-//   >;
-//   private fnRef: string;
-//   constructor(
-//     stepId: string,
-//     slackFunction: ISlackFunction<
-//       InputParameters,
-//       OutputParameters,
-//       RequiredInputs,
-//       RequiredOutputs
-//     >,
-//     inputs: WorkflowStepInputs<InputParameters, RequiredInputs>,
-//   ) {
-//     this.stepId = stepId;
-//     this.definition = slackFunction;
-//     this.inputs = inputs;
-//     this.outputs = {} as WorkflowInputsOutputsDefinition<
-//       OutputParameters
-//     >;
-//     const fnId = this.definition.id;
-//     // TODO: This is hacky, will revamp this later to allow fns to handle namespaces
-//     this.fnRef = /^slack#/.test(fnId) ? fnId : localFnPrefix + fnId;
-
-//     // Setup step outputs for use in input template expressions
-//     for (
-//       const [outputName, outputDefinition] of Object.entries(
-//         slackFunction?.definition?.output_parameters?.properties ?? {},
-//       )
-//     ) {
-//       this.outputs[
-//         outputName as keyof OutputParameters
-//       ] = ParameterVariable(
-//         `steps.${this.stepId}`,
-//         outputName,
-//         outputDefinition,
-//       ) as ParameterVariableType<
-//         OutputParameters[typeof outputName]
-//       >;
-//     }
-//   }
-
-//   templatizeInputs() {
-//     const templatizedInputs: ManifestWorkflowStepSchema["inputs"] =
-//       {} as ManifestWorkflowStepSchema["inputs"];
-
-//     for (const [inputName, inputValue] of Object.entries(this.inputs)) {
-//       templatizedInputs[inputName] = JSON.parse(JSON.stringify(inputValue));
-//     }
-
-//     return templatizedInputs;
-//   }
-
-//   export(): ManifestWorkflowStepSchema {
-//     return {
-//       id: this.stepId,
-//       function_id: this.fnRef,
-//       inputs: this.templatizeInputs(),
-//     };
-//   }
-
-//   toJSON() {
-//     return this.export();
-//   }
-
-//   registerFunction(manifest: SlackManifest) {
-//     if (this.isLocalFunctionReference()) {
-//       manifest.registerFunction(this.definition as ManifestFunction);
-//     }
-//   }
-
-//   private isLocalFunctionReference(): boolean {
-//     return this.fnRef.startsWith(localFnPrefix);
-//   }
-// }
-
-// class UntypedWorkflowStepDefinition
-//   extends WorkflowStepDefinition<any, any, any, any> {
-//   constructor(
-//     stepId: string,
-//     slackFunctionReference: string,
-//     inputs: WorkflowStepInputs<any, any>,
-//   ) {
-//     super();
-//     this.stepId = stepId;
-//     this.inputs = inputs;
-//     // TODO: This is hacky, will revamp this later to allow fns to handle namespaces
-//     this.fnRef = slackFunctionReference;
-
-//     this.outputs = CreateUntypedObjectParameterVariable(
-//       `steps.${stepId}`,
-//       "outputs",
-//     );
-//   }
-// }

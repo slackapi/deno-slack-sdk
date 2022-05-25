@@ -38,7 +38,7 @@ export type ParameterVariableType<Def extends ParameterDefinition> = Def extends
 // deno-lint-ignore ban-types
 type SingleParameterVariable = {};
 
-// // deno-lint-ignore no-explicit-any
+// deno-lint-ignore no-explicit-any
 type UntypedObjectParameterVariableType = any;
 
 // type ObjectParameterPropertyTypes<Def extends TypedObjectParameterDefinition> =
