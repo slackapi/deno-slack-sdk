@@ -21,9 +21,10 @@ export type RequiredParameters<
 
 export type ParameterPropertiesDefinition<
   Parameters extends ParameterSetDefinition,
+  Required extends RequiredParameters<Parameters>,
 > = {
   properties: Parameters;
-  required: RequiredParameters<Parameters>;
+  required: Required;
 };
 
 export type ParameterVariableType<Def extends ParameterDefinition> = Def extends

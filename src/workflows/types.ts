@@ -1,6 +1,7 @@
 import { SlackManifest } from "../manifest.ts";
 import type { ManifestWorkflowSchema } from "../types.ts";
 import {
+  ParameterPropertiesDefinition,
   ParameterSetDefinition,
   ParameterVariableType,
   RequiredParameters,
@@ -13,6 +14,11 @@ export interface ISlackWorkflow {
   registerParameterTypes: (manfest: SlackManifest) => void;
 }
 
+export type SlackWorkflowDefinition<Definition> = Definition extends
+  SlackWorkflowDefinitionArgs<infer I, infer O, infer RI, infer RO>
+  ? SlackWorkflowDefinitionArgs<I, O, RI, RO>
+  : never;
+
 export type SlackWorkflowDefinitionArgs<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
@@ -22,41 +28,54 @@ export type SlackWorkflowDefinitionArgs<
   callback_id: string;
   title: string;
   description?: string;
-  "input_parameters"?: {
-    required: RequiredInputs;
-    properties: InputParameters;
-  };
-  "output_parameters"?: {
-    required: RequiredOutputs;
-    properties: OutputParameters;
-  };
-};
-
-export type WorkflowInputsOutputsDefinition<
-  Parameters extends ParameterSetDefinition,
-> = {
-  [name in keyof Parameters]: ParameterVariableType<
-    Parameters[name]
+  "input_parameters"?: ParameterPropertiesDefinition<
+    InputParameters,
+    RequiredInputs
+  >;
+  "output_parameters"?: ParameterPropertiesDefinition<
+    OutputParameters,
+    RequiredOutputs
   >;
 };
 
+export type WorkflowInputs<
+  Params extends ParameterSetDefinition,
+  RequiredParams extends RequiredParameters<Params>,
+> = WorkflowParameterReferences<Params, RequiredParams>;
+
+export type WorkflowOutputs<
+  Params extends ParameterSetDefinition,
+  RequiredParams extends RequiredParameters<Params>,
+> = WorkflowParameterReferences<Params, RequiredParams>;
+
+export type WorkflowStepOutputs<
+  Params extends ParameterSetDefinition,
+  RequiredParams extends RequiredParameters<Params>,
+> = WorkflowParameterReferences<Params, RequiredParams>;
+
+type WorkflowParameterReferences<
+  Parameters extends ParameterSetDefinition,
+  Required extends RequiredParameters<Parameters>,
+> =
+  & {
+    [name in Required[number]]: ParameterVariableType<
+      Parameters[name]
+    >;
+  }
+  & {
+    [name in keyof Parameters]?: ParameterVariableType<Parameters[name]>;
+  };
+
+// Workflow Step inputs are different than workflow inputs/outputs or workflow step outputs.
+// They are purley the config values for the step, and not definitions that can be referenced
+// as variables like you can with workflow inputs and workflow step outputs
 export type WorkflowStepInputs<
   InputParameters extends ParameterSetDefinition,
   RequiredInputs extends RequiredParameters<InputParameters>,
-> =
-  & {
-    // deno-lint-ignore no-explicit-any
-    [k in RequiredInputs[number]]: any;
-  }
-  & {
+> = // & {
+  //   [k in RequiredInputs[number]]: any;
+  // }
+  {
     // deno-lint-ignore no-explicit-any
     [k in keyof InputParameters]?: any;
   };
-
-// export type SlackWorkflow<Definition> = Definition extends
-//   SlackWorkflowDefinitionArgs<infer I, infer O, infer RI, infer RO>
-//   ? BaseSlackFunctionHandler<
-//     FunctionRuntimeParameters<I, RI>,
-//     FunctionRuntimeParameters<O, RO>
-//   >
-//   : never;

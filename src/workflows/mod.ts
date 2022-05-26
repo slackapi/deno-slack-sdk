@@ -8,14 +8,15 @@ import {
   RequiredParameters,
 } from "../parameters/mod.ts";
 import {
-  BaseWorkflowStepDefinition,
+  TypedWorkflowStepDefinition,
   UntypedWorkflowStepDefinition,
   WorkflowStepDefinition,
 } from "./workflow-step.ts";
 import {
   ISlackWorkflow,
   SlackWorkflowDefinitionArgs,
-  WorkflowInputsOutputsDefinition,
+  WorkflowInputs,
+  WorkflowOutputs,
   WorkflowStepInputs,
 } from "./types.ts";
 
@@ -49,11 +50,17 @@ export class WorkflowDefinition<
     RequiredOutputs
   >;
 
-  public inputs: WorkflowInputsOutputsDefinition<
-    Inputs
+  public inputs: WorkflowInputs<
+    Inputs,
+    RequiredInputs
   >;
 
-  steps: BaseWorkflowStepDefinition[] = [];
+  public outputs: WorkflowOutputs<
+    Outputs,
+    RequiredOutputs
+  >;
+
+  steps: WorkflowStepDefinition[] = [];
 
   constructor(
     definition: SlackWorkflowDefinitionArgs<
@@ -65,8 +72,13 @@ export class WorkflowDefinition<
   ) {
     this.id = definition.callback_id;
     this.definition = definition;
-    this.inputs = {} as WorkflowInputsOutputsDefinition<
-      Inputs
+    this.inputs = {} as WorkflowInputs<
+      Inputs,
+      RequiredInputs
+    >;
+    this.outputs = {} as WorkflowOutputs<
+      Outputs,
+      RequiredOutputs
     >;
 
     for (
@@ -76,6 +88,8 @@ export class WorkflowDefinition<
           : {},
       )
     ) {
+      // deno-lint-ignore ban-ts-comment
+      //@ts-ignore
       this.inputs[
         inputName as keyof Inputs
       ] = ParameterVariable(
@@ -114,7 +128,7 @@ export class WorkflowDefinition<
       RequiredStepOutputs
     >,
     inputs: WorkflowStepInputs<StepInputs, RequiredStepInputs>,
-  ): WorkflowStepDefinition<
+  ): TypedWorkflowStepDefinition<
     StepInputs,
     StepOutputs,
     RequiredStepInputs,
@@ -137,7 +151,7 @@ export class WorkflowDefinition<
         RequiredStepOutputs
       >,
     inputs: WorkflowStepInputs<StepInputs, RequiredStepInputs>,
-  ): BaseWorkflowStepDefinition {
+  ): WorkflowStepDefinition {
     const stepId = `${this.steps.length}`;
 
     if (typeof functionOrReference === "string") {
@@ -156,7 +170,7 @@ export class WorkflowDefinition<
       RequiredStepInputs,
       RequiredStepOutputs
     >;
-    const newStep = new WorkflowStepDefinition(
+    const newStep = new TypedWorkflowStepDefinition(
       stepId,
       slackFunction,
       inputs,

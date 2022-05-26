@@ -8,14 +8,16 @@ import {
   ParameterVariableType,
   RequiredParameters,
 } from "../parameters/mod.ts";
-import {
-  WorkflowInputsOutputsDefinition,
-  WorkflowStepInputs,
-} from "./types.ts";
+import { WorkflowStepInputs, WorkflowStepOutputs } from "./types.ts";
 
 const localFnPrefix = "#/functions/";
 
-export abstract class BaseWorkflowStepDefinition {
+export type WorkflowStepDefinition =
+  // deno-lint-ignore no-explicit-any
+  | TypedWorkflowStepDefinition<any, any, any, any>
+  | UntypedWorkflowStepDefinition;
+
+abstract class BaseWorkflowStepDefinition {
   protected stepId: string;
 
   protected functionReference: string;
@@ -69,7 +71,7 @@ export abstract class BaseWorkflowStepDefinition {
   }
 }
 
-export class WorkflowStepDefinition<
+export class TypedWorkflowStepDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInputs extends RequiredParameters<InputParameters>,
@@ -82,8 +84,9 @@ export class WorkflowStepDefinition<
     RequiredOutputs
   >;
 
-  public outputs: WorkflowInputsOutputsDefinition<
-    OutputParameters
+  public outputs: WorkflowStepOutputs<
+    OutputParameters,
+    RequiredOutputs
   >;
 
   constructor(
@@ -100,8 +103,9 @@ export class WorkflowStepDefinition<
 
     this.definition = slackFunction;
 
-    this.outputs = {} as WorkflowInputsOutputsDefinition<
-      OutputParameters
+    this.outputs = {} as WorkflowStepOutputs<
+      OutputParameters,
+      RequiredOutputs
     >;
 
     // Setup step outputs for use in input template expressions
@@ -110,6 +114,8 @@ export class WorkflowStepDefinition<
         slackFunction?.definition?.output_parameters?.properties ?? {},
       )
     ) {
+      // deno-lint-ignore ban-ts-comment
+      //@ts-ignore
       this.outputs[
         outputName as keyof OutputParameters
       ] = ParameterVariable(

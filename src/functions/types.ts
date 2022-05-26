@@ -1,6 +1,7 @@
 import { Env, ManifestFunctionSchema } from "../types.ts";
 import {
   ParameterDefinition,
+  ParameterPropertiesDefinition,
   ParameterSetDefinition,
   RequiredParameters,
 } from "../parameters/mod.ts";
@@ -177,7 +178,7 @@ export interface ISlackFunction<
 export type FunctionDefinitionArgs<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
-  RequiredInput extends RequiredParameters<InputParameters>,
+  RequiredInputs extends RequiredParameters<InputParameters>,
   RequiredOutputs extends RequiredParameters<OutputParameters>,
 > = {
   callback_id: string;
@@ -187,13 +188,13 @@ export type FunctionDefinitionArgs<
   /** An optional description for your function. */
   description?: string;
   /** An optional map of input parameter names containing information about their type, title, description, required and (additional) properties. */
-  "input_parameters"?: {
-    properties: InputParameters;
-    required: RequiredInput;
-  };
+  "input_parameters"?: ParameterPropertiesDefinition<
+    InputParameters,
+    RequiredInputs
+  >;
   /** An optional map of output parameter names containing information about their type, title, description, required and (additional) properties. */
-  "output_parameters"?: {
-    properties: OutputParameters;
-    required: RequiredOutputs;
-  };
+  "output_parameters"?: ParameterPropertiesDefinition<
+    OutputParameters,
+    RequiredOutputs
+  >;
 };

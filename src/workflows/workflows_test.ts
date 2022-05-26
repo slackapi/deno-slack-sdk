@@ -40,7 +40,7 @@ Deno.test("WorkflowStep export input values", () => {
           type: "string",
         },
       },
-      required: ["email", "name"],
+      required: ["email"],
     },
   });
 
@@ -60,8 +60,6 @@ Deno.test("WorkflowStep export input values", () => {
     channel_id: "C123123",
     message: `Channel Created <#${step2.outputs.channel_id}>`,
   });
-
-  step2.outputs.message_ts;
 
   const exportedWorkflow = workflow.export();
   const step1Inputs = exportedWorkflow.steps[0].inputs;
