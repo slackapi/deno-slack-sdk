@@ -54,25 +54,6 @@ export class WorkflowDefinition<
   >;
 
   steps: BaseWorkflowStepDefinition[] = [];
-  /* this one is a bit tricky, we collect here the workflow steps,
-     these parameters are for the input / output parameters of the function that runs in that step
-     and it's inputs will be of whatever shape, so this can't be typed using the WorkflowDefinition
-     type parameters. The ParameterPropertiesDefinition<T> takes a Parameter set as T and uses that
-     to define the "Required" type. So if we type the below to
-     ParameterPropertiesDefinition<ParameterSetDefinition> it doesn't work, because the required sets
-     of the function could be of a different shape. I couldn't find any way to make this work,
-     other than let that one be `any` type.
-  */
-  // steps: WorkflowStepDefinition<
-  //   // deno-lint-ignore no-explicit-any
-  //   any,
-  //   // deno-lint-ignore no-explicit-any
-  //   any,
-  //   // deno-lint-ignore no-explicit-any
-  //   any,
-  //   // deno-lint-ignore no-explicit-any
-  //   any
-  // >[] = [];
 
   constructor(
     definition: SlackWorkflowDefinitionArgs<
