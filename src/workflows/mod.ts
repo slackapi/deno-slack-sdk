@@ -102,19 +102,9 @@ export class WorkflowDefinition<
     }
   }
 
-  // Supports adding an untyped step by using a plain function reference string and input configuration
-  // This won't support any typed inputs or outputs on the step, but can be useful when adding a step w/o the type definition available
-  addStep(
-    functionReference: string,
-    // This is essentially an untyped step input configuration
-    inputs: WorkflowStepInputs<
-      ParameterSetDefinition,
-      RequiredParameters<ParameterSetDefinition>
-    >,
-  ): UntypedWorkflowStepDefinition;
-
   // Supports adding a typed step where an ISlackFunction reference is used, which produces typed inputs and outputs
   // and the functionReference string can be rerived from that ISlackFunction reference
+  // Important that this overload is 1st, as it's the more specific match, and preffered type if it matches
   addStep<
     StepInputs extends ParameterSetDefinition,
     StepOutputs extends ParameterSetDefinition,
@@ -134,6 +124,17 @@ export class WorkflowDefinition<
     RequiredStepInputs,
     RequiredStepOutputs
   >;
+
+  // Supports adding an untyped step by using a plain function reference string and input configuration
+  // This won't support any typed inputs or outputs on the step, but can be useful when adding a step w/o the type definition available
+  addStep(
+    functionReference: string,
+    // This is essentially an untyped step input configuration
+    inputs: WorkflowStepInputs<
+      ParameterSetDefinition,
+      RequiredParameters<ParameterSetDefinition>
+    >,
+  ): UntypedWorkflowStepDefinition;
 
   // The runtime implementation of addStep handles both signatures (straight function-reference & config, or ISlackFunction)
   addStep<

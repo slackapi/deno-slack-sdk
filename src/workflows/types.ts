@@ -72,10 +72,12 @@ type WorkflowParameterReferences<
 export type WorkflowStepInputs<
   InputParameters extends ParameterSetDefinition,
   RequiredInputs extends RequiredParameters<InputParameters>,
-> = // & {
-  //   [k in RequiredInputs[number]]: any;
-  // }
-  {
+> =
+  & {
+    // deno-lint-ignore no-explicit-any
+    [k in RequiredInputs[number]]: any;
+  }
+  & {
     // deno-lint-ignore no-explicit-any
     [k in keyof InputParameters]?: any;
   };
