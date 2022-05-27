@@ -1,0 +1,10 @@
+#!/bin/bash
+#SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+cd "$(dirname "$0")"
+
+# Writes the Function files based on a functions.json file existing alongside this script
+deno run --quiet --allow-read --allow-write ./src/write_function_files.ts
+echo "Formatting Slack function files..."
+deno fmt --quiet ../*.ts
+echo "Linting Slack function files..."
+deno lint --quiet ../*.ts

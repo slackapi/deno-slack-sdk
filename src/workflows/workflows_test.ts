@@ -1,6 +1,6 @@
 import { assertEquals } from "../dev_deps.ts";
 import { DefineWorkflow } from "./mod.ts";
-import { DefineFunction } from "../mod.ts";
+import { DefineFunction, Schema } from "../mod.ts";
 
 Deno.test("WorkflowStep export input values", () => {
   const TestFunction = DefineFunction({
@@ -61,12 +61,19 @@ Deno.test("WorkflowStep export input values", () => {
     message: `Channel Created <#${step2.outputs.channel_id}>`,
   });
 
+  const step4 = workflow.addStep(Schema.slack.functions.SendMessage, {
+    // channel_id: "garbage",
+    // message: "hi Brad",
+  });
+
+  step2.outputs.message_ts;
+
   const exportedWorkflow = workflow.export();
   const step1Inputs = exportedWorkflow.steps[0].inputs;
   const step2Inputs = exportedWorkflow.steps[1].inputs;
   const step3Inputs = exportedWorkflow.steps[2].inputs;
 
-  assertEquals(exportedWorkflow.steps.length, 3);
+  assertEquals(exportedWorkflow.steps.length, 4);
   assertEquals(exportedWorkflow.title, "test");
   assertEquals(exportedWorkflow?.input_parameters?.properties.email, {
     type: "string",
