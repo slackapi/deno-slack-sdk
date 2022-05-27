@@ -51,4 +51,8 @@ export class CustomType<Def extends CustomTypeDefinition>
       manifest.registerType(this.definition.type);
     }
   }
+  export() {
+    const { callback_id: _c, ...definition } = this.definition;
+    return definition;
+  }
 }
