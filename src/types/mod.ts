@@ -52,6 +52,7 @@ export class CustomType<Def extends CustomTypeDefinition>
     }
   }
   export() {
+    // remove callback_id from the definition we pass to the manifest
     const { callback_id: _c, ...definition } = this.definition;
     return definition;
   }

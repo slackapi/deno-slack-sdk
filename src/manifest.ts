@@ -53,7 +53,6 @@ export class SlackManifest {
 
     if (def.types) {
       manifest.types = def.types?.reduce((acc = {}, customType) => {
-        // remove callback_id from the definition we pass to the manifest
         acc[customType.id] = customType.export();
         return acc;
       }, {} as ManifestSchema["types"]);
