@@ -1,4 +1,5 @@
 import { SlackManifest } from "../manifest.ts";
+import { ManifestCustomTypeSchema } from "../types.ts";
 import { CustomTypeDefinition, ICustomType } from "./types.ts";
 
 export const DefineType = <Def extends CustomTypeDefinition>(
@@ -51,7 +52,7 @@ export class CustomType<Def extends CustomTypeDefinition>
       manifest.registerType(this.definition.type);
     }
   }
-  export() {
+  export(): ManifestCustomTypeSchema {
     // remove callback_id from the definition we pass to the manifest
     const { callback_id: _c, ...definition } = this.definition;
     return definition;
