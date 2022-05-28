@@ -11,7 +11,7 @@ export default DefineFunction(
     description:
       "Ephemeral messages are only visible to the assigned user in a channel or DM. Message delivery is not guaranteed - the user must be currently active in Slack. These messages are useful as confirmations after a user has clicked a button or submitted a form.",
     input_parameters: {
-      required: ["user_id", "channel_id", "message"],
+      required: ["user_id", "channel_id"],
       properties: {
         user_id: {
           type: SlackTypes.user_id,

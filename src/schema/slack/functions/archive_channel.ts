@@ -6,14 +6,14 @@ export default DefineFunction(
   {
     callback_id: "slack#/functions/archive_channel",
     source_file: "",
-    title: "Archive channel",
-    description: "Archive an existing Slack channel.",
+    title: "Archives a channel",
+    description: "Archives a slack channel",
     input_parameters: {
       required: ["channel_id"],
       properties: {
         channel_id: {
           type: SlackTypes.channel_id,
-          description: "Channel to archive",
+          description: "ID of the channel to archive",
         },
       },
     },
@@ -22,7 +22,7 @@ export default DefineFunction(
       properties: {
         channel_id: {
           type: SlackTypes.channel_id,
-          description: "The channel that was archived",
+          description: "ID of the archived channel",
         },
       },
     },

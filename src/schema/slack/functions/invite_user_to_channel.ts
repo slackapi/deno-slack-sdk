@@ -6,18 +6,18 @@ export default DefineFunction(
   {
     callback_id: "slack#/functions/invite_user_to_channel",
     source_file: "",
-    title: "Invite User To Channel",
-    description: "Invites a user to the provided channel",
+    title: "Invites a user to a channel",
+    description: "Invites a user to a channel",
     input_parameters: {
       required: ["channel_id", "user_id"],
       properties: {
         channel_id: {
           type: SlackTypes.channel_id,
-          description: "Channel",
+          description: "The ID of the channel to invite user to",
         },
         user_id: {
           type: SlackTypes.user_id,
-          description: "User",
+          description: "User Id",
         },
       },
     },
