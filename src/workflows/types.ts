@@ -67,7 +67,7 @@ type WorkflowParameterReferences<
   };
 
 // Workflow Step inputs are different than workflow inputs/outputs or workflow step outputs.
-// They are purley the config values for the step, and not definitions that can be referenced
+// They are purely the config values for the step, and not definitions that can be referenced
 // as variables like you can with workflow inputs and workflow step outputs
 export type WorkflowStepInputs<
   InputParameters extends ParameterSetDefinition,
