@@ -22,14 +22,12 @@ abstract class BaseWorkflowStepDefinition {
 
   protected functionReference: string;
 
-  // deno-lint-ignore no-explicit-any
-  protected inputs: WorkflowStepInputs<any, any>;
+  protected inputs: Record<string, unknown>;
 
   constructor(
     stepId: string,
     functionReference: string,
-    // deno-lint-ignore no-explicit-any
-    inputs: WorkflowStepInputs<any, any>,
+    inputs: Record<string, unknown>,
   ) {
     this.stepId = stepId;
     // ensures the function reference is a full path - local functions will only be passing in the function callback id
