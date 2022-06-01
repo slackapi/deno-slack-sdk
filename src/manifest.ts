@@ -51,6 +51,13 @@ export class SlackManifest {
       }, {} as ManifestSchema["functions"]);
     }
 
+    if (def.workflows) {
+      manifest.workflows = def.workflows?.reduce((acc = {}, workflow) => {
+        acc[workflow.id] = workflow.export();
+        return acc;
+      }, {} as ManifestSchema["workflows"]);
+    }
+
     if (def.types) {
       manifest.types = def.types?.reduce((acc = {}, customType) => {
         acc[customType.id] = customType.definition;
