@@ -3,7 +3,7 @@ import {
   ParameterDefinition,
   ParameterPropertiesDefinition,
   ParameterSetDefinition,
-  RequiredParameters,
+  PossibleParameterKeys,
 } from "../parameters/mod.ts";
 import { TypedArrayParameterDefinition } from "../parameters/types.ts";
 import type SchemaTypes from "../schema/schema_types.ts";
@@ -65,7 +65,7 @@ type TypedArrayFunctionInputRuntimeType<
  */
 type FunctionRuntimeParameters<
   Params extends ParameterSetDefinition,
-  RequiredParams extends RequiredParameters<Params>,
+  RequiredParams extends PossibleParameterKeys<Params>,
 > =
   & {
     [k in RequiredParams[number]]: FunctionInputRuntimeType<
@@ -161,8 +161,8 @@ export type FunctionParameters = {
 export interface ISlackFunction<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
-  RequiredInput extends RequiredParameters<InputParameters>,
-  RequiredOutputs extends RequiredParameters<OutputParameters>,
+  RequiredInput extends PossibleParameterKeys<InputParameters>,
+  RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > {
   id: string;
   definition: FunctionDefinitionArgs<
@@ -178,8 +178,8 @@ export interface ISlackFunction<
 export type FunctionDefinitionArgs<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
-  RequiredInputs extends RequiredParameters<InputParameters>,
-  RequiredOutputs extends RequiredParameters<OutputParameters>,
+  RequiredInputs extends PossibleParameterKeys<InputParameters>,
+  RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > = {
   callback_id: string;
   /** A title for your function. */

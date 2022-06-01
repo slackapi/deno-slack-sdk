@@ -5,7 +5,7 @@ import {
   ParameterSetDefinition,
   ParameterVariable,
   ParameterVariableType,
-  RequiredParameters,
+  PossibleParameterKeys,
 } from "../parameters/mod.ts";
 import {
   TypedWorkflowStepDefinition,
@@ -23,8 +23,8 @@ import {
 export const DefineWorkflow = <
   Inputs extends ParameterSetDefinition,
   Outputs extends ParameterSetDefinition,
-  RequiredInputs extends RequiredParameters<Inputs>,
-  RequiredOutputs extends RequiredParameters<Outputs>,
+  RequiredInputs extends PossibleParameterKeys<Inputs>,
+  RequiredOutputs extends PossibleParameterKeys<Outputs>,
 >(
   definition: SlackWorkflowDefinitionArgs<
     Inputs,
@@ -39,8 +39,8 @@ export const DefineWorkflow = <
 export class WorkflowDefinition<
   Inputs extends ParameterSetDefinition,
   Outputs extends ParameterSetDefinition,
-  RequiredInputs extends RequiredParameters<Inputs>,
-  RequiredOutputs extends RequiredParameters<Outputs>,
+  RequiredInputs extends PossibleParameterKeys<Inputs>,
+  RequiredOutputs extends PossibleParameterKeys<Outputs>,
 > implements ISlackWorkflow {
   public id: string;
   private definition: SlackWorkflowDefinitionArgs<
@@ -108,8 +108,8 @@ export class WorkflowDefinition<
   addStep<
     StepInputs extends ParameterSetDefinition,
     StepOutputs extends ParameterSetDefinition,
-    RequiredStepInputs extends RequiredParameters<StepInputs>,
-    RequiredStepOutputs extends RequiredParameters<StepOutputs>,
+    RequiredStepInputs extends PossibleParameterKeys<StepInputs>,
+    RequiredStepOutputs extends PossibleParameterKeys<StepOutputs>,
   >(
     slackFunction: ISlackFunction<
       StepInputs,
@@ -132,7 +132,7 @@ export class WorkflowDefinition<
     // This is essentially an untyped step input configuration
     inputs: WorkflowStepInputs<
       ParameterSetDefinition,
-      RequiredParameters<ParameterSetDefinition>
+      PossibleParameterKeys<ParameterSetDefinition>
     >,
   ): UntypedWorkflowStepDefinition;
 
@@ -140,8 +140,8 @@ export class WorkflowDefinition<
   addStep<
     StepInputs extends ParameterSetDefinition,
     StepOutputs extends ParameterSetDefinition,
-    RequiredStepInputs extends RequiredParameters<StepInputs>,
-    RequiredStepOutputs extends RequiredParameters<StepOutputs>,
+    RequiredStepInputs extends PossibleParameterKeys<StepInputs>,
+    RequiredStepOutputs extends PossibleParameterKeys<StepOutputs>,
   >(
     functionOrReference:
       | string

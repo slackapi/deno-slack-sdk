@@ -4,7 +4,7 @@ import {
   ParameterPropertiesDefinition,
   ParameterSetDefinition,
   ParameterVariableType,
-  RequiredParameters,
+  PossibleParameterKeys,
 } from "../parameters/mod.ts";
 
 export interface ISlackWorkflow {
@@ -22,8 +22,8 @@ export type SlackWorkflowDefinition<Definition> = Definition extends
 export type SlackWorkflowDefinitionArgs<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
-  RequiredInputs extends RequiredParameters<InputParameters>,
-  RequiredOutputs extends RequiredParameters<OutputParameters>,
+  RequiredInputs extends PossibleParameterKeys<InputParameters>,
+  RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > = {
   callback_id: string;
   title: string;
@@ -40,22 +40,22 @@ export type SlackWorkflowDefinitionArgs<
 
 export type WorkflowInputs<
   Params extends ParameterSetDefinition,
-  RequiredParams extends RequiredParameters<Params>,
+  RequiredParams extends PossibleParameterKeys<Params>,
 > = WorkflowParameterReferences<Params, RequiredParams>;
 
 export type WorkflowOutputs<
   Params extends ParameterSetDefinition,
-  RequiredParams extends RequiredParameters<Params>,
+  RequiredParams extends PossibleParameterKeys<Params>,
 > = WorkflowParameterReferences<Params, RequiredParams>;
 
 export type WorkflowStepOutputs<
   Params extends ParameterSetDefinition,
-  RequiredParams extends RequiredParameters<Params>,
+  RequiredParams extends PossibleParameterKeys<Params>,
 > = WorkflowParameterReferences<Params, RequiredParams>;
 
 type WorkflowParameterReferences<
   Parameters extends ParameterSetDefinition,
-  Required extends RequiredParameters<Parameters>,
+  Required extends PossibleParameterKeys<Parameters>,
 > =
   & {
     [name in Required[number]]: ParameterVariableType<
@@ -71,7 +71,7 @@ type WorkflowParameterReferences<
 // as variables like you can with workflow inputs and workflow step outputs
 export type WorkflowStepInputs<
   InputParameters extends ParameterSetDefinition,
-  RequiredInputs extends RequiredParameters<InputParameters>,
+  RequiredInputs extends PossibleParameterKeys<InputParameters>,
 > =
   & {
     // deno-lint-ignore no-explicit-any

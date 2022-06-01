@@ -6,7 +6,7 @@ import {
   ParameterSetDefinition,
   ParameterVariable,
   ParameterVariableType,
-  RequiredParameters,
+  PossibleParameterKeys,
 } from "../parameters/mod.ts";
 import { WorkflowStepInputs, WorkflowStepOutputs } from "./types.ts";
 
@@ -74,8 +74,8 @@ abstract class BaseWorkflowStepDefinition {
 export class TypedWorkflowStepDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
-  RequiredInputs extends RequiredParameters<InputParameters>,
-  RequiredOutputs extends RequiredParameters<OutputParameters>,
+  RequiredInputs extends PossibleParameterKeys<InputParameters>,
+  RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > extends BaseWorkflowStepDefinition {
   public definition: ISlackFunction<
     InputParameters,

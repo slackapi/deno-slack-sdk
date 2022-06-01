@@ -15,13 +15,13 @@ export type ParameterSetDefinition = {
   [key: string]: ParameterDefinition;
 };
 
-export type RequiredParameters<
+export type PossibleParameterKeys<
   ParameterSetInternal extends ParameterSetDefinition,
 > = (keyof ParameterSetInternal)[];
 
 export type ParameterPropertiesDefinition<
   Parameters extends ParameterSetDefinition,
-  Required extends RequiredParameters<Parameters>,
+  Required extends PossibleParameterKeys<Parameters>,
 > = {
   properties: Parameters;
   required: Required;
