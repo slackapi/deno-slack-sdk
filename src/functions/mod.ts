@@ -1,7 +1,7 @@
 import { ManifestFunctionSchema } from "../types.ts";
 import {
   ParameterSetDefinition,
-  RequiredParameters,
+  PossibleParameterKeys,
 } from "../parameters/mod.ts";
 import { FunctionDefinitionArgs } from "./types.ts";
 import { SlackManifest } from "../manifest.ts";
@@ -15,8 +15,8 @@ import { SlackManifest } from "../manifest.ts";
 export const DefineFunction = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
-  RequiredInput extends RequiredParameters<InputParameters>,
-  RequiredOutput extends RequiredParameters<OutputParameters>,
+  RequiredInput extends PossibleParameterKeys<InputParameters>,
+  RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 >(
   definition: FunctionDefinitionArgs<
     InputParameters,
@@ -31,8 +31,8 @@ export const DefineFunction = <
 export class SlackFunction<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
-  RequiredInput extends RequiredParameters<InputParameters>,
-  RequiredOutput extends RequiredParameters<OutputParameters>,
+  RequiredInput extends PossibleParameterKeys<InputParameters>,
+  RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 > {
   public id: string;
 
