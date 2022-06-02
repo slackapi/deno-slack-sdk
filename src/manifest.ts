@@ -60,7 +60,7 @@ export class SlackManifest {
 
     if (def.types) {
       manifest.types = def.types?.reduce((acc = {}, customType) => {
-        acc[customType.id] = customType.definition;
+        acc[customType.id] = customType.export();
         return acc;
       }, {} as ManifestSchema["types"]);
     }
