@@ -48,6 +48,7 @@ This project is versioned using [Semantic Versioning][semver].
 > `main` is where active development occurs.
 > Long running branches named feature branches are occasionally created for collaboration on a feature that has a large scope (because everyone cannot push commits to another person's open Pull Request)
 
+<!--
 ### Issue Management
 
 Labels are used to run issues through an organized workflow. Here are the basic definitions:
@@ -72,6 +73,7 @@ level of information with labels. An issue should have **one** of the following 
 
 Issues are closed when a resolution has been reached. If for any reason a closed issue seems
 relevant once again, reopening is great and better than creating a duplicate issue.
+-->
 
 ## Everything else
 

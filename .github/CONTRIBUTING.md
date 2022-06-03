@@ -7,6 +7,9 @@ well.
 There are many ways you can contribute! :heart:
 
 ### Bug Reports and Fixes :bug:
+- At this early stage of development we are not accepting bug reports or feature requests through GitHub. Yet.
+
+<!--
 -  If you find a bug, please search for it in the [Issues](https://github.com/slackapi/deno-slack-sdk/issues), and if it isn't already tracked,
    [create a new issue](https://github.com/slackapi/deno-slack-sdk/issues/new). Fill out the "Bug Report" section of the issue template. Even if an Issue is closed, feel free to comment and add details, it will still
    be reviewed.
@@ -30,6 +33,7 @@ There are many ways you can contribute! :heart:
 
 If you're new to our project and looking for some way to make your first contribution, look for
 Issues labelled `good first contribution`.
+-->
 
 ## Requirements
 
@@ -52,7 +56,7 @@ If the contribution doesn't meet the above criteria, you may fail our automated 
 3.  :herb: Create a new branch and check it out.
 4.  :crystal_ball: Make your changes and commit them locally. Magic happens here!
 5.  :arrow_heading_up: Push your new branch to your fork. (e.g. `git push username fix-issue-16`).
-6.  :inbox_tray: Open a Pull Request on github.com from your new branch on your fork to `master` in this
+6.  :inbox_tray: Open a Pull Request on github.com from your new branch on your fork to `main` in this
     repository.
 
 ## Maintainers
