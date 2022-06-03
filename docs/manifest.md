@@ -13,7 +13,7 @@ example, taken from the template application:
 import { Manifest } from "slack-cloud-sdk/mod.ts";
 import { ReverseString } from "./functions/reverse_definition.ts";
 
-Manifest({
+export default Manifest({
   name: "heuristic-tortoise-312",
   description: "A demo showing how to use Slack functions",
   icon: "assets/icon.png",
