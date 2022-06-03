@@ -54,7 +54,7 @@ workflow.addStep("slack#/functions/send_message", {
 });
 ```
 
-You'll notice the first parameter to `addStep()` here is a string, instead of something like our `DinoFunction`. This is because we're referencing a step produced outside of our app, in this case by `slack`. We're using the string reference of `"slack#/functions/send_message"` to identify the function we're adding as a step. In fact, you can do the same thing with your own functions by creating what's called a local reference string to your own app's function. This uses your `callback_id`, and would like like `"#/functions/my_workflow"`. If we added our function as a step that way, it would look like this:
+You'll notice the first parameter to `addStep()` here is a string, instead of something like our `DinoFunction`. This is because we're referencing a step produced outside of our app, in this case by `slack`. We're using the string reference of `"slack#/functions/send_message"` to identify the function we're adding as a step. In fact, you can do the same thing with your own functions by creating what's called a local reference string to your own app's function. This uses your `callback_id`, and would look like `"#/functions/my_workflow"`. If we added our function as a step that way, it would look like this:
 
 ```ts
 const step1 = workflow.addStep("#/functions/my_workflow", {
@@ -62,11 +62,11 @@ const step1 = workflow.addStep("#/functions/my_workflow", {
 });
 ```
 
-The big difference here is you won't get some of the automatic typic of `inputs` and `outputs` for that step in this case, but you can still reference them as long as you follow the definition of that function.
+The big difference here is you won't get some of the automatic typing of `inputs` and `outputs` for that step, but you can still reference them as long as you follow the definition of that function.
 
 ### Auto-Registration of Workflow dependencies
 
-When a workflow is registered on your `Manifest()` any `functions` it uses as steps, or custom `types` used as input_parameters to the workflow or functions it references are automatically registered in your manifest. This can save you from having to register each function or type that a workflow might use, and just register the workflow.
+When a workflow is registered on your `Manifest()` any `functions` it uses as steps, or custom `types` used as `input_parameters` to the workflow or functions it references are automatically registered in your manifest. This can save you from having to register each function and type that a workflow might use, and just register the workflow.
 
 [manifest]: ./manifest.md
 [function]: ./functions.md
