@@ -40,7 +40,11 @@ Deno.test("SlackFunctionHandler with inputs and outputs", () => {
   const { createContext } = SlackFunctionTester(TestFn);
   const inputs = { in: "test" };
   const result = handler(createContext({ inputs }));
-  assertEquals(result.outputs?.out, inputs.in);
+
+  const stringTest = SlackFunctionTester("test");
+  const stringResult = handler(stringTest.createContext({ inputs }));
+
+  assertEquals(result.outputs?.out, inputs.in, stringResult.outputs?.out);
 });
 
 Deno.test("SlackFunctionHandler with optional input", () => {
