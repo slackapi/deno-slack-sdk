@@ -59,8 +59,7 @@ export type SlackFunctionTesterFn = {
   // This kind of works, but doesn't know what inputs are needed by the handler
   (funcOrCallbackId: string): {
     createContext: {
-      // deno-lint-ignore no-explicit-any
-      (args: SlackFunctionTesterArgs<any>): FunctionContext<any>;
+      <I>(args: SlackFunctionTesterArgs<I>): FunctionContext<I>;
     };
   };
 };
