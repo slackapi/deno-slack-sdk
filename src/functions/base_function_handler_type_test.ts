@@ -1,6 +1,5 @@
 import { assertEquals } from "../dev_deps.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
-import { DefineFunction } from "./mod.ts";
 import { BaseSlackFunctionHandler } from "./types.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
@@ -36,12 +35,7 @@ Deno.test("BaseSlackFunctionHandler with empty inputs and outputs", () => {
       outputs: {},
     };
   };
-  const TestFunction = DefineFunction({
-    callback_id: "callbackId",
-    source_file: "test",
-    title: "Test",
-  });
-  const { createContext } = SlackFunctionTester(TestFunction);
+  const { createContext } = SlackFunctionTester("test");
   const result = handler(createContext({ inputs: {} }));
   assertEquals(result.outputs, {});
 });
