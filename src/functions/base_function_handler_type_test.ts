@@ -1,5 +1,5 @@
 import { assertEquals } from "../dev_deps.ts";
-import { SlackFunctionTester } from "./function_tester.ts";
+import { SlackFunctionTester } from "./tester/mod.ts";
 import { DefineFunction } from "./mod.ts";
 import { BaseSlackFunctionHandler } from "./types.ts";
 
@@ -22,18 +22,7 @@ Deno.test("BaseSlackFunctionHandler types", () => {
       },
     };
   };
-  const TestFunction = DefineFunction({
-    callback_id: "callbackId",
-    source_file: "test",
-    title: "Test",
-    input_parameters: {
-      properties: {
-        in: { type: "string" },
-      },
-      required: ["in"],
-    },
-  });
-  const { createContext } = SlackFunctionTester(TestFunction);
+  const { createContext } = SlackFunctionTester("test");
   const inputs = { in: "test" };
   const result = handler(createContext({ inputs }));
   assertEquals(result.outputs?.out, inputs.in);
