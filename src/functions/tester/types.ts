@@ -56,7 +56,6 @@ export type SlackFunctionTesterFn = {
   >;
 
   // Accept a string
-  // This kind of works, but doesn't know what inputs are needed by the handler
   (funcOrCallbackId: string): {
     createContext: {
       <I>(args: SlackFunctionTesterArgs<I>): FunctionContext<I>;
