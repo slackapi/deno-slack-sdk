@@ -1,5 +1,5 @@
 import { assertEquals } from "../../dev_deps.ts";
-import { SlackFunctionTester } from "./mod.ts";
+import { DEFAULT_FUNCTION_TESTER_TITLE, SlackFunctionTester } from "./mod.ts";
 import { DefineFunction } from "../mod.ts";
 import { Schema } from "../../mod.ts";
 
@@ -22,6 +22,10 @@ Deno.test("SlackFunctionTester.createContext using a string for callback_id", ()
   assertEquals(typeof ctxWithInputs.token, "string");
   assertEquals(ctxWithInputs.event.type, "function_executed");
   assertEquals(ctxWithInputs.event.function.callback_id, callbackId);
+  assertEquals(
+    ctxWithInputs.event.function.title,
+    DEFAULT_FUNCTION_TESTER_TITLE,
+  );
 
   assertEquals(ctxWithoutInputs.inputs, {});
   assertEquals(ctxWithoutInputs.event.function.callback_id, callbackId);
@@ -56,6 +60,7 @@ Deno.test("SlackFunctionTester.createContext using Function definitions", () => 
   assertEquals(typeof requiredCtx.token, "string");
   assertEquals(requiredCtx.event.type, "function_executed");
   assertEquals(requiredCtx.event.function.callback_id, callbackId);
+  assertEquals(requiredCtx.event.function.title, TestFunction.definition.title);
 
   assertEquals(optionalCtx.inputs, {
     myValue: "some value",

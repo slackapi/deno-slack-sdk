@@ -6,6 +6,8 @@ import { SlackFunction } from "../mod.ts";
 import type { FunctionRuntimeParameters } from "../types.ts";
 import { CreateContext, SlackFunctionTesterFn } from "./types.ts";
 
+export const DEFAULT_FUNCTION_TESTER_TITLE = "Function Test Title";
+
 export const SlackFunctionTester: SlackFunctionTesterFn = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
@@ -45,7 +47,9 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
           callback_id: typeof funcOrCallbackId === "string"
             ? funcOrCallbackId
             : funcOrCallbackId.definition.callback_id,
-          title: "Function Test Title",
+          title: typeof funcOrCallbackId === "string"
+            ? DEFAULT_FUNCTION_TESTER_TITLE
+            : funcOrCallbackId.definition.title,
         },
       },
     };
