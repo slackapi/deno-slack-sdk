@@ -25,6 +25,17 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
 ) => {
   const now = new Date();
   const testFnID = `fn${now.getTime()}`;
+  let testFnCallbackID: string;
+  let testFnTitle: string;
+
+  if (typeof funcOrCallbackId === "string") {
+    testFnCallbackID = funcOrCallbackId;
+    testFnTitle = DEFAULT_FUNCTION_TESTER_TITLE;
+  } else {
+    testFnCallbackID = funcOrCallbackId.definition.callback_id;
+    testFnTitle = funcOrCallbackId.definition.title;
+  }
+
   const createContext: CreateContext<InputParameters, RequiredInput> = (
     args,
   ) => {
@@ -44,12 +55,8 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
         inputs: args.inputs as Record<string, unknown>,
         function: {
           id: testFnID,
-          callback_id: typeof funcOrCallbackId === "string"
-            ? funcOrCallbackId
-            : funcOrCallbackId.definition.callback_id,
-          title: typeof funcOrCallbackId === "string"
-            ? DEFAULT_FUNCTION_TESTER_TITLE
-            : funcOrCallbackId.definition.title,
+          callback_id: testFnCallbackID,
+          title: testFnTitle,
         },
       },
     };
