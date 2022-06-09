@@ -6,7 +6,7 @@ import type {
   // UntypedObjectParameterDefinition,
 } from "./types.ts";
 import { ParamReference } from "./param.ts";
-// import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
+import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 
 export type ParameterDefinition = TypedParameterDefinition;
 
@@ -15,15 +15,16 @@ export type ParameterSetDefinition = {
   [key: string]: ParameterDefinition;
 };
 
-export type RequiredParameters<
+export type PossibleParameterKeys<
   ParameterSetInternal extends ParameterSetDefinition,
 > = (keyof ParameterSetInternal)[];
 
 export type ParameterPropertiesDefinition<
   Parameters extends ParameterSetDefinition,
+  Required extends PossibleParameterKeys<Parameters>,
 > = {
   properties: Parameters;
-  required: RequiredParameters<Parameters>;
+  required: Required;
 };
 
 export type ParameterVariableType<Def extends ParameterDefinition> = Def extends
@@ -38,8 +39,8 @@ export type ParameterVariableType<Def extends ParameterDefinition> = Def extends
 // deno-lint-ignore ban-types
 type SingleParameterVariable = {};
 
-// // deno-lint-ignore no-explicit-any
-// type UntypedObjectParameterVariableType = any;
+// deno-lint-ignore no-explicit-any
+type UntypedObjectParameterVariableType = any;
 
 // type ObjectParameterPropertyTypes<Def extends TypedObjectParameterDefinition> =
 //   {
@@ -124,16 +125,16 @@ export const ParameterVariable = <P extends ParameterDefinition>(
 //   ) as ObjectParameterVariableType<P>;
 // };
 
-// const CreateUntypedObjectParameterVariable = (
-//   namespace: string,
-//   paramName: string,
-// ): UntypedObjectParameterVariableType => {
-//   return WithUntypedObjectProxy(
-//     {},
-//     namespace,
-//     paramName,
-//   ) as UntypedObjectParameterVariableType;
-// };
+export const CreateUntypedObjectParameterVariable = (
+  namespace: string,
+  paramName: string,
+): UntypedObjectParameterVariableType => {
+  return WithUntypedObjectProxy(
+    {},
+    namespace,
+    paramName,
+  ) as UntypedObjectParameterVariableType;
+};
 
 const CreateSingleParameterVariable = (
   namespace: string,
