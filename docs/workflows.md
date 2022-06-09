@@ -34,7 +34,8 @@ export default Manifest({
 A workflow by itself isn't of much use, and isn't valid, until you add some steps. Let's use the `DinoFunction` we've defined over in the [functions][function] example as one of our steps. The `DinoFunction` has a single `input_parameter` of `name` that we'll need to pass it. We'll use our `a_string` workflow `input_parameter` as the value for this, but you could just as easily pass a hard-coded value to any step input parameter as well.
 
 ```ts
-import { DinoFunction, DefineWorkflow } from '../functions/dino.ts';
+import { DefineWorkflow } from "slack-cloud-sdk/mod.ts";
+import { DinoFunction } from '../functions/dino.ts';
 
 const workflow = DefineWorkflow({...});
 
