@@ -65,7 +65,7 @@ export const ParameterVariable = <P extends ParameterDefinition>(
   paramName: string,
   definition: P,
 ): ParameterVariableType<P> => {
-  let param: (ParameterVariableType<P> | null) = null;
+  let param: ParameterVariableType<P> | null = null;
 
   // TODO: Should be able to use instanceof CustomType here
   if (definition.type instanceof Object) {
