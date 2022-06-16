@@ -34,10 +34,10 @@ export type FunctionInvocationBody = {
  */
 type FunctionInputRuntimeType<Param extends ParameterDefinition> =
   Param["type"] extends typeof SchemaTypes.string ? string
-    : // : Param["type"] extends
-    //   | typeof SchemaTypes.integer
-    //   | typeof SchemaTypes.number ? number
-    Param["type"] extends typeof SchemaTypes.boolean ? boolean
+    : Param["type"] extends
+      | typeof SchemaTypes.integer
+      | typeof SchemaTypes.number ? number
+    : Param["type"] extends typeof SchemaTypes.boolean ? boolean
     : Param["type"] extends typeof SchemaTypes.array
       ? Param extends TypedArrayParameterDefinition
         ? TypedArrayFunctionInputRuntimeType<Param>
@@ -48,10 +48,10 @@ type FunctionInputRuntimeType<Param extends ParameterDefinition> =
     //   : UnknownRuntimeType
     Param["type"] extends
       | typeof SlackSchemaTypes.user_id
-      // | typeof SlackSchemaTypes.usergroup_id
+      | typeof SlackSchemaTypes.usergroup_id
       | typeof SlackSchemaTypes.channel_id ? string
-    : // : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
-    UnknownRuntimeType;
+    : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
+    : UnknownRuntimeType;
 
 // deno-lint-ignore no-explicit-any
 type UnknownRuntimeType = any;
