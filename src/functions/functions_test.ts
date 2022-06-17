@@ -35,7 +35,7 @@ Deno.test("Function with required params", () => {
           type: Schema.types.boolean,
           title: "My boolean",
         },
-        integer: {
+        myInteger: {
           type: Schema.types.integer,
           description: "integer",
         },
