@@ -19,11 +19,5 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Verify formatting
-        run: deno fmt --check src
-
-      - name: Run linter
-        run: deno lint src
-
       - name: Run tests
-        run: deno test src
+        run: deno task test

@@ -99,9 +99,9 @@ Deno.test("Manifest() automatically registers types used by function input and o
     CustomStringType,
   ]);
   assertEquals(manifest.types, {
-    [inputTypeId]: CustomInputType.definition,
-    [stringTypeId]: CustomStringType.definition,
-    [outputTypeId]: CustomOutputType.definition,
+    [inputTypeId]: CustomInputType.export(),
+    [stringTypeId]: CustomStringType.export(),
+    [outputTypeId]: CustomOutputType.export(),
   });
 });
 
@@ -129,7 +129,7 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
   };
   const manifest = Manifest(definition);
   assertEquals(definition.types, [StringType]);
-  assertEquals(manifest.types, { [stringTypeId]: StringType.definition });
+  assertEquals(manifest.types, { [stringTypeId]: StringType.export() });
 });
 
 Deno.test("Manifest() automatically registers types referenced by other types", () => {
@@ -188,11 +188,11 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
     BooleanType,
   ]);
   assertEquals(manifest.types, {
-    [arrayTypeId]: ArrayType.definition,
-    [customTypeId]: CustomType.definition,
-    // [objectTypeId]: ObjectType.definition,
-    [stringTypeId]: StringType.definition,
-    [booleanTypeId]: BooleanType.definition,
+    [arrayTypeId]: ArrayType.export(),
+    [customTypeId]: CustomType.export(),
+    // [objectTypeId]: ObjectType.export(),
+    [stringTypeId]: StringType.export(),
+    [booleanTypeId]: BooleanType.export(),
   });
 });
 
@@ -257,8 +257,8 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
   assertEquals(exportedManifest.functions, { [functionId]: Func.export() });
   assertEquals(definition.types, [CustomArrayType, CustomStringType]);
   assertEquals(exportedManifest.types, {
-    [arrayTypeId]: CustomArrayType.definition,
-    [stringTypeId]: CustomStringType.definition,
+    [arrayTypeId]: CustomArrayType.export(),
+    [stringTypeId]: CustomStringType.export(),
   });
 });
 

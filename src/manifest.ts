@@ -52,9 +52,16 @@ export class SlackManifest {
       }, {} as ManifestSchema["functions"]);
     }
 
+    if (def.workflows) {
+      manifest.workflows = def.workflows?.reduce((acc = {}, workflow) => {
+        acc[workflow.id] = workflow.export();
+        return acc;
+      }, {} as ManifestSchema["workflows"]);
+    }
+
     if (def.types) {
       manifest.types = def.types?.reduce((acc = {}, customType) => {
-        acc[customType.id] = customType.definition;
+        acc[customType.id] = customType.export();
         return acc;
       }, {} as ManifestSchema["types"]);
     }
@@ -83,6 +90,10 @@ export class SlackManifest {
   }
 
   private registerFeatures() {
+    this.definition.workflows?.forEach((workflow) => {
+      workflow.registerStepFunctions(this);
+      workflow.registerParameterTypes(this);
+    });
     // Loop through functions to automatically register any referenced types
     this.definition.functions?.forEach((func) => {
       func.registerParameterTypes(this);
