@@ -131,11 +131,18 @@ type ErroredFunctionReturnArgs<OutputParameters> =
   & Partial<SuccessfulFunctionReturnArgs<OutputParameters>>
   & Required<Pick<SuccessfulFunctionReturnArgs<OutputParameters>, "error">>;
 
+type PendingFunctionReturnArgs<OutputParameters> =
+  & {
+    completed: false;
+  }
+  & Partial<SuccessfulFunctionReturnArgs<OutputParameters>>;
+
 export type FunctionHandlerReturnArgs<
   OutputParameters,
 > =
   | SuccessfulFunctionReturnArgs<OutputParameters>
-  | ErroredFunctionReturnArgs<OutputParameters>;
+  | ErroredFunctionReturnArgs<OutputParameters>
+  | PendingFunctionReturnArgs<OutputParameters>;
 
 export type FunctionContext<
   InputParameters extends FunctionParameters,
