@@ -3,7 +3,7 @@ const SchemaTypes = {
   boolean: "boolean",
   integer: "integer",
   number: "number",
-  // object: "object",
+  object: "object",
   array: "array",
 } as const;
 

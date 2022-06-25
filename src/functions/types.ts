@@ -5,7 +5,10 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../parameters/mod.ts";
-import { TypedArrayParameterDefinition } from "../parameters/types.ts";
+import {
+  TypedArrayParameterDefinition,
+  TypedObjectParameterDefinition,
+} from "../parameters/types.ts";
 import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackManifest } from "../manifest.ts";
@@ -42,11 +45,11 @@ type FunctionInputRuntimeType<Param extends ParameterDefinition> =
       ? Param extends TypedArrayParameterDefinition
         ? TypedArrayFunctionInputRuntimeType<Param>
       : UnknownRuntimeType[]
-    : // : Param["type"] extends typeof SchemaTypes.object
-    //   ? Param extends TypedObjectParameterDefinition
-    //     ? TypedObjectFunctionInputRuntimeType<Param>
-    //   : UnknownRuntimeType
-    Param["type"] extends
+    : Param["type"] extends typeof SchemaTypes.object
+      ? Param extends TypedObjectParameterDefinition
+        ? TypedObjectFunctionInputRuntimeType<Param>
+      : UnknownRuntimeType
+    : Param["type"] extends
       | typeof SlackSchemaTypes.user_id
       | typeof SlackSchemaTypes.usergroup_id
       | typeof SlackSchemaTypes.channel_id ? string
@@ -55,6 +58,18 @@ type FunctionInputRuntimeType<Param extends ParameterDefinition> =
 
 // deno-lint-ignore no-explicit-any
 type UnknownRuntimeType = any;
+
+type TypedObjectFunctionInputRuntimeType<
+  Param extends TypedObjectParameterDefinition,
+> =
+  & {
+    [k in keyof Param["properties"]]: FunctionInputRuntimeType<
+      Param["properties"][k]
+    >;
+  }
+  & {
+    [key: string]: UnknownRuntimeType;
+  };
 
 type TypedArrayFunctionInputRuntimeType<
   Param extends TypedArrayParameterDefinition,

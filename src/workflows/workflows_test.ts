@@ -15,6 +15,13 @@ Deno.test("WorkflowStep export input values", () => {
         name: {
           type: "string",
         },
+        manager: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            name: { type: "string" },
+          },
+        },
       },
       required: ["email"],
     },
@@ -39,8 +46,15 @@ Deno.test("WorkflowStep export input values", () => {
         name: {
           type: "string",
         },
+        manager: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            name: { type: "string" },
+          },
+        },
       },
-      required: ["email"],
+      required: ["email", "manager"],
     },
   });
 
@@ -48,6 +62,10 @@ Deno.test("WorkflowStep export input values", () => {
   const step1 = workflow.addStep(TestFunction, {
     email: workflow.inputs.email,
     name: `A name: ${workflow.inputs.name}`,
+    manager: {
+      name: workflow.inputs.manager.name,
+      email: workflow.inputs.manager.email,
+    },
   });
 
   // add a manually configured step

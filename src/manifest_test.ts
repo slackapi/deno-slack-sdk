@@ -101,15 +101,25 @@ Deno.test("Manifest() automatically registers types used by function input and o
 
 Deno.test("Manifest() automatically registers types referenced by datastores", () => {
   const stringTypeId = "test_string_type";
+  const objectTypeId = "test_object_type";
   const StringType = DefineType({
     callback_id: stringTypeId,
     type: Schema.types.string,
   });
 
+  const ObjectType = DefineType({
+    callback_id: objectTypeId,
+    type: Schema.types.object,
+    properties: {
+      aString: { type: StringType },
+    },
+  });
+
   const Store = DefineDatastore({
     name: "Test store",
     attributes: {
-      aString: { type: StringType },
+      aString: { type: "string" },
+      aType: { type: ObjectType },
     },
     primary_key: "aString",
   });
@@ -122,16 +132,18 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
     datastores: [Store],
   };
   const manifest = Manifest(definition);
-  assertEquals(definition.types, [StringType]);
-  assertEquals(manifest.types, { [stringTypeId]: StringType.export() });
+  assertEquals(definition.types, [ObjectType, StringType]);
+  assertEquals(manifest.types, {
+    [stringTypeId]: StringType.export(),
+    [objectTypeId]: ObjectType.export(),
+  });
 });
 
 Deno.test("Manifest() automatically registers types referenced by other types", () => {
-  // const objectTypeId = "test_object_type";
+  const objectTypeId = "test_object_type";
   const stringTypeId = "test_string_type";
   const booleanTypeId = "test_boolean_type";
   const arrayTypeId = "test_array_type";
-  const customTypeId = "test_custom_type";
 
   const BooleanType = DefineType({
     callback_id: booleanTypeId,
@@ -143,23 +155,18 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
     type: Schema.types.string,
   });
 
-  const CustomType = DefineType({
-    callback_id: customTypeId,
-    type: BooleanType,
+  const ObjectType = DefineType({
+    callback_id: objectTypeId,
+    type: Schema.types.object,
+    properties: {
+      aBoolean: { type: BooleanType },
+    },
   });
-
-  // const ObjectType = DefineType(objectTypeId, {
-  //   type: Schema.types.object,
-  //   properties: {
-  //     aString: { type: StringType },
-  //   },
-  // });
 
   const ArrayType = DefineType({
     callback_id: arrayTypeId,
     type: Schema.types.array,
     items: {
-      // type: ObjectType,
       type: StringType,
     },
   });
@@ -170,21 +177,19 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
     icon: "icon.png",
     longDescription: "LongDescription",
     botScopes: [],
-    types: [ArrayType, CustomType],
+    types: [ArrayType, ObjectType],
   };
   const manifest = Manifest(definition);
 
   assertEquals(definition.types, [
     ArrayType,
-    CustomType,
+    ObjectType,
     StringType,
-    // ObjectType,
     BooleanType,
   ]);
   assertEquals(manifest.types, {
     [arrayTypeId]: ArrayType.export(),
-    [customTypeId]: CustomType.export(),
-    // [objectTypeId]: ObjectType.export(),
+    [objectTypeId]: ObjectType.export(),
     [stringTypeId]: StringType.export(),
     [booleanTypeId]: BooleanType.export(),
   });
@@ -193,7 +198,7 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
 Deno.test("SlackManifest() registration functions don't allow duplicates", () => {
   const functionId = "test_function";
   const arrayTypeId = "test_array_type";
-  // const objectTypeId = "test_object_type";
+  const objectTypeId = "test_object_type";
   const stringTypeId = "test_string_type";
 
   const CustomStringType = DefineType({
@@ -201,15 +206,15 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
     type: Schema.types.string,
   });
 
-  // const CustomObjectType = DefineType({
-  //   callback_id: objectTypeId,
-  //   type: Schema.types.object,
-  //   properties: {
-  //     aString: {
-  //       type: CustomStringType,
-  //     },
-  //   },
-  // });
+  const CustomObjectType = DefineType({
+    callback_id: objectTypeId,
+    type: Schema.types.object,
+    properties: {
+      aString: {
+        type: CustomStringType,
+      },
+    },
+  });
 
   const CustomArrayType = DefineType({
     callback_id: arrayTypeId,
@@ -232,16 +237,15 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
     longDescription: "LongDescription",
     botScopes: [],
     functions: [Func],
-    types: [CustomArrayType],
-    // types: [CustomObjectType],
+    types: [CustomArrayType, CustomObjectType],
   };
 
   const Manifest = new SlackManifest(definition);
 
   Manifest.registerFunction(Func);
   Manifest.registerFunction(Func);
-  // Manifest.registerType(CustomObjectType);
-  // Manifest.registerType(CustomObjectType);
+  Manifest.registerType(CustomObjectType);
+  Manifest.registerType(CustomObjectType);
   Manifest.registerType(CustomArrayType);
   Manifest.registerType(CustomStringType);
 
@@ -249,9 +253,14 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
 
   assertEquals(definition.functions, [Func]);
   assertEquals(exportedManifest.functions, { [functionId]: Func.export() });
-  assertEquals(definition.types, [CustomArrayType, CustomStringType]);
+  assertEquals(definition.types, [
+    CustomArrayType,
+    CustomObjectType,
+    CustomStringType,
+  ]);
   assertEquals(exportedManifest.types, {
     [arrayTypeId]: CustomArrayType.export(),
+    [objectTypeId]: CustomObjectType.export(),
     [stringTypeId]: CustomStringType.export(),
   });
 });
