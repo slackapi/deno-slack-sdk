@@ -15,7 +15,7 @@ functions.
    script:
 
 ```
-> generate
+> ./generate
 ```
 
 3. This will output something like the following:
