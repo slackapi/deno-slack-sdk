@@ -111,31 +111,38 @@ export type BaseSlackFunctionHandler<
   | AsyncFunctionHandler<InputParameters, OutputParameters>
   | SyncFunctionHandler<InputParameters, OutputParameters>;
 
-type SuccessfulFunctionReturnArgs<
-  OutputParameters extends FunctionParameters,
-> = {
-  completed?: boolean;
-  // Allow function to return an empty object if no outputs are defined
-  outputs: OutputParameters extends undefined ? (Record<never, never>)
-    : OutputParameters;
-  error?: string;
-};
-
 // Exporting this alias for backwards compatability
 /**
  * @deprecated Use either SlackFunctionHandler<Definition> or BaseSlackFunctionHandler<Inputs, Outputs>
  */
 export type FunctionHandler<I, O> = BaseSlackFunctionHandler<I, O>;
 
+type SuccessfulFunctionReturnArgs<
+  OutputParameters extends FunctionParameters,
+> = {
+  completed?: true;
+  // Allow function to return an empty object if no outputs are defined
+  outputs: OutputParameters extends undefined ? (Record<never, never>)
+    : OutputParameters;
+  error?: string;
+};
+
 type ErroredFunctionReturnArgs<OutputParameters> =
   & Partial<SuccessfulFunctionReturnArgs<OutputParameters>>
   & Required<Pick<SuccessfulFunctionReturnArgs<OutputParameters>, "error">>;
+
+type PendingFunctionReturnArgs = {
+  completed: false;
+  outputs?: never;
+  error?: never;
+};
 
 export type FunctionHandlerReturnArgs<
   OutputParameters,
 > =
   | SuccessfulFunctionReturnArgs<OutputParameters>
-  | ErroredFunctionReturnArgs<OutputParameters>;
+  | ErroredFunctionReturnArgs<OutputParameters>
+  | PendingFunctionReturnArgs;
 
 export type FunctionContext<
   InputParameters extends FunctionParameters,
