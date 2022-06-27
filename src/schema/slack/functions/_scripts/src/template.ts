@@ -141,33 +141,5 @@ const renderImport = (callbackId: string) => {
 
 const renderFunctionPropWithType = (fn: FunctionRecord) => {
   const functionName = pascalCase(fn.callback_id);
-  // const inputParams = fn.input_parameters || [];
-  // const outputParams = fn.output_parameters || [];
-  // const inputs = Object.keys(inputParams).length > 0
-  //   ? templatizeParams(inputParams, true)
-  //   : "ParameterSetDefinition";
-  // const outputs = Object.keys(outputParams).length > 0
-  //   ? templatizeParams(outputParams, true)
-  //   : "ParameterSetDefinition";
-
-  // const requiredInputs = (fn.input_parameters || []).filter((p) =>
-  //   p.is_required
-  // ).map((p) => `"${p.name}"`);
-  // const requiredInputsType = requiredInputs.length > 0
-  //   ? `(${requiredInputs.join("|")})[]`
-  //   : `RequiredParameters<ParameterSetDefinition>`;
-  // const requiredOutputs = (fn.output_parameters || []).filter((p) =>
-  //   p.is_required
-  // ).map((p) => `"${p.name}"`);
-  // const requiredOutputsType = requiredOutputs.length > 0
-  //   ? `(${requiredOutputs.join("|")})[]`
-  //   : `RequiredParameters<ParameterSetDefinition>`;
-
-  // TODO: Update `RequiredParameters<ParameterSetDefinition>` to be typed w/ required inputs/outputs, i.e. ("channel_id"|"text")[]
-  return `${functionName}: ${functionName}` /*  as SlackFunction<
-    ${inputs},
-    ${outputs},
-    ${requiredInputsType},
-    ${requiredOutputsType}
-  >` */;
+  return `${functionName}: ${functionName}`;
 };
