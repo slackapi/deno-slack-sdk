@@ -1,5 +1,3 @@
-
-
 import { assertEquals } from "../dev_deps.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
 import { DefineFunction } from "./mod.ts";
