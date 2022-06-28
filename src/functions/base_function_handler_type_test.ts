@@ -129,8 +129,6 @@ Deno.test("BaseSlackFunctionHandler with no inputs and completed false output", 
   assertEquals(result.completed, false);
 });
 
-
-
 Deno.test("BaseSlackFunctionHandler with set inputs and any outputs", () => {
   type Inputs = {
     in: string;
