@@ -1,3 +1,5 @@
+
+
 import { assertEquals } from "../dev_deps.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
 import { DefineFunction } from "./mod.ts";
@@ -189,4 +191,52 @@ Deno.test("SlackFunctionHandler with only outputs", () => {
   const { createContext } = SlackFunctionTester(TestFn);
   const result = handler(createContext({ inputs: {} }));
   assertEquals(result.outputs?.out, "test");
+});
+
+Deno.test("SlackFunctionHandler with only completed false", () => {
+  const TestFn = DefineFunction({
+    callback_id: "test",
+    title: "test fn",
+    source_file: "test.ts",
+    output_parameters: {
+      properties: {
+        completed: {
+          type: "boolean",
+        },
+      },
+      required: [],
+    },
+  });
+  const handler: SlackFunctionHandler<typeof TestFn.definition> = () => {
+    return {
+      completed: false
+    };
+  };
+  const { createContext } = SlackFunctionTester(TestFn);
+  const result = handler(createContext({ inputs: {} }));
+  assertEquals(result.completed, false);
+});
+
+Deno.test("SlackFunctionHandler with only error", () => {
+  const TestFn = DefineFunction({
+    callback_id: "test",
+    title: "test fn",
+    source_file: "test.ts",
+    output_parameters: {
+      properties: {
+        error: {
+          type: "string",
+        },
+      },
+      required: [],
+    },
+  });
+  const handler: SlackFunctionHandler<typeof TestFn.definition> = () => {
+    return {
+      error: "error"
+    };
+  };
+  const { createContext } = SlackFunctionTester(TestFn);
+  const result = handler(createContext({ inputs: {} }));
+  assertEquals(result.error, "error");
 });
