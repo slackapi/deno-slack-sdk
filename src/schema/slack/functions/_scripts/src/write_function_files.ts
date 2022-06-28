@@ -3,7 +3,7 @@ import { SlackFunctionModTemplate, SlackFunctionTemplate } from "./template.ts";
 
 const yellow = "\x1b[38;5;214m";
 const reset = "\x1b[0m";
-const colorText = (text: string) => yellow + text + reset;
+const colorizeText = (text: string) => yellow + text + reset;
 
 const functionsPayload: FunctionsPayload = await Deno.readTextFile(
   "functions.json",
@@ -17,7 +17,7 @@ slackFunctions.sort((a, b) => a.callback_id.localeCompare(b.callback_id));
 
 await slackFunctions.forEach(async (fn) => {
   console.log(
-    `Generating code for Slack Function: ${colorText(fn.callback_id)}`,
+    `Generating code for Slack Function: ${colorizeText(fn.callback_id)}`,
   );
   const templateString = SlackFunctionTemplate(fn);
   const filename = `../${fn.callback_id}.ts`;
