@@ -107,7 +107,7 @@ Deno.test("BaseSlackFunctionHandler with no inputs and error output", () => {
   // deno-lint-ignore no-explicit-any
   const handler: BaseSlackFunctionHandler<any, any> = () => {
     return {
-      error: "error"
+      error: "error",
     };
   };
   const { createContext } = SlackFunctionTester("test");

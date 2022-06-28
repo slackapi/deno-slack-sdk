@@ -209,7 +209,7 @@ Deno.test("SlackFunctionHandler with only completed false", () => {
   });
   const handler: SlackFunctionHandler<typeof TestFn.definition> = () => {
     return {
-      completed: false
+      completed: false,
     };
   };
   const { createContext } = SlackFunctionTester(TestFn);
@@ -233,7 +233,7 @@ Deno.test("SlackFunctionHandler with only error", () => {
   });
   const handler: SlackFunctionHandler<typeof TestFn.definition> = () => {
     return {
-      error: "error"
+      error: "error",
     };
   };
   const { createContext } = SlackFunctionTester(TestFn);
