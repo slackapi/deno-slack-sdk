@@ -198,11 +198,11 @@ Deno.test("SlackFunctionHandler with only completed false", () => {
     source_file: "test.ts",
     output_parameters: {
       properties: {
-        onlyComplete: {
+        example: {
           type: "boolean",
         },
       },
-      required: [],
+      required: ["example"],
     },
   });
   const handler: SlackFunctionHandler<typeof TestFn.definition> = () => {
@@ -222,11 +222,11 @@ Deno.test("SlackFunctionHandler with only error", () => {
     source_file: "test.ts",
     output_parameters: {
       properties: {
-        onlyError: {
+        example: {
           type: "string",
         },
       },
-      required: [],
+      required: ["example"],
     },
   });
   const handler: SlackFunctionHandler<typeof TestFn.definition> = () => {
