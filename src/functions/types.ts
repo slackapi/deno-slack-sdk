@@ -34,31 +34,31 @@ export type FunctionInvocationBody = {
  */
 type FunctionInputRuntimeType<Param extends ParameterDefinition> =
   Param["type"] extends typeof SchemaTypes.string ? string
-  : // : Param["type"] extends
-  //   | typeof SchemaTypes.integer
-  //   | typeof SchemaTypes.number ? number
-  Param["type"] extends typeof SchemaTypes.boolean ? boolean
-  : Param["type"] extends typeof SchemaTypes.array
-  ? Param extends TypedArrayParameterDefinition
-  ? TypedArrayFunctionInputRuntimeType<Param>
-  : UnknownRuntimeType[]
-  : // : Param["type"] extends typeof SchemaTypes.object
-  //   ? Param extends TypedObjectParameterDefinition
-  //     ? TypedObjectFunctionInputRuntimeType<Param>
-  //   : UnknownRuntimeType
-  Param["type"] extends
-  | typeof SlackSchemaTypes.user_id
-  // | typeof SlackSchemaTypes.usergroup_id
-  | typeof SlackSchemaTypes.channel_id ? string
-  : // : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
-  UnknownRuntimeType;
+    : // : Param["type"] extends
+    //   | typeof SchemaTypes.integer
+    //   | typeof SchemaTypes.number ? number
+    Param["type"] extends typeof SchemaTypes.boolean ? boolean
+    : Param["type"] extends typeof SchemaTypes.array
+      ? Param extends TypedArrayParameterDefinition
+        ? TypedArrayFunctionInputRuntimeType<Param>
+      : UnknownRuntimeType[]
+    : // : Param["type"] extends typeof SchemaTypes.object
+    //   ? Param extends TypedObjectParameterDefinition
+    //     ? TypedObjectFunctionInputRuntimeType<Param>
+    //   : UnknownRuntimeType
+    Param["type"] extends
+      | typeof SlackSchemaTypes.user_id
+      // | typeof SlackSchemaTypes.usergroup_id
+      | typeof SlackSchemaTypes.channel_id ? string
+    : // : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
+    UnknownRuntimeType;
 
 // deno-lint-ignore no-explicit-any
 type UnknownRuntimeType = any;
 
 type TypedArrayFunctionInputRuntimeType<
   Param extends TypedArrayParameterDefinition,
-  > = FunctionInputRuntimeType<Param["items"]>[];
+> = FunctionInputRuntimeType<Param["items"]>[];
 
 /**
  * @description Converts a ParameterSetDefinition, and list of required params into an object type used for runtime inputs and outputs
@@ -66,7 +66,7 @@ type TypedArrayFunctionInputRuntimeType<
 export type FunctionRuntimeParameters<
   Params extends ParameterSetDefinition,
   RequiredParams extends PossibleParameterKeys<Params>,
-  > =
+> =
   & {
     [k in RequiredParams[number]]: FunctionInputRuntimeType<
       Params[k]
@@ -107,7 +107,7 @@ export type SlackFunctionHandler<Definition> = Definition extends
 export type BaseSlackFunctionHandler<
   InputParameters extends FunctionParameters,
   OutputParameters extends FunctionParameters,
-  > =
+> =
   | AsyncFunctionHandler<InputParameters, OutputParameters>
   | SyncFunctionHandler<InputParameters, OutputParameters>;
 
@@ -119,13 +119,13 @@ export type FunctionHandler<I, O> = BaseSlackFunctionHandler<I, O>;
 
 type SuccessfulFunctionReturnArgs<
   OutputParameters extends FunctionParameters,
-  > = {
-    completed?: true;
-    // Allow function to return an empty object if no outputs are defined
-    outputs: OutputParameters extends undefined ? (Record<never, never>)
+> = {
+  completed?: true;
+  // Allow function to return an empty object if no outputs are defined
+  outputs: OutputParameters extends undefined ? (Record<never, never>)
     : OutputParameters;
-    error?: string;
-  };
+  error?: string;
+};
 
 type ErroredFunctionReturnArgs<OutputParameters> =
   & Partial<SuccessfulFunctionReturnArgs<OutputParameters>>
@@ -139,25 +139,25 @@ type PendingFunctionReturnArgs = {
 
 export type FunctionHandlerReturnArgs<
   OutputParameters,
-  > =
+> =
   | SuccessfulFunctionReturnArgs<OutputParameters>
   | ErroredFunctionReturnArgs<OutputParameters>
   | PendingFunctionReturnArgs;
 
 export type FunctionContext<
   InputParameters extends FunctionParameters,
-  > = {
-    /**
-     * @description A map of string keys to string values containing any environment variables available and provided to your function handler's execution context.
-     */
-    env: Env;
-    /**
-     * @description The inputs to the function as defined by your function definition. If no inputs are specified, an empty object is provided at runtime.
-     */
-    inputs: InputParameters;
-    token: string;
-    event: FunctionInvocationBody["event"];
-  };
+> = {
+  /**
+   * @description A map of string keys to string values containing any environment variables available and provided to your function handler's execution context.
+   */
+  env: Env;
+  /**
+   * @description The inputs to the function as defined by your function definition. If no inputs are specified, an empty object is provided at runtime.
+   */
+  inputs: InputParameters;
+  token: string;
+  event: FunctionInvocationBody["event"];
+};
 
 // Allow undefined here for functions that have no inputs and/or outputs
 export type FunctionParameters = {
@@ -170,7 +170,7 @@ export interface ISlackFunction<
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
-  > {
+> {
   id: string;
   definition: FunctionDefinitionArgs<
     InputParameters,
@@ -187,21 +187,21 @@ export type FunctionDefinitionArgs<
   OutputParameters extends ParameterSetDefinition,
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
-  > = {
-    callback_id: string;
-    /** A title for your function. */
-    title: string;
-    source_file: string;
-    /** An optional description for your function. */
-    description?: string;
-    /** An optional map of input parameter names containing information about their type, title, description, required and (additional) properties. */
-    "input_parameters"?: ParameterPropertiesDefinition<
-      InputParameters,
-      RequiredInputs
-    >;
-    /** An optional map of output parameter names containing information about their type, title, description, required and (additional) properties. */
-    "output_parameters"?: ParameterPropertiesDefinition<
-      OutputParameters,
-      RequiredOutputs
-    >;
-  };
+> = {
+  callback_id: string;
+  /** A title for your function. */
+  title: string;
+  source_file: string;
+  /** An optional description for your function. */
+  description?: string;
+  /** An optional map of input parameter names containing information about their type, title, description, required and (additional) properties. */
+  "input_parameters"?: ParameterPropertiesDefinition<
+    InputParameters,
+    RequiredInputs
+  >;
+  /** An optional map of output parameter names containing information about their type, title, description, required and (additional) properties. */
+  "output_parameters"?: ParameterPropertiesDefinition<
+    OutputParameters,
+    RequiredOutputs
+  >;
+};
