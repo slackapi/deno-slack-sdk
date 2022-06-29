@@ -105,7 +105,7 @@ Deno.test("BaseSlackFunctionHandler with any inputs and any outputs", () => {
 
 Deno.test("BaseSlackFunctionHandler with no inputs and error output", () => {
   // deno-lint-ignore no-explicit-any
-  const handler: BaseSlackFunctionHandler<any, any> = () => {
+  const handler: BaseSlackFunctionHandler<any, { example: string }> = () => {
     return {
       error: "error",
     };
@@ -117,7 +117,7 @@ Deno.test("BaseSlackFunctionHandler with no inputs and error output", () => {
 
 Deno.test("BaseSlackFunctionHandler with no inputs and completed false output", () => {
   // deno-lint-ignore no-explicit-any
-  const handler: BaseSlackFunctionHandler<any, any> = () => {
+  const handler: BaseSlackFunctionHandler<any, { example: boolean }> = () => {
     return {
       completed: false,
     };
