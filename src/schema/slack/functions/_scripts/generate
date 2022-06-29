@@ -1,6 +1,5 @@
 #!/bin/bash
-#set -euo pipefail
-#SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+set -euo pipefail
 cd "$(dirname "$0")"
 
 # Writes the Function files based on a functions.json file existing alongside this script
