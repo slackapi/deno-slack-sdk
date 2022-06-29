@@ -198,7 +198,7 @@ Deno.test("SlackFunctionHandler with only completed false", () => {
     source_file: "test.ts",
     output_parameters: {
       properties: {
-        completed: {
+        onlyComplete: {
           type: "boolean",
         },
       },
@@ -222,7 +222,7 @@ Deno.test("SlackFunctionHandler with only error", () => {
     source_file: "test.ts",
     output_parameters: {
       properties: {
-        error: {
+        onlyError: {
           type: "string",
         },
       },

@@ -111,8 +111,7 @@ Deno.test("BaseSlackFunctionHandler with no inputs and error output", () => {
     };
   };
   const { createContext } = SlackFunctionTester("test");
-  const inputs = { in: "test" };
-  const result = handler(createContext({ inputs }));
+  const result = handler(createContext({ inputs: {} }));
   assertEquals(result.error, "error");
 });
 
@@ -124,8 +123,7 @@ Deno.test("BaseSlackFunctionHandler with no inputs and completed false output", 
     };
   };
   const { createContext } = SlackFunctionTester("test");
-  const inputs = { in: "test" };
-  const result = handler(createContext({ inputs }));
+  const result = handler(createContext({ inputs: {} }));
   assertEquals(result.completed, false);
 });
 
