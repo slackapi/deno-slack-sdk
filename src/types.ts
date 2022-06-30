@@ -16,6 +16,16 @@ export type {
   SlackFunctionHandler,
 } from "./functions/types.ts";
 
+export interface SlackManifestFeaturesAppHome {
+  messagesTabEnabled?: boolean;
+  // @default true
+  messagesTabReadOnlyEnabled?: boolean;
+}
+
+export interface SlackManifestFeatures {
+  appHome?: SlackManifestFeaturesAppHome;
+}
+
 export type SlackManifestType = {
   name: string;
   backgroundColor?: string;
@@ -29,6 +39,7 @@ export type SlackManifestType = {
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
   datastores?: ManifestDatastore[];
+  features?: SlackManifestFeatures;
 };
 
 export type ManifestDatastore = ISlackDatastore;
@@ -50,8 +61,8 @@ export type InvocationPayload<Body> = {
   // TODO: type this out to handle multiple body types
   body: Body;
   context: {
-    "bot_access_token": string;
-    "variables": Record<string, string>;
+    bot_access_token: string;
+    variables: Record<string, string>;
   };
 };
 
@@ -81,12 +92,14 @@ export type ManifestFunctionSchema = {
   title?: string;
   description?: string;
   source_file: string;
-  "input_parameters": ManifestFunctionParameters;
-  "output_parameters": ManifestFunctionParameters;
+  input_parameters: ManifestFunctionParameters;
+  output_parameters: ManifestFunctionParameters;
 };
 
+export type ManifestFunctionsSchema = { [key: string]: ManifestFunctionSchema };
+
 export type ManifestDatastoreSchema = {
-  "primary_key": string;
+  primary_key: string;
   attributes: {
     [key: string]: {
       type: string | ICustomType;
@@ -98,9 +111,13 @@ export type ManifestDatastoreSchema = {
   };
 };
 
+export type ManifestDataStoresSchema = {
+  [key: string]: ManifestDatastoreSchema;
+};
+
 export type ManifestWorkflowStepSchema = {
   id: string;
-  "function_id": string;
+  function_id: string;
   inputs: {
     [name: string]: unknown;
   };
@@ -109,47 +126,51 @@ export type ManifestWorkflowStepSchema = {
 export type ManifestWorkflowSchema = {
   title?: string;
   description?: string;
-  "input_parameters"?: ManifestFunctionParameters;
+  input_parameters?: ManifestFunctionParameters;
   steps: ManifestWorkflowStepSchema[];
 };
 
+export type ManifestWorkflowsSchema = { [key: string]: ManifestWorkflowSchema };
+
 export type ManifestCustomTypeSchema = ParameterDefinition;
 
+export type ManifestCustomTypesSchema = { [key: string]: ParameterDefinition };
+
 export type ManifestMetadata = {
-  "major_version"?: number;
-  "minor_version"?: number;
+  major_version?: number;
+  minor_version?: number;
 };
 
+export interface ManifestFeaturesAppHome {
+  messages_tab_enabled?: boolean;
+  messages_tab_read_only_enabled?: boolean;
+}
+
+export interface ManifestFeaturesSchema {
+  bot_user: {
+    display_name: string;
+  };
+  app_home?: ManifestFeaturesAppHome;
+}
+
 export type ManifestSchema = {
-  "_metadata"?: ManifestMetadata;
-  "display_information": {
-    "background_color"?: string;
+  _metadata?: ManifestMetadata;
+  display_information: {
+    background_color?: string;
     name: string;
-    "long_description"?: string;
-    "short_description": string;
+    long_description?: string;
+    short_description: string;
   };
   icon: string;
-  "oauth_config": {
+  oauth_config: {
     scopes: {
       bot: string[];
     };
   };
-  features: {
-    "bot_user": {
-      "display_name": string;
-    };
-  };
-  functions?: {
-    [key: string]: ManifestFunctionSchema;
-  };
-  workflows?: {
-    [key: string]: ManifestWorkflowSchema;
-  };
-  "outgoing_domains"?: string[];
-  types?: {
-    [key: string]: ManifestCustomTypeSchema;
-  };
-  datastores?: {
-    [key: string]: ManifestDatastoreSchema;
-  };
+  features: ManifestFeaturesSchema;
+  functions?: ManifestFunctionsSchema;
+  workflows?: ManifestWorkflowsSchema;
+  outgoing_domains?: string[];
+  types?: ManifestCustomTypesSchema;
+  datastores?: ManifestDataStoresSchema;
 };
