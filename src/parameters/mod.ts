@@ -50,8 +50,7 @@ type ObjectParameterPropertyTypes<Def extends TypedObjectParameterDefinition> =
     >;
   };
 
-// If additionalProperties is set to true, allow access to any key
-// Otherwise, only allow keys provided through use of properties
+// If additionalProperties is set to true, allow access to any key. Otherwise, only allow keys provided through use of properties
 type ObjectParameterVariableType<Def extends TypedObjectParameterDefinition> =
   Def["additionalProperties"] extends true ? 
     & ObjectParameterPropertyTypes<Def>
