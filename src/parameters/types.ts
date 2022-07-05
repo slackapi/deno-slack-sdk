@@ -4,8 +4,8 @@ import { ICustomType } from "../types/types.ts";
 export type PrimitiveParameterDefinition =
   | BooleanParameterDefinition
   | StringParameterDefinition
-  // | NumberParameterDefinition
-  // | IntegerParameterDefinition
+  | NumberParameterDefinition
+  | IntegerParameterDefinition
   | BaseParameterDefinition<AllValues>
   // | UntypedArrayParameterDefinition
   | TypedArrayParameterDefinition;
@@ -71,29 +71,29 @@ type StringParameterDefinition = BaseParameterDefinition<string> & {
   choices?: EnumChoice<string>[];
 };
 
-// type IntegerParameterDefinition = BaseParameterDefinition<number> & {
-//   type: typeof SchemaTypes.integer;
-//   /** Absolute minimum acceptable value for the integer */
-//   minimum?: number;
-//   /** Absolute maximum acceptable value for the integer */
-//   maximum?: number;
-//   /** Constrain the available integer options to just the list of integers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-//   enum?: number[];
-//   /** Defines labels that correspond to the `enum` values. */
-//   choices?: EnumChoice<number>[];
-// };
+type IntegerParameterDefinition = BaseParameterDefinition<number> & {
+  type: typeof SchemaTypes.integer;
+  /** Absolute minimum acceptable value for the integer */
+  minimum?: number;
+  /** Absolute maximum acceptable value for the integer */
+  maximum?: number;
+  /** Constrain the available integer options to just the list of integers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
+  enum?: number[];
+  /** Defines labels that correspond to the `enum` values. */
+  choices?: EnumChoice<number>[];
+};
 
-// type NumberParameterDefinition = BaseParameterDefinition<number> & {
-//   type: typeof SchemaTypes.number;
-//   /** Absolute minimum acceptable value for the number */
-//   minimum?: number;
-//   /** Absolute maximum acceptable value for the number */
-//   maximum?: number;
-//   /** Constrain the available number options to just the list of numbers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-//   enum?: number[];
-//   /** Defines labels that correspond to the `enum` values. */
-//   choices?: EnumChoice<number>[];
-// };
+type NumberParameterDefinition = BaseParameterDefinition<number> & {
+  type: typeof SchemaTypes.number;
+  /** Absolute minimum acceptable value for the number */
+  minimum?: number;
+  /** Absolute maximum acceptable value for the number */
+  maximum?: number;
+  /** Constrain the available number options to just the list of numbers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
+  enum?: number[];
+  /** Defines labels that correspond to the `enum` values. */
+  choices?: EnumChoice<number>[];
+};
 
 type EnumChoice<T> = {
   /** The `enum` value this {@link EnumChoice} corresponds to. */
