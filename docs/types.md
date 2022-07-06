@@ -8,13 +8,30 @@ Types can be defined with the top level `DefineType` export. Below is an example
 of setting up a custom Type used for setting shared boundaries on strings.
 
 ```ts
-const LimitedStringType = DefineType({
-  callback_id: "limited_string",
-  title: "String with length restrictions",
-  description: "Use this to provide boundaries to your string",
-  type: Schema.types.string,
-  minLength: 3,
-  maxLength: 8
+const IncidentType = DefineType({
+  callback_id: "incident",
+  title: "Incident Ticket",
+  description: "Use this to enter an Incident Ticket",
+  type: Schema.types.object,
+  properties: {
+    id: {
+      type: Schema.types.string,
+      minLength: 3,
+    },
+    title: {
+      type: Schema.types.string,
+    },
+    summary: {
+      type: Schema.types.string,
+    },
+    severity: {
+      type: Schema.types.string,
+    },
+    date_created: {
+      type: Schema.types.number,
+    },
+  },
+  required: [],
 }
 ```
 
@@ -25,7 +42,7 @@ parameter while defining the [`Manifest`][manifest].
 
 Note: All Custom Types **must** be registered to the [Manifest][manifest] in
 order for them to be used, but any types referenced by existing
-[`functions`][functions], [`datastores`][datastores], or other types will be
+[`functions`][functions], [`workflows`][workflows], [`datastores`][datastores], or other types will be
 registered automatically.
 
 ```ts
@@ -42,9 +59,9 @@ property to the Type it should reference.
 
 ```js
 input_parameters: {
-  secret: : {
-    title: 'A Special String',
-    type: LimitedStringType
+  incident: : {
+    title: 'A Special Incident',
+    type: IncidentType
   }
    ...
 }
@@ -55,3 +72,4 @@ _In the provided example the title from the Custom Type is being overridden_
 [functions]: ./functions.md
 [manifest]: ./manifest.md
 [datastores]: ./datastores.md
+[workflows]: ./workflows.md

@@ -11,9 +11,9 @@ export type PrimitiveParameterDefinition =
   | TypedArrayParameterDefinition;
 
 export type TypedParameterDefinition =
-  // | TypedObjectParameterDefinition
-  // | UntypedObjectParameterDefinition
-  PrimitiveParameterDefinition;
+  | TypedObjectParameterDefinition
+  | UntypedObjectParameterDefinition
+  | PrimitiveParameterDefinition;
 
 export type CustomTypeParameterDefinition =
   & BaseParameterDefinition<AllValues>
@@ -35,25 +35,25 @@ type BaseParameterDefinition<T> = {
   examples?: T[];
 };
 
-// export type UntypedObjectParameterDefinition =
-//   & BaseParameterDefinition<ObjectValue>
-//   & {
-//     type: typeof SchemaTypes.object;
-//   };
+export type UntypedObjectParameterDefinition =
+  & BaseParameterDefinition<ObjectValue>
+  & {
+    type: typeof SchemaTypes.object;
+  };
 
 // TODO: Required field should be limited to the names(key) of each property
-// export type TypedObjectParameterDefinition =
-//   & UntypedObjectParameterDefinition
-//   & {
-//     /** A list of required property names (must reference names defined on the `properties` property). Only for use with Object types. */
-//     required?: string[];
-//     /** Whether the parameter can accept objects with additional keys beyond those defined via `properties` */
-//     additionalProperties?: boolean;
-//     /** Object defining what properties are allowed on the parameter. */
-//     properties: {
-//       [key: string]: PrimitiveParameterDefinition;
-//     };
-// };
+export type TypedObjectParameterDefinition =
+  & UntypedObjectParameterDefinition
+  & {
+    /** A list of required property names (must reference names defined on the `properties` property). Only for use with Object types. */
+    required?: string[];
+    /** Whether the parameter can accept objects with additional keys beyond those defined via `properties` */
+    additionalProperties?: boolean;
+    /** Object defining what properties are allowed on the parameter. */
+    properties: {
+      [key: string]: PrimitiveParameterDefinition;
+    };
+  };
 
 type BooleanParameterDefinition = BaseParameterDefinition<boolean> & {
   type: typeof SchemaTypes.boolean;
