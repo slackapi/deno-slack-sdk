@@ -12,6 +12,7 @@ import {
 import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackManifest } from "../manifest.ts";
+import { ICustomType } from "../types/types.ts";
 
 export type FunctionInvocationBody = {
   "team_id": string;
@@ -36,7 +37,11 @@ export type FunctionInvocationBody = {
  * @description Maps a ParameterDefinition into a runtime type, i.e. "string" === string.
  */
 type FunctionInputRuntimeType<Param extends ParameterDefinition> =
-  Param["type"] extends typeof SchemaTypes.string ? string
+  Param["type"] extends ICustomType
+    // If the Parameter is a Custom Type, use the type's definition
+    ? FunctionInputRuntimeType<Param["type"]["definition"]>
+    // Otherwise, use the type itself
+    : Param["type"] extends typeof SchemaTypes.string ? string
     : Param["type"] extends
       | typeof SchemaTypes.integer
       | typeof SchemaTypes.number ? number
