@@ -15,6 +15,13 @@ Deno.test("WorkflowStep export input values", () => {
         name: {
           type: "string",
         },
+        manager: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            name: { type: "string" },
+          },
+        },
       },
       required: ["email"],
     },
@@ -22,6 +29,13 @@ Deno.test("WorkflowStep export input values", () => {
       properties: {
         url: {
           type: "string",
+        },
+        manager: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            name: { type: "string" },
+          },
         },
       },
       required: ["url"],
@@ -39,8 +53,15 @@ Deno.test("WorkflowStep export input values", () => {
         name: {
           type: "string",
         },
+        manager: {
+          type: "object",
+          properties: {
+            email: { type: "string" },
+            name: { type: "string" },
+          },
+        },
       },
-      required: ["email"],
+      required: ["email", "manager"],
     },
   });
 
@@ -48,6 +69,10 @@ Deno.test("WorkflowStep export input values", () => {
   const step1 = workflow.addStep(TestFunction, {
     email: workflow.inputs.email,
     name: `A name: ${workflow.inputs.name}`,
+    manager: {
+      name: workflow.inputs.manager.name,
+      email: workflow.inputs.manager.email,
+    },
   });
 
   // add a manually configured step
@@ -74,6 +99,8 @@ Deno.test("WorkflowStep export input values", () => {
   assertEquals(`${step1Inputs.email}`, "{{inputs.email}}");
   assertEquals(`${step1Inputs.name}`, "A name: {{inputs.name}}");
   assertEquals(`${step1.outputs.url}`, "{{steps.0.url}}");
+  assertEquals(`${step1.outputs.manager?.email}`, "{{steps.0.manager.email}}");
+  assertEquals(`${step1.outputs.manager?.name}`, "{{steps.0.manager.name}}");
 
   assertEquals(
     `${step2Inputs.channel_name}`,
