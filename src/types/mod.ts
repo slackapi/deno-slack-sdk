@@ -59,7 +59,6 @@ export class CustomType<Def extends CustomTypeDefinition>
   }
   export(): ManifestCustomTypeSchema {
     // remove callback_id or name from the definition we pass to the manifest
-    console.log("TEST");
     if ("callback_id" in this.definition) {
       const { callback_id: _c, ...definition } = this.definition;
       return definition;
