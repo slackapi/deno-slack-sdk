@@ -1,8 +1,7 @@
-import { assertEquals, assertExists } from "../dev_deps.ts";
+import { assertEquals } from "../dev_deps.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
 import { DefineFunction } from "./mod.ts";
 import { SlackFunctionHandler } from "./types.ts";
-import { DefineType } from "../mod.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
 // Any "failures" here will most likely be reflected in Type errors
@@ -234,60 +233,6 @@ Deno.test("SlackFunctionHandler with input and output object", () => {
     createContext({ inputs: { anObject: { in: "test" } } }),
   );
   assertEquals(result.outputs?.anObject.out, "test");
-});
-
-Deno.test("SlackFunctionHandler with custom type inputs", () => {
-  const TestStringType = DefineType({
-    callback_id: "example_string",
-    type: "string",
-  });
-  const TestObjectType = DefineType({
-    callback_id: "example_object",
-    type: "object",
-    properties: {
-      in: { type: TestStringType },
-    },
-  });
-  const TestFn = DefineFunction({
-    callback_id: "test",
-    title: "test fn",
-    source_file: "test.ts",
-    input_parameters: {
-      properties: {
-        anObject: {
-          type: TestObjectType,
-        },
-        aString: {
-          type: TestStringType,
-        },
-      },
-      required: ["anObject", "aString"],
-    },
-    output_parameters: {
-      properties: {
-        out: { type: "string" },
-      },
-      required: ["out"],
-    },
-  });
-  const handler: SlackFunctionHandler<typeof TestFn.definition> = (
-    { inputs },
-  ) => {
-    assertExists(inputs.anObject.in);
-    assertExists(inputs.aString);
-    return {
-      outputs: {
-        out: inputs.anObject.in || inputs.aString,
-      },
-    };
-  };
-  const { createContext } = SlackFunctionTester(TestFn);
-  const result = handler(
-    createContext({
-      inputs: { anObject: { in: "type_test" }, aString: "another_type_test" },
-    }),
-  );
-  assertEquals(result.outputs?.out, "type_test");
 });
 
 Deno.test("SlackFunctionHandler with only completed false", () => {
