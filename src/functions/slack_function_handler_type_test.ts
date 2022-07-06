@@ -190,3 +190,95 @@ Deno.test("SlackFunctionHandler with only outputs", () => {
   const result = handler(createContext({ inputs: {} }));
   assertEquals(result.outputs?.out, "test");
 });
+
+Deno.test("SlackFunctionHandler with input and output object", () => {
+  const TestFn = DefineFunction({
+    callback_id: "test",
+    title: "test fn",
+    source_file: "test.ts",
+    input_parameters: {
+      properties: {
+        anObject: {
+          type: "object",
+          properties: { in: { type: "string" } },
+          required: ["in"],
+        },
+      },
+      required: ["anObject"],
+    },
+    output_parameters: {
+      properties: {
+        anObject: {
+          type: "object",
+          properties: { out: { type: "string" } },
+          required: ["out"],
+        },
+      },
+      required: ["anObject"],
+    },
+  });
+  const handler: SlackFunctionHandler<typeof TestFn.definition> = (
+    { inputs },
+  ) => {
+    return {
+      outputs: {
+        anObject: {
+          out: inputs.anObject.in,
+        },
+      },
+    };
+  };
+  const { createContext } = SlackFunctionTester(TestFn);
+  const result = handler(
+    createContext({ inputs: { anObject: { in: "test" } } }),
+  );
+  assertEquals(result.outputs?.anObject.out, "test");
+});
+
+Deno.test("SlackFunctionHandler with only completed false", () => {
+  const TestFn = DefineFunction({
+    callback_id: "test",
+    title: "test fn",
+    source_file: "test.ts",
+    output_parameters: {
+      properties: {
+        example: {
+          type: "boolean",
+        },
+      },
+      required: ["example"],
+    },
+  });
+  const handler: SlackFunctionHandler<typeof TestFn.definition> = () => {
+    return {
+      completed: false,
+    };
+  };
+  const { createContext } = SlackFunctionTester(TestFn);
+  const result = handler(createContext({ inputs: {} }));
+  assertEquals(result.completed, false);
+});
+
+Deno.test("SlackFunctionHandler with only error", () => {
+  const TestFn = DefineFunction({
+    callback_id: "test",
+    title: "test fn",
+    source_file: "test.ts",
+    output_parameters: {
+      properties: {
+        example: {
+          type: "string",
+        },
+      },
+      required: ["example"],
+    },
+  });
+  const handler: SlackFunctionHandler<typeof TestFn.definition> = () => {
+    return {
+      error: "error",
+    };
+  };
+  const { createContext } = SlackFunctionTester(TestFn);
+  const result = handler(createContext({ inputs: {} }));
+  assertEquals(result.error, "error");
+});

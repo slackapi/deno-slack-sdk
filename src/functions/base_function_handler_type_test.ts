@@ -27,7 +27,7 @@ Deno.test("BaseSlackFunctionHandler types", () => {
   assertEquals(result.outputs?.out, inputs.in);
 });
 
-Deno.test("BaseSlackFunctionHandler with empty inputs and outputs", () => {
+Deno.test("BaseSlackFunctionHandler with empty inputs and empty outputs", () => {
   type Inputs = Record<never, never>;
   type Outputs = Record<never, never>;
   const handler: BaseSlackFunctionHandler<Inputs, Outputs> = () => {
@@ -103,6 +103,30 @@ Deno.test("BaseSlackFunctionHandler with any inputs and any outputs", () => {
   assertEquals(result.outputs?.out, inputs.in);
 });
 
+Deno.test("BaseSlackFunctionHandler with no inputs and error output", () => {
+  // deno-lint-ignore no-explicit-any
+  const handler: BaseSlackFunctionHandler<any, { example: string }> = () => {
+    return {
+      error: "error",
+    };
+  };
+  const { createContext } = SlackFunctionTester("test");
+  const result = handler(createContext({ inputs: {} }));
+  assertEquals(result.error, "error");
+});
+
+Deno.test("BaseSlackFunctionHandler with no inputs and completed false output", () => {
+  // deno-lint-ignore no-explicit-any
+  const handler: BaseSlackFunctionHandler<any, { example: boolean }> = () => {
+    return {
+      completed: false,
+    };
+  };
+  const { createContext } = SlackFunctionTester("test");
+  const result = handler(createContext({ inputs: {} }));
+  assertEquals(result.completed, false);
+});
+
 Deno.test("BaseSlackFunctionHandler with set inputs and any outputs", () => {
   type Inputs = {
     in: string;
@@ -119,4 +143,28 @@ Deno.test("BaseSlackFunctionHandler with set inputs and any outputs", () => {
   const inputs = { in: "test" };
   const result = handler(createContext({ inputs }));
   assertEquals(result.outputs?.out, inputs.in);
+});
+
+Deno.test("BaseSlackFunctionHandler with input and output objects", () => {
+  type Inputs = {
+    anObject: {
+      in: string;
+    };
+  };
+  type Outputs = {
+    anObject: {
+      out: string;
+    };
+  };
+  const handler: BaseSlackFunctionHandler<Inputs, Outputs> = ({ inputs }) => {
+    return {
+      outputs: {
+        anObject: { out: inputs.anObject.in },
+      },
+    };
+  };
+  const { createContext } = SlackFunctionTester("test");
+  const inputs = { anObject: { in: "test" } };
+  const result = handler(createContext({ inputs }));
+  assertEquals(result.outputs?.anObject?.out, inputs.anObject.in);
 });
