@@ -17,7 +17,9 @@ export class CustomType<Def extends CustomTypeDefinition>
   constructor(
     public definition: Def,
   ) {
-    this.id = "name" in definition ? definition.name : definition.callback_id;
+    this.id = "name" in definition
+      ? (definition.name as string)
+      : definition.callback_id;
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;

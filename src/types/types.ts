@@ -2,20 +2,14 @@ import { TypedParameterDefinition } from "../parameters/types.ts";
 import { SlackManifest } from "../manifest.ts";
 import { ManifestCustomTypeSchema } from "../types.ts";
 
-export type CustomTypeDefinition =
+export type CustomTypeDefinition = (
+  | { callback_id?: never; name: string }
+    & TypedParameterDefinition
   | (
-    & {
-      /**
-       * @deprecated Use name instead
-       */
-      callback_id: string;
-    }
+    & { callback_id: string; name?: never }
     & TypedParameterDefinition
   )
-  | (
-    & { name: string }
-    & TypedParameterDefinition
-  );
+);
 
 export interface ICustomType {
   id: string;
