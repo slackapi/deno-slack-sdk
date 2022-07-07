@@ -23,7 +23,7 @@ Deno.test("DefineType test against id using the callback_id parameter", () => {
   assertEquals(Type.id, "Callback_id");
 });
 
-Deno.test("DefineType test topString using the callback_id parameter", () => {
+Deno.test("DefineType test toString using the callback_id parameter", () => {
   const Type = DefineType({
     title: "Title",
     description: "Description",

@@ -99,6 +99,100 @@ Deno.test("Manifest() automatically registers types used by function input and o
   });
 });
 
+Deno.test("Manifest() properly converts name to proper key", () => {
+  const UsingName = DefineType({
+    name: "Using Name",
+    type: Schema.types.boolean,
+  });
+
+  const Function = DefineFunction(
+    {
+      callback_id: "test_function",
+      title: "Function title",
+      source_file: "functions/test_function.ts",
+      input_parameters: {
+        properties: { aType: { type: UsingName } },
+        required: [],
+      },
+    },
+  );
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    functions: [Function],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.types, { "Using Name": { type: "boolean" } });
+});
+
+Deno.test("Manifest() properly converts callback_id to proper key", () => {
+  const UsingCallback = DefineType({
+    callback_id: "Using Callback",
+    type: Schema.types.boolean,
+  });
+
+  const Function = DefineFunction(
+    {
+      callback_id: "test_function",
+      title: "Function title",
+      source_file: "functions/test_function.ts",
+      input_parameters: {
+        properties: { aType: { type: UsingCallback } },
+        required: [],
+      },
+    },
+  );
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    functions: [Function],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.types, { "Using Callback": { type: "boolean" } });
+});
+
+Deno.test("Manifest() properly uses name over callback_id to proper key", () => {
+  const UsingName = DefineType({
+    callback_id: "Using Callback",
+    name: "Using Name",
+    type: Schema.types.boolean,
+  });
+
+  const Function = DefineFunction(
+    {
+      callback_id: "test_function",
+      title: "Function title",
+      source_file: "functions/test_function.ts",
+      input_parameters: {
+        properties: { aType: { type: UsingName } },
+        required: [],
+      },
+    },
+  );
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    functions: [Function],
+  };
+  const manifest = Manifest(definition);
+  console.log(manifest);
+  assertEquals(manifest.types, {
+    "Using Name": { callback_id: "Using Callback", type: "boolean" },
+  });
+});
+
 Deno.test("Manifest() automatically registers types referenced by datastores", () => {
   const stringTypeId = "test_string_type";
   const StringType = DefineType({

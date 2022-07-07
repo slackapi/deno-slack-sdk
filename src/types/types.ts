@@ -4,7 +4,12 @@ import { ManifestCustomTypeSchema } from "../types.ts";
 
 export type CustomTypeDefinition =
   | (
-    & { callback_id: string }
+    & {
+      /**
+       * @deprecated Use name instead
+       */
+      callback_id: string;
+    }
     & TypedParameterDefinition
   )
   | (
