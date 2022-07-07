@@ -14,18 +14,18 @@ import SendMessage from "./send_message.ts";
 import UpdateChannelTopic from "./update_channel_topic.ts";
 
 const SlackFunctions = {
-  AddPin: AddPin, //
-  AddUserToUsergroup: AddUserToUsergroup, //
-  ArchiveChannel: ArchiveChannel, //
-  CreateChannel: CreateChannel, //
-  CreateUsergroup: CreateUsergroup, //
-  Delay: Delay, //
+  AddPin: AddPin,
+  AddUserToUsergroup: AddUserToUsergroup,
+  ArchiveChannel: ArchiveChannel,
+  CreateChannel: CreateChannel,
+  CreateUsergroup: CreateUsergroup,
+  Delay: Delay,
   InviteUserToChannel: InviteUserToChannel,
   RemoveUserFromUsergroup: RemoveUserFromUsergroup,
   RenameChannel: RenameChannel,
-  SendDm: SendDm, //
-  SendEphemeralMessage: SendEphemeralMessage, //
-  SendMessage: SendMessage, //
+  SendDm: SendDm,
+  SendEphemeralMessage: SendEphemeralMessage,
+  SendMessage: SendMessage,
   UpdateChannelTopic: UpdateChannelTopic,
 } as const;
 
