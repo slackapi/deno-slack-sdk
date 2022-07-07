@@ -3,8 +3,14 @@ import { SlackManifest } from "../manifest.ts";
 import { ManifestCustomTypeSchema } from "../types.ts";
 
 export type CustomTypeDefinition =
-  & { callback_id: string }
-  & TypedParameterDefinition;
+  | (
+    & { callback_id?: never; name: string }
+    & TypedParameterDefinition
+  )
+  | (
+    & { callback_id: string; name?: never }
+    & TypedParameterDefinition
+  );
 
 export interface ICustomType {
   id: string;
