@@ -18,7 +18,7 @@ export class CustomType<Def extends CustomTypeDefinition>
     public definition: Def,
   ) {
     this.id = "name" in definition
-      ? (definition.name as string)
+      ? (definition.name as string) // #TODO: Look into why this is requiring a cast as string
       : definition.callback_id;
     this.definition = definition;
     this.description = definition.description;
