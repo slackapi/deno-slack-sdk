@@ -99,6 +99,42 @@ Deno.test("Manifest() automatically registers types used by function input and o
   });
 });
 
+Deno.test("Manifest() properly converts name to proper key", () => {
+  const UsingName = DefineType({
+    name: "Using Name",
+    type: Schema.types.boolean,
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    types: [UsingName],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.types, { "Using Name": { type: "boolean" } });
+});
+
+Deno.test("Manifest() properly converts callback_id to proper key", () => {
+  const UsingCallback = DefineType({
+    callback_id: "Using Callback",
+    type: Schema.types.boolean,
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    types: [UsingCallback],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.types, { "Using Callback": { type: "boolean" } });
+});
+
 Deno.test("Manifest() automatically registers types referenced by datastores", () => {
   const stringTypeId = "test_string_type";
   const objectTypeId = "test_object_type";

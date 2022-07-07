@@ -17,7 +17,9 @@ export class CustomType<Def extends CustomTypeDefinition>
   constructor(
     public definition: Def,
   ) {
-    this.id = definition.callback_id;
+    this.id = "name" in definition
+      ? (definition.name as string) // #TODO: Look into why this is requiring a cast as string
+      : definition.callback_id;
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;
@@ -53,8 +55,13 @@ export class CustomType<Def extends CustomTypeDefinition>
     }
   }
   export(): ManifestCustomTypeSchema {
-    // remove callback_id from the definition we pass to the manifest
-    const { callback_id: _c, ...definition } = this.definition;
-    return definition;
+    // remove callback_id or name from the definition we pass to the manifest
+    if ("name" in this.definition) {
+      const { name: _n, ...definition } = this.definition;
+      return definition;
+    } else {
+      const { callback_id: _c, ...definition } = this.definition;
+      return definition;
+    }
   }
 }
