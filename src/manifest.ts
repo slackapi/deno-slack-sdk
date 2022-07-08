@@ -43,6 +43,10 @@ export class SlackManifest {
         bot_user: {
           display_name: def.displayName || def.name,
         },
+        app_home: {
+          messages_tab_enabled: true,
+          messages_tab_read_only_enabled: true,
+        },
       },
       outgoing_domains: def.outgoingDomains || [],
     };
@@ -88,11 +92,16 @@ export class SlackManifest {
     }
 
     if (def.features?.appHome) {
-      manifest.features.app_home = {
-        messages_tab_enabled: def.features?.appHome.messagesTabEnabled,
-        messages_tab_read_only_enabled:
-          def.features?.appHome.messagesTabReadOnlyEnabled ?? true,
-      };
+      const { messagesTabEnabled, messagesTabReadOnlyEnabled } =
+        def.features.appHome;
+
+      if (messagesTabEnabled !== undefined) {
+        manifest.features.app_home.messages_tab_enabled = messagesTabEnabled;
+      }
+      if (messagesTabReadOnlyEnabled !== undefined) {
+        manifest.features.app_home.messages_tab_read_only_enabled =
+          messagesTabReadOnlyEnabled;
+      }
     }
 
     return manifest;

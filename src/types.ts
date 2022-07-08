@@ -16,11 +16,20 @@ export type {
   SlackFunctionHandler,
 } from "./functions/types.ts";
 
-export interface SlackManifestFeaturesAppHome {
-  messagesTabEnabled?: boolean;
-  // @default true
+export type SlackManifestFeaturesAppHome = AppHomeMessagesTab;
+
+// TODO: Find way to share these defaults
+type AppHomeMessagesTab = {
+  /** @default true */
+  messagesTabEnabled?: true;
+  /** @default true */
   messagesTabReadOnlyEnabled?: boolean;
-}
+} | {
+  /** @default true */
+  messagesTabEnabled: false;
+  /** @default true */
+  messagesTabReadOnlyEnabled: false;
+};
 
 export interface SlackManifestFeatures {
   appHome?: SlackManifestFeaturesAppHome;
@@ -134,7 +143,9 @@ export type ManifestWorkflowsSchema = { [key: string]: ManifestWorkflowSchema };
 
 export type ManifestCustomTypeSchema = ParameterDefinition;
 
-export type ManifestCustomTypesSchema = { [key: string]: ParameterDefinition };
+export type ManifestCustomTypesSchema = {
+  [key: string]: ManifestCustomTypeSchema;
+};
 
 export type ManifestMetadata = {
   major_version?: number;
@@ -150,7 +161,7 @@ export interface ManifestFeaturesSchema {
   bot_user: {
     display_name: string;
   };
-  app_home?: ManifestFeaturesAppHome;
+  app_home: ManifestFeaturesAppHome;
 }
 
 export type ManifestSchema = {
