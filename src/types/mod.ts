@@ -6,22 +6,21 @@ import {
   NameTypeDefinition,
 } from "./types.ts";
 
-export function DefineType<Def extends NameTypeDefinition>(
-  name: Def,
-): CustomType<Def>;
-/**
- * @deprecated Use name instead of callback_id
- */
-export function DefineType<Def extends CallbackTypeDefinition>(
-  callback: Def,
-): CustomType<Def>;
-export function DefineType<
-  Def extends CallbackTypeDefinition | NameTypeDefinition,
+type DefineTypeType = {
+  <Def extends NameTypeDefinition>(name: Def): CustomType<Def>;
+  /**
+   * @deprecated Use name instead of callback_id
+   */
+  <Def extends CallbackTypeDefinition>(callback_id: Def): CustomType<Def>;
+};
+
+export const DefineType: DefineTypeType = <
+  Def extends NameTypeDefinition | CallbackTypeDefinition,
 >(
   definition: Def,
-) {
+) => {
   return new CustomType(definition);
-}
+};
 
 export class CustomType<Def extends NameTypeDefinition | CallbackTypeDefinition>
   implements ICustomType {
