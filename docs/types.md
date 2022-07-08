@@ -9,7 +9,7 @@ of setting up a custom Type used for setting shared boundaries on strings.
 
 ```ts
 const IncidentType = DefineType({
-  callback_id: "incident",
+  name: "incident",
   title: "Incident Ticket",
   description: "Use this to enter an Incident Ticket",
   type: Schema.types.object,

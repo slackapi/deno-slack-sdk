@@ -73,7 +73,7 @@ Deno.test("ParameterVariable array of strings", () => {
 
 Deno.test("ParameterVariable using CustomType string", () => {
   const customType = DefineType({
-    callback_id: "customTypeString",
+    name: "customTypeString",
     type: SchemaTypes.string,
   });
   const param = ParameterVariable("", "myCustomTypeString", {
@@ -85,7 +85,7 @@ Deno.test("ParameterVariable using CustomType string", () => {
 
 Deno.test("ParameterVariable using Custom Type typed object", () => {
   const customType = DefineType({
-    callback_id: "customType",
+    name: "customType",
     type: SchemaTypes.object,
     properties: {
       aString: {
@@ -103,7 +103,7 @@ Deno.test("ParameterVariable using Custom Type typed object", () => {
 
 Deno.test("ParameterVariable using Custom Type untyped object", () => {
   const customType = DefineType({
-    callback_id: "customTypeObject",
+    name: "customTypeObject",
     type: SchemaTypes.object,
   });
   const param = ParameterVariable("", "myCustomTypeObject", {
@@ -121,7 +121,7 @@ Deno.test("ParameterVariable using Custom Type untyped object", () => {
 
 Deno.test("ParameterVariable using Custom Type array", () => {
   const customType = DefineType({
-    callback_id: "customTypeArray",
+    name: "customTypeArray",
     type: SchemaTypes.array,
   });
   const param = ParameterVariable("", "myCustomTypeArray", {
@@ -133,12 +133,12 @@ Deno.test("ParameterVariable using Custom Type array", () => {
 
 Deno.test("ParameterVariable using Custom Type object referencing another Custom Type", () => {
   const StringType = DefineType({
-    callback_id: "stringType",
+    name: "stringType",
     type: SchemaTypes.string,
     minLength: 2,
   });
   const customType = DefineType({
-    callback_id: "customTypeWithCustomType",
+    name: "customTypeWithCustomType",
     type: SchemaTypes.object,
     properties: {
       customType: {
@@ -159,7 +159,7 @@ Deno.test("ParameterVariable using Custom Type object referencing another Custom
 
 Deno.test("ParameterVariable typed object with Custom Type property", () => {
   const StringType = DefineType({
-    callback_id: "stringType",
+    name: "stringType",
     type: SchemaTypes.string,
     minLength: 2,
   });
