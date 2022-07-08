@@ -1,25 +1,31 @@
 import { SlackManifest } from "../manifest.ts";
 import { ManifestCustomTypeSchema } from "../types.ts";
-import { CustomTypeDefinition, ICustomType } from "./types.ts";
+import {
+  CallbackTypeDefinition,
+  ICustomType,
+  NameTypeDefinition,
+} from "./types.ts";
 
-export const DefineType = <Def extends CustomTypeDefinition>(
-  definition: Def,
-) => {
+export function DefineType(name: NameTypeDefinition): CustomType;
+/**
+ * @deprecated Use name instead of callback_id
+ */
+export function DefineType(callback: CallbackTypeDefinition): CustomType;
+export function DefineType(
+  definition: NameTypeDefinition | CallbackTypeDefinition,
+) {
   return new CustomType(definition);
-};
+}
 
-export class CustomType<Def extends CustomTypeDefinition>
-  implements ICustomType {
+export class CustomType implements ICustomType {
   public id: string;
   public title: string | undefined;
   public description: string | undefined;
 
   constructor(
-    public definition: Def,
+    public definition: NameTypeDefinition | CallbackTypeDefinition,
   ) {
-    this.id = "name" in definition
-      ? (definition.name as string) // #TODO: Look into why this is requiring a cast as string
-      : definition.callback_id;
+    this.id = "name" in definition ? definition.name : definition.callback_id;
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;
