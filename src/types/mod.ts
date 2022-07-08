@@ -1,14 +1,29 @@
 import { SlackManifest } from "../manifest.ts";
 import { ManifestCustomTypeSchema } from "../types.ts";
-import { CustomTypeDefinition, ICustomType } from "./types.ts";
+import {
+  CallbackTypeDefinition,
+  ICustomType,
+  NameTypeDefinition,
+} from "./types.ts";
 
-export const DefineType = <Def extends CustomTypeDefinition>(
+export function DefineType<Def extends NameTypeDefinition>(
+  name: Def,
+): CustomType<Def>;
+/**
+ * @deprecated Use name instead of callback_id
+ */
+export function DefineType<Def extends CallbackTypeDefinition>(
+  callback: Def,
+): CustomType<Def>;
+export function DefineType<
+  Def extends NameTypeDefinition | CallbackTypeDefinition,
+>(
   definition: Def,
-) => {
+) {
   return new CustomType(definition);
-};
+}
 
-export class CustomType<Def extends CustomTypeDefinition>
+export class CustomType<Def extends NameTypeDefinition | CallbackTypeDefinition>
   implements ICustomType {
   public id: string;
   public title: string | undefined;
@@ -17,9 +32,7 @@ export class CustomType<Def extends CustomTypeDefinition>
   constructor(
     public definition: Def,
   ) {
-    this.id = "name" in definition
-      ? (definition.name as string) // #TODO: Look into why this is requiring a cast as string
-      : definition.callback_id;
+    this.id = "name" in definition ? definition.name : definition.callback_id;
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;
@@ -42,13 +55,13 @@ export class CustomType<Def extends CustomTypeDefinition>
       if (this.definition.items.type instanceof Object) {
         manifest.registerType(this.definition.items.type);
       }
-    } else if ("properties" in this.definition) {
-      // Loop through the properties and register any types
-      Object.values(this.definition.properties)?.forEach((property) => {
-        if ("type" in property && property.type instanceof Object) {
-          manifest.registerType(property.type);
-        }
-      });
+      // } else if ("properties" in this.definition) {
+      //   // Loop through the properties and register any types
+      //   Object.values(this.definition.properties)?.forEach((property) => {
+      //     if ("type" in property && property.type instanceof Object) {
+      //       manifest.registerType(property.type);
+      //     }
+      //   });
     } else if (this.definition.type instanceof Object) {
       // The referenced type is a Custom Type
       manifest.registerType(this.definition.type);

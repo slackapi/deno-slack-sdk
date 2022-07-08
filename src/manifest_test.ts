@@ -216,7 +216,6 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
     types: [ArrayType, ObjectType],
   };
   const manifest = Manifest(definition);
-
   assertEquals(definition.types, [
     ArrayType,
     ObjectType,
