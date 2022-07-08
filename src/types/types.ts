@@ -13,11 +13,11 @@ export type CallbackTypeDefinition =
 export type CustomTypeDefinition = NameTypeDefinition | CallbackTypeDefinition;
 
 export type DefineTypeFunction = {
-  <Def extends NameTypeDefinition>(name: Def): CustomType<Def>;
+  <Def extends NameTypeDefinition>(definition: Def): CustomType<Def>;
   /**
    * @deprecated Use name instead of callback_id
    */
-  <Def extends CallbackTypeDefinition>(callback_id: Def): CustomType<Def>;
+  <Def extends CallbackTypeDefinition>(definition: Def): CustomType<Def>;
 };
 
 export interface ICustomType {
