@@ -6,24 +6,31 @@ import {
   NameTypeDefinition,
 } from "./types.ts";
 
-export function DefineType(name: NameTypeDefinition): CustomType;
+export function DefineType<Def extends NameTypeDefinition>(
+  name: Def,
+): CustomType<Def>;
 /**
  * @deprecated Use name instead of callback_id
  */
-export function DefineType(callback: CallbackTypeDefinition): CustomType;
-export function DefineType(
-  definition: NameTypeDefinition | CallbackTypeDefinition,
+export function DefineType<Def extends CallbackTypeDefinition>(
+  callback: Def,
+): CustomType<Def>;
+export function DefineType<
+  Def extends CallbackTypeDefinition | NameTypeDefinition,
+>(
+  definition: Def,
 ) {
   return new CustomType(definition);
 }
 
-export class CustomType implements ICustomType {
+export class CustomType<Def extends NameTypeDefinition | CallbackTypeDefinition>
+  implements ICustomType {
   public id: string;
   public title: string | undefined;
   public description: string | undefined;
 
   constructor(
-    public definition: NameTypeDefinition | CallbackTypeDefinition,
+    public definition: Def,
   ) {
     this.id = "name" in definition ? definition.name : definition.callback_id;
     this.definition = definition;
