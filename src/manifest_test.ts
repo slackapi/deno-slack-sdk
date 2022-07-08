@@ -48,17 +48,17 @@ Deno.test("Manifest() automatically registers types used by function input and o
   const stringTypeId = "test_string_type";
 
   const CustomStringType = DefineType({
-    callback_id: stringTypeId,
+    name: stringTypeId,
     type: Schema.types.string,
   });
 
   const CustomInputType = DefineType({
-    callback_id: inputTypeId,
+    name: inputTypeId,
     type: CustomStringType,
   });
 
   const CustomOutputType = DefineType({
-    callback_id: outputTypeId,
+    name: outputTypeId,
     type: Schema.types.boolean,
   });
 
@@ -139,12 +139,12 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
   const stringTypeId = "test_string_type";
   const objectTypeId = "test_object_type";
   const StringType = DefineType({
-    callback_id: stringTypeId,
+    name: stringTypeId,
     type: Schema.types.string,
   });
 
   const ObjectType = DefineType({
-    callback_id: objectTypeId,
+    name: objectTypeId,
     type: Schema.types.object,
     properties: {
       aString: { type: StringType },
@@ -182,17 +182,17 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
   const arrayTypeId = "test_array_type";
 
   const BooleanType = DefineType({
-    callback_id: booleanTypeId,
+    name: booleanTypeId,
     type: Schema.types.boolean,
   });
 
   const StringType = DefineType({
-    callback_id: stringTypeId,
+    name: stringTypeId,
     type: Schema.types.string,
   });
 
   const ObjectType = DefineType({
-    callback_id: objectTypeId,
+    name: objectTypeId,
     type: Schema.types.object,
     properties: {
       aBoolean: { type: BooleanType },
@@ -200,7 +200,7 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
   });
 
   const ArrayType = DefineType({
-    callback_id: arrayTypeId,
+    name: arrayTypeId,
     type: Schema.types.array,
     items: {
       type: StringType,
@@ -238,12 +238,12 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
   const stringTypeId = "test_string_type";
 
   const CustomStringType = DefineType({
-    callback_id: stringTypeId,
+    name: stringTypeId,
     type: Schema.types.string,
   });
 
   const CustomObjectType = DefineType({
-    callback_id: objectTypeId,
+    name: objectTypeId,
     type: Schema.types.object,
     properties: {
       aString: {
@@ -253,7 +253,7 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
   });
 
   const CustomArrayType = DefineType({
-    callback_id: arrayTypeId,
+    name: arrayTypeId,
     type: Schema.types.array,
     items: {
       type: CustomStringType,

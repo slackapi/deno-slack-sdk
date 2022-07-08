@@ -1,28 +1,20 @@
 import { SlackManifest } from "../manifest.ts";
 import { ManifestCustomTypeSchema } from "../types.ts";
 import {
-  CallbackTypeDefinition,
+  CustomTypeDefinition,
+  DefineTypeFunction,
   ICustomType,
-  NameTypeDefinition,
 } from "./types.ts";
 
-type DefineTypeType = {
-  <Def extends NameTypeDefinition>(name: Def): CustomType<Def>;
-  /**
-   * @deprecated Use name instead of callback_id
-   */
-  <Def extends CallbackTypeDefinition>(callback_id: Def): CustomType<Def>;
-};
-
-export const DefineType: DefineTypeType = <
-  Def extends NameTypeDefinition | CallbackTypeDefinition,
+export const DefineType: DefineTypeFunction = <
+  Def extends CustomTypeDefinition,
 >(
   definition: Def,
 ) => {
   return new CustomType(definition);
 };
 
-export class CustomType<Def extends NameTypeDefinition | CallbackTypeDefinition>
+export class CustomType<Def extends CustomTypeDefinition>
   implements ICustomType {
   public id: string;
   public title: string | undefined;
