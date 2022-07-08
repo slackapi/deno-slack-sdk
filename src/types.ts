@@ -30,6 +30,9 @@ export type SlackManifestType =
  * ManifestSchema#function_runtime = slack hosted apps. Here, we surface that value
  * to the developer as the slackHosted top-level property.
  */
+
+//  features?: SlackManifestFeatures;
+
 export interface ISlackManifestHosted {
   slackHosted?: true; // maps to function_runtime = "slack" in ManifestSchema, optional since the apps are slack hosted by default
   name: string;
@@ -44,6 +47,7 @@ export interface ISlackManifestHosted {
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
   datastores?: ManifestDatastore[];
+  features?: SlackManifestFeatures;
 }
 
 /** ISlackManifestRemote contains the features currently available to
@@ -128,8 +132,8 @@ export type InvocationPayload<Body> = {
   // TODO: type this out to handle multiple body types
   body: Body;
   context: {
-    "bot_access_token": string;
-    "variables": Record<string, string>;
+    bot_access_token: string;
+    variables: Record<string, string>;
   };
 };
 
@@ -164,8 +168,11 @@ export type ManifestFunctionSchema = {
 
 export type ManifestCustomTypeSchema = ParameterDefinition;
 
+// TODO: Brand new type below
+export type ManifestFunctionsSchema = { [key: string]: ManifestFunctionSchema };
+
 export type ManifestDatastoreSchema = {
-  "primary_key": string;
+  primary_key: string;
   attributes: {
     [key: string]: {
       type: string | ICustomType;
@@ -177,9 +184,13 @@ export type ManifestDatastoreSchema = {
   };
 };
 
+export type ManifestDataStoresSchema = {
+  [key: string]: ManifestDatastoreSchema;
+};
+
 export type ManifestWorkflowStepSchema = {
   id: string;
-  "function_id": string;
+  function_id: string;
   inputs: {
     [name: string]: unknown;
   };
@@ -188,9 +199,11 @@ export type ManifestWorkflowStepSchema = {
 export type ManifestWorkflowSchema = {
   title?: string;
   description?: string;
-  "input_parameters"?: ManifestFunctionParameters;
+  input_parameters?: ManifestFunctionParameters;
   steps: ManifestWorkflowStepSchema[];
 };
+
+export type ManifestWorkflowsSchema = { [key: string]: ManifestWorkflowSchema };
 
 export type ManifestMetadataSchema = {
   "major_version"?: number;
@@ -203,11 +216,24 @@ export type ManifestBotUserSchema = {
   "always_online"?: boolean;
 };
 
-export type ManifestAppHomeSchema = {
-  "home_tab_enabled"?: boolean;
-  "messages_tab_enabled"?: boolean;
-  "messages_tab_read_only_enabled"?: boolean;
+// TODO: Find way to share these defaults
+type AppHomeMessagesTab = {
+  /** @default true */
+  messagesTabEnabled?: true;
+  /** @default true */
+  messagesTabReadOnlyEnabled?: boolean;
+} | {
+  /** @default true */
+  messagesTabEnabled: false;
+  /** @default true */
+  messagesTabReadOnlyEnabled: false;
 };
+
+export type ManifestAppHomeSchema = AppHomeMessagesTab & {
+  "home_tab_enabled"?: boolean;
+};
+
+export type SlackManifestFeaturesAppHome = ManifestAppHomeSchema;
 
 export type ManifestShortcutSchema = {
   name: string;
@@ -324,6 +350,29 @@ export type ManifestOauthConfigSchema = {
   "token_management_enabled"?: boolean;
 };
 
+export interface SlackManifestFeatures {
+  appHome?: SlackManifestFeaturesAppHome;
+}
+
+export interface ManifestFeaturesAppHome {
+  "home_tab_enabled"?: boolean;
+  messages_tab_enabled?: boolean;
+  messages_tab_read_only_enabled?: boolean;
+}
+
+export interface ManifestFeaturesSchema {
+  bot_user: ManifestBotUserSchema;
+  app_home: ManifestFeaturesAppHome;
+  "shortcuts"?: ManifestShortcutsSchema;
+  "slash_commands"?: ManifestSlashCommandsSchema;
+  "unfurl_domains"?: ManifestUnfurlDomainsSchema;
+  "workflow_steps"?: ManifestWorkflowStepsSchema;
+}
+
+export type ManifestCustomTypesSchema = {
+  [key: string]: ManifestCustomTypeSchema;
+};
+
 export type ManifestSchema = {
   "_metadata"?: ManifestMetadataSchema;
   settings: ManifestSettingsSchema;
@@ -331,25 +380,10 @@ export type ManifestSchema = {
   "display_information": ManifestDisplayInformationSchema;
   icon: string;
   "oauth_config": ManifestOauthConfigSchema;
-  features: {
-    "app_home"?: ManifestAppHomeSchema;
-    "bot_user"?: ManifestBotUserSchema;
-    "shortcuts"?: ManifestShortcutsSchema;
-    "slash_commands"?: ManifestSlashCommandsSchema;
-    "unfurl_domains"?: ManifestUnfurlDomainsSchema;
-    "workflow_steps"?: ManifestWorkflowStepsSchema;
-  };
-  functions?: {
-    [key: string]: ManifestFunctionSchema;
-  };
-  workflows?: {
-    [key: string]: ManifestWorkflowSchema;
-  };
-  "outgoing_domains"?: string[];
-  types?: {
-    [key: string]: ManifestCustomTypeSchema;
-  };
-  datastores?: {
-    [key: string]: ManifestDatastoreSchema;
-  };
+  features: ManifestFeaturesSchema;
+  functions?: ManifestFunctionsSchema;
+  workflows?: ManifestWorkflowsSchema;
+  outgoing_domains?: string[];
+  types?: ManifestCustomTypesSchema;
+  datastores?: ManifestDataStoresSchema;
 };

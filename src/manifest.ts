@@ -1,7 +1,11 @@
 import { ParameterSetDefinition } from "./parameters/mod.ts";
 import {
+  ManifestCustomTypesSchema,
+  ManifestDataStoresSchema,
   ManifestFunction,
+  ManifestFunctionsSchema,
   ManifestSchema,
+  ManifestWorkflowsSchema,
   SlackManifestType,
 } from "./types.ts";
 import { ICustomType } from "./types/types.ts";
@@ -18,27 +22,30 @@ export class SlackManifest {
 
   export() {
     const def = this.definition;
-    const manifest = {
-      "_metadata": {
+    const manifest: ManifestSchema = {
+      _metadata: {
         // todo: is there a more idiomatic way of defining this? constant file?
-        "major_version": 2,
+        major_version: 2,
       },
-      "display_information": {
+      display_information: {
         background_color: def.backgroundColor,
         name: def.name,
         long_description: def.longDescription,
         description: def.description,
       },
       icon: def.icon,
-      "oauth_config": {
+      oauth_config: {
         scopes: {
           bot: this.ensureBotScopes(),
         },
       },
       features: {
         bot_user: {
-          display_name: def.displayName ||
-            def.name,
+          display_name: def.displayName || def.name,
+        },
+        app_home: {
+          messages_tab_enabled: true,
+          messages_tab_read_only_enabled: true,
         },
       },
       settings: { "function_runtime": this.getFunctionRuntime() },
@@ -104,31 +111,56 @@ export class SlackManifest {
     }
 
     if (def.functions) {
-      manifest.functions = def.functions?.reduce((acc = {}, fn) => {
-        acc[fn.id] = fn.export();
-        return acc;
-      }, {} as ManifestSchema["functions"]);
+      manifest.functions = def.functions?.reduce<ManifestFunctionsSchema>(
+        (acc = {}, fn) => {
+          acc[fn.id] = fn.export();
+          return acc;
+        },
+        {},
+      );
     }
 
     if (def.workflows) {
-      manifest.workflows = def.workflows?.reduce((acc = {}, workflow) => {
-        acc[workflow.id] = workflow.export();
-        return acc;
-      }, {} as ManifestSchema["workflows"]);
+      manifest.workflows = def.workflows?.reduce<ManifestWorkflowsSchema>(
+        (acc = {}, workflow) => {
+          acc[workflow.id] = workflow.export();
+          return acc;
+        },
+        {},
+      );
     }
 
     if (def.types) {
-      manifest.types = def.types?.reduce((acc = {}, customType) => {
-        acc[customType.id] = customType.export();
-        return acc;
-      }, {} as ManifestSchema["types"]);
+      manifest.types = def.types?.reduce<ManifestCustomTypesSchema>(
+        (acc = {}, customType) => {
+          acc[customType.id] = customType.export();
+          return acc;
+        },
+        {},
+      );
     }
 
     if (def.datastores) {
-      manifest.datastores = def.datastores?.reduce((acc = {}, datastore) => {
-        acc[datastore.name] = datastore.export();
-        return acc;
-      }, {} as ManifestSchema["datastores"]);
+      manifest.datastores = def.datastores?.reduce<ManifestDataStoresSchema>(
+        (acc = {}, datastore) => {
+          acc[datastore.name] = datastore.export();
+          return acc;
+        },
+        {},
+      );
+    }
+
+    if (def.features?.appHome) {
+      const { messagesTabEnabled, messagesTabReadOnlyEnabled } =
+        def.features.appHome;
+
+      if (messagesTabEnabled !== undefined) {
+        manifest.features.app_home.messages_tab_enabled = messagesTabEnabled;
+      }
+      if (messagesTabReadOnlyEnabled !== undefined) {
+        manifest.features.app_home.messages_tab_read_only_enabled =
+          messagesTabReadOnlyEnabled;
+      }
     }
 
     return manifest;
