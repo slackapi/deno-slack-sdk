@@ -360,3 +360,53 @@ Deno.test("SlackManifest.export() will not duplicate datastore scopes if they're
     1,
   );
 });
+
+Deno.test("SlackManifest.export() defaults to enabling the read only messages tab", () => {
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+  };
+
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+  exportedManifest.features.app_home?.messages_tab_enabled;
+  exportedManifest.features.app_home?.messages_tab_read_only_enabled;
+  assertStrictEquals(
+    exportedManifest.features.app_home?.messages_tab_enabled,
+    true,
+  );
+  assertStrictEquals(
+    exportedManifest.features.app_home?.messages_tab_read_only_enabled,
+    true,
+  );
+});
+
+Deno.test("SlackManifest.export() allows overriding app home features", () => {
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+    features: {
+      appHome: {
+        messagesTabEnabled: false,
+        messagesTabReadOnlyEnabled: false,
+      },
+    },
+  };
+
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+  exportedManifest.features.app_home?.messages_tab_enabled;
+  exportedManifest.features.app_home?.messages_tab_read_only_enabled;
+  assertStrictEquals(
+    exportedManifest.features.app_home?.messages_tab_enabled,
+    false,
+  );
+  assertStrictEquals(
+    exportedManifest.features.app_home?.messages_tab_read_only_enabled,
+    false,
+  );
+});
