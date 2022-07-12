@@ -1,6 +1,6 @@
 import { TypedParameterDefinition } from "../parameters/types.ts";
-import { SlackManifest } from "../manifest.ts";
-import { ManifestCustomTypeSchema } from "../types.ts";
+import { SlackManifest } from "../manifest/mod.ts";
+import { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
 import { CustomType } from "./mod.ts";
 
 export type NameTypeDefinition =

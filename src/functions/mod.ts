@@ -1,10 +1,10 @@
-import { ManifestFunctionSchema } from "../types.ts";
+import { ManifestFunctionSchema } from "../manifest/manifest_schema.ts";
 import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../parameters/mod.ts";
 import { FunctionDefinitionArgs } from "./types.ts";
-import { SlackManifest } from "../manifest.ts";
+import { SlackManifest } from "../manifest/mod.ts";
 
 /**
  * Define a function and its input and output parameters for use in a Slack application.

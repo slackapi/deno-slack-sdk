@@ -1,16 +1,17 @@
-import { ParameterSetDefinition } from "./parameters/mod.ts";
+import { ISlackManifestRemote, SlackManifestType } from "./types.ts";
+import { ICustomType } from "../types/types.ts";
+import { ParameterSetDefinition } from "../parameters/mod.ts";
 import {
   ManifestCustomTypesSchema,
   ManifestDataStoresSchema,
   ManifestFunction,
+  ManifestFunctionRuntime,
   ManifestFunctionsSchema,
   ManifestSchema,
   ManifestWorkflowsSchema,
-  SlackManifestType,
-} from "./types.ts";
-import { ICustomType } from "./types/types.ts";
+} from "./manifest_schema.ts";
 
-export const Manifest = (definition: SlackManifestType) => {
+export const Manifest = (definition: Omit<SlackManifestType, "runOnSlack">) => {
   const manifest = new SlackManifest(definition);
   return manifest.export();
 };
@@ -48,68 +49,10 @@ export class SlackManifest {
           messages_tab_read_only_enabled: true,
         },
       },
-      settings: { "function_runtime": this.getFunctionRuntime() },
-    } as ManifestSchema;
+      settings: { function_runtime: this.getFunctionRuntime() },
+    };
 
-    if (def.slackHosted === false && def.slackHosted !== undefined) {
-      //Settings
-      if (def.settings === undefined) {
-        manifest.settings = {};
-      }
-      if (def.settings !== undefined) {
-        manifest.settings = def.settings;
-      }
-      manifest.settings.function_runtime = this.getFunctionRuntime();
-      if (def.eventSubscriptions !== undefined) {
-        manifest.settings.event_subscriptions = def.eventSubscriptions;
-      }
-      if (def.socketModeEnabled !== undefined) {
-        manifest.settings.socket_mode_enabled = def.socketModeEnabled;
-      }
-      if (def.tokenRotationEnabled !== undefined) {
-        manifest.settings.token_rotation_enabled = def.tokenRotationEnabled;
-      }
-
-      //AppDirectory
-      if (def.appDirectory !== undefined) {
-        manifest.app_directory = def.appDirectory;
-      }
-
-      //OauthConfig
-      if (def.userScopes !== undefined) {
-        manifest.oauth_config.scopes.user = def.userScopes;
-      }
-      if (def.redirectUrls !== undefined) {
-        manifest.oauth_config.redirect_urls = def.redirectUrls;
-      }
-      if (def.tokenManagementEnabled !== undefined) {
-        manifest.oauth_config.token_management_enabled =
-          def.tokenManagementEnabled;
-      }
-      //Features
-      if (def.features?.appHome !== undefined) {
-        manifest.features.app_home = def.features?.appHome;
-      }
-      if (def.features?.botUser?.always_online !== undefined) {
-        manifest.features.bot_user!.always_online =
-          def.features.botUser.always_online;
-      }
-      if (def.features?.shortcuts !== undefined) {
-        manifest.features.shortcuts = def.features?.shortcuts;
-      }
-      if (def.features?.slashCommands !== undefined) {
-        manifest.features.slash_commands = def.features?.slashCommands;
-      }
-      if (def.features?.unfurlDomains !== undefined) {
-        manifest.features.unfurl_domains = def.features?.unfurlDomains;
-      }
-      if (def.features?.workflowSteps !== undefined) {
-        manifest.features.workflow_steps = def.features?.workflowSteps;
-      }
-    } else {
-      manifest.outgoing_domains = def.outgoingDomains || [];
-    }
-
+    // Assign other shared properties
     if (def.functions) {
       manifest.functions = def.functions?.reduce<ManifestFunctionsSchema>(
         (acc = {}, fn) => {
@@ -151,16 +94,30 @@ export class SlackManifest {
     }
 
     if (def.features?.appHome) {
-      const { messagesTabEnabled, messagesTabReadOnlyEnabled } =
-        def.features.appHome;
+      const {
+        home_tab_enabled,
+        messages_tab_enabled,
+        messages_tab_read_only_enabled,
+      } = def.features.appHome;
 
-      if (messagesTabEnabled !== undefined) {
-        manifest.features.app_home.messages_tab_enabled = messagesTabEnabled;
+      if (home_tab_enabled !== undefined) {
+        manifest.features.app_home.home_tab_enabled = home_tab_enabled;
       }
-      if (messagesTabReadOnlyEnabled !== undefined) {
+
+      if (messages_tab_enabled !== undefined) {
+        manifest.features.app_home.messages_tab_enabled = messages_tab_enabled;
+      }
+      if (messages_tab_read_only_enabled !== undefined) {
         manifest.features.app_home.messages_tab_read_only_enabled =
-          messagesTabReadOnlyEnabled;
+          messages_tab_read_only_enabled;
       }
+    }
+
+    manifest.outgoing_domains = def.outgoingDomains || [];
+
+    // Assign remote hosted app properties
+    if (def.runOnSlack === false) {
+      this.assignNonRunOnSlackManifestProperties(manifest);
     }
 
     return manifest;
@@ -231,16 +188,47 @@ export class SlackManifest {
     return includedScopes;
   }
 
-  // Maps the slackHosted to function_runtime
-  private getFunctionRuntime(): string {
-    const slackHosted = this.definition.slackHosted;
-    let functionRuntime;
-    if (slackHosted === undefined || slackHosted) {
-      functionRuntime = "slack";
-    } else {
-      functionRuntime = "remote";
-    }
+  // Maps the top level runOnSlack boolean property to corresponding underlying ManifestSchema function_runtime property required by Slack API.
+  // If no runOnSlack property supplied, then functionRuntime defaults to "slack".
+  private getFunctionRuntime(): ManifestFunctionRuntime {
+    return this.definition.runOnSlack === false ? "remote" : "slack";
+  }
 
-    return functionRuntime;
+  // Assigns the remote app types (types specific to ISlackManifestRemote) to corresponding manifest types.
+  private assignNonRunOnSlackManifestProperties(manifest: ManifestSchema) {
+    const def = this.definition as ISlackManifestRemote;
+
+    //Settings
+    manifest.settings = def.settings ?? {};
+    manifest.settings.function_runtime = this.getFunctionRuntime();
+    manifest.settings.event_subscriptions = def.eventSubscriptions;
+    manifest.settings.socket_mode_enabled = def.socketModeEnabled;
+    manifest.settings.token_rotation_enabled = def.tokenRotationEnabled;
+
+    //AppDirectory
+    manifest.app_directory = def.appDirectory;
+
+    //OauthConfig
+    manifest.oauth_config.scopes.user = def.userScopes;
+    manifest.oauth_config.redirect_urls = def.redirectUrls;
+    manifest.oauth_config.token_management_enabled = def.tokenManagementEnabled;
+
+    // Remote Features
+    if (def.features?.botUser?.always_online !== undefined) {
+      manifest.features.bot_user!.always_online =
+        def.features.botUser.always_online;
+    }
+    if (def.features?.shortcuts !== undefined) {
+      manifest.features.shortcuts = def.features?.shortcuts;
+    }
+    if (def.features?.slashCommands !== undefined) {
+      manifest.features.slash_commands = def.features?.slashCommands;
+    }
+    if (def.features?.unfurlDomains !== undefined) {
+      manifest.features.unfurl_domains = def.features?.unfurlDomains;
+    }
+    if (def.features?.workflowSteps !== undefined) {
+      manifest.features.workflow_steps = def.features?.workflowSteps;
+    }
   }
 }

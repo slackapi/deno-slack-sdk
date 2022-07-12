@@ -1,4 +1,5 @@
-import { Env, ManifestFunctionSchema } from "../types.ts";
+import { Env } from "../types.ts";
+import { ManifestFunctionSchema } from "../manifest/manifest_schema.ts";
 import {
   ParameterDefinition,
   ParameterPropertiesDefinition,
@@ -11,7 +12,7 @@ import {
 } from "../parameters/types.ts";
 import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
-import { SlackManifest } from "../manifest.ts";
+import { SlackManifest } from "../manifest/mod.ts";
 
 export type FunctionInvocationBody = {
   "team_id": string;
