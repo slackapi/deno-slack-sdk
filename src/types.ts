@@ -31,8 +31,6 @@ export type SlackManifestType =
  * to the developer as the slackHosted top-level property.
  */
 
-//  features?: SlackManifestFeatures;
-
 export interface ISlackManifestHosted {
   slackHosted?: true; // maps to function_runtime = "slack" in ManifestSchema, optional since the apps are slack hosted by default
   name: string;
@@ -161,9 +159,9 @@ export type ManifestFunctionSchema = {
   //title and description is optional ->source file does not exists
   title?: string;
   description?: string;
-  "source_file": string;
-  "input_parameters": ManifestFunctionParameters;
-  "output_parameters": ManifestFunctionParameters;
+  source_file: string;
+  input_parameters: ManifestFunctionParameters;
+  output_parameters: ManifestFunctionParameters;
 };
 
 export type ManifestCustomTypeSchema = ParameterDefinition;
@@ -206,14 +204,21 @@ export type ManifestWorkflowSchema = {
 export type ManifestWorkflowsSchema = { [key: string]: ManifestWorkflowSchema };
 
 export type ManifestMetadataSchema = {
-  "major_version"?: number;
-  "minor_version"?: number;
+  major_version?: number;
+  minor_version?: number;
 };
 
 // Features
-export type ManifestBotUserSchema = {
-  "display_name": string;
-  "always_online"?: boolean;
+
+// SlackManifestFeatures for Slack Hosted Apps(ISlackManifestHosted)
+
+export interface SlackManifestFeatures {
+  appHome?: SlackManifestFeaturesAppHome;
+}
+export type SlackManifestFeaturesAppHome = ManifestAppHomeSchema;
+
+export type ManifestAppHomeSchema = AppHomeMessagesTab & {
+  home_tab_enabled?: boolean;
 };
 
 // TODO: Find way to share these defaults
@@ -229,16 +234,23 @@ type AppHomeMessagesTab = {
   messagesTabReadOnlyEnabled: false;
 };
 
-export type ManifestAppHomeSchema = AppHomeMessagesTab & {
-  "home_tab_enabled"?: boolean;
+//ManifestFeaturesSchema for Remote Hosted Apps(ISlackManifestRemote)
+
+export type ManifestBotUserSchema = {
+  display_name: string;
+  always_online?: boolean;
 };
 
-export type SlackManifestFeaturesAppHome = ManifestAppHomeSchema;
+export interface ManifestFeaturesAppHome {
+  home_tab_enabled?: boolean;
+  messages_tab_enabled?: boolean;
+  messages_tab_read_only_enabled?: boolean;
+}
 
 export type ManifestShortcutSchema = {
   name: string;
   type: "message" | "global";
-  "callback_id": string;
+  callback_id: string;
   description: string;
 };
 
@@ -251,8 +263,8 @@ export type ManifestSlashCommandSchema = {
   command: string;
   url?: string;
   description: string;
-  "usage_hint"?: string;
-  "should_escape"?: boolean;
+  usage_hint?: string;
+  should_escape?: boolean;
 };
 
 export type ManifestSlashCommandsSchema = [
@@ -264,7 +276,7 @@ export type ManifestUnfurlDomainsSchema = [string, ...string[]];
 
 export type ManifestWorkflowStep = {
   name: string;
-  "callback_id": string;
+  callback_id: string;
 };
 
 export type ManifestWorkflowStepsSchema = [
@@ -272,73 +284,73 @@ export type ManifestWorkflowStepsSchema = [
   ...ManifestWorkflowStep[],
 ];
 
-export interface ManifestFeaturesRemote {
-  appHome?: ManifestAppHomeSchema;
-  botUser?: ManifestBotUserSchema;
+export interface ManifestFeaturesSchema {
+  bot_user: ManifestBotUserSchema;
+  app_home: ManifestFeaturesAppHome;
   shortcuts?: ManifestShortcutsSchema;
-  slashCommands?: ManifestSlashCommandsSchema;
-  unfurlDomains?: ManifestUnfurlDomainsSchema;
-  workflowSteps?: ManifestWorkflowStepsSchema;
+  slash_commands?: ManifestSlashCommandsSchema;
+  unfurl_domains?: ManifestUnfurlDomainsSchema;
+  workflow_steps?: ManifestWorkflowStepsSchema;
 }
 
 // App Directory
 export type ManifestAppDirectorySchema = {
-  "app_directory_categories"?: string[];
-  "use_direct_install"?: boolean;
-  "direct_install_url"?: string;
-  "installation_landing_page": string;
-  "privacy_policy_url": string;
-  "support_url": string;
-  "support_email": string;
-  "supported_languages": [string, ...string[]];
+  app_directory_categories?: string[];
+  use_direct_install?: boolean;
+  direct_install_url?: string;
+  installation_landing_page: string;
+  privacy_policy_url: string;
+  support_url: string;
+  support_email: string;
+  supported_languages: [string, ...string[]];
   pricing: string;
 };
 
 // Settings
 export type ManifestInteractivitySchema = {
-  "is_enabled": boolean;
-  "request_url"?: string;
-  "message_menu_options_url"?: string;
+  is_enabled: boolean;
+  request_url?: string;
+  message_menu_options_url?: string;
 };
 
 export type ManifestEventSubscriptionsSchema = {
-  "request_url"?: string;
-  "user_events"?: string[];
-  "bot_events"?: string[];
-  "metadata_subscriptions"?: [
+  request_url?: string;
+  user_events?: string[];
+  bot_events?: string[];
+  metadata_subscriptions?: [
     {
-      "app_id": string;
-      "event_type": string;
+      app_id: string;
+      event_type: string;
     },
     ...{
-      "app_id": string;
-      "event_type": string;
+      app_id: string;
+      event_type: string;
     }[],
   ];
 };
 
 export type ManifestSiwsLinksSchema = {
-  "initiate_uri"?: string;
+  initiate_uri?: string;
 };
 
 export type ManifestSettingsSchema = {
-  "allowed_ip_address_ranges"?: [string, ...string[]];
-  "event_subscriptions"?: ManifestEventSubscriptionsSchema;
-  "incoming_webhooks"?: boolean;
+  allowed_ip_address_ranges?: [string, ...string[]];
+  event_subscriptions?: ManifestEventSubscriptionsSchema;
+  incoming_webhooks?: boolean;
   interactivity?: ManifestInteractivitySchema;
-  "org_deploy_enabled"?: boolean;
-  "socket_mode_enabled"?: boolean;
-  "token_rotation_enabled"?: boolean;
-  "siws_links"?: ManifestSiwsLinksSchema;
-  "function_runtime"?: string;
+  org_deploy_enabled?: boolean;
+  socket_mode_enabled?: boolean;
+  token_rotation_enabled?: boolean;
+  siws_links?: ManifestSiwsLinksSchema;
+  function_runtime?: string;
 };
 
 // Display Information
 export type ManifestDisplayInformationSchema = {
-  "background_color"?: string;
   name: string;
-  "long_description"?: string;
-  "description": string;
+  description?: string;
+  background_color?: string;
+  long_description?: string;
 };
 //Oauth Config
 export type ManifestOauthConfigSchema = {
@@ -346,40 +358,21 @@ export type ManifestOauthConfigSchema = {
     bot?: string[];
     user?: string[];
   };
-  "redirect_urls"?: string[];
-  "token_management_enabled"?: boolean;
+  redirect_urls?: string[];
+  token_management_enabled?: boolean;
 };
-
-export interface SlackManifestFeatures {
-  appHome?: SlackManifestFeaturesAppHome;
-}
-
-export interface ManifestFeaturesAppHome {
-  "home_tab_enabled"?: boolean;
-  messages_tab_enabled?: boolean;
-  messages_tab_read_only_enabled?: boolean;
-}
-
-export interface ManifestFeaturesSchema {
-  bot_user: ManifestBotUserSchema;
-  app_home: ManifestFeaturesAppHome;
-  "shortcuts"?: ManifestShortcutsSchema;
-  "slash_commands"?: ManifestSlashCommandsSchema;
-  "unfurl_domains"?: ManifestUnfurlDomainsSchema;
-  "workflow_steps"?: ManifestWorkflowStepsSchema;
-}
 
 export type ManifestCustomTypesSchema = {
   [key: string]: ManifestCustomTypeSchema;
 };
 
 export type ManifestSchema = {
-  "_metadata"?: ManifestMetadataSchema;
+  _metadata?: ManifestMetadataSchema;
   settings: ManifestSettingsSchema;
-  "app_directory"?: ManifestAppDirectorySchema;
-  "display_information": ManifestDisplayInformationSchema;
+  app_directory?: ManifestAppDirectorySchema;
+  display_information: ManifestDisplayInformationSchema;
   icon: string;
-  "oauth_config": ManifestOauthConfigSchema;
+  oauth_config: ManifestOauthConfigSchema;
   features: ManifestFeaturesSchema;
   functions?: ManifestFunctionsSchema;
   workflows?: ManifestWorkflowsSchema;

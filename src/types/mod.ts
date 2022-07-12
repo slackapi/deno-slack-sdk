@@ -23,13 +23,7 @@ export class CustomType<Def extends CustomTypeDefinition>
   constructor(
     public definition: Def,
   ) {
-<<<<<<< HEAD
-    this.id = "name" in definition
-      ? (definition.name as string) // #TODO: Look into why this is requiring a cast as string
-      : definition.callback_id;
-=======
     this.id = "name" in definition ? definition.name : definition.callback_id;
->>>>>>> main
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;
