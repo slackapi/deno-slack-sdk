@@ -1,12 +1,14 @@
 {
   "fmt": {
     "files": {
-      "include": ["src"]
+      "include": ["src"],
+      "exclude": ["src/schema/slack/functions/_scripts/functions.json"]
     }
   },
   "lint": {
     "files": {
-      "include": ["src"]
+      "include": ["src"],
+      "exclude": ["src/schema/slack/functions/_scripts/functions.json"]
     }
   },
   "tasks": {
