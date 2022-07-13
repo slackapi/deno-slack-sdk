@@ -4,7 +4,7 @@ import SchemaTypes from "../schema/schema_types.ts";
 import { DefineType } from "../types/mod.ts";
 
 const customType = DefineType({
-  callback_id: "custom_type",
+  name: "custom_type",
   type: SchemaTypes.boolean,
 });
 

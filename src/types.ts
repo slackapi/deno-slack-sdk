@@ -18,6 +18,25 @@ export type {
   SlackFunctionHandler,
 } from "./functions/types.ts";
 
+export type SlackManifestFeaturesAppHome = AppHomeMessagesTab;
+
+// TODO: Find way to share these defaults
+type AppHomeMessagesTab = {
+  /** @default true */
+  messagesTabEnabled?: true;
+  /** @default true */
+  messagesTabReadOnlyEnabled?: boolean;
+} | {
+  /** @default true */
+  messagesTabEnabled: false;
+  /** @default true */
+  messagesTabReadOnlyEnabled: false;
+};
+
+export interface SlackManifestFeatures {
+  appHome?: SlackManifestFeaturesAppHome;
+}
+
 export type SlackManifestType = {
   name: string;
   backgroundColor?: string;
@@ -31,6 +50,7 @@ export type SlackManifestType = {
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
   datastores?: ManifestDatastore[];
+  features?: SlackManifestFeatures;
   // In the future, there can be other types of providers
   externalAuthProviders?: (OAuth2Provider /*|OAuth1Provider*/)[];
 };
@@ -54,8 +74,8 @@ export type InvocationPayload<Body> = {
   // TODO: type this out to handle multiple body types
   body: Body;
   context: {
-    "bot_access_token": string;
-    "variables": Record<string, string>;
+    bot_access_token: string;
+    variables: Record<string, string>;
   };
 };
 
@@ -85,12 +105,14 @@ export type ManifestFunctionSchema = {
   title?: string;
   description?: string;
   source_file: string;
-  "input_parameters": ManifestFunctionParameters;
-  "output_parameters": ManifestFunctionParameters;
+  input_parameters: ManifestFunctionParameters;
+  output_parameters: ManifestFunctionParameters;
 };
 
+export type ManifestFunctionsSchema = { [key: string]: ManifestFunctionSchema };
+
 export type ManifestDatastoreSchema = {
-  "primary_key": string;
+  primary_key: string;
   attributes: {
     [key: string]: {
       type: string | ICustomType;
@@ -102,9 +124,13 @@ export type ManifestDatastoreSchema = {
   };
 };
 
+export type ManifestDataStoresSchema = {
+  [key: string]: ManifestDatastoreSchema;
+};
+
 export type ManifestWorkflowStepSchema = {
   id: string;
-  "function_id": string;
+  function_id: string;
   inputs: {
     [name: string]: unknown;
   };
@@ -113,53 +139,34 @@ export type ManifestWorkflowStepSchema = {
 export type ManifestWorkflowSchema = {
   title?: string;
   description?: string;
-  "input_parameters"?: ManifestFunctionParameters;
+  input_parameters?: ManifestFunctionParameters;
   steps: ManifestWorkflowStepSchema[];
 };
 
+export type ManifestWorkflowsSchema = { [key: string]: ManifestWorkflowSchema };
+
 export type ManifestCustomTypeSchema = ParameterDefinition;
 
-export type ManifestMetadata = {
-  "major_version"?: number;
-  "minor_version"?: number;
+export type ManifestCustomTypesSchema = {
+  [key: string]: ManifestCustomTypeSchema;
 };
 
-export type ManifestSchema = {
-  "_metadata"?: ManifestMetadata;
-  "display_information": {
-    "background_color"?: string;
-    name: string;
-    "long_description"?: string;
-    "short_description": string;
-  };
-  icon: string;
-  "oauth_config": {
-    scopes: {
-      bot: string[];
-    };
-  };
-  features: {
-    "bot_user": {
-      "display_name": string;
-    };
-  };
-  functions?: {
-    [key: string]: ManifestFunctionSchema;
-  };
-  workflows?: {
-    [key: string]: ManifestWorkflowSchema;
-  };
-  "outgoing_domains"?: string[];
-  types?: {
-    [key: string]: ManifestCustomTypeSchema;
-  };
-  datastores?: {
-    [key: string]: ManifestDatastoreSchema;
-  };
-  "external_auth_providers"?: {
-    oauth2?: ManifestOAuth2Schema;
-  };
+export type ManifestMetadata = {
+  major_version?: number;
+  minor_version?: number;
 };
+
+export interface ManifestFeaturesAppHome {
+  messages_tab_enabled?: boolean;
+  messages_tab_read_only_enabled?: boolean;
+}
+
+export interface ManifestFeaturesSchema {
+  bot_user: {
+    display_name: string;
+  };
+  app_home: ManifestFeaturesAppHome;
+}
 
 export type ManifestOAuth2Schema = {
   [key: string]: ManifestOAuth2ProviderSchema;
@@ -170,5 +177,30 @@ export type ManifestOAuth2ProviderSchema = {
   options: {
     // deno-lint-ignore no-explicit-any
     [key: string]: any;
+  };
+};
+
+export type ManifestSchema = {
+  _metadata?: ManifestMetadata;
+  display_information: {
+    background_color?: string;
+    name: string;
+    long_description?: string;
+    short_description: string;
+  };
+  icon: string;
+  oauth_config: {
+    scopes: {
+      bot: string[];
+    };
+  };
+  features: ManifestFeaturesSchema;
+  functions?: ManifestFunctionsSchema;
+  workflows?: ManifestWorkflowsSchema;
+  outgoing_domains?: string[];
+  types?: ManifestCustomTypesSchema;
+  datastores?: ManifestDataStoresSchema;
+  "external_auth_providers"?: {
+    oauth2?: ManifestOAuth2Schema;
   };
 };

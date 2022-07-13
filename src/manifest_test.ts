@@ -54,17 +54,17 @@ Deno.test("Manifest() automatically registers types used by function input and o
   const stringTypeId = "test_string_type";
 
   const CustomStringType = DefineType({
-    callback_id: stringTypeId,
+    name: stringTypeId,
     type: Schema.types.string,
   });
 
   const CustomInputType = DefineType({
-    callback_id: inputTypeId,
+    name: inputTypeId,
     type: CustomStringType,
   });
 
   const CustomOutputType = DefineType({
-    callback_id: outputTypeId,
+    name: outputTypeId,
     type: Schema.types.boolean,
   });
 
@@ -105,16 +105,52 @@ Deno.test("Manifest() automatically registers types used by function input and o
   });
 });
 
+Deno.test("Manifest() properly converts name to proper key", () => {
+  const UsingName = DefineType({
+    name: "Using Name",
+    type: Schema.types.boolean,
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    types: [UsingName],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.types, { "Using Name": { type: "boolean" } });
+});
+
+Deno.test("Manifest() properly converts callback_id to proper key", () => {
+  const UsingCallback = DefineType({
+    callback_id: "Using Callback",
+    type: Schema.types.boolean,
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    types: [UsingCallback],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.types, { "Using Callback": { type: "boolean" } });
+});
+
 Deno.test("Manifest() automatically registers types referenced by datastores", () => {
   const stringTypeId = "test_string_type";
   const objectTypeId = "test_object_type";
   const StringType = DefineType({
-    callback_id: stringTypeId,
+    name: stringTypeId,
     type: Schema.types.string,
   });
 
   const ObjectType = DefineType({
-    callback_id: objectTypeId,
+    name: objectTypeId,
     type: Schema.types.object,
     properties: {
       aString: { type: StringType },
@@ -152,17 +188,17 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
   const arrayTypeId = "test_array_type";
 
   const BooleanType = DefineType({
-    callback_id: booleanTypeId,
+    name: booleanTypeId,
     type: Schema.types.boolean,
   });
 
   const StringType = DefineType({
-    callback_id: stringTypeId,
+    name: stringTypeId,
     type: Schema.types.string,
   });
 
   const ObjectType = DefineType({
-    callback_id: objectTypeId,
+    name: objectTypeId,
     type: Schema.types.object,
     properties: {
       aBoolean: { type: BooleanType },
@@ -170,7 +206,7 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
   });
 
   const ArrayType = DefineType({
-    callback_id: arrayTypeId,
+    name: arrayTypeId,
     type: Schema.types.array,
     items: {
       type: StringType,
@@ -208,12 +244,12 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
   const stringTypeId = "test_string_type";
 
   const CustomStringType = DefineType({
-    callback_id: stringTypeId,
+    name: stringTypeId,
     type: Schema.types.string,
   });
 
   const CustomObjectType = DefineType({
-    callback_id: objectTypeId,
+    name: objectTypeId,
     type: Schema.types.object,
     properties: {
       aString: {
@@ -223,7 +259,7 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
   });
 
   const CustomArrayType = DefineType({
-    callback_id: arrayTypeId,
+    name: arrayTypeId,
     type: Schema.types.array,
     items: {
       type: CustomStringType,
@@ -328,6 +364,56 @@ Deno.test("SlackManifest.export() will not duplicate datastore scopes if they're
   assertStrictEquals(
     botScopes.filter((scope) => scope === "datastore:write").length,
     1,
+  );
+});
+
+Deno.test("SlackManifest.export() defaults to enabling the read only messages tab", () => {
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+  };
+
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+  exportedManifest.features.app_home?.messages_tab_enabled;
+  exportedManifest.features.app_home?.messages_tab_read_only_enabled;
+  assertStrictEquals(
+    exportedManifest.features.app_home?.messages_tab_enabled,
+    true,
+  );
+  assertStrictEquals(
+    exportedManifest.features.app_home?.messages_tab_read_only_enabled,
+    true,
+  );
+});
+
+Deno.test("SlackManifest.export() allows overriding app home features", () => {
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+    features: {
+      appHome: {
+        messagesTabEnabled: false,
+        messagesTabReadOnlyEnabled: false,
+      },
+    },
+  };
+
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+  exportedManifest.features.app_home?.messages_tab_enabled;
+  exportedManifest.features.app_home?.messages_tab_read_only_enabled;
+  assertStrictEquals(
+    exportedManifest.features.app_home?.messages_tab_enabled,
+    false,
+  );
+  assertStrictEquals(
+    exportedManifest.features.app_home?.messages_tab_read_only_enabled,
+    false,
   );
 });
 
