@@ -50,6 +50,7 @@ export class SlackFunction<
   registerParameterTypes(manifest: SlackManifest) {
     const { input_parameters: inputParams, output_parameters: outputParams } =
       this.definition;
+      console.log("TEST");
     manifest.registerTypes(inputParams?.properties ?? {});
     manifest.registerTypes(outputParams?.properties ?? {});
   }
