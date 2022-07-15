@@ -3,6 +3,7 @@ import { SlackManifest } from "../manifest.ts";
 import { ManifestCustomTypeSchema } from "../types.ts";
 import { CustomType } from "./mod.ts";
 
+export type Test = string;
 export type NameTypeDefinition =
   & { name: string }
   & TypedParameterDefinition;
