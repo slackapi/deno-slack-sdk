@@ -112,12 +112,11 @@ export class SlackManifest {
           messages_tab_read_only_enabled;
       }
     }
+
     manifest.outgoing_domains = def.outgoingDomains || [];
 
-    // Assign slack hosted vs. remote hosted properties
-    if (def.slackHosted === true) {
-      //manifest.outgoing_domains = def.outgoingDomains || [];
-    } else if (def.slackHosted === false) {
+    // Assign remote hosted app properties
+    if (def.slackHosted === false) {
       this.assignRemoteHostedManifestProperties(manifest);
     }
 
