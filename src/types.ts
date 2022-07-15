@@ -180,6 +180,10 @@ export type ManifestOAuth2ProviderSchema = {
   };
 };
 
+export interface ManifestExternalAuthProviders {
+  oauth2?: ManifestOAuth2Schema;
+}
+
 export type ManifestSchema = {
   _metadata?: ManifestMetadata;
   display_information: {
@@ -200,7 +204,5 @@ export type ManifestSchema = {
   outgoing_domains?: string[];
   types?: ManifestCustomTypesSchema;
   datastores?: ManifestDataStoresSchema;
-  "external_auth_providers"?: {
-    oauth2?: ManifestOAuth2Schema;
-  };
+  external_auth_providers?: ManifestExternalAuthProviders;
 };
