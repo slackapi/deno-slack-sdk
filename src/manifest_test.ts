@@ -1,7 +1,13 @@
 import { SlackManifestType } from "./types.ts";
 
 import { Manifest, SlackManifest } from "./manifest.ts";
-import { DefineDatastore, DefineFunction, DefineType, Schema } from "./mod.ts";
+import {
+  DefineDatastore,
+  DefineFunction,
+  DefineOAuth2Provider,
+  DefineType,
+  Schema,
+} from "./mod.ts";
 import { assertEquals, assertStrictEquals } from "./dev_deps.ts";
 
 Deno.test("Manifest() property mappings", () => {
@@ -409,4 +415,51 @@ Deno.test("SlackManifest.export() allows overriding app home features", () => {
     exportedManifest.features.app_home?.messages_tab_read_only_enabled,
     false,
   );
+});
+
+Deno.test("SlackManifest() oauth2 providers get set properly", () => {
+  const providerKey = "test_provider";
+
+  const Provider = DefineOAuth2Provider({
+    provider_key: providerKey,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "client_secret_env_key": "secret_key",
+      "scope": ["scope_a", "scope_b"],
+    },
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+    externalAuthProviders: [Provider],
+  };
+
+  const Manifest = new SlackManifest(definition);
+
+  const exportedManifest = Manifest.export();
+
+  assertEquals(definition.externalAuthProviders, [Provider]);
+  assertEquals(exportedManifest.external_auth_providers, {
+    "oauth2": { "test_provider": Provider.export() },
+  });
+});
+
+Deno.test("SlackManifest() oauth2 providers are undefined when not configured", () => {
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+  };
+
+  const Manifest = new SlackManifest(definition);
+
+  const exportedManifest = Manifest.export();
+
+  assertEquals(definition.externalAuthProviders, undefined);
+  assertEquals(exportedManifest.external_auth_providers, undefined);
 });

@@ -1,4 +1,5 @@
 import SchemaTypes from "../schema/schema_types.ts";
+import SlackTypes from "../schema/slack/schema_types.ts";
 import { ICustomType } from "../types/types.ts";
 
 export type PrimitiveParameterDefinition =
@@ -13,7 +14,8 @@ export type PrimitiveParameterDefinition =
 export type TypedParameterDefinition =
   | TypedObjectParameterDefinition
   | UntypedObjectParameterDefinition
-  | PrimitiveParameterDefinition;
+  | PrimitiveParameterDefinition
+  | OAuth2ParameterDefinition;
 
 export type CustomTypeParameterDefinition =
   & BaseParameterDefinition<AllValues>
@@ -93,6 +95,11 @@ type NumberParameterDefinition = BaseParameterDefinition<number> & {
   enum?: number[];
   /** Defines labels that correspond to the `enum` values. */
   choices?: EnumChoice<number>[];
+};
+
+export type OAuth2ParameterDefinition = BaseParameterDefinition<string> & {
+  type: typeof SlackTypes.oauth2;
+  oauth2_provider_key: string;
 };
 
 type EnumChoice<T> = {
