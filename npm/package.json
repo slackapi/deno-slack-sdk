@@ -2,7 +2,7 @@
   "module": "./esm/mod.js",
   "main": "./script/mod.js",
   "types": "./types/mod.d.ts",
-  "name": "@slack/deno-slack-sdk",
+  "name": "fekiz-test-deno-slack-sdk",
   "version": "0.1.0",
   "description": "Test deno sdk dpendencies",
   "license": "MIT",
