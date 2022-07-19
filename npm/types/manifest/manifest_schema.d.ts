@@ -1,6 +1,7 @@
 import { ISlackDatastore } from "../datastore/types.js";
 import { ISlackFunction } from "../functions/types.js";
 import type { ParameterDefinition, ParameterSetDefinition } from "../parameters/mod.js";
+import { OAuth2ProviderTypeValues } from "../schema/providers/oauth2/types.js";
 import type { ICustomType } from "../types/types.js";
 import { ISlackWorkflow } from "../workflows/types.js";
 export declare type ManifestSchema = {
@@ -16,6 +17,7 @@ export declare type ManifestSchema = {
     outgoing_domains?: string[];
     types?: ManifestCustomTypesSchema;
     datastores?: ManifestDataStoresSchema;
+    external_auth_providers?: ManifestExternalAuthProviders;
 };
 export declare type ManifestMetadataSchema = {
     major_version?: number;
@@ -186,5 +188,17 @@ export declare type ManifestDatastoreSchema = {
 export declare type ManifestDataStoresSchema = {
     [key: string]: ManifestDatastoreSchema;
 };
+export declare type ManifestOAuth2Schema = {
+    [key: string]: ManifestOAuth2ProviderSchema;
+};
+export declare type ManifestOAuth2ProviderSchema = {
+    provider_type: OAuth2ProviderTypeValues;
+    options: {
+        [key: string]: any;
+    };
+};
+export interface ManifestExternalAuthProviders {
+    oauth2?: ManifestOAuth2Schema;
+}
 export declare type PopulatedArray<T> = [T, ...T[]];
 export {};

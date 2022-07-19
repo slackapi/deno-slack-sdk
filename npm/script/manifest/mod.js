@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SlackManifest = exports.Manifest = void 0;
+const mod_js_1 = require("../providers/oauth2/mod.js");
 const Manifest = (definition) => {
     const manifest = new SlackManifest(definition);
     return manifest.export();
@@ -84,10 +85,19 @@ class SlackManifest {
                     messages_tab_read_only_enabled;
             }
         }
+        if (def.externalAuthProviders) {
+            manifest.external_auth_providers = def.externalAuthProviders?.reduce((acc, provider) => {
+                if (provider instanceof mod_js_1.OAuth2Provider) {
+                    acc["oauth2"] = acc["oauth2"] ?? {};
+                    acc["oauth2"][provider.id] = provider.export();
+                }
+                return acc;
+            }, {});
+        }
         manifest.outgoing_domains = def.outgoingDomains || [];
         // Assign remote hosted app properties
         if (def.runOnSlack === false) {
-            this.assignRemoteHostedManifestProperties(manifest);
+            this.assignNonRunOnSlackManifestProperties(manifest);
         }
         return manifest;
     }
@@ -156,7 +166,7 @@ class SlackManifest {
         return this.definition.runOnSlack === false ? "remote" : "slack";
     }
     // Assigns the remote app types (types specific to ISlackManifestRemote) to corresponding manifest types.
-    assignRemoteHostedManifestProperties(manifest) {
+    assignNonRunOnSlackManifestProperties(manifest) {
         const def = this.definition;
         //Settings
         manifest.settings = def.settings ?? {};

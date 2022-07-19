@@ -4,7 +4,7 @@ import type {
   ParameterDefinition,
   ParameterSetDefinition,
 } from "../parameters/mod.js";
-
+import { OAuth2ProviderTypeValues } from "../schema/providers/oauth2/types.js";
 import type { ICustomType } from "../types/types.js";
 import { ISlackWorkflow } from "../workflows/types.js";
 
@@ -25,6 +25,7 @@ export type ManifestSchema = {
   outgoing_domains?: string[];
   types?: ManifestCustomTypesSchema;
   datastores?: ManifestDataStoresSchema;
+  external_auth_providers?: ManifestExternalAuthProviders;
 };
 
 // ---------------------------------------------------------------------------
@@ -274,6 +275,25 @@ export type ManifestDatastoreSchema = {
 export type ManifestDataStoresSchema = {
   [key: string]: ManifestDatastoreSchema;
 };
+
+// -------------------------------------------------------------------------
+// Manifest: OAuth2 Provider
+// -------------------------------------------------------------------------
+export type ManifestOAuth2Schema = {
+  [key: string]: ManifestOAuth2ProviderSchema;
+};
+
+export type ManifestOAuth2ProviderSchema = {
+  provider_type: OAuth2ProviderTypeValues;
+  options: {
+    // deno-lint-ignore no-explicit-any
+    [key: string]: any;
+  };
+};
+
+export interface ManifestExternalAuthProviders {
+  oauth2?: ManifestOAuth2Schema;
+}
 
 // -------------------------------------------------------------------------
 // Utilities

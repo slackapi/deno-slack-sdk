@@ -5,6 +5,7 @@ declare const SlackSchema: {
         readonly usergroup_id: "slack#/types/usergroup_id";
         readonly timestamp: "slack#/types/timestamp";
         readonly blocks: "slack#/types/blocks";
+        readonly oauth2: "slack#/types/credential/oauth2";
     };
     readonly functions: {
         readonly AddPin: import("../../functions/mod.js").SlackFunction<{

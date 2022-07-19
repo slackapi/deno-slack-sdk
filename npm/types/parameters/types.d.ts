@@ -1,7 +1,8 @@
 import SchemaTypes from "../schema/schema_types.js";
+import SlackTypes from "../schema/slack/schema_types.js";
 import { ICustomType } from "../types/types.js";
 export declare type PrimitiveParameterDefinition = BooleanParameterDefinition | StringParameterDefinition | NumberParameterDefinition | IntegerParameterDefinition | BaseParameterDefinition<AllValues> | TypedArrayParameterDefinition;
-export declare type TypedParameterDefinition = TypedObjectParameterDefinition | UntypedObjectParameterDefinition | PrimitiveParameterDefinition;
+export declare type TypedParameterDefinition = TypedObjectParameterDefinition | UntypedObjectParameterDefinition | PrimitiveParameterDefinition | OAuth2ParameterDefinition;
 export declare type CustomTypeParameterDefinition = BaseParameterDefinition<AllValues> & {
     type: ICustomType;
 };
@@ -65,6 +66,10 @@ declare type NumberParameterDefinition = BaseParameterDefinition<number> & {
     enum?: number[];
     /** Defines labels that correspond to the `enum` values. */
     choices?: EnumChoice<number>[];
+};
+export declare type OAuth2ParameterDefinition = BaseParameterDefinition<string> & {
+    type: typeof SlackTypes.oauth2;
+    oauth2_provider_key: string;
 };
 declare type EnumChoice<T> = {
     /** The `enum` value this {@link EnumChoice} corresponds to. */

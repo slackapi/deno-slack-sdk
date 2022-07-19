@@ -1,5 +1,6 @@
 import { ISlackManifestRemote, SlackManifestType } from "./types.js";
 import { ICustomType } from "../types/types.js";
+import { OAuth2Provider } from "../providers/oauth2/mod.js";
 import { ParameterSetDefinition } from "../parameters/mod.js";
 import {
   ManifestCustomTypesSchema,
@@ -11,7 +12,7 @@ import {
   ManifestWorkflowsSchema,
 } from "./manifest_schema.js";
 
-export const Manifest = (definition: SlackManifestType) => {
+export const Manifest = (definition: Omit<SlackManifestType, "runOnSlack">) => {
   const manifest = new SlackManifest(definition);
   return manifest.export();
 };
@@ -113,11 +114,24 @@ export class SlackManifest {
       }
     }
 
+    if (def.externalAuthProviders) {
+      manifest.external_auth_providers = def.externalAuthProviders?.reduce(
+        (acc, provider) => {
+          if (provider instanceof OAuth2Provider) {
+            acc["oauth2"] = acc["oauth2"] ?? {};
+            acc["oauth2"][provider.id] = provider.export();
+          }
+          return acc;
+        },
+        {} as NonNullable<ManifestSchema["external_auth_providers"]>,
+      );
+    }
+
     manifest.outgoing_domains = def.outgoingDomains || [];
 
     // Assign remote hosted app properties
     if (def.runOnSlack === false) {
-      this.assignRemoteHostedManifestProperties(manifest);
+      this.assignNonRunOnSlackManifestProperties(manifest);
     }
 
     return manifest;
@@ -195,7 +209,7 @@ export class SlackManifest {
   }
 
   // Assigns the remote app types (types specific to ISlackManifestRemote) to corresponding manifest types.
-  private assignRemoteHostedManifestProperties(manifest: ManifestSchema) {
+  private assignNonRunOnSlackManifestProperties(manifest: ManifestSchema) {
     const def = this.definition as ISlackManifestRemote;
 
     //Settings

@@ -81,7 +81,6 @@ dntShim.Deno.test("Manifest() sets function_runtime = remote when runOnSlack = f
         botScopes: ["channels:history", "chat:write", "commands"],
     };
     const manifest = (0, mod_js_1.Manifest)(definition);
-    console.log(manifest.settings);
     (0, dev_deps_js_1.assertEquals)(manifest.settings.function_runtime, "remote");
 });
 dntShim.Deno.test("Manifest() property mappings", () => {
@@ -582,4 +581,41 @@ dntShim.Deno.test("SlackManifest.export() allows overriding app home features", 
     exportedManifest.features.app_home?.messages_tab_read_only_enabled;
     (0, dev_deps_js_1.assertStrictEquals)(exportedManifest.features.app_home?.messages_tab_enabled, false);
     (0, dev_deps_js_1.assertStrictEquals)(exportedManifest.features.app_home?.messages_tab_read_only_enabled, false);
+});
+dntShim.Deno.test("SlackManifest() oauth2 providers get set properly", () => {
+    const providerKey = "test_provider";
+    const Provider = (0, mod_js_2.DefineOAuth2Provider)({
+        provider_key: providerKey,
+        provider_type: mod_js_2.Schema.providers.oauth2.CUSTOM,
+        options: {
+            "client_id": "123.456",
+            "client_secret_env_key": "secret_key",
+            "scope": ["scope_a", "scope_b"],
+        },
+    });
+    const definition = {
+        name: "Name",
+        description: "Description",
+        icon: "icon.png",
+        botScopes: [],
+        externalAuthProviders: [Provider],
+    };
+    const Manifest = new mod_js_1.SlackManifest(definition);
+    const exportedManifest = Manifest.export();
+    (0, dev_deps_js_1.assertEquals)(definition.externalAuthProviders, [Provider]);
+    (0, dev_deps_js_1.assertEquals)(exportedManifest.external_auth_providers, {
+        "oauth2": { "test_provider": Provider.export() },
+    });
+});
+dntShim.Deno.test("SlackManifest() oauth2 providers are undefined when not configured", () => {
+    const definition = {
+        name: "Name",
+        description: "Description",
+        icon: "icon.png",
+        botScopes: [],
+    };
+    const Manifest = new mod_js_1.SlackManifest(definition);
+    const exportedManifest = Manifest.export();
+    (0, dev_deps_js_1.assertEquals)(definition.externalAuthProviders, undefined);
+    (0, dev_deps_js_1.assertEquals)(exportedManifest.external_auth_providers, undefined);
 });

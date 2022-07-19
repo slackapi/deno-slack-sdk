@@ -13,9 +13,10 @@ import {
   ManifestWorkflowStepsSchemaLegacy,
 } from "./manifest_schema.js";
 
+import { OAuth2Provider } from "../providers/oauth2/mod.js";
 import { ICustomType } from "../types/types.js";
 
-/** User-facing manifest definition.
+/** Manifest definition.
  *
  * SlackManifestType contains affordances for better user experience (e.g runOnSlack property)
  * The lower level ManifestSchema aligns with Slack API
@@ -24,7 +25,7 @@ import { ICustomType } from "../types/types.js";
  * maps to function_runtime in the underlying ManifestSchema.
  */
 export type SlackManifestType =
-  | ISlackManifestHosted
+  | ISlackManifestRunOnSlack
   | ISlackManifestRemote;
 
 /** Slack-hosted app manifest
@@ -32,16 +33,16 @@ export type SlackManifestType =
  * When runOnSlack = true
  * Corresponds to function_runtime = slack in ManifestSchema.
  */
-export interface ISlackManifestHosted extends ISlackManifestShared {
+export interface ISlackManifestRunOnSlack extends ISlackManifestShared {
   runOnSlack?: true; // maps to function_runtime = "slack" in ManifestSchema, optional since the apps are slack hosted by default
   outgoingDomains?: Array<string>;
-  features?: ISlackManifestHostedFeaturesSchema;
+  features?: ISlackManifestRunOnSlackFeaturesSchema;
 }
 
 /** Non-Slack hosted app manifest
  *
  * When runOnSlack = false.
- * Corresponds to function_runtime = slack in ManifestSchema.
+ * Corresponds to function_runtime = remote in ManifestSchema.
  */
 export interface ISlackManifestRemote extends ISlackManifestShared {
   runOnSlack: false; // maps to function_runtime = "remote" in ManifestSchema
@@ -77,9 +78,10 @@ interface ISlackManifestShared {
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
   datastores?: ManifestDatastore[];
+  externalAuthProviders?: (OAuth2Provider /*|OAuth1Provider*/)[];
 }
 
-interface ISlackManifestHostedFeaturesSchema {
+interface ISlackManifestRunOnSlackFeaturesSchema {
   appHome?: ManifestAppHomeSchema;
 }
 

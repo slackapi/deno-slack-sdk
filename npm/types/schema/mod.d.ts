@@ -14,6 +14,7 @@ declare const Schema: {
             readonly usergroup_id: "slack#/types/usergroup_id";
             readonly timestamp: "slack#/types/timestamp";
             readonly blocks: "slack#/types/blocks";
+            readonly oauth2: "slack#/types/credential/oauth2";
         };
         readonly functions: {
             readonly AddPin: import("../functions/mod.js").SlackFunction<{
@@ -216,6 +217,11 @@ declare const Schema: {
                     description: string;
                 };
             }, ("channel_id" | "topic")[], "topic"[]>;
+        };
+    };
+    readonly providers: {
+        readonly oauth2: {
+            readonly CUSTOM: "CUSTOM";
         };
     };
 };

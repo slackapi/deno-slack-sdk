@@ -13,7 +13,7 @@ on:
 jobs:
 
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     
     steps:
       - name: Actions checkout
@@ -30,9 +30,14 @@ jobs:
         with:
           deno-version: v1.x
 
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
       - name: Get the tag name
-        #run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-        run: echo  ${{github.ref}}  
+        run: echo ::set-output name=TAG::${GITHUB_REF#refs/*/}
+        #run: echo "TAG=${${github.ref}/refs\/tags\//}" >> $GITHUB_ENV
+        #run: echo  ${{github.ref}}  
 
       - name: Run build_npm.ts
         run: deno run -A build_npm.ts ${{github.event.push.ref}}

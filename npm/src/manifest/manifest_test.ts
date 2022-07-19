@@ -1,11 +1,17 @@
 import * as dntShim from "../_dnt.test_shims.js";
 import {
-  ISlackManifestHosted,
   ISlackManifestRemote,
+  ISlackManifestRunOnSlack,
   SlackManifestType,
 } from "./types.js";
 import { Manifest, SlackManifest } from "./mod.js";
-import { DefineDatastore, DefineFunction, DefineType, Schema } from "../mod.js";
+import {
+  DefineDatastore,
+  DefineFunction,
+  DefineOAuth2Provider,
+  DefineType,
+  Schema,
+} from "../mod.js";
 import {
   assert,
   assertEquals,
@@ -25,7 +31,7 @@ dntShim.Deno.test("SlackManifestType correctly resolves to a Hosted App when run
     icon: "icon.png",
     botScopes: ["channels:history", "chat:write", "commands"],
   };
-  assert<IsExact<typeof definition, ISlackManifestHosted>>(true);
+  assert<IsExact<typeof definition, ISlackManifestRunOnSlack>>(true);
   assert<IsExact<typeof definition, ISlackManifestRemote>>(false);
 });
 
@@ -41,7 +47,7 @@ dntShim.Deno.test("SlackManifestType correctly resolves to a Remote App when run
     icon: "icon.png",
     botScopes: ["channels:history", "chat:write", "commands"],
   };
-  assert<IsExact<typeof definition, ISlackManifestHosted>>(false);
+  assert<IsExact<typeof definition, ISlackManifestRunOnSlack>>(false);
   assert<IsExact<typeof definition, ISlackManifestRemote>>(true);
 });
 
@@ -74,7 +80,6 @@ dntShim.Deno.test("Manifest() sets function_runtime = remote when runOnSlack = f
     botScopes: ["channels:history", "chat:write", "commands"],
   };
   const manifest = Manifest(definition);
-  console.log(manifest.settings);
   assertEquals(manifest.settings.function_runtime, "remote");
 });
 
@@ -662,6 +667,7 @@ dntShim.Deno.test("SlackManifest.export() will not duplicate datastore scopes if
     1,
   );
 });
+
 dntShim.Deno.test("SlackManifest.export() defaults to enabling the read only messages tab", () => {
   const definition: SlackManifestType = {
     name: "Name",
@@ -710,4 +716,51 @@ dntShim.Deno.test("SlackManifest.export() allows overriding app home features", 
     exportedManifest.features.app_home?.messages_tab_read_only_enabled,
     false,
   );
+});
+
+dntShim.Deno.test("SlackManifest() oauth2 providers get set properly", () => {
+  const providerKey = "test_provider";
+
+  const Provider = DefineOAuth2Provider({
+    provider_key: providerKey,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "client_secret_env_key": "secret_key",
+      "scope": ["scope_a", "scope_b"],
+    },
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+    externalAuthProviders: [Provider],
+  };
+
+  const Manifest = new SlackManifest(definition);
+
+  const exportedManifest = Manifest.export();
+
+  assertEquals(definition.externalAuthProviders, [Provider]);
+  assertEquals(exportedManifest.external_auth_providers, {
+    "oauth2": { "test_provider": Provider.export() },
+  });
+});
+
+dntShim.Deno.test("SlackManifest() oauth2 providers are undefined when not configured", () => {
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+  };
+
+  const Manifest = new SlackManifest(definition);
+
+  const exportedManifest = Manifest.export();
+
+  assertEquals(definition.externalAuthProviders, undefined);
+  assertEquals(exportedManifest.external_auth_providers, undefined);
 });
