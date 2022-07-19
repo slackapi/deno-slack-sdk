@@ -17,10 +17,10 @@ import { ICustomType } from "../types/types.js";
 
 /** User-facing manifest definition.
  *
- * SlackManifestType contains affordances for better user experience (e.g slackHosted property)
+ * SlackManifestType contains affordances for better user experience (e.g runOnSlack property)
  * The lower level ManifestSchema aligns with Slack API
  *
- * A discriminated union where the discriminant property slackHosted
+ * A discriminated union where the discriminant property runOnSlack
  * maps to function_runtime in the underlying ManifestSchema.
  */
 export type SlackManifestType =
@@ -29,22 +29,22 @@ export type SlackManifestType =
 
 /** Slack-hosted app manifest
  *
- * When slackHosted = true
+ * When runOnSlack = true
  * Corresponds to function_runtime = slack in ManifestSchema.
  */
 export interface ISlackManifestHosted extends ISlackManifestShared {
-  slackHosted?: true; // maps to function_runtime = "slack" in ManifestSchema, optional since the apps are slack hosted by default
+  runOnSlack?: true; // maps to function_runtime = "slack" in ManifestSchema, optional since the apps are slack hosted by default
   outgoingDomains?: Array<string>;
   features?: ISlackManifestHostedFeaturesSchema;
 }
 
 /** Non-Slack hosted app manifest
  *
- * When slackHosted = false.
+ * When runOnSlack = false.
  * Corresponds to function_runtime = slack in ManifestSchema.
  */
 export interface ISlackManifestRemote extends ISlackManifestShared {
-  slackHosted: false; // maps to function_runtime = "remote" in ManifestSchema
+  runOnSlack: false; // maps to function_runtime = "remote" in ManifestSchema
 
   settings?: Omit<
     ManifestSettingsSchema,

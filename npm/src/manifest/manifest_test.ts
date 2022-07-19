@@ -13,9 +13,9 @@ import {
   IsExact,
 } from "../dev_deps.js";
 
-dntShim.Deno.test("SlackManifestType correctly resolves to a Hosted App when slackHosted = true", () => {
+dntShim.Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
   const definition: SlackManifestType = {
-    slackHosted: true,
+    runOnSlack: true,
     name: "test",
     description: "description",
     backgroundColor: "#FFF",
@@ -29,9 +29,9 @@ dntShim.Deno.test("SlackManifestType correctly resolves to a Hosted App when sla
   assert<IsExact<typeof definition, ISlackManifestRemote>>(false);
 });
 
-dntShim.Deno.test("SlackManifestType correctly resolves to a Remote App when slackHosted = false", () => {
+dntShim.Deno.test("SlackManifestType correctly resolves to a Remote App when runOnSlack = false", () => {
   const definition: SlackManifestType = {
-    slackHosted: false,
+    runOnSlack: false,
     name: "test",
     description: "description",
     backgroundColor: "#FFF",
@@ -45,9 +45,9 @@ dntShim.Deno.test("SlackManifestType correctly resolves to a Remote App when sla
   assert<IsExact<typeof definition, ISlackManifestRemote>>(true);
 });
 
-dntShim.Deno.test("Manifest() sets function_runtime = slack when slackHosted = true", () => {
+dntShim.Deno.test("Manifest() sets function_runtime = slack when runOnSlack = true", () => {
   const definition: SlackManifestType = {
-    slackHosted: true,
+    runOnSlack: true,
     name: "test",
     description: "description",
     backgroundColor: "#FFF",
@@ -61,9 +61,9 @@ dntShim.Deno.test("Manifest() sets function_runtime = slack when slackHosted = t
   assertEquals(manifest.settings.function_runtime, "slack");
 });
 
-dntShim.Deno.test("Manifest() sets function_runtime = remote when slackHosted = false", () => {
+dntShim.Deno.test("Manifest() sets function_runtime = remote when runOnSlack = false", () => {
   const definition: SlackManifestType = {
-    slackHosted: false,
+    runOnSlack: false,
     name: "test",
     description: "description",
     backgroundColor: "#FFF",
@@ -80,7 +80,7 @@ dntShim.Deno.test("Manifest() sets function_runtime = remote when slackHosted = 
 
 dntShim.Deno.test("Manifest() property mappings", () => {
   const definition: SlackManifestType = {
-    slackHosted: true,
+    runOnSlack: true,
     name: "fear and loathing in las vegas",
     description:
       "fear and loathing in las vegas: a savage journey to the heart of the american dream",
@@ -308,7 +308,7 @@ dntShim.Deno.test("Manifest() automatically registers types referenced by other 
 
 dntShim.Deno.test("Manifest() correctly assigns display_information properties ", () => {
   const definition: SlackManifestType = {
-    slackHosted: false,
+    runOnSlack: false,
     name: "fear and loathing in las vegas",
     description:
       "fear and loathing in las vegas: a savage journey to the heart of the american dream",
@@ -337,7 +337,7 @@ dntShim.Deno.test("Manifest() correctly assigns display_information properties "
 
 dntShim.Deno.test("Manifest() correctly assigns app_directory properties", () => {
   const definition: SlackManifestType = {
-    slackHosted: false,
+    runOnSlack: false,
     name: "fear and loathing in las vegas",
     description:
       "fear and loathing in las vegas: a savage journey to the heart of the american dream",
@@ -369,7 +369,7 @@ dntShim.Deno.test("Manifest() correctly assigns app_directory properties", () =>
 
 dntShim.Deno.test("Manifest() correctly assigns settings properties", () => {
   const definition: SlackManifestType = {
-    slackHosted: false,
+    runOnSlack: false,
     name: "fear and loathing in las vegas",
     description:
       "fear and loathing in las vegas: a savage journey to the heart of the american dream",
@@ -428,7 +428,7 @@ dntShim.Deno.test("Manifest() correctly assigns settings properties", () => {
 
 dntShim.Deno.test("Manifest() correctly assigns oauth properties", () => {
   const definition: SlackManifestType = {
-    slackHosted: false,
+    runOnSlack: false,
     name: "fear and loathing in las vegas",
     description:
       "fear and loathing in las vegas: a savage journey to the heart of the american dream",
@@ -460,7 +460,7 @@ dntShim.Deno.test("Manifest() correctly assigns oauth properties", () => {
 
 dntShim.Deno.test("Manifest() correctly assigns other app features", () => {
   const definition: SlackManifestType = {
-    slackHosted: false,
+    runOnSlack: false,
     name: "fear and loathing in las vegas",
     description:
       "fear and loathing in las vegas: a savage journey to the heart of the american dream",
@@ -614,7 +614,7 @@ dntShim.Deno.test("SlackManifest.export() ensures datastore scopes if they are n
   });
 
   const definition: SlackManifestType = {
-    slackHosted: true,
+    runOnSlack: true,
     name: "Name",
     description: "Description",
     icon: "icon.png",

@@ -86,7 +86,7 @@ class SlackManifest {
         }
         manifest.outgoing_domains = def.outgoingDomains || [];
         // Assign remote hosted app properties
-        if (def.slackHosted === false) {
+        if (def.runOnSlack === false) {
             this.assignRemoteHostedManifestProperties(manifest);
         }
         return manifest;
@@ -150,10 +150,10 @@ class SlackManifest {
         }
         return includedScopes;
     }
-    // Maps the top level slackHosted boolean property to corresponding underlying ManifestSchema function_runtime property required by Slack API.
-    // If no slackHosted property supplied, then functionRuntime defaults to "slack".
+    // Maps the top level runOnSlack boolean property to corresponding underlying ManifestSchema function_runtime property required by Slack API.
+    // If no runOnSlack property supplied, then functionRuntime defaults to "slack".
     getFunctionRuntime() {
-        return this.definition.slackHosted === false ? "remote" : "slack";
+        return this.definition.runOnSlack === false ? "remote" : "slack";
     }
     // Assigns the remote app types (types specific to ISlackManifestRemote) to corresponding manifest types.
     assignRemoteHostedManifestProperties(manifest) {

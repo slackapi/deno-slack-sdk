@@ -2,9 +2,9 @@ import * as dntShim from "../_dnt.test_shims.js";
 import { Manifest, SlackManifest } from "./mod.js";
 import { DefineDatastore, DefineFunction, DefineType, Schema } from "../mod.js";
 import { assert, assertEquals, assertStrictEquals, } from "../dev_deps.js";
-dntShim.Deno.test("SlackManifestType correctly resolves to a Hosted App when slackHosted = true", () => {
+dntShim.Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
     const definition = {
-        slackHosted: true,
+        runOnSlack: true,
         name: "test",
         description: "description",
         backgroundColor: "#FFF",
@@ -16,9 +16,9 @@ dntShim.Deno.test("SlackManifestType correctly resolves to a Hosted App when sla
     assert(true);
     assert(false);
 });
-dntShim.Deno.test("SlackManifestType correctly resolves to a Remote App when slackHosted = false", () => {
+dntShim.Deno.test("SlackManifestType correctly resolves to a Remote App when runOnSlack = false", () => {
     const definition = {
-        slackHosted: false,
+        runOnSlack: false,
         name: "test",
         description: "description",
         backgroundColor: "#FFF",
@@ -30,9 +30,9 @@ dntShim.Deno.test("SlackManifestType correctly resolves to a Remote App when sla
     assert(false);
     assert(true);
 });
-dntShim.Deno.test("Manifest() sets function_runtime = slack when slackHosted = true", () => {
+dntShim.Deno.test("Manifest() sets function_runtime = slack when runOnSlack = true", () => {
     const definition = {
-        slackHosted: true,
+        runOnSlack: true,
         name: "test",
         description: "description",
         backgroundColor: "#FFF",
@@ -44,9 +44,9 @@ dntShim.Deno.test("Manifest() sets function_runtime = slack when slackHosted = t
     const manifest = Manifest(definition);
     assertEquals(manifest.settings.function_runtime, "slack");
 });
-dntShim.Deno.test("Manifest() sets function_runtime = remote when slackHosted = false", () => {
+dntShim.Deno.test("Manifest() sets function_runtime = remote when runOnSlack = false", () => {
     const definition = {
-        slackHosted: false,
+        runOnSlack: false,
         name: "test",
         description: "description",
         backgroundColor: "#FFF",
@@ -61,7 +61,7 @@ dntShim.Deno.test("Manifest() sets function_runtime = remote when slackHosted = 
 });
 dntShim.Deno.test("Manifest() property mappings", () => {
     const definition = {
-        slackHosted: true,
+        runOnSlack: true,
         name: "fear and loathing in las vegas",
         description: "fear and loathing in las vegas: a savage journey to the heart of the american dream",
         backgroundColor: "#FFF",
@@ -255,7 +255,7 @@ dntShim.Deno.test("Manifest() automatically registers types referenced by other 
 });
 dntShim.Deno.test("Manifest() correctly assigns display_information properties ", () => {
     const definition = {
-        slackHosted: false,
+        runOnSlack: false,
         name: "fear and loathing in las vegas",
         description: "fear and loathing in las vegas: a savage journey to the heart of the american dream",
         backgroundColor: "#FFF",
@@ -276,7 +276,7 @@ dntShim.Deno.test("Manifest() correctly assigns display_information properties "
 });
 dntShim.Deno.test("Manifest() correctly assigns app_directory properties", () => {
     const definition = {
-        slackHosted: false,
+        runOnSlack: false,
         name: "fear and loathing in las vegas",
         description: "fear and loathing in las vegas: a savage journey to the heart of the american dream",
         backgroundColor: "#FFF",
@@ -302,7 +302,7 @@ dntShim.Deno.test("Manifest() correctly assigns app_directory properties", () =>
 });
 dntShim.Deno.test("Manifest() correctly assigns settings properties", () => {
     const definition = {
-        slackHosted: false,
+        runOnSlack: false,
         name: "fear and loathing in las vegas",
         description: "fear and loathing in las vegas: a savage journey to the heart of the american dream",
         backgroundColor: "#FFF",
@@ -345,7 +345,7 @@ dntShim.Deno.test("Manifest() correctly assigns settings properties", () => {
 });
 dntShim.Deno.test("Manifest() correctly assigns oauth properties", () => {
     const definition = {
-        slackHosted: false,
+        runOnSlack: false,
         name: "fear and loathing in las vegas",
         description: "fear and loathing in las vegas: a savage journey to the heart of the american dream",
         backgroundColor: "#FFF",
@@ -365,7 +365,7 @@ dntShim.Deno.test("Manifest() correctly assigns oauth properties", () => {
 });
 dntShim.Deno.test("Manifest() correctly assigns other app features", () => {
     const definition = {
-        slackHosted: false,
+        runOnSlack: false,
         name: "fear and loathing in las vegas",
         description: "fear and loathing in las vegas: a savage journey to the heart of the american dream",
         backgroundColor: "#FFF",
@@ -486,7 +486,7 @@ dntShim.Deno.test("SlackManifest.export() ensures datastore scopes if they are n
         primary_key: "attr",
     });
     const definition = {
-        slackHosted: true,
+        runOnSlack: true,
         name: "Name",
         description: "Description",
         icon: "icon.png",
