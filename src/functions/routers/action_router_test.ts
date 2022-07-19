@@ -12,7 +12,7 @@ const func = DefineFunction({
     properties: {
       garbage: { type: Schema.types.string },
     },
-    required: [],
+    required: ["garbage"],
   },
 });
 const { createContext } = SlackActionHandlerTester(func);
@@ -30,7 +30,7 @@ Deno.test("ActionsRouter", async (t) => {
       let handlerCalled = false;
       router.addHandler(DEFAULT_ACTION.action_id, (ctx) => {
         assertExists(ctx.inputs);
-        assertEquals<string>(ctx.inputs.garbage as string, inputs.garbage);
+        assertEquals<string>(ctx.inputs.garbage, inputs.garbage);
         assertExists(ctx.token);
         assertExists(ctx.action);
         assertExists(ctx.env);
