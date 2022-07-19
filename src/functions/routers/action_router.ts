@@ -133,8 +133,10 @@ export class ActionsRouter<
         // Assumes an object as a constraint (type BlockActionConstraintObject)
         // Return first match *within* any of the defined fields on the constaint object, but ensure there is a match on *all* defined fields
         // Effectively a logical AND across the action_id and block_id field(s)
-        let actionIDMatched = false;
-        let blockIDMatched = false;
+        // If either of the constraint fields are not defined, pre-set them to have matched so we can effectively
+        // ignore them when determining if we have a match by &&'ing them
+        let actionIDMatched = constraint.action_id ? false : true;
+        let blockIDMatched = constraint.block_id ? false : true;
         if (constraint.action_id) {
           actionIDMatched = matchBlockActionConstraintField(
             normalizeConstraintToArray(constraint.action_id),
@@ -149,12 +151,7 @@ export class ActionsRouter<
             action,
           );
         }
-        if (
-          (constraint.block_id && constraint.action_id && blockIDMatched &&
-            actionIDMatched) ||
-          (constraint.block_id && blockIDMatched) ||
-          (constraint.action_id && actionIDMatched)
-        ) {
+        if (blockIDMatched && actionIDMatched) {
           return handler;
         }
       }

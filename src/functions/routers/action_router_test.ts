@@ -354,6 +354,498 @@ Deno.test("ActionsRouter", async (t) => {
         );
         console.warn = originalWarn;
       });
+      reset();
+      await t.step("no false positives", async (t) => {
+        // for these false positive tests, console.warn can be noisy, so lets turn it into a temporary no-op
+        const originalWarn = console.warn;
+        console.warn = () => {};
+        await t.step(
+          "not matching action_id: string",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler("nope", () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching action_id: string[]",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler(["nope", "nuh uh"], () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching action_id: regex",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler(/regex/, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string}",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({ action_id: "nope" }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string[]}",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({ action_id: ["nope", "nuh uh"] }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: regex}",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({ action_id: /regex/ }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {block_id: string}",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({ block_id: "nope" }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {block_id: string[]}",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({ block_id: ["nope", "nuh uh"] }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {block_id: regex}",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({ block_id: /regex/ }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string, block_id: regex}, action_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: "not good enough",
+              block_id: /block/,
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string, block_id: regex}, block_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: "action_id",
+              block_id: /noway/,
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string, block_id: string[]}, action_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: "not good enough",
+              block_id: ["notthisonebut", "block_id"],
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string, block_id: string}, block_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: "action_id",
+              block_id: ["this", "wont", "work"],
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string, block_id: string}, action_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: "not good enough",
+              block_id: "block_id",
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string, block_id: string}, block_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: "action_id",
+              block_id: "nicetry",
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string[], block_id: regex}, action_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: ["not", "good", "enough"],
+              block_id: /block/,
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string[], block_id: regex}, block_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: ["decoy", "action_id"],
+              block_id: /noway/,
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string[], block_id: string[]}, action_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: ["not", "good", "enough"],
+              block_id: ["notthisonebut", "block_id"],
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string[], block_id: string}, block_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: ["decoy", "action_id"],
+              block_id: ["this", "wont", "work"],
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string[], block_id: string}, action_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: ["not", "good", "enough"],
+              block_id: "block_id",
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: string[], block_id: string}, block_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: ["decoy", "action_id"],
+              block_id: "nicetry",
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: regex, block_id: regex}, action_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: /heh/,
+              block_id: /block/,
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: regex, block_id: regex}, block_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: /action/,
+              block_id: /noway/,
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: regex, block_id: string[]}, action_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: /hah/,
+              block_id: ["notthisonebut", "block_id"],
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: regex, block_id: string}, block_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: /action/,
+              block_id: ["this", "wont", "work"],
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: regex, block_id: string}, action_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: /huh/,
+              block_id: "block_id",
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        reset();
+        await t.step(
+          "not matching {action_id: regex, block_id: string}, block_id does not match",
+          async () => {
+            let handlerCalled = 0;
+            router.addHandler({
+              action_id: /action/,
+              block_id: "nicetry",
+            }, () => {
+              handlerCalled++;
+            });
+            await router(createContext({ inputs }));
+            assertEquals(
+              handlerCalled,
+              0,
+              "action handler called when it should not be",
+            );
+          },
+        );
+        console.warn = originalWarn;
+      });
     });
   });
 });
