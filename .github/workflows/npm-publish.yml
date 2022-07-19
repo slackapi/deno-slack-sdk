@@ -30,16 +30,17 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+      # - name: Get the version
+      #   id: get_version
+      #   run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
       - name: Get the tag name
         id: get_tag_name
         run: echo ::set-output name=TAG::${GITHUB_REF#refs/*/}
         
       - name: Run build_npm.ts
-        run: echo ${{steps.get_tag_name.outputs.TAG}} & deno run -A build_npm.ts ${TAG}
+        run: deno run -A build_npm.ts ${{steps.get_tag_name.outputs.TAG}}
+        #echo ${{steps.get_tag_name.outputs.TAG}} & 
         
          
       - name: Publish to NPM    
