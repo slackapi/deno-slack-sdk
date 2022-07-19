@@ -5,7 +5,7 @@ name: Build & Deploy to NPM
 
 on:
   push:    
-    branches: [ expand-manifest-types-fekiz ]
+    branches: [ test-expanded-manifest-fekiz ]
     tags:        
       - '*'
     
@@ -35,12 +35,11 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
       - name: Get the tag name
+        id: get_tag_name
         run: echo ::set-output name=TAG::${GITHUB_REF#refs/*/}
-        #run: echo "TAG=${${github.ref}/refs\/tags\//}" >> $GITHUB_ENV
-        #run: echo  ${{github.ref}}  
-
+        
       - name: Run build_npm.ts
-        run: deno run -A build_npm.ts ${{github.event.push.ref}}
+        run: echo ${{steps.get_tag_name.outputs.TAG}} & deno run -A build_npm.ts ${TAG}
         
          
       - name: Publish to NPM    
