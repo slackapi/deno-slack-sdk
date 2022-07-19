@@ -5,7 +5,7 @@ name: Build & Deploy to NPM
 
 on:
   push:    
-    branches: [ test-expanded-manifest-fekiz ]
+    #branches: [ test-expanded-manifest-fekiz ]
     tags:        
       - '*'
     
