@@ -130,7 +130,7 @@ export type ManifestOauthConfigSchema = {
 // ---------------------------------------------------------------------------
 export interface ManifestFeaturesSchema {
   bot_user?: ManifestBotUserSchema;
-  app_home: ManifestAppHomeSchema;
+  app_home?: ManifestAppHomeSchema;
   shortcuts?: ManifestShortcutsSchema;
   slash_commands?: ManifestSlashCommandsSchema;
   unfurl_domains?: ManifestUnfurlDomainsSchema;

@@ -105,14 +105,9 @@ export class SlackManifest {
         messages_tab_read_only_enabled,
       } = def.features.appHome;
 
-      if (home_tab_enabled !== undefined) {
+      if (manifest.features.app_home != undefined) {
         manifest.features.app_home.home_tab_enabled = home_tab_enabled;
-      }
-
-      if (messages_tab_enabled !== undefined) {
         manifest.features.app_home.messages_tab_enabled = messages_tab_enabled;
-      }
-      if (messages_tab_read_only_enabled !== undefined) {
         manifest.features.app_home.messages_tab_read_only_enabled =
           messages_tab_read_only_enabled;
       }
