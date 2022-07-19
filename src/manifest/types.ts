@@ -37,6 +37,7 @@ export interface ISlackManifestRunOnSlack extends ISlackManifestShared {
   runOnSlack?: true; // maps to function_runtime = "slack" in ManifestSchema, optional since the apps are slack hosted by default
   outgoingDomains?: Array<string>;
   features?: ISlackManifestRunOnSlackFeaturesSchema;
+  externalAuthProviders?: (OAuth2Provider /*|OAuth1Provider*/)[];
 }
 
 /** Non-Slack hosted app manifest
@@ -78,7 +79,6 @@ interface ISlackManifestShared {
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
   datastores?: ManifestDatastore[];
-  externalAuthProviders?: (OAuth2Provider /*|OAuth1Provider*/)[];
 }
 
 interface ISlackManifestRunOnSlackFeaturesSchema {
