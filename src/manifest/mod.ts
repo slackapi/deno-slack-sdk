@@ -1,5 +1,6 @@
 import { ISlackManifestRemote, SlackManifestType } from "./types.ts";
 import { ICustomType } from "../types/types.ts";
+import { OAuth2Provider } from "../providers/oauth2/mod.ts";
 import { ParameterSetDefinition } from "../parameters/mod.ts";
 import {
   ManifestCustomTypesSchema,
@@ -111,6 +112,19 @@ export class SlackManifest {
         manifest.features.app_home.messages_tab_read_only_enabled =
           messages_tab_read_only_enabled;
       }
+    }
+
+    if (def.externalAuthProviders) {
+      manifest.external_auth_providers = def.externalAuthProviders?.reduce(
+        (acc, provider) => {
+          if (provider instanceof OAuth2Provider) {
+            acc["oauth2"] = acc["oauth2"] ?? {};
+            acc["oauth2"][provider.id] = provider.export();
+          }
+          return acc;
+        },
+        {} as NonNullable<ManifestSchema["external_auth_providers"]>,
+      );
     }
 
     manifest.outgoing_domains = def.outgoingDomains || [];

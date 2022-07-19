@@ -13,6 +13,7 @@ import {
   ManifestWorkflowStepsSchemaLegacy,
 } from "./manifest_schema.ts";
 
+import { OAuth2Provider } from "../providers/oauth2/mod.ts";
 import { ICustomType } from "../types/types.ts";
 
 /** Manifest definition.
@@ -77,6 +78,7 @@ interface ISlackManifestShared {
   outgoingDomains?: Array<string>;
   types?: ICustomType[];
   datastores?: ManifestDatastore[];
+  externalAuthProviders?: (OAuth2Provider /*|OAuth1Provider*/)[];
 }
 
 interface ISlackManifestRunOnSlackFeaturesSchema {
