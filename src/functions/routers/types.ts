@@ -28,7 +28,6 @@ export type BlockActionInvocationBody<
 > = {
   type: string;
   actions: BlockAction[];
-  bot_access_token?: string;
   function_data?: FunctionData<InputParameters>;
   // deno-lint-ignore no-explicit-any
   [key: string]: any;
