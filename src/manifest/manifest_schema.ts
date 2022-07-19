@@ -14,7 +14,7 @@ import { ISlackWorkflow } from "../workflows/types.ts";
 // ----------------------------------------------------------------------------
 export type ManifestSchema = {
   _metadata?: ManifestMetadataSchema;
-  settings?: ManifestSettingsSchema;
+  settings: ManifestSettingsSchema;
   app_directory?: ManifestAppDirectorySchema;
   display_information: ManifestDisplayInformationSchema;
   icon: string;
@@ -294,7 +294,7 @@ export type ManifestOAuth2ProviderSchema = {
 export interface ManifestExternalAuthProviders {
   oauth2?: ManifestOAuth2Schema;
 }
-s
+
 // -------------------------------------------------------------------------
 // Utilities
 // -------------------------------------------------------------------------

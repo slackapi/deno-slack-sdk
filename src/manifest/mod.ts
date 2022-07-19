@@ -1,4 +1,8 @@
-import { ISlackManifestRemote, SlackManifestType } from "./types.ts";
+import {
+  ISlackManifestRemote,
+  ISlackManifestRunOnSlack,
+  SlackManifestType,
+} from "./types.ts";
 import { ICustomType } from "../types/types.ts";
 import { OAuth2Provider } from "../providers/oauth2/mod.ts";
 import { ParameterSetDefinition } from "../parameters/mod.ts";
@@ -114,23 +118,12 @@ export class SlackManifest {
       }
     }
 
-    if (def.externalAuthProviders) {
-      manifest.external_auth_providers = def.externalAuthProviders?.reduce(
-        (acc, provider) => {
-          if (provider instanceof OAuth2Provider) {
-            acc["oauth2"] = acc["oauth2"] ?? {};
-            acc["oauth2"][provider.id] = provider.export();
-          }
-          return acc;
-        },
-        {} as NonNullable<ManifestSchema["external_auth_providers"]>,
-      );
-    }
-
     manifest.outgoing_domains = def.outgoingDomains || [];
 
     // Assign remote hosted app properties
-    if (def.runOnSlack === false) {
+    if (manifest.settings.function_runtime === "slack") {
+      this.assignRunOnSlackManifestProperties(manifest);
+    } else if (manifest.settings.function_runtime === "remote") {
       this.assignNonRunOnSlackManifestProperties(manifest);
     }
 
@@ -208,7 +201,7 @@ export class SlackManifest {
     return this.definition.runOnSlack === false ? "remote" : "slack";
   }
 
-  // Assigns the remote app types (types specific to ISlackManifestRemote) to corresponding manifest types.
+  // Assigns the remote app properties
   private assignNonRunOnSlackManifestProperties(manifest: ManifestSchema) {
     const def = this.definition as ISlackManifestRemote;
 
@@ -243,6 +236,24 @@ export class SlackManifest {
     }
     if (def.features?.workflowSteps !== undefined) {
       manifest.features.workflow_steps = def.features?.workflowSteps;
+    }
+  }
+
+  private assignRunOnSlackManifestProperties(manifest: ManifestSchema) {
+    const def = this.definition as ISlackManifestRunOnSlack;
+
+    // External Auth providers
+    if (def.externalAuthProviders) {
+      manifest.external_auth_providers = def.externalAuthProviders?.reduce(
+        (acc, provider) => {
+          if (provider instanceof OAuth2Provider) {
+            acc["oauth2"] = acc["oauth2"] ?? {};
+            acc["oauth2"][provider.id] = provider.export();
+          }
+          return acc;
+        },
+        {} as NonNullable<ManifestSchema["external_auth_providers"]>,
+      );
     }
   }
 }

@@ -739,9 +739,7 @@ Deno.test("SlackManifest() oauth2 providers get set properly", () => {
   };
 
   const Manifest = new SlackManifest(definition);
-
   const exportedManifest = Manifest.export();
-
   assertEquals(definition.externalAuthProviders, [Provider]);
   assertEquals(exportedManifest.external_auth_providers, {
     "oauth2": { "test_provider": Provider.export() },
