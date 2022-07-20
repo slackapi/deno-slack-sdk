@@ -14,6 +14,7 @@ import { OAuth2ProviderTypeValues } from "./schema/providers/oauth2/types.ts";
 
 export type {
   BaseSlackFunctionHandler,
+  BlockActionHandler,
   FunctionHandler, // Deprecated
   SlackFunctionHandler,
 } from "./functions/types.ts";

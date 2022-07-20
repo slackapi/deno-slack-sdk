@@ -4,8 +4,7 @@ import {
 } from "../../parameters/mod.ts";
 import { SlackFunction } from "../mod.ts";
 import type { FunctionRuntimeParameters } from "../types.ts";
-import { CreateContext, SlackFunctionTesterFn } from "./types.ts";
-
+import { CreateFunctionContext, SlackFunctionTesterFn } from "./types.ts";
 export const DEFAULT_FUNCTION_TESTER_TITLE = "Function Test Title";
 
 export const SlackFunctionTester: SlackFunctionTesterFn = <
@@ -36,7 +35,7 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
     testFnTitle = funcOrCallbackId.definition.title;
   }
 
-  const createContext: CreateContext<InputParameters, RequiredInput> = (
+  const createContext: CreateFunctionContext<InputParameters, RequiredInput> = (
     args,
   ) => {
     const ts = new Date();

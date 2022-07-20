@@ -15,7 +15,7 @@ export type SlackFunctionTesterArgs<
     inputs: InputParameters;
   };
 
-export type CreateContext<
+export type CreateFunctionContext<
   InputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
 > = {
@@ -32,7 +32,7 @@ export type SlackFunctionTesterResponse<
   InputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
 > = {
-  createContext: CreateContext<InputParameters, RequiredInput>;
+  createContext: CreateFunctionContext<InputParameters, RequiredInput>;
 };
 
 // Slack Function Tester is overloaded to accept either a string or a SlackFunction
