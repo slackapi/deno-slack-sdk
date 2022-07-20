@@ -1,9 +1,119 @@
 import { assertEquals, assertExists, assertMatch } from "../../dev_deps.ts";
 import { BlockActionsRouter } from "./action_router.ts";
+import type { ActionContext, BlockAction } from "./types.ts";
+import type { FunctionRuntimeParameters } from "../types.ts";
+import type {
+  ParameterSetDefinition,
+  PossibleParameterKeys,
+} from "../../parameters/mod.ts";
+import type { SlackFunction } from "../mod.ts";
 import { DefineFunction, Schema } from "../../mod.ts";
-import { DEFAULT_ACTION, SlackActionHandlerTester } from "../tester/mod.ts";
 
-// Test fixtures: a basic function definition and associated block action router to test
+// Helper test types
+// TODO: maybe we want to export this for userland usage at some point?
+// Very much a direct copy from the existing main function tester types and utilties in src/functions/tester
+type SlackActionHandlerTesterArgs<InputParameters> =
+  & Partial<
+    ActionContext<InputParameters>
+  >
+  & {
+    inputs: InputParameters;
+  };
+
+type CreateActionHandlerContext<
+  InputParameters extends ParameterSetDefinition,
+  RequiredInput extends PossibleParameterKeys<InputParameters>,
+> = {
+  (
+    args: SlackActionHandlerTesterArgs<
+      FunctionRuntimeParameters<InputParameters, RequiredInput>
+    >,
+  ): ActionContext<
+    FunctionRuntimeParameters<InputParameters, RequiredInput>
+  >;
+};
+
+type SlackActionHandlerTesterResponse<
+  InputParameters extends ParameterSetDefinition,
+  RequiredInput extends PossibleParameterKeys<InputParameters>,
+> = {
+  createContext: CreateActionHandlerContext<InputParameters, RequiredInput>;
+};
+
+type SlackActionHandlerTesterFn = {
+  // Accept a Slack Function
+  <
+    InputParameters extends ParameterSetDefinition,
+    OutputParameters extends ParameterSetDefinition,
+    RequiredInput extends PossibleParameterKeys<InputParameters>,
+    RequiredOutput extends PossibleParameterKeys<OutputParameters>,
+  >(
+    func: SlackFunction<
+      InputParameters,
+      OutputParameters,
+      RequiredInput,
+      RequiredOutput
+    >,
+  ): SlackActionHandlerTesterResponse<
+    InputParameters,
+    RequiredInput
+  >;
+};
+// Helper test fixtures and utilities
+const DEFAULT_ACTION: BlockAction = {
+  type: "button",
+  block_id: "block_id",
+  action_ts: `${new Date().getTime()}`,
+  action_id: "action_id",
+  text: { type: "plain_text", text: "duncare", emoji: false },
+  style: "danger",
+};
+const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
+  InputParameters extends ParameterSetDefinition,
+  OutputParameters extends ParameterSetDefinition,
+  RequiredInput extends PossibleParameterKeys<InputParameters>,
+  RequiredOutput extends PossibleParameterKeys<OutputParameters>,
+>(
+  _func: SlackFunction<
+    InputParameters,
+    OutputParameters,
+    RequiredInput,
+    RequiredOutput
+  >,
+) => {
+  const createContext: CreateActionHandlerContext<
+    InputParameters,
+    RequiredInput
+  > = (
+    args,
+  ) => {
+    const inputs = (args.inputs || {}) as FunctionRuntimeParameters<
+      InputParameters,
+      RequiredInput
+    >;
+    const DEFAULT_BODY = {
+      type: "block_actions",
+      actions: [DEFAULT_ACTION],
+      function_data: {
+        execution_id: "123",
+        function: { callback_id: "456" },
+        inputs,
+      },
+    };
+
+    return {
+      inputs,
+      env: args.env || {},
+      token: args.token || "slack-function-test-token",
+      action: args.action || DEFAULT_ACTION,
+      body: args.body || DEFAULT_BODY,
+    };
+  };
+
+  return { createContext };
+};
+
+// a basic function definition and associated block action router to test
 const func = DefineFunction({
   callback_id: "id",
   title: "test",

@@ -4,7 +4,6 @@ import type {
 } from "../../parameters/mod.ts";
 import type { SlackFunction } from "../mod.ts";
 import type { FunctionContext, FunctionRuntimeParameters } from "../types.ts";
-import type { ActionContext } from "../routers/types.ts";
 
 export type SlackFunctionTesterArgs<
   InputParameters,
@@ -62,52 +61,4 @@ export type SlackFunctionTesterFn = {
       <I>(args: SlackFunctionTesterArgs<I>): FunctionContext<I>;
     };
   };
-};
-
-export type SlackActionHandlerTesterArgs<InputParameters> =
-  & Partial<
-    ActionContext<InputParameters>
-  >
-  & {
-    inputs: InputParameters;
-  };
-
-export type CreateActionHandlerContext<
-  InputParameters extends ParameterSetDefinition,
-  RequiredInput extends PossibleParameterKeys<InputParameters>,
-> = {
-  (
-    args: SlackActionHandlerTesterArgs<
-      FunctionRuntimeParameters<InputParameters, RequiredInput>
-    >,
-  ): ActionContext<
-    FunctionRuntimeParameters<InputParameters, RequiredInput>
-  >;
-};
-
-export type SlackActionHandlerTesterResponse<
-  InputParameters extends ParameterSetDefinition,
-  RequiredInput extends PossibleParameterKeys<InputParameters>,
-> = {
-  createContext: CreateActionHandlerContext<InputParameters, RequiredInput>;
-};
-
-export type SlackActionHandlerTesterFn = {
-  // Accept a Slack Function
-  <
-    InputParameters extends ParameterSetDefinition,
-    OutputParameters extends ParameterSetDefinition,
-    RequiredInput extends PossibleParameterKeys<InputParameters>,
-    RequiredOutput extends PossibleParameterKeys<OutputParameters>,
-  >(
-    func: SlackFunction<
-      InputParameters,
-      OutputParameters,
-      RequiredInput,
-      RequiredOutput
-    >,
-  ): SlackActionHandlerTesterResponse<
-    InputParameters,
-    RequiredInput
-  >;
 };

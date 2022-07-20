@@ -9,7 +9,8 @@ export type BlockActionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (
       context: ActionContext<FunctionRuntimeParameters<I, RI>>,
-    ): Promise<void> | void;
+      // deno-lint-ignore no-explicit-any
+    ): Promise<any> | any;
   }
   : never;
 
@@ -28,7 +29,7 @@ export type BlockActionInvocationBody<
 > = {
   type: string;
   actions: BlockAction[];
-  function_data?: FunctionData<InputParameters>;
+  function_data: FunctionData<InputParameters>;
   // deno-lint-ignore no-explicit-any
   [key: string]: any;
 };

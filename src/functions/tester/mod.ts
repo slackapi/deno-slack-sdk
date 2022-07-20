@@ -3,24 +3,9 @@ import {
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
 import { SlackFunction } from "../mod.ts";
-import type { BlockAction } from "../routers/types.ts";
 import type { FunctionRuntimeParameters } from "../types.ts";
-import {
-  CreateActionHandlerContext,
-  CreateFunctionContext,
-  SlackActionHandlerTesterFn,
-  SlackFunctionTesterFn,
-} from "./types.ts";
-
+import { CreateFunctionContext, SlackFunctionTesterFn } from "./types.ts";
 export const DEFAULT_FUNCTION_TESTER_TITLE = "Function Test Title";
-export const DEFAULT_ACTION: BlockAction = {
-  type: "button",
-  block_id: "block_id",
-  action_ts: `${new Date().getTime()}`,
-  action_id: "action_id",
-  text: { type: "plain_text", text: "duncare", emoji: false },
-  style: "danger",
-};
 
 export const SlackFunctionTester: SlackFunctionTesterFn = <
   InputParameters extends ParameterSetDefinition,
@@ -73,45 +58,6 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
           title: testFnTitle,
         },
       },
-    };
-  };
-
-  return { createContext };
-};
-
-export const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
-  InputParameters extends ParameterSetDefinition,
-  OutputParameters extends ParameterSetDefinition,
-  RequiredInput extends PossibleParameterKeys<InputParameters>,
-  RequiredOutput extends PossibleParameterKeys<OutputParameters>,
->(
-  _func: SlackFunction<
-    InputParameters,
-    OutputParameters,
-    RequiredInput,
-    RequiredOutput
-  >,
-) => {
-  const createContext: CreateActionHandlerContext<
-    InputParameters,
-    RequiredInput
-  > = (
-    args,
-  ) => {
-    const DEFAULT_BODY = {
-      type: "block_actions",
-      actions: [DEFAULT_ACTION],
-    };
-
-    return {
-      inputs: (args.inputs || {}) as FunctionRuntimeParameters<
-        InputParameters,
-        RequiredInput
-      >,
-      env: args.env || {},
-      token: args.token || "slack-function-test-token",
-      action: args.action || DEFAULT_ACTION,
-      body: args.body || DEFAULT_BODY,
     };
   };
 
