@@ -5,6 +5,7 @@ const SlackTypes = {
   timestamp: "slack#/types/timestamp",
   blocks: "slack#/types/blocks",
   oauth2: "slack#/types/credential/oauth2",
+  user_context: "slack#/types/user_context",
 } as const;
 
 export default SlackTypes;
