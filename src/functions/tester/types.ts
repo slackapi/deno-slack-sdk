@@ -3,11 +3,8 @@ import type {
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
 import type { SlackFunction } from "../mod.ts";
-import type {
-  ActionContext,
-  FunctionContext,
-  FunctionRuntimeParameters,
-} from "../types.ts";
+import type { FunctionContext, FunctionRuntimeParameters } from "../types.ts";
+import type { ActionContext } from "../routers/types.ts";
 
 export type SlackFunctionTesterArgs<
   InputParameters,

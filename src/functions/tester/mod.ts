@@ -3,7 +3,8 @@ import {
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
 import { SlackFunction } from "../mod.ts";
-import type { BlockAction, FunctionRuntimeParameters } from "../types.ts";
+import type { BlockAction } from "../routers/types.ts";
+import type { FunctionRuntimeParameters } from "../types.ts";
 import {
   CreateActionHandlerContext,
   CreateFunctionContext,

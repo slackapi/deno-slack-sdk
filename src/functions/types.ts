@@ -13,11 +13,7 @@ import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackManifest } from "../manifest.ts";
 
-export type {
-  ActionContext,
-  BlockAction,
-  BlockActionHandler,
-} from "./routers/types.ts";
+export type { BlockActionHandler } from "./routers/types.ts";
 
 export type FunctionInvocationBody = {
   "team_id": string;
