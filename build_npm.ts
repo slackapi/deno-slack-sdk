@@ -14,7 +14,7 @@ await build({
     // package.json properties
     name: "@slack/deno-slack-sdk",
     version: Deno.args[0],
-    description: "Deno Slack SDK published to NPM to be consumed in node Slack apps",
+    description: "Official library for using Deno Slack SDK in node Slack apps",
     license: "MIT",
     repository: {
       type: "git",
