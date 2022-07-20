@@ -8,37 +8,37 @@ enum LogLevel {
 }
 
 export function debug<T>(
-  msg: (T extends (...args: any[]) => any ? never : T) | (() => T),
+  msg: (T extends (...args: unknown[]) => unknown ? never : T) | (() => T),
 ): string {
   return write(msg, LogLevel.DEBUG);
 }
 
 export function info<T>(
-  msg: (T extends (...args: any[]) => any ? never : T) | (() => T),
+  msg: (T extends (...args: unknown[]) => unknown ? never : T) | (() => T),
 ): string {
   return write(msg, LogLevel.INFO);
 }
 
 export function warn<T>(
-  msg: (T extends (...args: any[]) => any ? never : T) | (() => T),
+  msg: (T extends (...args: unknown[]) => unknown ? never : T) | (() => T),
 ): string {
   return write(msg, LogLevel.WARN);
 }
 
 export function error<T>(
-  msg: (T extends (...args: any[]) => any ? never : T) | (() => T),
+  msg: (T extends (...args: unknown[]) => unknown ? never : T) | (() => T),
 ): string {
   return write(msg, LogLevel.ERROR);
 }
 
 export function fatal<T>(
-  msg: (T extends (...args: any[]) => any ? never : T) | (() => T),
+  msg: (T extends (...args: unknown[]) => unknown ? never : T) | (() => T),
 ): string {
   return write(msg, LogLevel.FATAL);
 }
 
 function write<T>(
-  msg: (T extends (...args: any[]) => any ? never : T) | (() => T),
+  msg: (T extends (...args: unknown[]) => unknown ? never : T) | (() => T),
   level: LogLevel,
 ): string {
   let res: T | undefined;
@@ -51,7 +51,7 @@ function write<T>(
     logMessage = toString(msg);
   }
 
-  let formattedLog =
+  const formattedLog =
     `{"loggerName":"slack","msg":"${logMessage}","level":${level},"datetime":"${
       new Date().toISOString()
     }"}`;
