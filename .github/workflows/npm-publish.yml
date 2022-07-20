@@ -7,7 +7,7 @@ on:
   push:    
     #branches: [ test-expanded-manifest-fekiz ]
     tags:        
-      - '*.*.*'
+      - '^\d+\.\d+\.\d+$'
     
 
 jobs:
