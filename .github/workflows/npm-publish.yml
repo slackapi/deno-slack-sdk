@@ -39,7 +39,7 @@ jobs:
       - name: Publish to NPM    
         run: cd npm && npm publish --access=public
         env:
-          NODE_AUTH_TOKEN: ${{secrets.SLACK_NPM_TOKEN}}                 
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}                 
       
         
          
