@@ -12,7 +12,7 @@ await build({
   },
   package: {
     // package.json properties
-    name: "@slack/deno-slack-sdk",
+    name: "test-deno-slack-sdk",
     version: Deno.args[0],
     description: "Deno Slack SDK published to NPM to be consumed in node Slack apps",
     license: "MIT",
