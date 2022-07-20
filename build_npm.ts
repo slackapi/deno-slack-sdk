@@ -12,7 +12,7 @@ await build({
   },
   package: {
     // package.json properties
-    name: "fekiz-test-deno-slack-sdk",
+    name: "test-deno-slack-sdk",
     version: Deno.args[0],
     description: "Test deno sdk dpendencies",
     license: "MIT",

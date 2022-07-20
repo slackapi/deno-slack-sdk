@@ -30,10 +30,6 @@ jobs:
         with:
           deno-version: v1.x
 
-      # - name: Get the version
-      #   id: get_version
-      #   run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
-
       - name: Get the tag name
         id: get_tag_name
         run: echo ::set-output name=TAG::${GITHUB_REF#refs/*/}
