@@ -38,7 +38,7 @@ jobs:
         run: deno run -A build_npm.ts ${{steps.get_tag_name.outputs.TAG}}
         
       - name: Publish to NPM    
-        run: cd npm && npm publish --access=public
+        run: cd npm && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}                 
       
