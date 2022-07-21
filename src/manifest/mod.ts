@@ -121,7 +121,7 @@ export class SlackManifest {
     if (manifest.settings.function_runtime === "slack") {
       this.assignRunOnSlackManifestProperties(manifest);
     } else if (manifest.settings.function_runtime === "remote") {
-      this.assignNonRunOnSlackManifestProperties(manifest);
+      this.assignRemoteSlackManifestProperties(manifest);
     }
 
     return manifest;
@@ -199,15 +199,19 @@ export class SlackManifest {
   }
 
   // Assigns the remote app properties
-  private assignNonRunOnSlackManifestProperties(manifest: ManifestSchema) {
+  private assignRemoteSlackManifestProperties(manifest: ManifestSchema) {
     const def = this.definition as ISlackManifestRemote;
 
     //Settings
-    manifest.settings = def.settings ?? {};
-    manifest.settings.function_runtime = this.getFunctionRuntime();
+    manifest.settings = {
+      ...manifest.settings,
+      ...def.settings,
+    };
     manifest.settings.event_subscriptions = def.eventSubscriptions;
     manifest.settings.socket_mode_enabled = def.socketModeEnabled;
     manifest.settings.token_rotation_enabled = def.tokenRotationEnabled;
+
+    console.log(manifest.settings);
 
     //AppDirectory
     manifest.app_directory = def.appDirectory;
@@ -218,22 +222,12 @@ export class SlackManifest {
     manifest.oauth_config.token_management_enabled = def.tokenManagementEnabled;
 
     // Remote Features
-    if (def.features?.botUser?.always_online !== undefined) {
-      manifest.features.bot_user!.always_online =
-        def.features.botUser.always_online;
-    }
-    if (def.features?.shortcuts !== undefined) {
-      manifest.features.shortcuts = def.features?.shortcuts;
-    }
-    if (def.features?.slashCommands !== undefined) {
-      manifest.features.slash_commands = def.features?.slashCommands;
-    }
-    if (def.features?.unfurlDomains !== undefined) {
-      manifest.features.unfurl_domains = def.features?.unfurlDomains;
-    }
-    if (def.features?.workflowSteps !== undefined) {
-      manifest.features.workflow_steps = def.features?.workflowSteps;
-    }
+    manifest.features.bot_user!.always_online = def.features?.botUser
+      ?.always_online;
+    manifest.features.shortcuts = def.features?.shortcuts;
+    manifest.features.slash_commands = def.features?.slashCommands;
+    manifest.features.unfurl_domains = def.features?.unfurlDomains;
+    manifest.features.workflow_steps = def.features?.workflowSteps;
   }
 
   private assignRunOnSlackManifestProperties(manifest: ManifestSchema) {

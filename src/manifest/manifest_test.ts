@@ -405,16 +405,10 @@ Deno.test("Manifest() correctly assigns settings properties", () => {
         },
       ],
     },
-
     socketModeEnabled: true,
     tokenRotationEnabled: false,
   };
   const manifest = Manifest(definition);
-  //settings
-  assertStrictEquals(
-    manifest.settings,
-    definition.settings,
-  );
   assertStrictEquals(
     manifest.settings.socket_mode_enabled,
     definition.socketModeEnabled,
@@ -426,6 +420,22 @@ Deno.test("Manifest() correctly assigns settings properties", () => {
   assertStrictEquals(
     manifest.settings.event_subscriptions,
     definition.eventSubscriptions,
+  );
+  assertStrictEquals(
+    manifest.settings.allowed_ip_address_ranges,
+    definition.settings?.allowed_ip_address_ranges,
+  );
+  assertStrictEquals(
+    manifest.settings.incoming_webhooks,
+    definition.settings?.incoming_webhooks,
+  );
+  assertStrictEquals(
+    manifest.settings.org_deploy_enabled,
+    definition.settings?.org_deploy_enabled,
+  );
+  assertStrictEquals(
+    manifest.settings.siws_links,
+    definition.settings?.siws_links,
   );
   assertStrictEquals(manifest.settings.function_runtime, "remote");
 });
