@@ -16,7 +16,9 @@ import {
   ManifestWorkflowsSchema,
 } from "./manifest_schema.ts";
 
-export const Manifest = (definition: Omit<SlackManifestType, "runOnSlack">) => {
+export const Manifest = (
+  definition: Omit<ISlackManifestRunOnSlack, "runOnSlack">,
+) => {
   const manifest = new SlackManifest(definition);
   return manifest.export();
 };
