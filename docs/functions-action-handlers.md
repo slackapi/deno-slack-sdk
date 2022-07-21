@@ -12,6 +12,13 @@ with these [interactive components][interactivity].
 If you're already familiar with the main concepts underpinning Block Kit Action Handlers,
 then you may want to skip ahead to the [`BlockActionsRouter` API Reference](#api-reference).
 
+1. [Requirements](#requirements)
+2. [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
+3. [Defining a Block Actions Router](#defining-a-block-actions-router)
+4. [API Reference](#api-reference)
+  - [`BlockActionsRouter`]()
+  - [`addHandler()`]()
+
 ### Requirements
 
 Your app needs to have an existing [Function][functions] defined, implemented and working
@@ -196,6 +203,23 @@ Now when you run your app and trigger your function, you have the basics in plac
 to provide interactivity between your application and users in Slack!
 
 ### API Reference
+
+#### `BlockActionsRouter(function_definition)`
+
+```typescript
+import { BlockActionsRouter, DefineFunction } from "deno-slack-sdk/mod.ts";`
+const myFunction = DefineFunction(...);
+const router = BlockActionsRouter(myFunction);
+```
+
+`BlockActionsRouter` defines a router instance that helps with routing specific
+action interactions to particular action handlers. This helps organize your application code to have different action handlers for different [interactive Block Kit components][interactivity].
+
+The sole argument to `BlockActionsRouter` is a [function definition](./functions.md#defining-a-function).
+
+Once defined, a `BlockActionsRouter` has the following methods available on it:
+
+##### `addHandler(constraint, handler)`
 
 [functions]: ./functions.md
 [api]: https://api.slack.com/methods
