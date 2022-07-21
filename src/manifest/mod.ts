@@ -102,16 +102,16 @@ export class SlackManifest {
 
     if (def.features?.appHome) {
       const {
-        home_tab_enabled,
-        messages_tab_enabled,
-        messages_tab_read_only_enabled,
+        homeTabEnabled,
+        messagesTabEnabled,
+        messagesTabReadOnlyEnabled,
       } = def.features.appHome;
 
       if (manifest.features.app_home != undefined) {
-        manifest.features.app_home.home_tab_enabled = home_tab_enabled;
-        manifest.features.app_home.messages_tab_enabled = messages_tab_enabled;
+        manifest.features.app_home.home_tab_enabled = homeTabEnabled;
+        manifest.features.app_home.messages_tab_enabled = messagesTabEnabled;
         manifest.features.app_home.messages_tab_read_only_enabled =
-          messages_tab_read_only_enabled;
+          messagesTabReadOnlyEnabled;
       }
     }
 

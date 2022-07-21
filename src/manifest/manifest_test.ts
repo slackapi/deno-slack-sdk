@@ -493,9 +493,9 @@ Deno.test("Manifest() correctly assigns other app features", () => {
         description: "shortcut",
       }],
       appHome: {
-        home_tab_enabled: true,
-        messages_tab_enabled: false,
-        messages_tab_read_only_enabled: false,
+        homeTabEnabled: true,
+        messagesTabEnabled: false,
+        messagesTabReadOnlyEnabled: false,
       },
       slashCommands: [{
         command: "sample-command",
@@ -533,8 +533,16 @@ Deno.test("Manifest() correctly assigns other app features", () => {
     definition.features?.slashCommands,
   );
   assertEquals(
-    manifest.features.app_home,
-    definition.features?.appHome,
+    manifest.features.app_home?.home_tab_enabled,
+    true,
+  );
+  assertEquals(
+    manifest.features.app_home?.messages_tab_enabled,
+    false,
+  );
+  assertEquals(
+    manifest.features.app_home?.messages_tab_read_only_enabled,
+    false,
   );
   assertStrictEquals(
     manifest.features.unfurl_domains,
@@ -707,8 +715,8 @@ Deno.test("SlackManifest.export() allows overriding app home features", () => {
     botScopes: [],
     features: {
       appHome: {
-        messages_tab_enabled: false,
-        messages_tab_read_only_enabled: false,
+        messagesTabEnabled: false,
+        messagesTabReadOnlyEnabled: false,
       },
     },
   };
