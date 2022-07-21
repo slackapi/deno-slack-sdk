@@ -20,6 +20,20 @@ Deno.test("Test logging with string", () => {
   assertEquals(match.groups["msg"], msg);
 });
 
+Deno.test("Test logging with function", () => {
+  const msg = "This is a string";
+  const res = logger.info(() => {
+    return msg;
+  });
+
+  const match = res.match(regex);
+
+  assertExists(match);
+  assertExists(match.groups);
+
+  assertEquals(match.groups["msg"], msg);
+});
+
 Deno.test("Test logging with int", () => {
   const msg = 15;
   const res = logger.info(msg);
