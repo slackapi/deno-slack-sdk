@@ -211,8 +211,6 @@ export class SlackManifest {
     manifest.settings.socket_mode_enabled = def.socketModeEnabled;
     manifest.settings.token_rotation_enabled = def.tokenRotationEnabled;
 
-    console.log(manifest.settings);
-
     //AppDirectory
     manifest.app_directory = def.appDirectory;
 
