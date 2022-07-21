@@ -16,8 +16,8 @@ then you may want to skip ahead to the [`BlockActionsRouter` API Reference](#api
 2. [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
 3. [Defining a Block Actions Router](#defining-a-block-actions-router)
 4. [API Reference](#api-reference)
-  - [`BlockActionsRouter`]()
-  - [`addHandler()`]()
+  - [`BlockActionsRouter()`](blockactionsrouterfunction_definition)
+  - [`addHandler()`](addhandlerconstraint-handler)
 
 ### Requirements
 
@@ -213,7 +213,8 @@ const router = BlockActionsRouter(myFunction);
 ```
 
 `BlockActionsRouter` defines a router instance that helps with routing specific
-action interactions to particular action handlers. This helps organize your application code to have different action handlers for different [interactive Block Kit components][interactivity].
+action interactions to particular action handlers. This helps organize your application
+code to have different action handlers for different [interactive Block Kit components][interactivity].
 
 The sole argument to `BlockActionsRouter` is a [function definition](./functions.md#defining-a-function).
 
@@ -221,8 +222,53 @@ Once defined, a `BlockActionsRouter` has the following methods available on it:
 
 ##### `addHandler(constraint, handler)`
 
+```typescript
+router.addHandler({ block_id: "mah-buttons", action_id: "approve_request"}, async (ctx) => { ... });
+```
+
+`addHandler` registers a block action handler based on a `constraint` argument.
+If any incoming actions match the `constraint`, then the specified `handler` will
+be invoked with the action. This allows for authoring focussed, single-purpose
+action handlers and provides a concise but flexible API for registering handlers
+to specific actions.
+
+`constraint` is of type [`BlockActionConstraint`][constraint], which itself can
+be either a [`BlockActionConstraintField`][#blockactionconstraintfield] or a [`BlockActionConstraintObject`][#blockactionconstraintobject]. 
+
+If a [`BlockActionConstraintField`][#blockactionconstraintfield] is used as the
+value for `constraint`, then this will be matched against the incoming action's
+`action_id` property.
+
+[`BlockActionConstraintObject`][#blockactionconstraintobject] is a more complex
+object used to match against actions. It contains nested `block_id` and `action_id`
+properties - both optional - that are used to match against the incoming action.
+If both `action_id` and `block_id` properties exist on the `constraint`, then both 
+`action_id` and `block_id` properties _must match_. If only one of these properties
+is provided, then only the provided property must match. The type of each property
+is also [`BlockActionConstraintField`][#blockactionconstraintfield].
+
+###### `BlockActionConstraintField`
+
+```typescript
+type BlockActionConstraintField = string | string[] | RegExp;
+```
+
+- when provided as a `string`, it must match the field exactly.
+- when provided as an array of `string`s, it must match one of the array values exactly.
+- when provided as a `RegExp`, the regular expression must match.
+
+###### `BlockActionConstraintObject`
+
+```typescript
+type BlockActionConstraintObject = {
+  block_id?: BlockActionConstraintField;
+  action_id?: BlockActionConstraintField;
+};
+```
+
 [functions]: ./functions.md
 [api]: https://api.slack.com/methods
 [block-kit]: https://api.slack.com/block-kit
 [interactivity]: https://api.slack.com/block-kit/interactivity
 [sdk]: https://github.com/slackapi/deno-slack-sdk
+[constraint]: ../src/functions/routers/types.ts#L53-L62
