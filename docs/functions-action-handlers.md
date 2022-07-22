@@ -16,8 +16,8 @@ then you may want to skip ahead to the [`BlockActionsRouter` API Reference](#api
 2. [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
 3. [Defining a Block Actions Router](#defining-a-block-actions-router)
 4. [API Reference](#api-reference)
-  - [`BlockActionsRouter()`](blockactionsrouterfunction_definition)
-  - [`addHandler()`](addhandlerconstraint-handler)
+    - [`BlockActionsRouter()`](blockactionsrouterfunction_definition)
+    - [`addHandler()`](addhandlerconstraint-handler)
 
 ### Requirements
 
@@ -33,7 +33,7 @@ our app will handle these button interactions - these Block Kit Actions - and
 update the original message with either an "Approved!" or "Denied!" text.
 
 For the purposes of walking through this approval flow example, let us assume the
-following [Function][functions] definition:
+following [Function][functions] definition (that we will store in a file called `definition.ts` under the `functions/approval/` subdirectory inside your app):
 
 ```typescript
 import { DefineFunction, Schema } from "deno-slack-sdk/mod.ts";
@@ -42,7 +42,7 @@ export const ApprovalFunction = DefineFunction({
   callback_id: "review_approval",
   title: "Approval",
   description: "Get approval for a request",
-  source_file: "functions/approval/mod.ts",
+  source_file: "functions/approval/mod.ts", // <-- important! Make sure this is where the logic for your function - which we will write in the next section - exists.
   input_parameters: {
     properties: {
       requester_id: {
@@ -84,7 +84,9 @@ export const ApprovalFunction = DefineFunction({
 First, we need a message that has some [interactive components][interactivity]
 from [Block Kit][block-kit] included! We can modify one of our app's [Functions][functions]
 to post a message that includes some interactive components. Here's an example function
-that posts a message with two buttons: an approval button, and a deny button:
+(which we will assume exists in a `mod.ts` file under the `functions/approval/`
+subdirectory in your app) that posts a message with two buttons: an approval button,
+and a deny button:
 
 ```typescript
 import type { SlackFunctionHandler } from "deno-slack-sdk/types.ts";
@@ -99,7 +101,7 @@ const approval: SlackFunctionHandler<typeof ApprovalFunction.definition> =
     const client = SlackAPI(token, {
       slackApiUrl: env.SLACK_API_URL,
     });
-    const resp = await client.chat.postMessage({
+    await client.chat.postMessage({
       channel: inputs.approval_channel_id,
       blocks: [{
         "type": "actions",
@@ -130,6 +132,7 @@ const approval: SlackFunctionHandler<typeof ApprovalFunction.definition> =
       completed: false,
     };
   };
+export default approval;
 ```
 
 The key bit of information we need to remember before moving on to adding an
@@ -157,7 +160,8 @@ const ActionsRouter = BlockActionsRouter(ApprovalFunction);
 // Now can use the router's addHandler method to register different handlers based on action properties like
 // action_id or block_id
 export const blockActions = ActionsRouter.addHandler(
-  ['approve_request', 'deny_request'], // The first argument to addHandler can accept an array of action_id strings
+  ['approve_request', 'deny_request'], // The first argument to addHandler can accept an array of action_id strings, among many other formats!
+  // Check the API reference at the end of this document for the full list of supported options
   async ({ action, body, token, env }) => { // The second argument is the handler function itself
     console.log('Incoming action handler invocation', action);
     const client = SlackAPI(token, {
@@ -174,7 +178,7 @@ export const blockActions = ActionsRouter.addHandler(
 
     // Remove the button from the original message using the chat.update API
     // and replace its contents with the result of the approval.
-    const updateMsgResp = await client.chat.update({
+    await client.chat.update({
       channel: body.function_data.inputs.approval_channel_id,
       ts: outputs.message_ts,
       blocks: [{
@@ -183,7 +187,7 @@ export const blockActions = ActionsRouter.addHandler(
           {
             type: "mrkdwn",
             text: `${
-              approved ? " :white_check_mark: Approved" : ":x: Denied"
+              outputs.approved ? " :white_check_mark: Approved" : ":x: Denied"
             } by <@${outputs.reviewer}>`,
           },
         ],
@@ -233,7 +237,7 @@ action handlers and provides a concise but flexible API for registering handlers
 to specific actions.
 
 `constraint` is of type [`BlockActionConstraint`][constraint], which itself can
-be either a [`BlockActionConstraintField`][#blockactionconstraintfield] or a [`BlockActionConstraintObject`][#blockactionconstraintobject]. 
+be either a [`BlockActionConstraintField`][#blockactionconstraintfield] or a [`BlockActionConstraintObject`][#blockactionconstraintobject].
 
 If a [`BlockActionConstraintField`][#blockactionconstraintfield] is used as the
 value for `constraint`, then this will be matched against the incoming action's
@@ -242,7 +246,7 @@ value for `constraint`, then this will be matched against the incoming action's
 [`BlockActionConstraintObject`][#blockactionconstraintobject] is a more complex
 object used to match against actions. It contains nested `block_id` and `action_id`
 properties - both optional - that are used to match against the incoming action.
-If both `action_id` and `block_id` properties exist on the `constraint`, then both 
+If both `action_id` and `block_id` properties exist on the `constraint`, then both
 `action_id` and `block_id` properties _must match_. If only one of these properties
 is provided, then only the provided property must match. The type of each property
 is also [`BlockActionConstraintField`][#blockactionconstraintfield].
