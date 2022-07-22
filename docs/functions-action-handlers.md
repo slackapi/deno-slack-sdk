@@ -237,19 +237,15 @@ action handlers and provides a concise but flexible API for registering handlers
 to specific actions.
 
 `constraint` is of type [`BlockActionConstraint`][constraint], which itself can
-be either a [`BlockActionConstraintField`][#blockactionconstraintfield] or a [`BlockActionConstraintObject`][#blockactionconstraintobject].
+be either a [`BlockActionConstraintField`](#blockactionconstraintfield) or a [`BlockActionConstraintObject`](#blockactionconstraintobject).
 
-If a [`BlockActionConstraintField`][#blockactionconstraintfield] is used as the
+If a [`BlockActionConstraintField`](#blockactionconstraintfield) is used as the
 value for `constraint`, then this will be matched against the incoming action's
 `action_id` property.
 
-[`BlockActionConstraintObject`][#blockactionconstraintobject] is a more complex
+[`BlockActionConstraintObject`](#blockactionconstraintobject) is a more complex
 object used to match against actions. It contains nested `block_id` and `action_id`
 properties - both optional - that are used to match against the incoming action.
-If both `action_id` and `block_id` properties exist on the `constraint`, then both
-`action_id` and `block_id` properties _must match_. If only one of these properties
-is provided, then only the provided property must match. The type of each property
-is also [`BlockActionConstraintField`][#blockactionconstraintfield].
 
 ###### `BlockActionConstraintField`
 
@@ -269,6 +265,13 @@ type BlockActionConstraintObject = {
   action_id?: BlockActionConstraintField;
 };
 ```
+
+This object can contain two properties, both optional: `action_id` and/or `block_id`.
+The type of each property is [`BlockActionConstraintField`](#blockactionconstraintfield).
+
+If both `action_id` and `block_id` properties exist on the `constraint`, then both
+`action_id` and `block_id` properties _must match_ any incoming action. If only
+one of these properties is provided, then only the provided property must match.
 
 [functions]: ./functions.md
 [api]: https://api.slack.com/methods
