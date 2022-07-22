@@ -3,6 +3,15 @@
 Functions are the core of your Slack app: they accept one or more input
 parameters, execute some logic and return one or more output parameters.
 
+Functions can optionally define different kinds of Interactivity Handlers. If your
+function creates messages or opens views, then it may need to define one or more
+interactivity handlers to respond to user interactions with these interactive components.
+Run-on-Slack applications support the following interactivity handlers, follow the links
+to get more information about how each of them work:
+
+- [Block Kit Action Handlers][action-handlers]: Handle events from interactive [Block Kit][block-kit]
+  components like [Buttons, Menus and Date/Time Pickers](https://api.slack.com/block-kit/interactivity)
+
 ### Defining a Function
 
 Functions can be defined with the top level `DefineFunction` export. Below is an
@@ -119,3 +128,5 @@ Once you have defined a function, don't forget to include it in your
     });
 
 [manifest]: ./manifest.md
+[action-handlers]: ./functions-action-handlers.md
+[block-kit]: https://api.slack.com/block-kit
