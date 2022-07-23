@@ -1,5 +1,5 @@
-import { SlackManifest } from "../manifest.ts";
-import { ManifestWorkflowSchema } from "../types.ts";
+import { SlackManifest } from "../manifest/mod.ts";
+import { ManifestWorkflowSchema } from "../manifest/manifest_schema.ts";
 import { ISlackFunction } from "../functions/types.ts";
 import {
   ParameterSetDefinition,

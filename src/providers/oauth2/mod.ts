@@ -4,7 +4,7 @@ import {
 } from "./types.ts";
 
 import { OAuth2ProviderTypeValues } from "../../schema/providers/oauth2/types.ts";
-import { ManifestOAuth2ProviderSchema } from "../../types.ts";
+import { ManifestOAuth2ProviderSchema } from "../../manifest/manifest_schema.ts";
 
 export const DefineOAuth2Provider = (
   definition: OAuth2ProviderDefinitionArgs,
