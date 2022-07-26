@@ -3,6 +3,7 @@ import {
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
 import { SlackFunction } from "../mod.ts";
+import { FunctionDefinitionArgs } from "../types.ts";
 import type {
   BlockAction,
   BlockActionConstraint,
@@ -75,7 +76,14 @@ export class ActionsRouter<
    */
   addHandler(
     actionConstraint: BlockActionConstraint,
-    handler: BlockActionHandler<typeof this.func.definition>,
+    handler: BlockActionHandler<
+      FunctionDefinitionArgs<
+        InputParameters,
+        OutputParameters,
+        RequiredInput,
+        RequiredOutput
+      >
+    >,
   ): ActionsRouter<
     InputParameters,
     OutputParameters,
@@ -90,7 +98,14 @@ export class ActionsRouter<
    * Returns a method handling routing of action payloads to the appropriate action handler.
    * The output of export() should be attached to the `blockActions` export of your function.
    */
-  export(): BlockActionHandler<typeof this.func.definition> {
+  export(): BlockActionHandler<
+    FunctionDefinitionArgs<
+      InputParameters,
+      OutputParameters,
+      RequiredInput,
+      RequiredOutput
+    >
+  > {
     return async (context) => {
       const action: BlockAction = context.action;
       const handler = this.matchHandler(action);
@@ -114,7 +129,16 @@ export class ActionsRouter<
    */
   matchHandler(
     action: BlockAction,
-  ): BlockActionHandler<typeof this.func.definition> | null {
+  ):
+    | BlockActionHandler<
+      FunctionDefinitionArgs<
+        InputParameters,
+        OutputParameters,
+        RequiredInput,
+        RequiredOutput
+      >
+    >
+    | null {
     for (let i = 0; i < this.routes.length; i++) {
       const route = this.routes[i];
       let [constraint, handler] = route;
