@@ -125,14 +125,8 @@ Deno.test("Workflows properly treats interactivity and user context types", () =
         interactivity: {
           type: SlackTypes.interactivity,
         },
-        somethingElse: {
-          type: "object",
-          properties: {
-            nestedObject: {
-              type: "object",
-              properties: { finalString: { type: "string" } },
-            },
-          },
+        user: {
+          type: SlackTypes.user_context,
         },
       },
       required: ["interactivity"],
@@ -161,5 +155,17 @@ Deno.test("Workflows properly treats interactivity and user context types", () =
   assertEquals(
     `${step1.outputs.interactivity.interactor.secret}`,
     `{{steps.0.interactivity.interactor.secret}}`,
+  );
+  assertEquals(
+    `${step1.outputs.user}`,
+    `{{steps.0.user}}`,
+  );
+  assertEquals(
+    `${step1.outputs.user?.id}`,
+    `{{steps.0.user.id}}`,
+  );
+  assertEquals(
+    `${step1.outputs.user?.secret}`,
+    `{{steps.0.user.secret}}`,
   );
 });
