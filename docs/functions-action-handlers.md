@@ -95,12 +95,11 @@ import { SlackAPI } from "deno-slack-api/mod.ts";
 import { ApprovalFunction } from "./definition.ts";
 
 const approval: SlackFunctionHandler<typeof ApprovalFunction.definition> =
-  async ({ inputs, token, env }) => {
+  async ({ inputs, token }) => {
     console.log('Incoming approval!');
     // A Slack API client, so that we can make API calls to Slack
-    const client = SlackAPI(token, {
-      slackApiUrl: env.SLACK_API_URL,
-    });
+    const client = SlackAPI(token);
+
     await client.chat.postMessage({
       channel: inputs.approval_channel_id,
       blocks: [{
@@ -162,11 +161,9 @@ const ActionsRouter = BlockActionsRouter(ApprovalFunction);
 export const blockActions = ActionsRouter.addHandler(
   ['approve_request', 'deny_request'], // The first argument to addHandler can accept an array of action_id strings, among many other formats!
   // Check the API reference at the end of this document for the full list of supported options
-  async ({ action, body, token, env }) => { // The second argument is the handler function itself
+  async ({ action, body, token }) => { // The second argument is the handler function itself
     console.log('Incoming action handler invocation', action);
-    const client = SlackAPI(token, {
-      slackApiUrl: env.SLACK_API_URL,
-    });
+    const client = SlackAPI(token);
 
     const outputs = {
       reviewer: body.user.id,
@@ -211,7 +208,7 @@ to provide interactivity between your application and users in Slack!
 #### `BlockActionsRouter(function_definition)`
 
 ```typescript
-import { BlockActionsRouter, DefineFunction } from "deno-slack-sdk/mod.ts";`
+import { BlockActionsRouter, DefineFunction } from "deno-slack-sdk/mod.ts";
 const myFunction = DefineFunction(...);
 const router = BlockActionsRouter(myFunction);
 ```
