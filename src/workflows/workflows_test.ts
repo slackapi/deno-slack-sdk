@@ -1,6 +1,7 @@
 import { assertEquals } from "../dev_deps.ts";
 import { DefineWorkflow } from "./mod.ts";
 import { DefineFunction } from "../mod.ts";
+import SlackTypes from "../schema/slack/schema_types.ts";
 
 Deno.test("WorkflowStep export input values", () => {
   const TestFunction = DefineFunction({
@@ -111,5 +112,60 @@ Deno.test("WorkflowStep export input values", () => {
   assertEquals(
     `${step3Inputs.message}`,
     "Channel Created <#{{steps.1.channel_id}}>",
+  );
+});
+
+Deno.test("Workflows properly treats interactivity and user context types", () => {
+  const TestFunction = DefineFunction({
+    source_file: "./test.ts",
+    callback_id: "test",
+    title: "Test",
+    output_parameters: {
+      properties: {
+        interactivity: {
+          type: SlackTypes.interactivity,
+        },
+        user: {
+          type: SlackTypes.user_context,
+        },
+      },
+      required: ["interactivity"],
+    },
+  });
+
+  const TestWorkflow = DefineWorkflow({
+    callback_id: "test",
+    title: "Test",
+  });
+
+  const step1 = TestWorkflow.addStep(TestFunction, {});
+
+  assertEquals(
+    `${step1.outputs.interactivity}`,
+    `{{steps.0.interactivity}}`,
+  );
+  assertEquals(
+    `${step1.outputs.interactivity.interactivity_pointer}`,
+    `{{steps.0.interactivity.interactivity_pointer}}`,
+  );
+  assertEquals(
+    `${step1.outputs.interactivity.interactor.id}`,
+    `{{steps.0.interactivity.interactor.id}}`,
+  );
+  assertEquals(
+    `${step1.outputs.interactivity.interactor.secret}`,
+    `{{steps.0.interactivity.interactor.secret}}`,
+  );
+  assertEquals(
+    `${step1.outputs.user}`,
+    `{{steps.0.user}}`,
+  );
+  assertEquals(
+    `${step1.outputs.user?.id}`,
+    `{{steps.0.user.id}}`,
+  );
+  assertEquals(
+    `${step1.outputs.user?.secret}`,
+    `{{steps.0.user.secret}}`,
   );
 });
