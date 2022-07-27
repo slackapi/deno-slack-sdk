@@ -13,8 +13,6 @@ export type BlockActionsBody = {
   team: {
     id: string;
     domain: string;
-    enterprise_id?: string;
-    enterprise_name?: string;
   };
   enterprise?: {
     id: string;
