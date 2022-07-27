@@ -1,5 +1,5 @@
 import SchemaTypes from "../schema/schema_types.ts";
-import SlackTypes from "../schema/slack/schema_types.ts";
+import { SlackTypes } from "../schema/slack/schema_types.ts";
 import { ICustomType } from "../types/types.ts";
 
 export type PrimitiveParameterDefinition =

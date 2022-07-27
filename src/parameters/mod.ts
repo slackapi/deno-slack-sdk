@@ -8,10 +8,6 @@ import type {
 import { ParamReference } from "./param.ts";
 import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 import SchemaTypes from "../schema/schema_types.ts";
-import SlackTypes, {
-  InteractivityParameterDefinition,
-  UserContextParameterDefinition,
-} from "../schema/slack/schema_types.ts";
 
 export type ParameterDefinition = TypedParameterDefinition;
 
@@ -39,10 +35,6 @@ export type ParameterVariableType<Def extends ParameterDefinition> = Def extends
     ? ObjectParameterVariableType<Def>
   : Def extends UntypedObjectParameterDefinition
     ? UntypedObjectParameterVariableType
-  : Def["type"] extends typeof SlackTypes["interactivity"]
-    ? ObjectParameterVariableType<typeof InteractivityParameterDefinition>
-  : Def["type"] extends typeof SlackTypes["user_context"]
-    ? ObjectParameterVariableType<typeof UserContextParameterDefinition>
   : SingleParameterVariable;
 
 // deno-lint-ignore ban-types
@@ -93,18 +85,6 @@ export const ParameterVariable = <P extends ParameterDefinition>(
     } else {
       param = CreateUntypedObjectParameterVariable(namespace, paramName);
     }
-  } else if (definition.type === SlackTypes.interactivity) {
-    param = CreateTypedObjectParameterVariable(
-      namespace,
-      paramName,
-      InteractivityParameterDefinition,
-    ) as ParameterVariableType<P>;
-  } else if (definition.type === SlackTypes.user_context) {
-    param = CreateTypedObjectParameterVariable(
-      namespace,
-      paramName,
-      UserContextParameterDefinition,
-    ) as ParameterVariableType<P>;
   } else {
     param = CreateSingleParameterVariable(
       namespace,

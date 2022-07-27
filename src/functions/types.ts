@@ -13,10 +13,6 @@ import {
 import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackManifest } from "../manifest/mod.ts";
-import {
-  InteractivityParameterDefinition,
-  UserContextParameterDefinition,
-} from "../schema/slack/schema_types.ts";
 
 export type { BlockActionHandler } from "./routers/types.ts";
 
@@ -56,14 +52,6 @@ type FunctionInputRuntimeType<Param extends ParameterDefinition> =
       ? Param extends TypedObjectParameterDefinition
         ? TypedObjectFunctionInputRuntimeType<Param>
       : UnknownRuntimeType
-    : Param["type"] extends typeof SlackSchemaTypes.interactivity
-      ? TypedObjectFunctionInputRuntimeType<
-        typeof InteractivityParameterDefinition
-      >
-    : Param["type"] extends typeof SlackSchemaTypes.user_context
-      ? TypedObjectFunctionInputRuntimeType<
-        typeof UserContextParameterDefinition
-      >
     : Param["type"] extends
       | typeof SlackSchemaTypes.user_id
       | typeof SlackSchemaTypes.usergroup_id
