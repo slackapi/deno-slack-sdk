@@ -42,11 +42,13 @@ type FunctionData<InputParameters extends FunctionParameters> = {
 };
 
 type Interactivity = {
-  interactor: {
-    secret: string;
-    id: string;
-  };
+  interactor: UserContext;
   interactivity_pointer: string;
+};
+
+type UserContext = {
+  secret: string;
+  id: string;
 };
 
 export type BlockActionConstraint =
