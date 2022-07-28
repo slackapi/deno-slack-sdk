@@ -5,12 +5,12 @@ import {
 import { SlackFunction } from "../mod.ts";
 import { FunctionDefinitionArgs } from "../types.ts";
 import type {
-  BlockAction,
   BlockActionConstraint,
   BlockActionConstraintField,
   BlockActionConstraintObject,
   BlockActionHandler,
 } from "./types.ts";
+import { BlockAction } from "./block_actions_types.ts";
 
 /**
  * Define an actions "router" and its input and output parameters for use in a Slack application. The ActionsRouter will route incoming action events to action-specific handlers.

@@ -1,6 +1,7 @@
 import { assertEquals, assertExists, assertMatch } from "../../dev_deps.ts";
 import { BlockActionsRouter } from "./action_router.ts";
-import type { ActionContext, BlockAction } from "./types.ts";
+import type { ActionContext } from "./types.ts";
+import type { BlockAction } from "./block_actions_types.ts";
 import type { FunctionRuntimeParameters } from "../types.ts";
 import type {
   ParameterSetDefinition,
@@ -99,6 +100,26 @@ const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
         function: { callback_id: "456" },
         inputs,
       },
+      interactivity: {
+        interactor: {
+          secret: "shhhh",
+          id: "123",
+        },
+        interactivity_pointer: "123.asdf",
+      },
+      user: {
+        id: "123",
+        name: "asdf",
+        team_id: "123",
+      },
+      team: {
+        id: "123",
+        domain: "asdf",
+      },
+      api_app_id: "123",
+      token: "123",
+      trigger_id: "123",
+      response_url: "asdf",
     };
 
     return {

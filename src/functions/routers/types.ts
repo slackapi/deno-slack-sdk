@@ -4,6 +4,7 @@ import {
   FunctionParameters,
   FunctionRuntimeParameters,
 } from "../types.ts";
+import { BlockAction, BlockActionsBody } from "./block_actions_types.ts";
 
 export type BlockActionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
@@ -23,15 +24,13 @@ type ActionSpecificContext<InputParameters extends FunctionParameters> = {
   action: BlockAction;
 };
 
-// TODO: all below stolen from deno-slack-runtime, need to centralize these somewhere
 export type BlockActionInvocationBody<
   InputParameters extends FunctionParameters,
-> = {
-  type: string;
-  actions: BlockAction[];
+> = BlockActionsBody & FunctionInteractivity<InputParameters>;
+
+type FunctionInteractivity<InputParameters extends FunctionParameters> = {
   function_data: FunctionData<InputParameters>;
-  // deno-lint-ignore no-explicit-any
-  [key: string]: any;
+  interactivity: Interactivity;
 };
 
 type FunctionData<InputParameters extends FunctionParameters> = {
@@ -42,12 +41,14 @@ type FunctionData<InputParameters extends FunctionParameters> = {
   inputs: InputParameters;
 };
 
-export type BlockAction = {
-  type: string;
-  block_id: string;
-  action_id: string;
-  // deno-lint-ignore no-explicit-any
-  [key: string]: any;
+type Interactivity = {
+  interactor: UserContext;
+  interactivity_pointer: string;
+};
+
+type UserContext = {
+  secret: string;
+  id: string;
 };
 
 export type BlockActionConstraint =
