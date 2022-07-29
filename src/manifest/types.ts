@@ -49,10 +49,10 @@ export interface ISlackManifestRemote extends ISlackManifestShared {
 
   settings?: Omit<
     ManifestSettingsSchema,
-    | "function_runtime"
     | "event_subscriptions"
     | "socket_mode_enabled"
     | "token_rotation_enabled"
+    | "function_runtime"
   >; // lifting omitted properties to top level
   eventSubscriptions?: ManifestEventSubscriptionsSchema;
   socketModeEnabled?: boolean;

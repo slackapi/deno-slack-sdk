@@ -371,7 +371,7 @@ Deno.test("Manifest() correctly assigns app_directory properties", () => {
   );
 });
 
-Deno.test("Manifest() correctly assigns settings properties", () => {
+Deno.test("Manifest() correctly assigns remote app settings properties", () => {
   const definition: SlackManifestType = {
     runOnSlack: false,
     name: "fear and loathing in las vegas",
@@ -438,6 +438,35 @@ Deno.test("Manifest() correctly assigns settings properties", () => {
     definition.settings?.siws_links,
   );
   assertStrictEquals(manifest.settings.function_runtime, "remote");
+
+  // When org_deploy_enabled not supplied, remote app settings default org deploy to true
+  const definition2: SlackManifestType = {
+    runOnSlack: false,
+    name: "",
+    description: "",
+    backgroundColor: "",
+    longDescription: "",
+    displayName: "",
+    icon: "",
+    botScopes: [],
+    settings: {},
+  };
+  const manifest2 = Manifest(definition2);
+  assertEquals(manifest2.settings.org_deploy_enabled, true);
+});
+
+Deno.test("Manifest() correctly assigns run on slack app settings properties", () => {
+  const definition: SlackManifestType = {
+    name: "",
+    description: "",
+    backgroundColor: "",
+    longDescription: "",
+    displayName: "",
+    icon: "",
+    botScopes: [],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.settings.org_deploy_enabled, true);
 });
 
 Deno.test("Manifest() correctly assigns oauth properties", () => {
