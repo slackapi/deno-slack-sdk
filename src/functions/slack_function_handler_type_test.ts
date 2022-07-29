@@ -1,4 +1,4 @@
-import { assertEquals, assertExists } from "../dev_deps.ts";
+import { assertExists } from "../dev_deps.ts";
 import { assertEqualsTypedValues } from "../test_utils.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
 import { DefineFunction } from "./mod.ts";
