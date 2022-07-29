@@ -231,6 +231,10 @@ export class SlackManifest {
   private assignRunOnSlackManifestProperties(manifest: ManifestSchema) {
     const def = this.definition as ISlackManifestRunOnSlack;
 
+    // Run on Slack Apps do not manage access tokens
+    // This is set by default as false
+    manifest.oauth_config.token_management_enabled = false;
+
     // External Auth providers
     if (def.externalAuthProviders) {
       manifest.external_auth_providers = def.externalAuthProviders?.reduce(
