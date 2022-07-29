@@ -211,6 +211,13 @@ export class SlackManifest {
     manifest.settings.socket_mode_enabled = def.socketModeEnabled;
     manifest.settings.token_rotation_enabled = def.tokenRotationEnabled;
 
+    // Set org deploy enabled to true unless specified by dev
+    // Org deploy enabled is required to use remote functions
+    manifest.settings.org_deploy_enabled =
+      (def.settings?.org_deploy_enabled !== undefined)
+        ? def.settings?.org_deploy_enabled
+        : true;
+
     //AppDirectory
     manifest.app_directory = def.appDirectory;
 
@@ -244,5 +251,8 @@ export class SlackManifest {
         {} as NonNullable<ManifestSchema["external_auth_providers"]>,
       );
     }
+
+    // Required App Settings for run on slack apps
+    manifest.settings.org_deploy_enabled = true;
   }
 }
