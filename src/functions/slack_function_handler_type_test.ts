@@ -1,7 +1,9 @@
-import { assertEquals } from "../dev_deps.ts";
+import { assertEquals, assertExists } from "../dev_deps.ts";
+import { assertEqualsTypedValues } from "../test_utils.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
 import { DefineFunction } from "./mod.ts";
 import { SlackFunctionHandler } from "./types.ts";
+import { Schema } from "../mod.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
 // Any "failures" here will most likely be reflected in Type errors
@@ -44,7 +46,14 @@ Deno.test("SlackFunctionHandler with inputs and outputs", () => {
   const stringTest = SlackFunctionTester("test");
   const stringResult = handler(stringTest.createContext({ inputs }));
 
-  assertEquals(result.outputs?.out, inputs.in, stringResult.outputs?.out);
+  assertEqualsTypedValues(
+    result.outputs?.out,
+    inputs.in,
+  );
+  assertEqualsTypedValues(
+    inputs.in,
+    stringResult.outputs?.out,
+  );
 });
 
 Deno.test("SlackFunctionHandler with optional input", () => {
@@ -81,7 +90,7 @@ Deno.test("SlackFunctionHandler with optional input", () => {
   const { createContext } = SlackFunctionTester(TestFn);
   const inputs = {};
   const result = handler(createContext({ inputs }));
-  assertEquals(result.outputs?.out, "default");
+  assertEqualsTypedValues(result.outputs?.out, "default");
 });
 
 Deno.test("SlackFunctionHandler with no inputs or outputs", () => {
@@ -97,7 +106,7 @@ Deno.test("SlackFunctionHandler with no inputs or outputs", () => {
   };
   const { createContext } = SlackFunctionTester(TestFn);
   const result = handler(createContext({ inputs: {} }));
-  assertEquals(result.outputs, {});
+  assertEqualsTypedValues(result.outputs, {});
 });
 
 Deno.test("SlackFunctionHandler with undefined inputs and outputs", () => {
@@ -115,7 +124,7 @@ Deno.test("SlackFunctionHandler with undefined inputs and outputs", () => {
   };
   const { createContext } = SlackFunctionTester(TestFn);
   const result = handler(createContext({ inputs: {} }));
-  assertEquals(result.outputs, {});
+  assertEqualsTypedValues(result.outputs, {});
 });
 
 Deno.test("SlackFunctionHandler with empty inputs and outputs", () => {
@@ -133,7 +142,7 @@ Deno.test("SlackFunctionHandler with empty inputs and outputs", () => {
   };
   const { createContext } = SlackFunctionTester(TestFn);
   const result = handler(createContext({ inputs: {} }));
-  assertEquals(result.outputs, {});
+  assertEqualsTypedValues(result.outputs, {});
 });
 
 Deno.test("SlackFunctionHandler with only inputs", () => {
@@ -162,7 +171,7 @@ Deno.test("SlackFunctionHandler with only inputs", () => {
   const { createContext } = SlackFunctionTester(TestFn);
   const inputs = { in: "test" };
   const result = handler(createContext({ inputs }));
-  assertEquals(result.outputs, {});
+  assertEqualsTypedValues(result.outputs, {});
 });
 
 Deno.test("SlackFunctionHandler with only outputs", () => {
@@ -188,7 +197,7 @@ Deno.test("SlackFunctionHandler with only outputs", () => {
   };
   const { createContext } = SlackFunctionTester(TestFn);
   const result = handler(createContext({ inputs: {} }));
-  assertEquals(result.outputs?.out, "test");
+  assertEqualsTypedValues(result.outputs?.out, "test");
 });
 
 Deno.test("SlackFunctionHandler with input and output object", () => {
@@ -232,7 +241,7 @@ Deno.test("SlackFunctionHandler with input and output object", () => {
   const result = handler(
     createContext({ inputs: { anObject: { in: "test" } } }),
   );
-  assertEquals(result.outputs?.anObject.out, "test");
+  assertEqualsTypedValues(result.outputs?.anObject.out, "test");
 });
 
 Deno.test("SlackFunctionHandler with only completed false", () => {
@@ -256,7 +265,7 @@ Deno.test("SlackFunctionHandler with only completed false", () => {
   };
   const { createContext } = SlackFunctionTester(TestFn);
   const result = handler(createContext({ inputs: {} }));
-  assertEquals(result.completed, false);
+  assertEqualsTypedValues(result.completed, false);
 });
 
 Deno.test("SlackFunctionHandler with only error", () => {
@@ -280,5 +289,85 @@ Deno.test("SlackFunctionHandler with only error", () => {
   };
   const { createContext } = SlackFunctionTester(TestFn);
   const result = handler(createContext({ inputs: {} }));
-  assertEquals(result.error, "error");
+  assertEqualsTypedValues(result.error, "error");
+});
+
+Deno.test("SlackFunctionHandler using Custom Types", () => {
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        interactivity: { type: Schema.slack.types.interactivity },
+        user_context: { type: Schema.slack.types.user_context },
+      },
+      required: ["interactivity", "user_context"],
+    },
+    output_parameters: {
+      properties: {
+        interactivity: { type: Schema.slack.types.interactivity },
+        user_context: { type: Schema.slack.types.user_context },
+      },
+      required: ["interactivity", "user_context"],
+    },
+  });
+
+  const sharedInputs = {
+    interactivity: {
+      interactivity_pointer: "interactivity_pointer",
+      interactor: {
+        id: "interactor id",
+        secret: "interactor secret",
+      },
+    },
+    user_context: {
+      id: "user_context id",
+      secret: "user_context secret",
+    },
+  };
+
+  const handler: SlackFunctionHandler<typeof TestFunction.definition> = (
+    { inputs },
+  ) => {
+    inputs.interactivity.interactor.secret;
+    const { interactivity, user_context } = inputs;
+    assertEqualsTypedValues(interactivity, sharedInputs.interactivity);
+    assertEqualsTypedValues(
+      interactivity.interactivity_pointer,
+      sharedInputs.interactivity.interactivity_pointer,
+    );
+    assertEqualsTypedValues(
+      interactivity.interactor.id,
+      sharedInputs.interactivity.interactor.id,
+    );
+    assertEqualsTypedValues(
+      interactivity.interactor.secret,
+      sharedInputs.interactivity.interactor.secret,
+    );
+    assertEqualsTypedValues(user_context, sharedInputs.user_context);
+    assertEqualsTypedValues(
+      user_context.secret,
+      sharedInputs.user_context.secret,
+    );
+    assertEqualsTypedValues(user_context.id, sharedInputs.user_context.id);
+    assertEqualsTypedValues(
+      user_context.secret,
+      sharedInputs.user_context.secret,
+    );
+
+    return {
+      outputs: inputs,
+    };
+  };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = handler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(sharedInputs, result.outputs);
+  assertExists(result.outputs?.interactivity.interactivity_pointer);
+  assertExists(result.outputs?.interactivity.interactor.id);
+  assertExists(result.outputs?.interactivity.interactor.secret);
+  assertExists(result.outputs?.user_context.id);
+  assertExists(result.outputs?.user_context.secret);
 });

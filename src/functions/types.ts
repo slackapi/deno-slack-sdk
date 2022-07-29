@@ -7,6 +7,7 @@ import {
   PossibleParameterKeys,
 } from "../parameters/mod.ts";
 import {
+  CustomTypeParameterDefinition,
   TypedArrayParameterDefinition,
   TypedObjectParameterDefinition,
 } from "../parameters/types.ts";
@@ -35,11 +36,36 @@ export type FunctionInvocationBody = {
   };
 };
 
+/** @description Defines accepted depth values */
+type RecursionDepthLevel = 0 | 1 | 2 | 3 | 4 | 5;
+
+/** @description Defines the max depth we want to recurse */
+type MaxRecursionDepth = 5;
+
+/** @description Increases the depth value one at a time */
+type IncreaseDepth<Depth extends RecursionDepthLevel = 0> = Depth extends 0 ? 1
+  : Depth extends 1 ? 2
+  : Depth extends 2 ? 3
+  : Depth extends 3 ? 4
+  : Depth extends 4 ? 5
+  : Depth extends 5 ? MaxRecursionDepth
+  : MaxRecursionDepth;
+
 /**
  * @description Maps a ParameterDefinition into a runtime type, i.e. "string" === string.
  */
-type FunctionInputRuntimeType<Param extends ParameterDefinition> =
-  Param["type"] extends typeof SchemaTypes.string ? string
+type FunctionInputRuntimeType<
+  Param extends ParameterDefinition,
+  CurrentDepth extends RecursionDepthLevel = 0,
+> =
+  // Recurse through Custom Types, stop when we hit our max depth
+  CurrentDepth extends MaxRecursionDepth ? UnknownRuntimeType
+    : Param extends CustomTypeParameterDefinition ? FunctionInputRuntimeType<
+        Param["type"]["definition"],
+        IncreaseDepth<CurrentDepth>
+      >
+      // Not a Custom Type, so assign the runtime value
+    : Param["type"] extends typeof SchemaTypes.string ? string
     : Param["type"] extends
       | typeof SchemaTypes.integer
       | typeof SchemaTypes.number ? number
