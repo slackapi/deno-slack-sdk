@@ -1,5 +1,5 @@
 import SchemaTypes from "../schema/schema_types.ts";
-import SlackTypes from "../schema/slack/schema_types.ts";
+import { SlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
 import { ICustomType } from "../types/types.ts";
 
 export type PrimitiveParameterDefinition =
@@ -98,7 +98,7 @@ type NumberParameterDefinition = BaseParameterDefinition<number> & {
 };
 
 export type OAuth2ParameterDefinition = BaseParameterDefinition<string> & {
-  type: typeof SlackTypes.oauth2;
+  type: typeof SlackPrimitiveTypes.oauth2;
   oauth2_provider_key: string;
 };
 
