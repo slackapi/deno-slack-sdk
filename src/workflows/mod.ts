@@ -43,7 +43,7 @@ export class WorkflowDefinition<
   RequiredOutputs extends PossibleParameterKeys<Outputs>,
 > implements ISlackWorkflow {
   public id: string;
-  private definition: SlackWorkflowDefinitionArgs<
+  public definition: SlackWorkflowDefinitionArgs<
     Inputs,
     Outputs,
     RequiredInputs,
