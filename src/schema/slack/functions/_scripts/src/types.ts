@@ -1,9 +1,11 @@
+import { ICustomType } from "../../../../../types/types.ts";
+
 export type FunctionParameter = {
   name: string;
   description: string;
-  type: string;
+  type: string | ICustomType;
   items: {
-    type: string;
+    type: string | ICustomType;
   };
   "is_required": boolean;
 };

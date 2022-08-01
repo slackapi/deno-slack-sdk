@@ -3,7 +3,7 @@ import { DefineType } from "../../../../types/mod.ts";
 import { UserContextType } from "./user_context.ts";
 
 const InteractivityType = DefineType({
-  name: "User Context",
+  name: "slack#/types/interactivity",
   type: SchemaTypes.object,
   properties: {
     interactivity_pointer: {
