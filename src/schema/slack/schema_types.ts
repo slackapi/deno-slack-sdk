@@ -1,4 +1,4 @@
-import SlackTypes from "./types/mod.ts";
-import SlackCustomTypes from "./types/custom/mod.ts";
+import { SlackPrimitiveTypes } from "./types/mod.ts";
+import { CustomSlackTypes } from "./types/custom/mod.ts";
 
-export default { ...SlackTypes, ...SlackCustomTypes };
+export default { ...SlackPrimitiveTypes, ...CustomSlackTypes };
