@@ -30,7 +30,7 @@ export class CustomType<Def extends CustomTypeDefinition>
   }
 
   private generateReferenceString() {
-    return this.id.startsWith("slack#/") ? this.id : `#/types/${this.id}`;
+    return this.id.includes("#/") ? this.id : `#/types/${this.id}`;
   }
 
   toString() {
