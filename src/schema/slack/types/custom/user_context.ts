@@ -3,7 +3,7 @@ import { SlackPrimitiveTypes } from "../../types/mod.ts";
 import { DefineType } from "../../../../types/mod.ts";
 
 const UserContextType = DefineType({
-  name: "User Context",
+  name: "slack#/types/user_context",
   type: SchemaTypes.object,
   properties: {
     id: {

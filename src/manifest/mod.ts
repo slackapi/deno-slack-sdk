@@ -168,6 +168,10 @@ export class SlackManifest {
 
   registerType(customType: ICustomType) {
     if (!this.definition.types) this.definition.types = [];
+    // Don't register Slack types
+    if (customType.id.startsWith("slack#/")) {
+      return;
+    }
     // Check to make sure type doesn't already exist on manifest
     if (this.definition.types.some((type) => type.id === customType.id)) {
       return;
