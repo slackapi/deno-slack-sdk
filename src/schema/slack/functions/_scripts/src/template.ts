@@ -96,7 +96,7 @@ const getParameterList = (fn: FunctionRecord) => [
   ...fn?.output_parameters ?? [],
 ];
 
-/** @description Whether or not a fn uses parameters from a defind type object */
+/** @description Whether or not a fn uses parameters from a defined type object */
 const hasParamsFromTypeObject = (
   fn: FunctionRecord,
   typeObject: AllowedTypeValueObject,
