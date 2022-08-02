@@ -214,6 +214,38 @@ Deno.test("Manifest() properly converts callback_id to proper key", () => {
   assertEquals(manifest.types, { "Using Callback": { type: "boolean" } });
 });
 
+Deno.test("Manifest() always sets token_management_enabled to false for runOnSlack: true apps", () => {
+  // When runOnSlack is explicitly specified as true, token_management_enabled must be set to false
+  const definition: SlackManifestType = {
+    runOnSlack: true,
+    name: "",
+    description: "",
+    backgroundColor: "#FFF",
+    longDescription: "",
+    displayName: "",
+    icon: "",
+    botScopes: [],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.oauth_config.token_management_enabled, false);
+});
+
+Deno.test("Manifest() always sets token_management_enabled to false for function_runtime: slack apps", () => {
+  // SlackManifestType will default to function_runtime == slack when runOnSlack property omitted
+  // AND when no remote-only features are specified
+  const definition: SlackManifestType = {
+    name: "",
+    description: "",
+    backgroundColor: "#FFF",
+    longDescription: "",
+    displayName: "",
+    icon: "",
+    botScopes: [],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.oauth_config.token_management_enabled, false);
+});
+
 Deno.test("Manifest() automatically registers types referenced by datastores", () => {
   const stringTypeId = "test_string_type";
   const objectTypeId = "test_object_type";
