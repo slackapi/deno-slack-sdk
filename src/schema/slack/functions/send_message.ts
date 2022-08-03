@@ -30,13 +30,6 @@ export default DefineFunction(
           description:
             "Metadata you post to Slack is accessible to any app or user who is a member of that workspace",
         },
-        interactive_elements: {
-          type: SchemaTypes.array,
-          description: "Interactivity elements",
-          items: {
-            type: "object",
-          },
-        },
       },
     },
     output_parameters: {
@@ -49,14 +42,6 @@ export default DefineFunction(
         message_link: {
           type: SchemaTypes.string,
           description: "Permalink URL of the message that was sent",
-        },
-        interactive_elements_value: {
-          type: SchemaTypes.string,
-          description: "Value of clicked interactive element",
-        },
-        interactivity: {
-          type: SlackTypes.interactivity,
-          description: "Interactivity context",
         },
       },
     },
