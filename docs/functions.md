@@ -116,16 +116,17 @@ The object returned by your function that supports the following properties:
 Once you have defined a function, don't forget to include it in your
 [`Manifest`][manifest] definition!
 
-    import { ReverseString } from "./functions/reverse_definition.ts";
+```ts
+import { ReverseString } from "./functions/reverse_definition.ts";
 
-    Manifest({
-      name: "heuristic-tortoise",
-      description:
-        "A demo showing how to use Slack functions",
-      icon: "assets/icon.png",
-      botScopes: ["commands", "chat:write", "chat:write.public"],
-      functions: [ReverseString], // <-- don't forget this!
-    });
+Manifest({
+  name: "heuristic-tortoise",
+  description: "A demo showing how to use Slack functions",
+  icon: "assets/icon.png",
+  botScopes: ["commands", "chat:write", "chat:write.public"],
+  functions: [ReverseString], // <-- don't forget this!
+});
+```
 
 [manifest]: ./manifest.md
 [action-handlers]: ./functions-action-handlers.md
