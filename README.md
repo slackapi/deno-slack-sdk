@@ -2,16 +2,28 @@
 
 This is the SDK for the Deno Runtime of Run on Slack Functions.
 
+## Requirements
+
+A recent version of `deno`.
+
 ## Documentation
 
 Check out the [`./docs`](./docs) directory!
 
-## Contributing
+## Running Tests
 
-Not much to say here yet, but for now, if you're making changes or reviewing a PR, please manually run tests via the `test` script. It's a bit of a placeholder until we can setup proper CI that supports `deno`.
+If you make changes to this repo, or just want to make sure things are working as desired, you can run:
 
-```bash
->./test
-```
+    deno task test
 
-This will run the linter, check formatting, attempt a bundle to catch any compiler errors and run any test files.
+To get a full test coverage report, run:
+
+    deno task coverage
+
+---
+
+### Getting Help
+
+We welcome contributions from everyone! Please check out our
+[Contributor's Guide](.github/CONTRIBUTING.md) for how to contribute in a
+helpful and collaborative way.

@@ -25,7 +25,6 @@ Deno.test("Function with required params", () => {
     title: "All Types Function",
     source_file: "functions/example.ts",
     input_parameters: {
-      required: ["myString" /* , "myNumber" */],
       properties: {
         myString: {
           type: Schema.types.string,
@@ -36,29 +35,30 @@ Deno.test("Function with required params", () => {
           type: Schema.types.boolean,
           title: "My boolean",
         },
-        // integer: {
-        //   type: Schema.types.integer,
-        //   description: "integer",
-        // },
-        // myNumber: {
-        //   type: Schema.types.number,
-        //   description: "number",
-        // },
+        myInteger: {
+          type: Schema.types.integer,
+          description: "integer",
+        },
+        myNumber: {
+          type: Schema.types.number,
+          description: "number",
+        },
       },
+      required: ["myString", "myNumber"],
     },
     output_parameters: {
-      required: ["out"],
       properties: {
         out: {
           type: Schema.types.string,
         },
       },
+      required: ["out"],
     },
   });
 
   assertEquals(AllTypesFunction.definition.input_parameters?.required, [
     "myString",
-    // "myNumber",
+    "myNumber",
   ]);
   assertEquals(AllTypesFunction.definition.output_parameters?.required, [
     "out",
@@ -81,10 +81,10 @@ Deno.test("Function without input and output parameters", () => {
 
 Deno.test("Function with input parameters but no output parameters", () => {
   const inputParameters = {
-    required: [],
     properties: {
       aString: { type: Schema.types.string },
     },
+    required: [],
   };
   const NoOutputParamFunction = DefineFunction({
     callback_id: "input_params_only",
@@ -107,10 +107,10 @@ Deno.test("Function with input parameters but no output parameters", () => {
 
 Deno.test("Function with output parameters but no input parameters", () => {
   const outputParameters = {
-    required: [],
     properties: {
       aString: { type: Schema.types.string },
     },
+    required: [],
   };
   const NoInputParamFunction = DefineFunction({
     callback_id: "output_params_only",

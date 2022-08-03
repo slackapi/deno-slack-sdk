@@ -1,6 +1,6 @@
 import { ICustomType } from "../types/types.ts";
-import { ManifestDatastoreSchema } from "../types.ts";
-import { SlackManifest } from "../manifest.ts";
+import { ManifestDatastoreSchema } from "../manifest/manifest_schema.ts";
+import { SlackManifest } from "../manifest/mod.ts";
 
 export type SlackDatastoreAttribute = {
   // supports custom types, primitive types, inline objects and lists
@@ -10,10 +10,12 @@ export type SlackDatastoreAttribute = {
 export type SlackDatastoreAttributes = Record<string, SlackDatastoreAttribute>;
 
 export type SlackDatastoreDefinition<
+  Name extends string,
   Attributes extends SlackDatastoreAttributes,
+  PrimaryKey extends keyof Attributes,
 > = {
-  name: string;
-  "primary_key": keyof Attributes;
+  name: Name;
+  "primary_key": PrimaryKey;
   attributes: Attributes;
 };
 

@@ -1,9 +1,4 @@
-const SlackTypes = {
-  user_id: "slack#/types/user_id",
-  channel_id: "slack#/types/channel_id",
-  // usergroup_id: "slack#/types/usergroup_id",
-  // timestamp: "slack#/types/timestamp",
-  // blocks: "slack#/types/blocks",
-} as const;
+import { SlackPrimitiveTypes } from "./types/mod.ts";
+import { CustomSlackTypes } from "./types/custom/mod.ts";
 
-export default SlackTypes;
+export default { ...SlackPrimitiveTypes, ...CustomSlackTypes };

@@ -1,7 +1,14 @@
-import { SlackManifest } from "../manifest.ts";
-import { CustomTypeDefinition, ICustomType } from "./types.ts";
+import { SlackManifest } from "../manifest/mod.ts";
+import { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
+import {
+  CustomTypeDefinition,
+  DefineTypeFunction,
+  ICustomType,
+} from "./types.ts";
 
-export const DefineType = <Def extends CustomTypeDefinition>(
+export const DefineType: DefineTypeFunction = <
+  Def extends CustomTypeDefinition,
+>(
   definition: Def,
 ) => {
   return new CustomType(definition);
@@ -16,14 +23,14 @@ export class CustomType<Def extends CustomTypeDefinition>
   constructor(
     public definition: Def,
   ) {
-    this.id = definition.callback_id;
+    this.id = "name" in definition ? definition.name : definition.callback_id;
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;
   }
 
   private generateReferenceString() {
-    return `#/types/${this.id}`;
+    return this.id.includes("#/") ? this.id : `#/types/${this.id}`;
   }
 
   toString() {
@@ -39,16 +46,26 @@ export class CustomType<Def extends CustomTypeDefinition>
       if (this.definition.items.type instanceof Object) {
         manifest.registerType(this.definition.items.type);
       }
-      // } else if ("properties" in this.definition) {
-      //   // Loop through the properties and register any types
-      //   Object.values(this.definition.properties)?.forEach((property) => {
-      //     if ("type" in property && property.type instanceof Object) {
-      //       manifest.registerType(property.type);
-      //     }
-      //   });
+    } else if ("properties" in this.definition) {
+      // Loop through the properties and register any types
+      Object.values(this.definition.properties)?.forEach((property) => {
+        if ("type" in property && property.type instanceof Object) {
+          manifest.registerType(property.type);
+        }
+      });
     } else if (this.definition.type instanceof Object) {
       // The referenced type is a Custom Type
       manifest.registerType(this.definition.type);
+    }
+  }
+  export(): ManifestCustomTypeSchema {
+    // remove callback_id or name from the definition we pass to the manifest
+    if ("name" in this.definition) {
+      const { name: _n, ...definition } = this.definition;
+      return definition;
+    } else {
+      const { callback_id: _c, ...definition } = this.definition;
+      return definition;
     }
   }
 }

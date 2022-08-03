@@ -4,7 +4,7 @@ import SchemaTypes from "../schema/schema_types.ts";
 import { DefineType } from "../types/mod.ts";
 
 const customType = DefineType({
-  callback_id: "custom_type",
+  name: "custom_type",
   type: SchemaTypes.boolean,
 });
 
@@ -22,6 +22,12 @@ Deno.test("Datastore sets appropriate defaults", () => {
       attr3: {
         type: customType,
       },
+      attr4: {
+        type: SchemaTypes.object,
+        properties: {
+          anObjectString: { type: SchemaTypes.string },
+        },
+      },
     },
   });
 
@@ -30,4 +36,9 @@ Deno.test("Datastore sets appropriate defaults", () => {
   assertStrictEquals(exported.attributes.attr1.type, SchemaTypes.string);
   assertStrictEquals(exported.attributes.attr2.type, SchemaTypes.boolean);
   assertStrictEquals(exported.attributes.attr3.type, customType);
+  assertStrictEquals(exported.attributes.attr4.type, SchemaTypes.object);
+  assertStrictEquals(
+    exported.attributes.attr4.properties?.anObjectString?.type,
+    SchemaTypes.string,
+  );
 });

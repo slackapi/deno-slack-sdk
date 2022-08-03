@@ -1,12 +1,13 @@
 // import SchemaTypes from "../schema/schema_types.ts";
 import type {
   CustomTypeParameterDefinition,
-  // TypedObjectParameterDefinition,
+  TypedObjectParameterDefinition,
   TypedParameterDefinition,
-  // UntypedObjectParameterDefinition,
+  UntypedObjectParameterDefinition,
 } from "./types.ts";
 import { ParamReference } from "./param.ts";
-// import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
+import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
+import SchemaTypes from "../schema/schema_types.ts";
 
 export type ParameterDefinition = TypedParameterDefinition;
 
@@ -15,58 +16,57 @@ export type ParameterSetDefinition = {
   [key: string]: ParameterDefinition;
 };
 
-export type RequiredParameters<
+export type PossibleParameterKeys<
   ParameterSetInternal extends ParameterSetDefinition,
-> = {
-  [index: number]: keyof ParameterSetInternal;
-};
+> = (keyof ParameterSetInternal)[];
 
 export type ParameterPropertiesDefinition<
   Parameters extends ParameterSetDefinition,
+  Required extends PossibleParameterKeys<Parameters>,
 > = {
-  required: RequiredParameters<Parameters>;
   properties: Parameters;
+  required: Required;
 };
 
 export type ParameterVariableType<Def extends ParameterDefinition> = Def extends
   CustomTypeParameterDefinition // If the ParameterVariable is a Custom type, use it's definition instead
   ? ParameterVariableType<Def["type"]["definition"]>
-  : // : Def extends TypedObjectParameterDefinition // If the ParameterVariable is of type object, allow access to the object's properties
-  //   ? ObjectParameterVariableType<Def>
-  // : Def extends UntypedObjectParameterDefinition
-  //   ? UntypedObjectParameterVariableType
-  SingleParameterVariable;
+  : Def extends TypedObjectParameterDefinition // If the ParameterVariable is of type object, allow access to the object's properties
+    ? ObjectParameterVariableType<Def>
+  : Def extends UntypedObjectParameterDefinition
+    ? UntypedObjectParameterVariableType
+  : SingleParameterVariable;
 
 // deno-lint-ignore ban-types
 type SingleParameterVariable = {};
 
-// // deno-lint-ignore no-explicit-any
-// type UntypedObjectParameterVariableType = any;
+// deno-lint-ignore no-explicit-any
+type UntypedObjectParameterVariableType = any;
 
-// type ObjectParameterPropertyTypes<Def extends TypedObjectParameterDefinition> =
-//   {
-//     [name in keyof Def["properties"]]: ParameterVariableType<
-//       Def["properties"][name]
-//     >;
-//   };
+type ObjectParameterPropertyTypes<Def extends TypedObjectParameterDefinition> =
+  {
+    [name in keyof Def["properties"]]: ParameterVariableType<
+      Def["properties"][name]
+    >;
+  };
 
-// If additionalProperties is set to true, allow access to any key
+// If additionalProperties is set to true, allow access to any key.
 // Otherwise, only allow keys provided through use of properties
-// type ObjectParameterVariableType<Def extends TypedObjectParameterDefinition> =
-//   Def["additionalProperties"] extends true ?
-//     & ObjectParameterPropertyTypes<Def>
-//     & {
-//       // deno-lint-ignore no-explicit-any
-//       [key: string]: any;
-//     }
-//     : ObjectParameterPropertyTypes<Def>;
+type ObjectParameterVariableType<Def extends TypedObjectParameterDefinition> =
+  Def["additionalProperties"] extends true ? 
+      & ObjectParameterPropertyTypes<Def>
+      & {
+        // deno-lint-ignore no-explicit-any
+        [key: string]: any;
+      }
+    : ObjectParameterPropertyTypes<Def>;
 
 export const ParameterVariable = <P extends ParameterDefinition>(
   namespace: string,
   paramName: string,
   definition: P,
 ): ParameterVariableType<P> => {
-  let param: (ParameterVariableType<P> | null) = null;
+  let param: ParameterVariableType<P> | null = null;
 
   // TODO: Should be able to use instanceof CustomType here
   if (definition.type instanceof Object) {
@@ -75,16 +75,16 @@ export const ParameterVariable = <P extends ParameterDefinition>(
       paramName,
       definition.type.definition,
     ) as ParameterVariableType<P>;
-    // } else if (definition.type === SchemaTypes.object) {
-    //   if ("properties" in definition) {
-    //     param = CreateTypedObjectParameterVariable(
-    //       namespace,
-    //       paramName,
-    //       definition,
-    //     ) as ParameterVariableType<P>;
-    //   } else {
-    //     param = CreateUntypedObjectParameterVariable(namespace, paramName);
-    //   }
+  } else if (definition.type === SchemaTypes.object) {
+    if ("properties" in definition) {
+      param = CreateTypedObjectParameterVariable(
+        namespace,
+        paramName,
+        definition,
+      ) as ParameterVariableType<P>;
+    } else {
+      param = CreateUntypedObjectParameterVariable(namespace, paramName);
+    }
   } else {
     param = CreateSingleParameterVariable(
       namespace,
@@ -95,47 +95,47 @@ export const ParameterVariable = <P extends ParameterDefinition>(
   return param as ParameterVariableType<P>;
 };
 
-// const CreateTypedObjectParameterVariable = <
-//   P extends TypedObjectParameterDefinition,
-// >(
-//   namespace: string,
-//   paramName: string,
-//   definition: P,
-// ): ObjectParameterVariableType<P> => {
-//   const ns = namespace ? `${namespace}.` : "";
-//   const pathReference = `${ns}${paramName}`;
-//   const param = ParamReference(pathReference);
+const CreateTypedObjectParameterVariable = <
+  P extends TypedObjectParameterDefinition,
+>(
+  namespace: string,
+  paramName: string,
+  definition: P,
+): ObjectParameterVariableType<P> => {
+  const ns = namespace ? `${namespace}.` : "";
+  const pathReference = `${ns}${paramName}`;
+  const param = ParamReference(pathReference);
 
-//   for (
-//     const [propName, propDefinition] of Object.entries(
-//       definition.properties || {},
-//     )
-//   ) {
-//     param[propName as string] = ParameterVariable(
-//       pathReference,
-//       propName,
-//       propDefinition,
-//     );
-//   }
+  for (
+    const [propName, propDefinition] of Object.entries(
+      definition.properties || {},
+    )
+  ) {
+    param[propName as string] = ParameterVariable(
+      pathReference,
+      propName,
+      propDefinition,
+    );
+  }
 
-//   // We wrap the typed object parameter w/ an untyped proxy to allow indexing into additional properties
-//   return WithUntypedObjectProxy(
-//     param,
-//     namespace,
-//     paramName,
-//   ) as ObjectParameterVariableType<P>;
-// };
+  // We wrap the typed object parameter w/ an untyped proxy to allow indexing into additional properties
+  return WithUntypedObjectProxy(
+    param,
+    namespace,
+    paramName,
+  ) as ObjectParameterVariableType<P>;
+};
 
-// const CreateUntypedObjectParameterVariable = (
-//   namespace: string,
-//   paramName: string,
-// ): UntypedObjectParameterVariableType => {
-//   return WithUntypedObjectProxy(
-//     {},
-//     namespace,
-//     paramName,
-//   ) as UntypedObjectParameterVariableType;
-// };
+export const CreateUntypedObjectParameterVariable = (
+  namespace: string,
+  paramName: string,
+): UntypedObjectParameterVariableType => {
+  return WithUntypedObjectProxy(
+    {},
+    namespace,
+    paramName,
+  ) as UntypedObjectParameterVariableType;
+};
 
 const CreateSingleParameterVariable = (
   namespace: string,
