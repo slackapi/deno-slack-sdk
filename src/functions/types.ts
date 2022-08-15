@@ -81,7 +81,8 @@ type FunctionInputRuntimeType<
     : Param["type"] extends
       | typeof SlackSchemaTypes.user_id
       | typeof SlackSchemaTypes.usergroup_id
-      | typeof SlackSchemaTypes.channel_id ? string
+      | typeof SlackSchemaTypes.channel_id
+      | typeof SlackSchemaTypes.date ? string
     : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
     : UnknownRuntimeType;
 
