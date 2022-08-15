@@ -202,7 +202,14 @@ export type FunctionContext<
    * @description The inputs to the function as defined by your function definition. If no inputs are specified, an empty object is provided at runtime.
    */
   inputs: InputParameters;
+  /**
+   * @description API token that can be used with the deno-slack-api API client.
+   */
   token: string;
+  /**
+   * @description A unique encoded ID representing the Slack team associated with the workspace where the function execution takes place.
+   */
+  team_id: string;
   event: FunctionInvocationBody["event"];
 };
 
