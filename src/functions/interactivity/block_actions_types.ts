@@ -14,7 +14,7 @@ export type BlockActionsBody = {
   // type: "block_actions";
   actions: BlockAction[];
   /**
-   * @description The application ID the event was dispatched to.
+   * @description The encoded application ID the event was dispatched to, e.g. A123456.
    */
   api_app_id: string;
   /**
@@ -95,13 +95,21 @@ export type BlockActionsBody = {
 /**
  * @description A single Block Kit interactive component interaction.
  */
-export type BlockAction = {
+export type BlockAction =
+  & {
+    /**
+     * @description Identifies the Block Kit interactive component that was interacted with.
+     */
+    action_id: string;
+  }
+  & BlockElement;
+
+/**
+ * @description A single Block element
+ */
+export type BlockElement = {
   /**
-   * @description Identifies the Block Kit interactive component that was interacted with.
-   */
-  action_id: string;
-  /**
-   * @description Identifies the block within a surface that contained the interactive component that was interacted with.
+   * @description Identifies the block within a surface.
    */
   block_id: string;
   type: string;
