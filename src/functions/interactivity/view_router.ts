@@ -53,7 +53,7 @@ export const ViewsRouter = <
 };
 
 class ViewRouter<
-  ViewEvent,
+  ViewEvent extends ViewEvents,
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
@@ -134,7 +134,9 @@ class ViewRouter<
         RequiredOutput
       >
     > {
-    return async (context) => {
+    return async (
+      context,
+    ) => {
       const handler = this.matchHandler(context.view);
       if (handler === null) {
         // TODO: what do in this case?
