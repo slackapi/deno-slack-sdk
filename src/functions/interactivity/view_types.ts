@@ -7,6 +7,11 @@ Possibly helpful links:
 
 import type { BlockElement } from "./block_actions_types.ts";
 
+export enum ViewEvents {
+  SUBMISSION = "view_submission",
+  CLOSED = "view_closed",
+}
+
 /**
  * @description Common `body` type for both `view_submission` and `view_closed` events.
  */

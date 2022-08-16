@@ -5,7 +5,7 @@ import {
   FunctionRuntimeParameters,
 } from "../types.ts";
 import { BlockAction, BlockActionsBody } from "./block_actions_types.ts";
-import { View, ViewBody } from "./view_types.ts";
+import { View, ViewBody, ViewEvents } from "./view_types.ts";
 
 export type BlockActionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
@@ -83,7 +83,7 @@ export type ViewSubmissionInvocationBody<
      * @description Used to open a modal by passing it to e.g. `view.open` or `view.push` APIs. Represents a particular user interaction with an interactive component. Short-lived token (expires fast!) that may only be used once.
      */
     trigger_id: string;
-    type: "view_submission";
+    type: ViewEvents.SUBMISSION;
   };
 
 export type ViewClosedInvocationBody<
@@ -96,7 +96,7 @@ export type ViewClosedInvocationBody<
      * @description Whether or not an entire view stack was cleared.
      */
     is_cleared: boolean;
-    type: "view_closed";
+    type: ViewEvents.CLOSED;
   };
 
 type FunctionInteractivity<InputParameters extends FunctionParameters> = {
@@ -123,12 +123,12 @@ type UserContext = {
 };
 
 export type BlockActionConstraint =
-  | BlockActionConstraintField
+  | BasicConstraintField
   | BlockActionConstraintObject;
 
 export type BlockActionConstraintObject = {
-  block_id?: BlockActionConstraintField;
-  action_id?: BlockActionConstraintField;
+  block_id?: BasicConstraintField;
+  action_id?: BasicConstraintField;
 };
 
-export type BlockActionConstraintField = string | string[] | RegExp;
+export type BasicConstraintField = string | string[] | RegExp;
