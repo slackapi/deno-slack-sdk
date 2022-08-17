@@ -15,7 +15,7 @@ export enum ViewEvents {
 /**
  * @description Common `body` type for both `view_submission` and `view_closed` events.
  */
-export type ViewBody = {
+export type BaseViewBody = {
   /**
    * @description The encoded application ID the view event was dispatched to, e.g. A123456.
    */
@@ -75,6 +75,33 @@ export type ViewBody = {
   // deno-lint-ignore no-explicit-any
   [key: string]: any;
 };
+
+/**
+ * @description `body` type for `view_submission` event.
+ */
+export type ViewSubmissionBody =
+  & BaseViewBody
+  & {
+    response_urls: string[];
+    /**
+     * @description Used to open a modal by passing it to e.g. `view.open` or `view.push` APIs. Represents a particular user interaction with an interactive component. Short-lived token (expires fast!) that may only be used once.
+     */
+    trigger_id: string;
+    type: ViewEvents.SUBMISSION;
+  };
+
+/**
+ * @description `body` type for `view_closed` event.
+ */
+export type ViewClosedBody =
+  & BaseViewBody
+  & {
+    /**
+     * @description Whether or not an entire view stack was cleared.
+     */
+    is_cleared: boolean;
+    type: ViewEvents.CLOSED;
+  };
 
 /**
  * @description The source view of the modal interacted with.
