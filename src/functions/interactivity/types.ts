@@ -5,26 +5,12 @@ import {
   FunctionRuntimeParameters,
 } from "../types.ts";
 import { BlockAction, BlockActionsBody } from "./block_actions_types.ts";
-import {
-  BaseViewBody,
-  View,
-  ViewClosedBody,
-  ViewSubmissionBody,
-} from "./view_types.ts";
+import { View, ViewClosedBody, ViewSubmissionBody } from "./view_types.ts";
 
 export type BlockActionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (
       context: ActionContext<FunctionRuntimeParameters<I, RI>>,
-      // deno-lint-ignore no-explicit-any
-    ): Promise<any> | any;
-  }
-  : never;
-
-export type ViewHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
-    (
-      context: BaseViewContext<FunctionRuntimeParameters<I, RI>>,
       // deno-lint-ignore no-explicit-any
     ): Promise<any> | any;
   }
@@ -57,10 +43,6 @@ export type ActionContext<InputParameters> =
   & BaseInteractivityContext<InputParameters>
   & ActionSpecificContext<InputParameters>;
 
-export type BaseViewContext<InputParameters> =
-  & BaseInteractivityContext<InputParameters>
-  & BaseViewSpecificContext<InputParameters>;
-
 export type ViewSubmissionContext<InputParameters> =
   & BaseInteractivityContext<InputParameters>
   & ViewSubmissionSpecificContext<InputParameters>;
@@ -72,11 +54,6 @@ export type ViewClosedContext<InputParameters> =
 type ActionSpecificContext<InputParameters extends FunctionParameters> = {
   body: BlockActionInvocationBody<InputParameters>;
   action: BlockAction;
-};
-
-type BaseViewSpecificContext<InputParameters extends FunctionParameters> = {
-  body: BaseViewInvocationBody<InputParameters>;
-  view: View;
 };
 
 type ViewSubmissionSpecificContext<InputParameters extends FunctionParameters> =
@@ -94,12 +71,6 @@ export type BlockActionInvocationBody<
   InputParameters extends FunctionParameters,
 > =
   & BlockActionsBody
-  & FunctionInteractivity<InputParameters>;
-
-export type BaseViewInvocationBody<
-  InputParameters extends FunctionParameters,
-> =
-  & BaseViewBody
   & FunctionInteractivity<InputParameters>;
 
 export type ViewSubmissionInvocationBody<

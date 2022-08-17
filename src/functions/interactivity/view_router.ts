@@ -10,8 +10,9 @@ import {
 } from "./matchers.ts";
 import type {
   BasicConstraintField,
+  ViewClosedContext,
   ViewClosedHandler,
-  ViewHandler,
+  ViewSubmissionContext,
   ViewSubmissionHandler,
 } from "./types.ts";
 import type { View, ViewEvents } from "./view_types.ts";
@@ -30,12 +31,7 @@ export const ViewsRouter = <
   >,
   eventFilter: ViewEvents,
 ) => {
-  const router = new ViewRouter<
-    InputParameters,
-    OutputParameters,
-    RequiredInput,
-    RequiredOutput
-  >(func, eventFilter);
+  const router = new ViewRouter(func, eventFilter);
 
   // deno-lint-ignore no-explicit-any
   const exportedHandler: any = router.export();
@@ -61,7 +57,8 @@ class ViewRouter<
   private routes: Array<
     [
       BasicConstraintField,
-      ViewHandler<typeof this.func.definition>,
+      | ViewClosedHandler<typeof this.func.definition>
+      | ViewSubmissionHandler<typeof this.func.definition>,
     ]
   >;
 
@@ -112,14 +109,23 @@ class ViewRouter<
   >;
   addHandler(
     viewConstraint: BasicConstraintField,
-    handler: ViewHandler<
-      FunctionDefinitionArgs<
-        InputParameters,
-        OutputParameters,
-        RequiredInput,
-        RequiredOutput
+    handler:
+      | ViewSubmissionHandler<
+        FunctionDefinitionArgs<
+          InputParameters,
+          OutputParameters,
+          RequiredInput,
+          RequiredOutput
+        >
       >
-    >,
+      | ViewClosedHandler<
+        FunctionDefinitionArgs<
+          InputParameters,
+          OutputParameters,
+          RequiredInput,
+          RequiredOutput
+        >
+      >,
   ): ViewRouter<
     InputParameters,
     OutputParameters,
@@ -134,16 +140,41 @@ class ViewRouter<
    * Returns a method handling routing of view events to the appropriate view handler.
    * The output of export() should be attached to either the `viewSubmission` or the `viewClosed` export of your function.
    */
-  export(): ViewHandler<
-    FunctionDefinitionArgs<
-      InputParameters,
-      OutputParameters,
-      RequiredInput,
-      RequiredOutput
+  export():
+    | ViewSubmissionHandler<
+      FunctionDefinitionArgs<
+        InputParameters,
+        OutputParameters,
+        RequiredInput,
+        RequiredOutput
+      >
     >
-  > {
+    | ViewClosedHandler<
+      FunctionDefinitionArgs<
+        InputParameters,
+        OutputParameters,
+        RequiredInput,
+        RequiredOutput
+      >
+    > {
     return async (
-      context,
+      context:
+        | ViewClosedContext<
+          FunctionDefinitionArgs<
+            InputParameters,
+            OutputParameters,
+            RequiredInput,
+            RequiredOutput
+          >
+        >
+        | ViewSubmissionContext<
+          FunctionDefinitionArgs<
+            InputParameters,
+            OutputParameters,
+            RequiredInput,
+            RequiredOutput
+          >
+        >,
     ) => {
       console.log("export router incoming", JSON.stringify(context, null, 2));
       if (context.body.type !== this.eventFilter) return;
@@ -165,7 +196,22 @@ class ViewRouter<
   matchHandler(
     view: View,
   ):
-    | ViewHandler<typeof this.func.definition>
+    | ViewClosedHandler<
+      FunctionDefinitionArgs<
+        InputParameters,
+        OutputParameters,
+        RequiredInput,
+        RequiredOutput
+      >
+    >
+    | ViewSubmissionHandler<
+      FunctionDefinitionArgs<
+        InputParameters,
+        OutputParameters,
+        RequiredInput,
+        RequiredOutput
+      >
+    >
     | null {
     for (let i = 0; i < this.routes.length; i++) {
       const route = this.routes[i];
