@@ -102,7 +102,7 @@ class ViewRouter<
     RequiredOutput
   > {
     const constraint: ViewConstraintObject = {
-      type: ViewEvents.CLOSED,
+      type: "view_closed",
       callback_id: viewConstraint,
     };
     this.closedRoutes.push([constraint, handler]);
@@ -126,7 +126,7 @@ class ViewRouter<
     RequiredOutput
   > {
     const constraint: ViewConstraintObject = {
-      type: ViewEvents.SUBMISSION,
+      type: "view_submission",
       callback_id: viewConstraint,
     };
     this.submissionRoutes.push([constraint, handler]);
@@ -147,10 +147,6 @@ class ViewRouter<
   > {
     return {
       viewClosed: async (context) => {
-        console.log(
-          "export view_closed incoming",
-          JSON.stringify(context, null, 2),
-        );
         const handler = this.matchHandler(context.body.type, context.view);
         if (handler === null) {
           // TODO: what do in this case?
@@ -166,10 +162,6 @@ class ViewRouter<
         return await handler(context);
       },
       viewSubmission: async (context) => {
-        console.log(
-          "export view_submission incoming",
-          JSON.stringify(context, null, 2),
-        );
         const handler = this.matchHandler(context.body.type, context.view);
         if (handler === null) {
           // TODO: what do in this case?
@@ -193,7 +185,7 @@ class ViewRouter<
     // deno-lint-ignore no-explicit-any
   ): any {
     let routes;
-    let _handler: typeof type extends ViewEvents.CLOSED ? ViewClosedHandler<
+    let _handler: typeof type extends "view_closed" ? ViewClosedHandler<
         FunctionDefinitionArgs<
           InputParameters,
           OutputParameters,
@@ -209,7 +201,7 @@ class ViewRouter<
           RequiredOutput
         >
       >;
-    if (type === ViewEvents.CLOSED) {
+    if (type === "view_closed") {
       routes = this.closedRoutes;
     } else {
       routes = this.submissionRoutes;

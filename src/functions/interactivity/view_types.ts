@@ -7,10 +7,7 @@ Possibly helpful links:
 
 import type { BlockElement } from "./block_actions_types.ts";
 
-export enum ViewEvents {
-  SUBMISSION = "view_submission",
-  CLOSED = "view_closed",
-}
+export type ViewEvents = "view_submission" | "view_closed";
 
 /**
  * @description Common `body` type for both `view_submission` and `view_closed` events.
@@ -87,7 +84,7 @@ export type ViewSubmissionBody =
      * @description Used to open a modal by passing it to e.g. `view.open` or `view.push` APIs. Represents a particular user interaction with an interactive component. Short-lived token (expires fast!) that may only be used once.
      */
     trigger_id: string;
-    type: ViewEvents.SUBMISSION;
+    type: "view_submission";
   };
 
 /**
@@ -100,7 +97,7 @@ export type ViewClosedBody =
      * @description Whether or not an entire view stack was cleared.
      */
     is_cleared: boolean;
-    type: ViewEvents.CLOSED;
+    type: "view_closed";
   };
 
 /**
