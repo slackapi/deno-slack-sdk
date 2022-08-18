@@ -10,12 +10,11 @@ import {
 } from "./matchers.ts";
 import type {
   BasicConstraintField,
-  ViewClosedContext,
   ViewClosedHandler,
-  ViewSubmissionContext,
+  ViewConstraintObject,
   ViewSubmissionHandler,
 } from "./types.ts";
-import type { View, ViewEvents } from "./view_types.ts";
+import { View, ViewEvents } from "./view_types.ts";
 
 export const ViewsRouter = <
   InputParameters extends ParameterSetDefinition,
@@ -29,23 +28,29 @@ export const ViewsRouter = <
     RequiredInput,
     RequiredOutput
   >,
-  eventFilter: ViewEvents,
 ) => {
-  const router = new ViewRouter(func, eventFilter);
+  const router = new ViewRouter(func);
 
   // deno-lint-ignore no-explicit-any
   const exportedHandler: any = router.export();
 
   // deno-lint-ignore no-explicit-any
-  exportedHandler.addHandler = ((...args: any) => {
-    router.addHandler.apply(router, args);
+  exportedHandler.addSubmissionHandler = ((...args: any) => {
+    router.addSubmissionHandler.apply(router, args);
 
     return exportedHandler;
-  }) as typeof router.addHandler;
+  }) as typeof router.addSubmissionHandler;
+
+  // deno-lint-ignore no-explicit-any
+  exportedHandler.addClosedHandler = ((...args: any) => {
+    router.addClosedHandler.apply(router, args);
+
+    return exportedHandler;
+  }) as typeof router.addClosedHandler;
 
   return exportedHandler as
     & ReturnType<typeof router.export>
-    & Pick<typeof router, "addHandler">;
+    & Pick<typeof router, "addSubmissionHandler" | "addClosedHandler">;
 };
 
 class ViewRouter<
@@ -54,11 +59,16 @@ class ViewRouter<
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 > {
-  private routes: Array<
+  private closedRoutes: Array<
     [
-      BasicConstraintField,
-      | ViewClosedHandler<typeof this.func.definition>
-      | ViewSubmissionHandler<typeof this.func.definition>,
+      ViewConstraintObject,
+      ViewClosedHandler<typeof this.func.definition>,
+    ]
+  >;
+  private submissionRoutes: Array<
+    [
+      ViewConstraintObject,
+      ViewSubmissionHandler<typeof this.func.definition>,
     ]
   >;
 
@@ -69,13 +79,13 @@ class ViewRouter<
       RequiredInput,
       RequiredOutput
     >,
-    private eventFilter: ViewEvents,
   ) {
     this.func = func;
-    this.routes = [];
+    this.submissionRoutes = [];
+    this.closedRoutes = [];
   }
 
-  addHandler(
+  addClosedHandler(
     viewConstraint: BasicConstraintField,
     handler: ViewClosedHandler<
       FunctionDefinitionArgs<
@@ -90,8 +100,16 @@ class ViewRouter<
     OutputParameters,
     RequiredInput,
     RequiredOutput
-  >;
-  addHandler(
+  > {
+    const constraint: ViewConstraintObject = {
+      type: ViewEvents.CLOSED,
+      callback_id: viewConstraint,
+    };
+    this.closedRoutes.push([constraint, handler]);
+    return this;
+  }
+
+  addSubmissionHandler(
     viewConstraint: BasicConstraintField,
     handler: ViewSubmissionHandler<
       FunctionDefinitionArgs<
@@ -106,33 +124,12 @@ class ViewRouter<
     OutputParameters,
     RequiredInput,
     RequiredOutput
-  >;
-  addHandler(
-    viewConstraint: BasicConstraintField,
-    handler:
-      | ViewSubmissionHandler<
-        FunctionDefinitionArgs<
-          InputParameters,
-          OutputParameters,
-          RequiredInput,
-          RequiredOutput
-        >
-      >
-      | ViewClosedHandler<
-        FunctionDefinitionArgs<
-          InputParameters,
-          OutputParameters,
-          RequiredInput,
-          RequiredOutput
-        >
-      >,
-  ): ViewRouter<
-    InputParameters,
-    OutputParameters,
-    RequiredInput,
-    RequiredOutput
   > {
-    this.routes.push([viewConstraint, handler]);
+    const constraint: ViewConstraintObject = {
+      type: ViewEvents.SUBMISSION,
+      callback_id: viewConstraint,
+    };
+    this.submissionRoutes.push([constraint, handler]);
     return this;
   }
 
@@ -140,89 +137,102 @@ class ViewRouter<
    * Returns a method handling routing of view events to the appropriate view handler.
    * The output of export() should be attached to either the `viewSubmission` or the `viewClosed` export of your function.
    */
-  export():
-    | ViewSubmissionHandler<
-      FunctionDefinitionArgs<
-        InputParameters,
-        OutputParameters,
-        RequiredInput,
-        RequiredOutput
-      >
+  export(): ViewExports<
+    FunctionDefinitionArgs<
+      InputParameters,
+      OutputParameters,
+      RequiredInput,
+      RequiredOutput
     >
-    | ViewClosedHandler<
-      FunctionDefinitionArgs<
-        InputParameters,
-        OutputParameters,
-        RequiredInput,
-        RequiredOutput
-      >
-    > {
-    return async (
-      context:
-        | ViewClosedContext<
-          FunctionDefinitionArgs<
-            InputParameters,
-            OutputParameters,
-            RequiredInput,
-            RequiredOutput
-          >
-        >
-        | ViewSubmissionContext<
-          FunctionDefinitionArgs<
-            InputParameters,
-            OutputParameters,
-            RequiredInput,
-            RequiredOutput
-          >
-        >,
-    ) => {
-      console.log("export router incoming", JSON.stringify(context, null, 2));
-      if (context.body.type !== this.eventFilter) return;
-      const handler = this.matchHandler(context.view);
-      if (handler === null) {
-        // TODO: what do in this case?
-        // perhaps the user typo'ed the action id when registering their handler or defining their callback_id.
-        // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
-        console.warn(
-          `Received ${context.body.type} payload ${
-            JSON.stringify(context.view)
-          } but this app has no view handler defined to handle it!`,
+  > {
+    return {
+      viewClosed: async (context) => {
+        console.log(
+          "export view_closed incoming",
+          JSON.stringify(context, null, 2),
         );
-        return;
-      }
-      return await handler(context);
+        const handler = this.matchHandler(context.body.type, context.view);
+        if (handler === null) {
+          // TODO: what do in this case?
+          // perhaps the user typo'ed the action id when registering their handler or defining their callback_id.
+          // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
+          console.warn(
+            `Received ${context.body.type} payload ${
+              JSON.stringify(context.view)
+            } but this app has no view handler defined to handle it!`,
+          );
+          return;
+        }
+        return await handler(context);
+      },
+      viewSubmission: async (context) => {
+        console.log(
+          "export view_submission incoming",
+          JSON.stringify(context, null, 2),
+        );
+        const handler = this.matchHandler(context.body.type, context.view);
+        if (handler === null) {
+          // TODO: what do in this case?
+          // perhaps the user typo'ed the action id when registering their handler or defining their callback_id.
+          // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
+          console.warn(
+            `Received ${context.body.type} payload ${
+              JSON.stringify(context.view)
+            } but this app has no view handler defined to handle it!`,
+          );
+          return;
+        }
+        return await handler(context);
+      },
     };
   }
+
   matchHandler(
+    type: ViewEvents,
     view: View,
-  ):
-    | ViewClosedHandler<
-      FunctionDefinitionArgs<
-        InputParameters,
-        OutputParameters,
-        RequiredInput,
-        RequiredOutput
+    // deno-lint-ignore no-explicit-any
+  ): any {
+    let routes;
+    let _handler: typeof type extends ViewEvents.CLOSED ? ViewClosedHandler<
+        FunctionDefinitionArgs<
+          InputParameters,
+          OutputParameters,
+          RequiredInput,
+          RequiredOutput
+        >
       >
-    >
-    | ViewSubmissionHandler<
-      FunctionDefinitionArgs<
-        InputParameters,
-        OutputParameters,
-        RequiredInput,
-        RequiredOutput
-      >
-    >
-    | null {
-    for (let i = 0; i < this.routes.length; i++) {
-      const route = this.routes[i];
-      let [constraint, handler] = route;
+      : ViewSubmissionHandler<
+        FunctionDefinitionArgs<
+          InputParameters,
+          OutputParameters,
+          RequiredInput,
+          RequiredOutput
+        >
+      >;
+    if (type === ViewEvents.CLOSED) {
+      routes = this.closedRoutes;
+    } else {
+      routes = this.submissionRoutes;
+    }
+    for (let i = 0; i < routes.length; i++) {
+      const route = routes[i];
+      const [constraint, _handler] = route;
+      // Check that the view event type (submission vs. closed) matches
+      if (constraint.type !== type) continue;
       // Normalize simple string constraints to be an array of strings for consistency in handling inside this method.
-      constraint = normalizeConstraintToArray(constraint);
+      const constraintArray = normalizeConstraintToArray(
+        constraint.callback_id,
+      );
       // Handle the case where the constraint is either a regex or an array of strings to match against action_id
-      if (matchBasicConstraintField(constraint, "callback_id", view)) {
-        return handler;
+      if (matchBasicConstraintField(constraintArray, "callback_id", view)) {
+        return _handler;
       }
     }
     return null;
   }
 }
+
+type ViewExports<Definition> = {
+  viewSubmission: ViewSubmissionHandler<Definition>;
+  viewClosed: ViewClosedHandler<Definition>;
+};

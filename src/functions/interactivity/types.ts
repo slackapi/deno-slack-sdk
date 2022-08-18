@@ -5,7 +5,12 @@ import {
   FunctionRuntimeParameters,
 } from "../types.ts";
 import { BlockAction, BlockActionsBody } from "./block_actions_types.ts";
-import { View, ViewClosedBody, ViewSubmissionBody } from "./view_types.ts";
+import {
+  View,
+  ViewClosedBody,
+  ViewEvents,
+  ViewSubmissionBody,
+} from "./view_types.ts";
 
 export type BlockActionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
@@ -115,6 +120,11 @@ export type BlockActionConstraint =
 export type BlockActionConstraintObject = {
   block_id?: BasicConstraintField;
   action_id?: BasicConstraintField;
+};
+
+export type ViewConstraintObject = {
+  type: ViewEvents;
+  callback_id: BasicConstraintField;
 };
 
 export type BasicConstraintField = string | string[] | RegExp;
