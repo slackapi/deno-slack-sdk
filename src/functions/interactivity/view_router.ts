@@ -3,15 +3,17 @@ import {
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
 import { SlackFunction } from "../mod.ts";
-import { FunctionDefinitionArgs } from "../types.ts";
+import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
 import {
   matchBasicConstraintField,
   normalizeConstraintToArray,
 } from "./matchers.ts";
 import type {
   BasicConstraintField,
+  ViewClosedContext,
   ViewClosedHandler,
   ViewConstraintObject,
+  ViewSubmissionContext,
   ViewSubmissionHandler,
 } from "./types.ts";
 import { View, ViewEvents } from "./view_types.ts";
@@ -29,28 +31,7 @@ export const ViewsRouter = <
     RequiredOutput
   >,
 ) => {
-  const router = new ViewRouter(func);
-
-  // deno-lint-ignore no-explicit-any
-  const exportedHandler: any = router.export();
-
-  // deno-lint-ignore no-explicit-any
-  exportedHandler.addSubmissionHandler = ((...args: any) => {
-    router.addSubmissionHandler.apply(router, args);
-
-    return exportedHandler;
-  }) as typeof router.addSubmissionHandler;
-
-  // deno-lint-ignore no-explicit-any
-  exportedHandler.addClosedHandler = ((...args: any) => {
-    router.addClosedHandler.apply(router, args);
-
-    return exportedHandler;
-  }) as typeof router.addClosedHandler;
-
-  return exportedHandler as
-    & ReturnType<typeof router.export>
-    & Pick<typeof router, "addSubmissionHandler" | "addClosedHandler">;
+  return new ViewRouter(func);
 };
 
 class ViewRouter<
@@ -134,52 +115,55 @@ class ViewRouter<
   }
 
   /**
-   * Returns a method handling routing of view events to the appropriate view handler.
-   * The output of export() should be attached to either the `viewSubmission` or the `viewClosed` export of your function.
+   * Method for handling view_closed events. This should be the `viewClosed` export of your function module.
    */
-  export(): ViewExports<
-    FunctionDefinitionArgs<
-      InputParameters,
-      OutputParameters,
-      RequiredInput,
-      RequiredOutput
-    >
-  > {
-    return {
-      viewClosed: async (context) => {
-        const handler = this.matchHandler(context.body.type, context.view);
-        if (handler === null) {
-          // TODO: what do in this case?
-          // perhaps the user typo'ed the action id when registering their handler or defining their callback_id.
-          // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
-          console.warn(
-            `Received ${context.body.type} payload ${
-              JSON.stringify(context.view)
-            } but this app has no view handler defined to handle it!`,
-          );
-          return;
-        }
-        return await handler(context);
-      },
-      viewSubmission: async (context) => {
-        const handler = this.matchHandler(context.body.type, context.view);
-        if (handler === null) {
-          // TODO: what do in this case?
-          // perhaps the user typo'ed the action id when registering their handler or defining their callback_id.
-          // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
-          console.warn(
-            `Received ${context.body.type} payload ${
-              JSON.stringify(context.view)
-            } but this app has no view handler defined to handle it!`,
-          );
-          return;
-        }
-        return await handler(context);
-      },
-    };
+  async viewClosed(
+    context: ViewClosedContext<
+      FunctionRuntimeParameters<InputParameters, RequiredInput>
+    >,
+  ) {
+    const handler = this.matchHandler(context.body.type, context.view);
+    if (handler === null) {
+      // TODO: what do in this case?
+      // We can potentially throw an "UnhandledEventError" here once this lands: https://github.com/slackapi/deno-slack-runtime/pull/29
+      // perhaps the user typo'ed the action id when registering their handler or defining their callback_id.
+      // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
+      console.warn(
+        `Received ${context.body.type} payload ${
+          JSON.stringify(context.view)
+        } but this app has no view handler defined to handle it!`,
+      );
+      return;
+    }
+    return await handler(context);
   }
 
-  matchHandler(
+  /**
+   * Method for handling view_submission events. This should be the `viewSubmission` export of your function module.
+   */
+
+  async viewSubmission(
+    context: ViewSubmissionContext<
+      FunctionRuntimeParameters<InputParameters, RequiredInput>
+    >,
+  ) {
+    const handler = this.matchHandler(context.body.type, context.view);
+    if (handler === null) {
+      // TODO: what do in this case?
+      // We can potentially throw an "UnhandledEventError" here once this lands: https://github.com/slackapi/deno-slack-runtime/pull/29
+      // perhaps the user typo'ed the action id when registering their handler or defining their callback_id.
+      // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
+      console.warn(
+        `Received ${context.body.type} payload ${
+          JSON.stringify(context.view)
+        } but this app has no view handler defined to handle it!`,
+      );
+      return;
+    }
+    return await handler(context);
+  }
+
+  private matchHandler(
     type: ViewEvents,
     view: View,
     // deno-lint-ignore no-explicit-any
@@ -223,8 +207,3 @@ class ViewRouter<
     return null;
   }
 }
-
-type ViewExports<Definition> = {
-  viewSubmission: ViewSubmissionHandler<Definition>;
-  viewClosed: ViewClosedHandler<Definition>;
-};
