@@ -116,6 +116,8 @@ const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
         id: "123",
         domain: "asdf",
       },
+      enterprise: null,
+      is_enterprise_install: false,
       api_app_id: "123",
       token: "123",
       trigger_id: "123",
