@@ -82,9 +82,10 @@ type FunctionInputRuntimeType<
       | typeof SlackSchemaTypes.user_id
       | typeof SlackSchemaTypes.usergroup_id
       | typeof SlackSchemaTypes.channel_id
-      | typeof SlackSchemaTypes.date
-      | typeof SlackSchemaTypes.rich_text ? UnknownRuntimeType
+      | typeof SlackSchemaTypes.date ? string
     : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
+    : Param["type"] extends typeof SlackSchemaTypes.rich_text
+      ? UnknownRuntimeType
     : UnknownRuntimeType;
 
 // deno-lint-ignore no-explicit-any
