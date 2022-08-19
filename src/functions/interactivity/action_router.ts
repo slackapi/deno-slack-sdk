@@ -4,13 +4,12 @@ import {
 } from "../../parameters/mod.ts";
 import { SlackFunction } from "../mod.ts";
 import { FunctionDefinitionArgs } from "../types.ts";
-import type {
-  BlockActionConstraint,
-  BlockActionConstraintField,
-  BlockActionConstraintObject,
-  BlockActionHandler,
-} from "./types.ts";
+import type { BlockActionConstraint, BlockActionHandler } from "./types.ts";
 import { BlockAction } from "./block_actions_types.ts";
+import {
+  matchBasicConstraintField,
+  normalizeConstraintToArray,
+} from "./matchers.ts";
 
 /**
  * Define an actions "router" and its input and output parameters for use in a Slack application. The ActionsRouter will route incoming action events to action-specific handlers.
@@ -150,7 +149,7 @@ export class ActionsRouter<
         // Normalize simple string constraints to be an array of strings for consistency in handling inside this method.
         constraint = normalizeConstraintToArray(constraint);
         // Handle the case where the constraint is either a regex or an array of strings to match against action_id
-        if (matchBlockActionConstraintField(constraint, "action_id", action)) {
+        if (matchBasicConstraintField(constraint, "action_id", action)) {
           return handler;
         }
       } else {
@@ -162,14 +161,14 @@ export class ActionsRouter<
         let actionIDMatched = constraint.action_id ? false : true;
         let blockIDMatched = constraint.block_id ? false : true;
         if (constraint.action_id) {
-          actionIDMatched = matchBlockActionConstraintField(
+          actionIDMatched = matchBasicConstraintField(
             normalizeConstraintToArray(constraint.action_id),
             "action_id",
             action,
           );
         }
         if (constraint.block_id) {
-          blockIDMatched = matchBlockActionConstraintField(
+          blockIDMatched = matchBasicConstraintField(
             normalizeConstraintToArray(constraint.block_id),
             "block_id",
             action,
@@ -182,31 +181,4 @@ export class ActionsRouter<
     }
     return null;
   }
-}
-
-function normalizeConstraintToArray(constraint: BlockActionConstraintField) {
-  if (typeof constraint === "string") {
-    constraint = [constraint];
-  }
-  return constraint;
-}
-
-function matchBlockActionConstraintField(
-  constraint: BlockActionConstraintField,
-  field: keyof BlockActionConstraintObject,
-  action: BlockAction,
-) {
-  if (constraint instanceof RegExp) {
-    if (action[field].match(constraint)) {
-      return true;
-    }
-  } else if (constraint instanceof Array) {
-    for (let j = 0; j < constraint.length; j++) {
-      const c = constraint[j];
-      if (action[field] === c) {
-        return true;
-      }
-    }
-  }
-  return false;
 }
