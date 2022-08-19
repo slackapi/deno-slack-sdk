@@ -64,8 +64,18 @@ class ViewRouter<
     this.func = func;
     this.submissionRoutes = [];
     this.closedRoutes = [];
+
+    // Bind these two handler functions as they're meant to exported directly by the user-defined function module
+    this.viewClosed = this.viewClosed.bind(this);
+    this.viewSubmission = this.viewSubmission.bind(this);
   }
 
+  /**
+   * Add a handler for view_closed events
+   * @param {BasicConstraintField} viewConstraint A view constraing (i.e. a string, array of strings or regular expression) that matches against view_closed event's `callback_id` property.
+   * @param handler A handler function for the matched view_closed event
+   * @returns {ViewRouter}
+   */
   addClosedHandler(
     viewConstraint: BasicConstraintField,
     handler: ViewClosedHandler<
@@ -90,6 +100,12 @@ class ViewRouter<
     return this;
   }
 
+  /**
+   * Add a handler for view_submission events
+   * @param {BasicConstraintField} viewConstraint A view constraing (i.e. a string, array of strings or regular expression) that matches against view_submission event's `callback_id` property.
+   * @param handler A handler function for the matched view_submission event
+   * @returns {ViewRouter}
+   */
   addSubmissionHandler(
     viewConstraint: BasicConstraintField,
     handler: ViewSubmissionHandler<
