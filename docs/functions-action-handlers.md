@@ -16,8 +16,8 @@ then you may want to skip ahead to the [`BlockActionsRouter` API Reference](#api
 2. [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
 3. [Defining a Block Actions Router](#defining-a-block-actions-router)
 4. [API Reference](#api-reference)
-    - [`BlockActionsRouter()`](blockactionsrouterfunction_definition)
-    - [`addHandler()`](addhandlerconstraint-handler)
+    - [`BlockActionsRouter()`](#blockactionsrouterfunction_definition)
+    - [`addHandler()`](#addhandlerconstraint-handler)
 
 ### Requirements
 
