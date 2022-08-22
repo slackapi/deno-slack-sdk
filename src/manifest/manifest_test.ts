@@ -804,7 +804,6 @@ Deno.test("SlackManifest() oauth2 providers get set properly", () => {
     provider_type: Schema.providers.oauth2.CUSTOM,
     options: {
       "client_id": "123.456",
-      "client_secret_env_key": "secret_key",
       "scope": ["scope_a", "scope_b"],
     },
   });
