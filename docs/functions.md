@@ -10,7 +10,10 @@ Run-on-Slack applications support the following interactivity handlers, follow t
 to get more information about how each of them work:
 
 - [Block Kit Action Handlers][action-handlers]: Handle events from interactive [Block Kit][block-kit]
-  components like [Buttons, Menus and Date/Time Pickers](https://api.slack.com/block-kit/interactivity)
+  components that you can use in messages like
+  Buttons, Menus and Date/Time Pickers](https://api.slack.com/block-kit/interactivity)
+- [View Handlers][view-handlers]: Handle events triggered from [Modals][modals],
+  which are composed of [Views][views].
 
 ### Defining a Function
 
@@ -130,4 +133,7 @@ Manifest({
 
 [manifest]: ./manifest.md
 [action-handlers]: ./functions-action-handlers.md
+[view-handlers]: ./functions-view-handlers.md
 [block-kit]: https://api.slack.com/block-kit
+[modals]: https://api.slack.com/surfaces/modals
+[views]: https://api.slack.com/surfaces/modals/using
