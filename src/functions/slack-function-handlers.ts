@@ -2,45 +2,12 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../parameters/mod.ts";
-import { FunctionDefinitionArgs, SlackFunctionHandler } from "./types.ts";
-import {
-  BasicConstraintField,
-  BlockActionConstraint,
-  BlockActionHandler,
-  ViewClosedHandler,
-  ViewSubmissionHandler,
-} from "./interactivity/types.ts";
+import { SlackFunctionHandler, SlackFunctionHandlersType } from "./types.ts";
 import { SlackFunction } from "./mod.ts";
 import { BlockActionsRouter } from "./interactivity/action_router.ts";
 import { ViewsRouter } from "./interactivity/view_router.ts";
 
-// Types
-export type SlackFunctionModuleType<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
-    (): SlackFunctionHandler<Definition>;
-    addBlockActionsHandler(
-      actionConstraint: BlockActionConstraint,
-      handler: BlockActionHandler<
-        FunctionDefinitionArgs<I, O, RI, RO>
-      >,
-    ): SlackFunctionModuleType<Definition>;
-    addViewClosedHandler(
-      viewConstraint: BasicConstraintField,
-      handler: ViewClosedHandler<
-        FunctionDefinitionArgs<I, O, RI, RO>
-      >,
-    ): SlackFunctionModuleType<Definition>;
-    addViewSubmissionHandler(
-      viewConstraint: BasicConstraintField,
-      handler: ViewSubmissionHandler<
-        FunctionDefinitionArgs<I, O, RI, RO>
-      >,
-    ): SlackFunctionModuleType<Definition>;
-  }
-  : never;
-
-// Functions
-export const SlackFunctionModule = <
+export const SlackFunctionHandlers = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
@@ -54,11 +21,18 @@ export const SlackFunctionModule = <
   >,
   functionHandler: SlackFunctionHandler<typeof func.definition>,
 ) => {
-  // deno-lint-ignore no-explicit-any
-  const handlerModule: any = functionHandler;
+  // Start with their fn handler, and we'll wrap it up so we can append some additional functions to it
 
+  // @ts-ignore - creating a wrapper around provided fn handler so we don't mutate it directly
+  // deno-lint-ignore no-explicit-any
+  const handlerModule: any = (...args) => functionHandler(...args);
+
+  // Create routers for block/view actions
+  // TODO: we could probably lazily create these when corresponding add* functions are called
   const blockActionsRouter = BlockActionsRouter(func);
   const viewsRouter = ViewsRouter(func);
+
+  // Add fns for additional function handlers
 
   // deno-lint-ignore no-explicit-any
   handlerModule.addBlockActionsHandler = (...args: any) => {
@@ -81,10 +55,10 @@ export const SlackFunctionModule = <
     return handlerModule;
   };
 
-  // Expose named handlers
+  // Expose named handlers that the deno-slack-runtime will invoke
   handlerModule.blockActions = blockActionsRouter;
   handlerModule.viewClosed = viewsRouter.viewClosed;
   handlerModule.viewSubmission = viewsRouter.viewSubmission;
 
-  return handlerModule as SlackFunctionModuleType<typeof func.definition>;
+  return handlerModule as SlackFunctionHandlersType<typeof func.definition>;
 };

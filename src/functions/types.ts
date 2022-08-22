@@ -14,6 +14,13 @@ import {
 import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackManifest } from "../manifest/mod.ts";
+import {
+  BasicConstraintField,
+  BlockActionConstraint,
+  BlockActionHandler,
+  ViewClosedHandler,
+  ViewSubmissionHandler,
+} from "./interactivity/types.ts";
 
 export type { BlockActionHandler } from "./interactivity/types.ts";
 
@@ -259,3 +266,27 @@ export type FunctionDefinitionArgs<
     RequiredOutputs
   >;
 };
+
+export type SlackFunctionHandlersType<Definition> = Definition extends
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+    (): SlackFunctionHandler<Definition>;
+    addBlockActionsHandler(
+      actionConstraint: BlockActionConstraint,
+      handler: BlockActionHandler<
+        FunctionDefinitionArgs<I, O, RI, RO>
+      >,
+    ): SlackFunctionHandlersType<Definition>;
+    addViewClosedHandler(
+      viewConstraint: BasicConstraintField,
+      handler: ViewClosedHandler<
+        FunctionDefinitionArgs<I, O, RI, RO>
+      >,
+    ): SlackFunctionHandlersType<Definition>;
+    addViewSubmissionHandler(
+      viewConstraint: BasicConstraintField,
+      handler: ViewSubmissionHandler<
+        FunctionDefinitionArgs<I, O, RI, RO>
+      >,
+    ): SlackFunctionHandlersType<Definition>;
+  }
+  : never;
