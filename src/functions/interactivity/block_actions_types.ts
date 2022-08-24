@@ -76,6 +76,7 @@ export type BlockActionsBody = {
     id: string;
     /**
      * @description User's handle as seen in the Slack client when e.g. at-notifying the user.
+     */
     name: string;
     /**
      * @description The encoded team ID for the workspace, or team, where the Block Kit action originated from.

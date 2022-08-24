@@ -29,6 +29,24 @@ Deno.test("ParameterVariable typed object", () => {
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
 
+Deno.test("ParameterVariable typed object allows access to additional properties", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.object,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+  });
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
 Deno.test("ParameterVariable typed object with additional properties", () => {
   const param = ParameterVariable("", "incident", {
     type: SchemaTypes.object,
@@ -46,6 +64,28 @@ Deno.test("ParameterVariable typed object with additional properties", () => {
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable typed object with no additional properties", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.object,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    additionalProperties: false,
+  });
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+
+  //@ts-expect-error foo doesn't exist
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
