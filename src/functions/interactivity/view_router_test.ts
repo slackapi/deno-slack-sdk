@@ -1,4 +1,9 @@
-import { assertEquals, assertExists, assertMatch } from "../../dev_deps.ts";
+import {
+  assertEquals,
+  assertExists,
+  assertRejects,
+  mock,
+} from "../../dev_deps.ts";
 import { ViewsRouter } from "./view_router.ts";
 import type {
   ViewClosedContext,
@@ -291,313 +296,239 @@ const { createContext: createClosedContext } = SlackViewClosedHandlerTester(
 );
 // Dummy object to be able to programmatically reference the identifiers
 const inputs = { garbage: "in, garbage out" };
-let router = ViewsRouter(func);
 
-const reset = () => {
-  router = ViewsRouter(func);
-};
+const getRouter = () => ViewsRouter(func);
 
-Deno.test("ViewRouter", async (t) => {
-  reset();
-  await t.step("viewSubmission", async (t) => {
-    await t.step("event matching", async (t) => {
-      await t.step(
-        "export method returns result of submissionHandler when matching view comes in and baseline handler context parameters are present and exist",
-        async () => {
-          let handlerCalled = false;
-          router.addSubmissionHandler(DEFAULT_VIEW.callback_id, (ctx) => {
-            assertExists(ctx.inputs);
-            assertEquals<string>(ctx.inputs.garbage, inputs.garbage);
-            assertExists(ctx.token);
-            assertExists<View>(ctx.view);
-            assertExists<
-              ViewSubmissionInvocationBody<
-                typeof func.definition extends
-                  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
-                  ? FunctionRuntimeParameters<I, RI>
-                  : never
-              >
-            >(ctx.body);
-            assertExists(ctx.env);
-            handlerCalled = true;
-          });
-          await router.viewSubmission(createSubmissionContext({ inputs }));
-          assertEquals(handlerCalled, true, "view handler not called!");
-        },
-      );
-      reset();
-      await t.step("happy path", async (t) => {
-        await t.step("simple string matching to callback_id", async () => {
-          let handlerCalled = false;
-          router.addSubmissionHandler(DEFAULT_VIEW.callback_id, (ctx) => {
-            assertExists(ctx.inputs);
-            assertExists<string>(ctx.token);
-            assertExists<View>(ctx.view);
-            assertExists(ctx.env);
-            handlerCalled = true;
-          });
-          await router.viewSubmission(createSubmissionContext({ inputs }));
-          assertEquals(handlerCalled, true, "view handler not called!");
-        });
-        reset();
-        await t.step("array of strings matching to callback_id", async () => {
-          let handlerCalled = 0;
-          router.addSubmissionHandler(
-            ["nope", DEFAULT_VIEW.callback_id],
-            () => {
-              handlerCalled++;
-            },
-          );
-          await router.viewSubmission(createSubmissionContext({ inputs }));
-          assertEquals(
-            handlerCalled,
-            1,
-            "view handler not called exactly once",
-          );
-        });
-        reset();
-        await t.step("regex matching to callback_id", async () => {
-          let handlerCalled = 0;
-          router.addSubmissionHandler(/12/, () => {
-            handlerCalled++;
-          });
-          await router.viewSubmission(createSubmissionContext({ inputs }));
-          assertEquals(
-            handlerCalled,
-            1,
-            "view handler not called exactly once",
-          );
-        });
-        reset();
+Deno.test("ViewRouter viewSubmission", async (t) => {
+  await t.step(
+    "export method returns result of submissionHandler when matching view comes in and baseline handler context parameters are present and exist",
+    async () => {
+      const router = getRouter();
+      let handlerCalled = false;
+      router.addSubmissionHandler(DEFAULT_VIEW.callback_id, (ctx) => {
+        assertExists(ctx.inputs);
+        assertEquals<string>(ctx.inputs.garbage, inputs.garbage);
+        assertExists(ctx.token);
+        assertExists<View>(ctx.view);
+        assertExists<
+          ViewSubmissionInvocationBody<
+            typeof func.definition extends
+              FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
+              ? FunctionRuntimeParameters<I, RI>
+              : never
+          >
+        >(ctx.body);
+        assertExists(ctx.env);
+        handlerCalled = true;
       });
-      await t.step("sad path", async (t) => {
-        await t.step(
-          "unhandled view_submission should log to console",
-          async () => {
-            const originalWarn = console.warn;
-            let warnCalled = 0;
-            // deno-lint-ignore no-explicit-any
-            console.warn = (...data: any[]) => {
-              warnCalled++;
-              const warn = data[0];
-              assertMatch(warn, /no view handler defined/);
-            };
-            await router.viewSubmission(createSubmissionContext({ inputs }));
-            assertEquals(
-              warnCalled,
-              1,
-              "console.warn not called exactly once",
-            );
-            console.warn = originalWarn;
-          },
-        );
-        reset();
-        await t.step("no false positives", async (t) => {
-          // for these false positive tests, console.warn can be noisy, so lets turn it into a temporary no-op
-          const originalWarn = console.warn;
-          console.warn = () => {};
-          await t.step(
-            "not matching callback_id: string",
-            async () => {
-              let handlerCalled = 0;
-              router.addSubmissionHandler("nope", () => {
-                handlerCalled++;
-              });
-              await router.viewSubmission(createSubmissionContext({ inputs }));
-              assertEquals(
-                handlerCalled,
-                0,
-                "view handler called when it should not be",
-              );
-            },
-          );
-          reset();
-          await t.step(
-            "not matching callback_id: string[]",
-            async () => {
-              let handlerCalled = 0;
-              router.addSubmissionHandler(["nope", "nuh uh"], () => {
-                handlerCalled++;
-              });
-              await router.viewSubmission(createSubmissionContext({ inputs }));
-              assertEquals(
-                handlerCalled,
-                0,
-                "view handler called when it should not be",
-              );
-            },
-          );
-          reset();
-          await t.step(
-            "not matching callback_id: regex",
-            async () => {
-              let handlerCalled = 0;
-              router.addSubmissionHandler(/regex/, () => {
-                handlerCalled++;
-              });
-              await router.viewSubmission(createSubmissionContext({ inputs }));
-              assertEquals(
-                handlerCalled,
-                0,
-                "view handler called when it should not be",
-              );
-            },
-          );
-          reset();
-          console.warn = originalWarn;
-        });
-      });
+      await router.viewSubmission(createSubmissionContext({ inputs }));
+      assertEquals(handlerCalled, true, "view handler not called!");
+    },
+  );
+});
+
+Deno.test("ViewRouter viewSubmission happy path", async (t) => {
+  await t.step("simple string matching to callback_id", async () => {
+    const router = getRouter();
+    let handlerCalled = false;
+    router.addSubmissionHandler(DEFAULT_VIEW.callback_id, (ctx) => {
+      assertExists(ctx.inputs);
+      assertExists<string>(ctx.token);
+      assertExists<View>(ctx.view);
+      assertExists(ctx.env);
+      handlerCalled = true;
     });
+    await router.viewSubmission(createSubmissionContext({ inputs }));
+    assertEquals(handlerCalled, true, "view handler not called!");
   });
-  reset();
-  await t.step("viewClosed", async (t) => {
-    await t.step("event matching", async (t) => {
-      await t.step(
-        "export method returns result of closedHandler when matching view comes in and baseline handler context parameters are present and exist",
-        async () => {
-          let handlerCalled = false;
-          router.addClosedHandler(DEFAULT_VIEW.callback_id, (ctx) => {
-            assertExists(ctx.inputs);
-            assertEquals<string>(ctx.inputs.garbage, inputs.garbage);
-            assertExists(ctx.token);
-            assertExists<View>(ctx.view);
-            assertExists<
-              ViewClosedInvocationBody<
-                typeof func.definition extends
-                  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
-                  ? FunctionRuntimeParameters<I, RI>
-                  : never
-              >
-            >(ctx.body);
-            assertExists(ctx.env);
-            handlerCalled = true;
-          });
-          await router.viewClosed(createClosedContext({ inputs }));
-          assertEquals(handlerCalled, true, "view handler not called!");
-        },
+
+  await t.step("array of strings matching to callback_id", async () => {
+    const router = getRouter();
+    const handler = mock.spy();
+    router.addSubmissionHandler(
+      ["nope", DEFAULT_VIEW.callback_id],
+      handler,
+    );
+    await router.viewSubmission(createSubmissionContext({ inputs }));
+    mock.assertSpyCalls(handler, 1);
+  });
+
+  await t.step("regex matching to callback_id", async () => {
+    const router = getRouter();
+    const handler = mock.spy();
+    router.addSubmissionHandler(/12/, handler);
+    await router.viewSubmission(createSubmissionContext({ inputs }));
+    mock.assertSpyCalls(handler, 1);
+  });
+});
+
+Deno.test("ViewRouter viewSubmission sad path", async (t) => {
+  await t.step(
+    "unhandled view_submission throw",
+    async () => {
+      const router = getRouter();
+      await assertRejects(
+        () => router.viewSubmission(createSubmissionContext({ inputs })),
+        "no view handler defined",
       );
-      reset();
-      await t.step("happy path", async (t) => {
-        await t.step("simple string matching to callback_id", async () => {
-          let handlerCalled = false;
-          router.addClosedHandler(DEFAULT_VIEW.callback_id, (ctx) => {
-            assertExists(ctx.inputs);
-            assertExists<string>(ctx.token);
-            assertExists<View>(ctx.view);
-            assertExists(ctx.env);
-            handlerCalled = true;
-          });
-          await router.viewClosed(createClosedContext({ inputs }));
-          assertEquals(handlerCalled, true, "view handler not called!");
-        });
-        reset();
-        await t.step("array of strings matching to callback_id", async () => {
-          let handlerCalled = 0;
-          router.addClosedHandler(
-            ["nope", DEFAULT_VIEW.callback_id],
-            () => {
-              handlerCalled++;
-            },
-          );
-          await router.viewClosed(createClosedContext({ inputs }));
-          assertEquals(
-            handlerCalled,
-            1,
-            "view handler not called exactly once",
-          );
-        });
-        reset();
-        await t.step("regex matching to callback_id", async () => {
-          let handlerCalled = 0;
-          router.addClosedHandler(/12/, () => {
-            handlerCalled++;
-          });
-          await router.viewClosed(createClosedContext({ inputs }));
-          assertEquals(
-            handlerCalled,
-            1,
-            "view handler not called exactly once",
-          );
-        });
-        reset();
-      });
-      await t.step("sad path", async (t) => {
-        await t.step(
-          "unhandled view_submission should log to console",
-          async () => {
-            const originalWarn = console.warn;
-            let warnCalled = 0;
-            // deno-lint-ignore no-explicit-any
-            console.warn = (...data: any[]) => {
-              warnCalled++;
-              const warn = data[0];
-              assertMatch(warn, /no view handler defined/);
-            };
-            await router.viewClosed(createClosedContext({ inputs }));
-            assertEquals(
-              warnCalled,
-              1,
-              "console.warn not called exactly once",
-            );
-            console.warn = originalWarn;
-          },
+    },
+  );
+
+  await t.step("no false positives", async (t) => {
+    await t.step(
+      "not matching callback_id: string",
+      async () => {
+        const router = getRouter();
+        const handler = mock.spy();
+        router.addSubmissionHandler("nope", handler);
+        await assertRejects(() =>
+          router.viewSubmission(createSubmissionContext({ inputs }))
         );
-        reset();
-        await t.step("no false positives", async (t) => {
-          // for these false positive tests, console.warn can be noisy, so lets turn it into a temporary no-op
-          const originalWarn = console.warn;
-          console.warn = () => {};
-          await t.step(
-            "not matching callback_id: string",
-            async () => {
-              let handlerCalled = 0;
-              router.addClosedHandler("nope", () => {
-                handlerCalled++;
-              });
-              await router.viewClosed(createClosedContext({ inputs }));
-              assertEquals(
-                handlerCalled,
-                0,
-                "view handler called when it should not be",
-              );
-            },
-          );
-          reset();
-          await t.step(
-            "not matching callback_id: string[]",
-            async () => {
-              let handlerCalled = 0;
-              router.addClosedHandler(["nope", "nuh uh"], () => {
-                handlerCalled++;
-              });
-              await router.viewClosed(createClosedContext({ inputs }));
-              assertEquals(
-                handlerCalled,
-                0,
-                "view handler called when it should not be",
-              );
-            },
-          );
-          reset();
-          await t.step(
-            "not matching callback_id: regex",
-            async () => {
-              let handlerCalled = 0;
-              router.addClosedHandler(/regex/, () => {
-                handlerCalled++;
-              });
-              await router.viewClosed(createClosedContext({ inputs }));
-              assertEquals(
-                handlerCalled,
-                0,
-                "view handler called when it should not be",
-              );
-            },
-          );
-          reset();
-          console.warn = originalWarn;
-        });
+        mock.assertSpyCalls(handler, 0);
+      },
+    );
+
+    await t.step(
+      "not matching callback_id: string[]",
+      async () => {
+        const router = getRouter();
+        const handler = mock.spy();
+        router.addSubmissionHandler(["nope", "nuh uh"], handler);
+        await assertRejects(() =>
+          router.viewSubmission(createSubmissionContext({ inputs }))
+        );
+        mock.assertSpyCalls(handler, 0);
+      },
+    );
+
+    await t.step(
+      "not matching callback_id: regex",
+      async () => {
+        const router = getRouter();
+        const handler = mock.spy();
+        router.addSubmissionHandler(/regex/, handler);
+        await assertRejects(() =>
+          router.viewSubmission(createSubmissionContext({ inputs }))
+        );
+        mock.assertSpyCalls(handler, 0);
+      },
+    );
+  });
+});
+
+Deno.test("ViewRouter viewClosed", async (t) => {
+  await t.step(
+    "export method returns result of closedHandler when matching view comes in and baseline handler context parameters are present and exist",
+    async () => {
+      const router = getRouter();
+      let handlerCalled = false;
+      router.addClosedHandler(DEFAULT_VIEW.callback_id, (ctx) => {
+        assertExists(ctx.inputs);
+        assertEquals<string>(ctx.inputs.garbage, inputs.garbage);
+        assertExists(ctx.token);
+        assertExists<View>(ctx.view);
+        assertExists<
+          ViewClosedInvocationBody<
+            typeof func.definition extends
+              FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
+              ? FunctionRuntimeParameters<I, RI>
+              : never
+          >
+        >(ctx.body);
+        assertExists(ctx.env);
+        handlerCalled = true;
       });
+      await router.viewClosed(createClosedContext({ inputs }));
+      assertEquals(handlerCalled, true, "view handler not called!");
+    },
+  );
+});
+
+Deno.test("ViewRouter viewClosed happy path", async (t) => {
+  await t.step("simple string matching to callback_id", async () => {
+    const router = getRouter();
+    let handlerCalled = false;
+    router.addClosedHandler(DEFAULT_VIEW.callback_id, (ctx) => {
+      assertExists(ctx.inputs);
+      assertExists<string>(ctx.token);
+      assertExists<View>(ctx.view);
+      assertExists(ctx.env);
+      handlerCalled = true;
     });
+    await router.viewClosed(createClosedContext({ inputs }));
+    assertEquals(handlerCalled, true, "view handler not called!");
+  });
+
+  await t.step("array of strings matching to callback_id", async () => {
+    const router = getRouter();
+    const handler = mock.spy();
+    router.addClosedHandler(
+      ["nope", DEFAULT_VIEW.callback_id],
+      handler,
+    );
+    await router.viewClosed(createClosedContext({ inputs }));
+    mock.assertSpyCalls(handler, 1);
+  });
+
+  await t.step("regex matching to callback_id", async () => {
+    const router = getRouter();
+    const handler = mock.spy();
+    router.addClosedHandler(/12/, handler);
+    await router.viewClosed(createClosedContext({ inputs }));
+    mock.assertSpyCalls(handler, 1);
+  });
+});
+
+Deno.test("ViewRouter viewClosed sad path", async (t) => {
+  await t.step(
+    "unhandled view_submission should throw",
+    async () => {
+      const router = getRouter();
+      await assertRejects(
+        () => router.viewClosed(createClosedContext({ inputs })),
+        "no view handler defined",
+      );
+    },
+  );
+
+  await t.step("no false positives", async (t) => {
+    await t.step(
+      "not matching callback_id: string",
+      async () => {
+        const router = getRouter();
+        const handler = mock.spy();
+        router.addClosedHandler("nope", handler);
+        await assertRejects(() =>
+          router.viewClosed(createClosedContext({ inputs }))
+        );
+        mock.assertSpyCalls(handler, 0);
+      },
+    );
+
+    await t.step(
+      "not matching callback_id: string[]",
+      async () => {
+        const router = getRouter();
+        const handler = mock.spy();
+        router.addClosedHandler(["nope", "nuh uh"], handler);
+        await assertRejects(() =>
+          router.viewClosed(createClosedContext({ inputs }))
+        );
+        mock.assertSpyCalls(handler, 0);
+      },
+    );
+
+    await t.step(
+      "not matching callback_id: regex",
+      async () => {
+        const router = getRouter();
+        const handler = mock.spy();
+        router.addClosedHandler(/regex/, handler);
+        await assertRejects(() =>
+          router.viewClosed(createClosedContext({ inputs }))
+        );
+        mock.assertSpyCalls(handler, 0);
+      },
+    );
   });
 });

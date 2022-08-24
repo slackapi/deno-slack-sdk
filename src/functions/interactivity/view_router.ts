@@ -169,12 +169,11 @@ class ViewRouter<
       // We can potentially throw an "UnhandledEventError" here once this lands: https://github.com/slackapi/deno-slack-runtime/pull/29
       // perhaps the user typo'ed the action id when registering their handler or defining their callback_id.
       // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
-      console.warn(
+      throw new UnhandledEventError(
         `Received ${context.body.type} payload ${
           JSON.stringify(context.view)
         } but this app has no view handler defined to handle it!`,
       );
-      return;
     }
     return await handler(context);
   }
