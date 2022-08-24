@@ -1,5 +1,5 @@
 const CredentialSource = {
-  BUILDER: "BUILDER",
+  DEVELOPER: "DEVELOPER",
 } as const;
 
 export default CredentialSource;
