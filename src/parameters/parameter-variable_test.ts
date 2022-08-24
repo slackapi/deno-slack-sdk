@@ -47,6 +47,7 @@ Deno.test("ParameterVariable typed object allows access to additional properties
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
+
 Deno.test("ParameterVariable typed object with additional properties", () => {
   const param = ParameterVariable("", "incident", {
     type: SchemaTypes.object,
