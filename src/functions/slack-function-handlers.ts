@@ -26,6 +26,8 @@ export const SlackFunctionHandlers = <
   // @ts-ignore - creating a wrapper around provided fn handler so we don't mutate it directly
   // deno-lint-ignore no-explicit-any
   const handlerModule: any = (...args) => functionHandler(...args);
+  // Unhandled events are sent to a single handler, which is not set by default
+  handlerModule.unhandledEvent = undefined;
 
   // Create routers for block/view actions
   // TODO: we could probably lazily create these when corresponding add* functions are called
@@ -51,6 +53,14 @@ export const SlackFunctionHandlers = <
   // deno-lint-ignore no-explicit-any
   handlerModule.addViewSubmissionHandler = (...args: any) => {
     viewsRouter.addSubmissionHandler.apply(viewsRouter, args);
+
+    return handlerModule;
+  };
+
+  // deno-lint-ignore no-explicit-any
+  handlerModule.addUnhandledEventHandler = (handler: any) => {
+    // Set the unhandledEvent property directly
+    handlerModule.unhandledEvent = handler;
 
     return handlerModule;
   };

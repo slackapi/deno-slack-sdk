@@ -3,6 +3,7 @@ import {
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
 import { SlackFunction } from "../mod.ts";
+import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { FunctionDefinitionArgs } from "../types.ts";
 import type { BlockActionConstraint, BlockActionHandler } from "./types.ts";
 import { BlockAction } from "./block_actions_types.ts";
@@ -112,12 +113,11 @@ export class ActionsRouter<
         // TODO: what do in this case?
         // perhaps the user typo'ed the action id when registering their handler or defining their block.
         // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
-        console.warn(
+        throw new UnhandledEventError(
           `Received block action payload with action=${
             JSON.stringify(action)
           } but this app has no action handler defined to handle it!`,
         );
-        return;
       }
       return await handler(context);
     };

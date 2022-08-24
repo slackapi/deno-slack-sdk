@@ -2,8 +2,10 @@ export {
   assertEquals,
   assertExists,
   assertMatch,
+  assertRejects,
   assertStrictEquals,
-} from "https://deno.land/std@0.134.0/testing/asserts.ts";
+} from "https://deno.land/std@0.152.0/testing/asserts.ts";
+export * as mock from "https://deno.land/std@0.152.0/testing/mock.ts";
 
 export { assert } from "https://deno.land/x/conditional_type_checks@1.0.6/mod.ts";
 

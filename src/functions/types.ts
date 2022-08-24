@@ -18,6 +18,7 @@ import {
   BasicConstraintField,
   BlockActionConstraint,
   BlockActionHandler,
+  UnhandledEventHandler,
   ViewClosedHandler,
   ViewSubmissionHandler,
 } from "./interactivity/types.ts";
@@ -285,6 +286,11 @@ export type SlackFunctionHandlersType<Definition> = Definition extends
     addViewSubmissionHandler(
       viewConstraint: BasicConstraintField,
       handler: ViewSubmissionHandler<
+        FunctionDefinitionArgs<I, O, RI, RO>
+      >,
+    ): SlackFunctionHandlersType<Definition>;
+    addUnhandledEventHandler(
+      handler: UnhandledEventHandler<
         FunctionDefinitionArgs<I, O, RI, RO>
       >,
     ): SlackFunctionHandlersType<Definition>;
