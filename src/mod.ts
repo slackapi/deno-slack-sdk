@@ -12,6 +12,7 @@ export {
 } from "./functions/interactivity/mod.ts";
 export type { ViewEvents } from "./functions/interactivity/view_types.ts";
 export { DefineWorkflow } from "./workflows/mod.ts";
+export { DefineEvent } from "./events/mod.ts";
 export { DefineType } from "./types/mod.ts";
 export { DefineOAuth2Provider } from "./providers/oauth2/mod.ts";
 export { default as Schema } from "./schema/mod.ts";

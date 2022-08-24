@@ -25,6 +25,7 @@ export type ManifestSchema = {
   outgoing_domains?: string[];
   types?: ManifestCustomTypesSchema;
   datastores?: ManifestDataStoresSchema;
+  events?: ManifestCustomEventsSchema;
   external_auth_providers?: ManifestExternalAuthProviders;
 };
 
@@ -246,6 +247,15 @@ export type ManifestWorkflowStepSchema = {
   };
 };
 
+// ---------------------------------------------------------------------------
+// Manifest: Custom Events
+// ---------------------------------------------------------------------------
+
+export type ManifestCustomEventSchema = ParameterDefinition;
+
+export type ManifestCustomEventsSchema = {
+  [key: string]: ManifestCustomEventSchema;
+};
 // ---------------------------------------------------------------------------
 // Manifest: Custom Types
 // ---------------------------------------------------------------------------
