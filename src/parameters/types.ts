@@ -31,6 +31,8 @@ type BaseParameterDefinition<T> = {
   title?: string;
   /** An optional parameter description. */
   description?: string;
+  /** An optional parameter hint. */
+  hint?: string;
   /** An optional parameter default value. */
   default?: T;
   /** An option list of examples; intended for future use in a possible app type schemas page. */
