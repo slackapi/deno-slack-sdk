@@ -51,7 +51,10 @@ export type TypedObjectParameterDefinition =
   & {
     /** A list of required property names (must reference names defined on the `properties` property). Only for use with Object types. */
     required?: string[];
-    /** Whether the parameter can accept objects with additional keys beyond those defined via `properties` */
+    /**
+     * Whether the parameter can accept objects with additional keys beyond those defined via `properties`
+     * @default "true"
+     */
     additionalProperties?: boolean;
     /** Object defining what properties are allowed on the parameter. */
     properties: {

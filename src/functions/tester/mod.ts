@@ -47,6 +47,7 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
       >,
       env: args.env || {},
       token: args.token || "slack-function-test-token",
+      team_id: args.team_id || "test-team-id",
       event: args.event || {
         type: "function_executed",
         event_ts: `${ts.getTime()}`,

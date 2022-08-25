@@ -198,6 +198,7 @@ const SlackViewSubmissionHandlerTester: SlackViewSubmissionHandlerTesterFn = <
       token: args.token || "slack-function-test-token",
       view: args.view || DEFAULT_VIEW,
       body: args.body || DEFAULT_BODY,
+      team_id: DEFAULT_VIEW.team_id,
     };
   };
 
@@ -265,6 +266,7 @@ const SlackViewClosedHandlerTester: SlackViewClosedHandlerTesterFn = <
       token: args.token || "slack-function-test-token",
       view: args.view || DEFAULT_VIEW,
       body: args.body || DEFAULT_BODY,
+      team_id: DEFAULT_VIEW.team_id,
     };
   };
 

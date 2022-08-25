@@ -128,6 +128,7 @@ const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
       inputs,
       env: args.env || {},
       token: args.token || "slack-function-test-token",
+      team_id: args.team_id || "test-team-id",
       action: args.action || DEFAULT_ACTION,
       body: args.body || DEFAULT_BODY,
     };
