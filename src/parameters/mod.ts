@@ -53,13 +53,13 @@ type ObjectParameterPropertyTypes<Def extends TypedObjectParameterDefinition> =
 // If additionalProperties is set to true, allow access to any key.
 // Otherwise, only allow keys provided through use of properties
 type ObjectParameterVariableType<Def extends TypedObjectParameterDefinition> =
-  Def["additionalProperties"] extends true ? 
+  Def["additionalProperties"] extends false ? ObjectParameterPropertyTypes<Def>
+    : 
       & ObjectParameterPropertyTypes<Def>
       & {
         // deno-lint-ignore no-explicit-any
         [key: string]: any;
-      }
-    : ObjectParameterPropertyTypes<Def>;
+      };
 
 export const ParameterVariable = <P extends ParameterDefinition>(
   namespace: string,

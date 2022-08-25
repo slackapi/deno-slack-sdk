@@ -101,15 +101,20 @@ type UnknownRuntimeType = any;
 
 type TypedObjectFunctionInputRuntimeType<
   Param extends TypedObjectParameterDefinition,
-> =
-  & {
+> = Param["additionalProperties"] extends false ? {
     [k in keyof Param["properties"]]: FunctionInputRuntimeType<
       Param["properties"][k]
     >;
   }
-  & {
-    [key: string]: UnknownRuntimeType;
-  };
+  : 
+    & {
+      [k in keyof Param["properties"]]: FunctionInputRuntimeType<
+        Param["properties"][k]
+      >;
+    }
+    & {
+      [key: string]: UnknownRuntimeType;
+    };
 
 type TypedArrayFunctionInputRuntimeType<
   Param extends TypedArrayParameterDefinition,

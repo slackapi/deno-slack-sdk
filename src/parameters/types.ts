@@ -31,6 +31,8 @@ type BaseParameterDefinition<T> = {
   title?: string;
   /** An optional parameter description. */
   description?: string;
+  /** An optional parameter hint. */
+  hint?: string;
   /** An optional parameter default value. */
   default?: T;
   /** An option list of examples; intended for future use in a possible app type schemas page. */
@@ -49,7 +51,10 @@ export type TypedObjectParameterDefinition =
   & {
     /** A list of required property names (must reference names defined on the `properties` property). Only for use with Object types. */
     required?: string[];
-    /** Whether the parameter can accept objects with additional keys beyond those defined via `properties` */
+    /**
+     * Whether the parameter can accept objects with additional keys beyond those defined via `properties`
+     * @default "true"
+     */
     additionalProperties?: boolean;
     /** Object defining what properties are allowed on the parameter. */
     properties: {
