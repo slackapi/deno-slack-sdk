@@ -288,7 +288,7 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
 });
 
 Deno.test("Manifest() automatically registers types referenced by events", () => {
-  const objectTypeId = "test_object_type";
+  const objectEventId = "test_object_type";
   const stringTypeId = "test_string_type";
   const booleanTypeId = "test_boolean_type";
   const arrayTypeId = "test_array_type";
@@ -311,8 +311,8 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
     },
   });
 
-  const ObjectType = DefineEvent({
-    name: objectTypeId,
+  const ObjectEvent = DefineEvent({
+    name: objectEventId,
     type: Schema.types.object,
     properties: {
       aBoolean: { type: BooleanType },
@@ -326,18 +326,18 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
     icon: "icon.png",
     longDescription: "LongDescription",
     botScopes: [],
-    types: [ObjectType],
+    events: [ObjectEvent],
   };
   const manifest = Manifest(definition);
 
+  assertEquals(definition.events, [ObjectEvent]);
+  assertEquals(manifest.events, { [objectEventId]: ObjectEvent.export() });
   assertEquals(definition.types, [
-    ObjectType,
     BooleanType,
     ArrayType,
     StringType,
   ]);
   assertEquals(manifest.types, {
-    [objectTypeId]: ObjectType.export(),
     [booleanTypeId]: BooleanType.export(),
     [arrayTypeId]: ArrayType.export(),
     [stringTypeId]: StringType.export(),
