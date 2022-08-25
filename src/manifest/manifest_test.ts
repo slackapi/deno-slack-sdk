@@ -288,7 +288,9 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
 });
 
 Deno.test("Manifest() automatically registers types referenced by events", () => {
-  const objectEventId = "test_object_type";
+  const objectEventTypeId = "test_object_event_type";
+  const objectTypeId = "test_object_type";
+  const objectEventId = "test_object_event";
   const stringTypeId = "test_string_type";
   const booleanTypeId = "test_boolean_type";
   const arrayTypeId = "test_array_type";
@@ -311,6 +313,14 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
     },
   });
 
+  const ObjectType = DefineType({
+    name: objectTypeId,
+    type: Schema.types.object,
+    properties: {
+      aBoolean: { type: BooleanType },
+    },
+  });
+
   const ObjectEvent = DefineEvent({
     name: objectEventId,
     type: Schema.types.object,
@@ -320,24 +330,34 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
     },
   });
 
+  const ObjectTypeEvent = DefineEvent({
+    name: objectEventTypeId,
+    type: ObjectType,
+  });
+
   const definition: SlackManifestType = {
     name: "Name",
     description: "Description",
     icon: "icon.png",
     longDescription: "LongDescription",
     botScopes: [],
-    events: [ObjectEvent],
+    events: [ObjectTypeEvent, ObjectEvent],
   };
   const manifest = Manifest(definition);
 
-  assertEquals(definition.events, [ObjectEvent]);
-  assertEquals(manifest.events, { [objectEventId]: ObjectEvent.export() });
+  assertEquals(definition.events, [ObjectTypeEvent, ObjectEvent]);
+  assertEquals(manifest.events, {
+    [objectEventTypeId]: ObjectTypeEvent.export(),
+    [objectEventId]: ObjectEvent.export(),
+  });
   assertEquals(definition.types, [
+    ObjectType,
     BooleanType,
     ArrayType,
     StringType,
   ]);
   assertEquals(manifest.types, {
+    [objectTypeId]: ObjectType.export(),
     [booleanTypeId]: BooleanType.export(),
     [arrayTypeId]: ArrayType.export(),
     [stringTypeId]: StringType.export(),
