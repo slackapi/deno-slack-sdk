@@ -11,8 +11,6 @@ export type OAuth2ProviderIdentitySchema = {
 export type OAuth2ProviderOptions = {
   /** Client id for your provider */
   "client_id": string;
-  /** Client secret for your provider */
-  "client_secret_env_key": string;
   /** Scopes for your provider */
   "scope": string[];
   /** Display name for your provider. Required for CUSTOM provider types. */
