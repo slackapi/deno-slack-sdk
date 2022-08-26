@@ -12,7 +12,7 @@ import type {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
-import type { SlackFunction } from "../mod.ts";
+import type { SlackFunctionDefinition } from "../mod.ts";
 import { DefineFunction, Schema } from "../../mod.ts";
 
 // Helper test types
@@ -54,7 +54,7 @@ type SlackActionHandlerTesterFn = {
     RequiredInput extends PossibleParameterKeys<InputParameters>,
     RequiredOutput extends PossibleParameterKeys<OutputParameters>,
   >(
-    func: SlackFunction<
+    func: SlackFunctionDefinition<
       InputParameters,
       OutputParameters,
       RequiredInput,
@@ -80,7 +80,7 @@ const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 >(
-  _func: SlackFunction<
+  _func: SlackFunctionDefinition<
     InputParameters,
     OutputParameters,
     RequiredInput,

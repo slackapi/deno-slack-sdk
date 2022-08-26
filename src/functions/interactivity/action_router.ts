@@ -2,7 +2,7 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
-import { SlackFunction } from "../mod.ts";
+import { SlackFunctionDefinition } from "../mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { FunctionDefinitionArgs } from "../types.ts";
 import type { BlockActionConstraint, BlockActionHandler } from "./types.ts";
@@ -14,7 +14,7 @@ import {
 
 /**
  * Define an actions "router" and its input and output parameters for use in a Slack application. The ActionsRouter will route incoming action events to action-specific handlers.
- * @param {SlackFunction<InputParameters, OutputParameters, RequiredInput, RequiredOutput>} func Reference to your previously-created SlackFunction, defined via DefineFunction
+ * @param {SlackFunctionDefinition<InputParameters, OutputParameters, RequiredInput, RequiredOutput>} func Reference to your previously-created SlackFunction, defined via DefineFunction
  * @returns {ActionsRouter}
  */
 export const BlockActionsRouter = <
@@ -23,7 +23,7 @@ export const BlockActionsRouter = <
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 >(
-  func: SlackFunction<
+  func: SlackFunctionDefinition<
     InputParameters,
     OutputParameters,
     RequiredInput,
@@ -58,7 +58,7 @@ export class ActionsRouter<
   >;
 
   constructor(
-    private func: SlackFunction<
+    private func: SlackFunctionDefinition<
       InputParameters,
       OutputParameters,
       RequiredInput,

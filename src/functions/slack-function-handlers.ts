@@ -3,7 +3,7 @@ import {
   PossibleParameterKeys,
 } from "../parameters/mod.ts";
 import { SlackFunctionHandler, SlackFunctionHandlersType } from "./types.ts";
-import { SlackFunction } from "./mod.ts";
+import { SlackFunctionDefinition } from "./mod.ts";
 import { BlockActionsRouter } from "./interactivity/action_router.ts";
 import { ViewsRouter } from "./interactivity/view_router.ts";
 
@@ -13,7 +13,7 @@ export const SlackFunctionHandlers = <
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 >(
-  func: SlackFunction<
+  func: SlackFunctionDefinition<
     InputParameters,
     OutputParameters,
     RequiredInput,

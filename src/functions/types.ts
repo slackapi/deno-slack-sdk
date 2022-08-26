@@ -232,7 +232,7 @@ export type FunctionParameters = {
   [key: string]: any;
 } | undefined;
 
-export interface ISlackFunction<
+export interface ISlackFunctionDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,

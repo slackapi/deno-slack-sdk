@@ -1,5 +1,5 @@
 import { ISlackDatastore } from "../datastore/types.ts";
-import { ISlackFunction } from "../functions/types.ts";
+import { ISlackFunctionDefinition } from "../functions/types.ts";
 import type {
   ParameterDefinition,
   ParameterSetDefinition,
@@ -204,7 +204,7 @@ export type ManifestUnfurlDomainsSchema = [string, ...string[]];
 // This is typed liberally at this level but more specifically down further
 // This is to work around an issue TS has with resolving the generics across the hierarchy
 // deno-lint-ignore no-explicit-any
-export type ManifestFunction = ISlackFunction<any, any, any, any>;
+export type ManifestFunction = ISlackFunctionDefinition<any, any, any, any>;
 
 export type ManifestFunctionsSchema = { [key: string]: ManifestFunctionSchema };
 

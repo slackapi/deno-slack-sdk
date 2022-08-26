@@ -2,7 +2,7 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
-import { SlackFunction } from "../mod.ts";
+import { SlackFunctionDefinition } from "../mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
 import {
@@ -25,7 +25,7 @@ export const ViewsRouter = <
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 >(
-  func: SlackFunction<
+  func: SlackFunctionDefinition<
     InputParameters,
     OutputParameters,
     RequiredInput,
@@ -55,7 +55,7 @@ class ViewRouter<
   >;
 
   constructor(
-    private func: SlackFunction<
+    private func: SlackFunctionDefinition<
       InputParameters,
       OutputParameters,
       RequiredInput,

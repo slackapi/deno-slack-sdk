@@ -2,7 +2,7 @@ import type {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
-import type { SlackFunction } from "../mod.ts";
+import type { SlackFunctionDefinition } from "../mod.ts";
 import type { FunctionContext, FunctionRuntimeParameters } from "../types.ts";
 
 export type SlackFunctionTesterArgs<
@@ -44,7 +44,7 @@ export type SlackFunctionTesterFn = {
     RequiredInput extends PossibleParameterKeys<InputParameters>,
     RequiredOutput extends PossibleParameterKeys<OutputParameters>,
   >(
-    funcOrCallbackId: SlackFunction<
+    funcOrCallbackId: SlackFunctionDefinition<
       InputParameters,
       OutputParameters,
       RequiredInput,
