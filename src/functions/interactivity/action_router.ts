@@ -110,9 +110,6 @@ export class ActionsRouter<
       const action: BlockAction = context.action;
       const handler = this.matchHandler(action);
       if (handler === null) {
-        // TODO: what do in this case?
-        // perhaps the user typo'ed the action id when registering their handler or defining their block.
-        // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
         throw new UnhandledEventError(
           `Received block action payload with action=${
             JSON.stringify(action)
