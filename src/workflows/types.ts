@@ -15,8 +15,8 @@ export interface ISlackWorkflow {
 }
 
 export type SlackWorkflowDefinition<Definition> = Definition extends
-  SlackWorkflowDefinitionArgs<infer I, infer O, infer RI, infer RO>
-  ? SlackWorkflowDefinitionArgs<I, O, RI, RO>
+  SlackWorkflowDefinitionArgs<infer I, infer O, infer RI, infer RO, infer CB>
+  ? SlackWorkflowDefinitionArgs<I, O, RI, RO, CB>
   : never;
 
 export type SlackWorkflowDefinitionArgs<
@@ -24,8 +24,9 @@ export type SlackWorkflowDefinitionArgs<
   OutputParameters extends ParameterSetDefinition,
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
+  CallbackID extends string,
 > = {
-  callback_id: string;
+  callback_id: CallbackID;
   title: string;
   description?: string;
   "input_parameters"?: ParameterPropertiesDefinition<
