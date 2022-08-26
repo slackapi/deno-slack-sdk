@@ -273,7 +273,7 @@ export type FunctionDefinitionArgs<
   >;
 };
 
-export type SlackFunctionHandlersType<Definition> = Definition extends
+export type SlackFunctionType<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (): SlackFunctionHandler<Definition>;
     addBlockActionsHandler(
@@ -281,23 +281,23 @@ export type SlackFunctionHandlersType<Definition> = Definition extends
       handler: BlockActionHandler<
         FunctionDefinitionArgs<I, O, RI, RO>
       >,
-    ): SlackFunctionHandlersType<Definition>;
+    ): SlackFunctionType<Definition>;
     addViewClosedHandler(
       viewConstraint: BasicConstraintField,
       handler: ViewClosedHandler<
         FunctionDefinitionArgs<I, O, RI, RO>
       >,
-    ): SlackFunctionHandlersType<Definition>;
+    ): SlackFunctionType<Definition>;
     addViewSubmissionHandler(
       viewConstraint: BasicConstraintField,
       handler: ViewSubmissionHandler<
         FunctionDefinitionArgs<I, O, RI, RO>
       >,
-    ): SlackFunctionHandlersType<Definition>;
+    ): SlackFunctionType<Definition>;
     addUnhandledEventHandler(
       handler: UnhandledEventHandler<
         FunctionDefinitionArgs<I, O, RI, RO>
       >,
-    ): SlackFunctionHandlersType<Definition>;
+    ): SlackFunctionType<Definition>;
   }
   : never;

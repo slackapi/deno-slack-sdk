@@ -1,5 +1,5 @@
 import { assertEquals, mock } from "../dev_deps.ts";
-import { DefineFunction, SlackFunctionHandlers } from "../mod.ts";
+import { DefineFunction, SlackFunction } from "../mod.ts";
 
 const TestFunction = DefineFunction({
   title: "Test",
@@ -7,10 +7,10 @@ const TestFunction = DefineFunction({
   source_file: "test.js",
 });
 
-Deno.test("SlackFunctionHandlers returns the expected interface", () => {
+Deno.test("SlackFunction returns the expected interface", () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
-  const handlers = SlackFunctionHandlers(TestFunction, mainFnHandler);
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
 
   assertEquals(typeof handlers.addBlockActionsHandler, "function");
   assertEquals(typeof handlers.addViewClosedHandler, "function");
@@ -18,10 +18,10 @@ Deno.test("SlackFunctionHandlers returns the expected interface", () => {
   assertEquals(typeof handlers.addUnhandledEventHandler, "function");
 });
 
-Deno.test("SlackFunctionHandlers returns a proper function module definition", () => {
+Deno.test("SlackFunction returns a proper function module definition", () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
-  const handlers = SlackFunctionHandlers(TestFunction, mainFnHandler);
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
   assertEquals(typeof handlers, "function");
@@ -30,19 +30,19 @@ Deno.test("SlackFunctionHandlers returns a proper function module definition", (
   assertEquals(typeof typedHandlers.viewClosed, "function");
 });
 
-Deno.test("SlackFunctionHandlers unhandledEvent is undefined by default", () => {
+Deno.test("SlackFunction unhandledEvent is undefined by default", () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
-  const handlers = SlackFunctionHandlers(TestFunction, mainFnHandler);
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
   assertEquals(typedHandlers.unhandledEvent, undefined);
 });
 
-Deno.test("SlackFunctionHandlers unhandledEvent is defined after calling addUnhandledEventHandler", () => {
+Deno.test("SlackFunction unhandledEvent is defined after calling addUnhandledEventHandler", () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
-  const handlers = SlackFunctionHandlers(TestFunction, mainFnHandler);
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
   const handlerSpy = mock.spy();
@@ -54,7 +54,7 @@ Deno.test("SlackFunctionHandlers unhandledEvent is defined after calling addUnha
 Deno.test("Main handler should pass arguments through", () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
-  const handlers = SlackFunctionHandlers(TestFunction, mainFnHandler);
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
   const args = { test: "arguments" };
@@ -66,7 +66,7 @@ Deno.test("Main handler should pass arguments through", () => {
 Deno.test("addBlockActionsHandler", async () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
-  const handlers = SlackFunctionHandlers(TestFunction, mainFnHandler);
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
   const actionId = "whatever";
@@ -80,7 +80,7 @@ Deno.test("addBlockActionsHandler", async () => {
 Deno.test("addViewClosedHandler", async () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
-  const handlers = SlackFunctionHandlers(TestFunction, mainFnHandler);
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
   const callbackId = "lolwutwut";
@@ -97,7 +97,7 @@ Deno.test("addViewClosedHandler", async () => {
 Deno.test("addViewSubmissionHandler", async () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
-  const handlers = SlackFunctionHandlers(TestFunction, mainFnHandler);
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
   const callbackId = "lolwutwut";
@@ -114,7 +114,7 @@ Deno.test("addViewSubmissionHandler", async () => {
 Deno.test("addUnhandledEventHandler", async () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
-  const handlers = SlackFunctionHandlers(TestFunction, mainFnHandler);
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
   const handlerSpy = mock.spy();

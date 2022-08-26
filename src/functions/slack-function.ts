@@ -2,12 +2,12 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../parameters/mod.ts";
-import { SlackFunctionHandler, SlackFunctionHandlersType } from "./types.ts";
+import { SlackFunctionHandler, SlackFunctionType } from "./types.ts";
 import { SlackFunctionDefinition } from "./mod.ts";
 import { BlockActionsRouter } from "./interactivity/action_router.ts";
 import { ViewsRouter } from "./interactivity/view_router.ts";
 
-export const SlackFunctionHandlers = <
+export const SlackFunction = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
@@ -70,5 +70,5 @@ export const SlackFunctionHandlers = <
   handlerModule.viewClosed = viewsRouter.viewClosed;
   handlerModule.viewSubmission = viewsRouter.viewSubmission;
 
-  return handlerModule as SlackFunctionHandlersType<typeof func.definition>;
+  return handlerModule as SlackFunctionType<typeof func.definition>;
 };
