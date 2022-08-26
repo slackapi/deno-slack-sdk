@@ -18,7 +18,7 @@ Deno.test("SlackFunctionHandlers returns the expected interface", () => {
   assertEquals(typeof handlers.addUnhandledEventHandler, "function");
 });
 
-Deno.test("SlackFunctionHandlers returns a properly function module defintion", () => {
+Deno.test("SlackFunctionHandlers returns a proper function module definition", () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
   const handlers = SlackFunctionHandlers(TestFunction, mainFnHandler);
