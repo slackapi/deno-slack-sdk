@@ -25,12 +25,14 @@ export const DefineWorkflow = <
   Outputs extends ParameterSetDefinition,
   RequiredInputs extends PossibleParameterKeys<Inputs>,
   RequiredOutputs extends PossibleParameterKeys<Outputs>,
+  CallbackID extends string,
 >(
   definition: SlackWorkflowDefinitionArgs<
     Inputs,
     Outputs,
     RequiredInputs,
-    RequiredOutputs
+    RequiredOutputs,
+    CallbackID
   >,
 ) => {
   return new WorkflowDefinition(definition);
@@ -41,13 +43,15 @@ export class WorkflowDefinition<
   Outputs extends ParameterSetDefinition,
   RequiredInputs extends PossibleParameterKeys<Inputs>,
   RequiredOutputs extends PossibleParameterKeys<Outputs>,
+  CallbackID extends string,
 > implements ISlackWorkflow {
   public id: string;
   public definition: SlackWorkflowDefinitionArgs<
     Inputs,
     Outputs,
     RequiredInputs,
-    RequiredOutputs
+    RequiredOutputs,
+    CallbackID
   >;
 
   public inputs: WorkflowInputs<
@@ -67,7 +71,8 @@ export class WorkflowDefinition<
       Inputs,
       Outputs,
       RequiredInputs,
-      RequiredOutputs
+      RequiredOutputs,
+      CallbackID
     >,
   ) {
     this.id = definition.callback_id;
