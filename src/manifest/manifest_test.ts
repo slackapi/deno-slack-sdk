@@ -246,6 +246,21 @@ Deno.test("Manifest() always sets token_management_enabled to false for function
   assertEquals(manifest.oauth_config.token_management_enabled, false);
 });
 
+Deno.test("Manifest() sets token_management_enabled to true by default for runOnSlack: false apps", () => {
+  const definition: SlackManifestType = {
+    runOnSlack: false,
+    name: "",
+    description: "",
+    backgroundColor: "",
+    longDescription: "",
+    displayName: "",
+    icon: "",
+    botScopes: [],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.oauth_config.token_management_enabled, true);
+});
+
 Deno.test("Manifest() automatically registers types referenced by datastores", () => {
   const stringTypeId = "test_string_type";
   const objectTypeId = "test_object_type";
@@ -515,7 +530,6 @@ Deno.test("Manifest() correctly assigns oauth properties", () => {
     botScopes: ["channels:history", "chat:write", "commands"],
     userScopes: ["admin", "calls:read"],
     redirectUrls: ["https://api.slack.com/", "https://app.slack.com/"],
-    tokenManagementEnabled: false,
   };
   const manifest = Manifest(definition);
   //oauth
@@ -529,7 +543,7 @@ Deno.test("Manifest() correctly assigns oauth properties", () => {
   );
   assertStrictEquals(
     manifest.oauth_config.token_management_enabled,
-    definition.tokenManagementEnabled,
+    true,
   );
 });
 
