@@ -1,7 +1,6 @@
 export type {
   BaseSlackFunctionHandler,
   BlockActionHandler,
-  FunctionHandler, // Deprecated
   SlackFunctionHandler,
 } from "./functions/types.ts";
 

@@ -10,6 +10,7 @@ import {
   DefineFunction,
   DefineOAuth2Provider,
   DefineType,
+  DefineWorkflow,
   Schema,
 } from "../mod.ts";
 import {
@@ -179,6 +180,50 @@ Deno.test("Manifest() automatically registers types used by function input and o
   });
 });
 
+Deno.test("Manifest() automatically registers functions used by workflows", () => {
+  const Function = DefineFunction(
+    {
+      callback_id: "test_function",
+      title: "Function title",
+      source_file: "functions/test_function.ts",
+      input_parameters: {
+        properties: { aString: { type: Schema.types.string } },
+        required: [],
+      },
+      output_parameters: {
+        properties: { aType: { type: Schema.types.string } },
+        required: [],
+      },
+    },
+  );
+
+  const Workflow = DefineWorkflow({
+    title: "test workflow",
+    callback_id: "test_workflow",
+  });
+
+  Workflow.addStep(Function, {
+    aString: "test",
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    workflows: [Workflow],
+  };
+  const manifest = Manifest(definition);
+
+  assertEquals(manifest.workflows, {
+    [Workflow.id]: Workflow.export(),
+  });
+  assertEquals(manifest.functions, {
+    [Function.id]: Function.export(),
+  });
+});
+
 Deno.test("Manifest() properly converts name to proper key", () => {
   const UsingName = DefineType({
     name: "Using Name",
@@ -195,24 +240,6 @@ Deno.test("Manifest() properly converts name to proper key", () => {
   };
   const manifest = Manifest(definition);
   assertEquals(manifest.types, { "Using Name": { type: "boolean" } });
-});
-
-Deno.test("Manifest() properly converts callback_id to proper key", () => {
-  const UsingCallback = DefineType({
-    callback_id: "Using Callback",
-    type: Schema.types.boolean,
-  });
-
-  const definition: SlackManifestType = {
-    name: "Name",
-    description: "Description",
-    icon: "icon.png",
-    longDescription: "LongDescription",
-    botScopes: [],
-    types: [UsingCallback],
-  };
-  const manifest = Manifest(definition);
-  assertEquals(manifest.types, { "Using Callback": { type: "boolean" } });
 });
 
 Deno.test("Manifest() always sets token_management_enabled to false for runOnSlack: true apps", () => {

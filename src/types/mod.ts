@@ -23,7 +23,7 @@ export class CustomType<Def extends CustomTypeDefinition>
   constructor(
     public definition: Def,
   ) {
-    this.id = "name" in definition ? definition.name : definition.callback_id;
+    this.id = definition.name;
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;
@@ -59,13 +59,8 @@ export class CustomType<Def extends CustomTypeDefinition>
     }
   }
   export(): ManifestCustomTypeSchema {
-    // remove callback_id or name from the definition we pass to the manifest
-    if ("name" in this.definition) {
-      const { name: _n, ...definition } = this.definition;
-      return definition;
-    } else {
-      const { callback_id: _c, ...definition } = this.definition;
-      return definition;
-    }
+    // remove name from the definition we pass to the manifest
+    const { name: _n, ...definition } = this.definition;
+    return definition;
   }
 }
