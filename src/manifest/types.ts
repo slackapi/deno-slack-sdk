@@ -15,6 +15,7 @@ import {
 import { OAuth2Provider } from "../providers/oauth2/mod.ts";
 import { ICustomType } from "../types/types.ts";
 import { CamelCasedPropertiesDeep } from "./types_util.ts";
+import { ICustomEvent } from "../events/types.ts";
 
 /** Manifest definition.
  *
@@ -60,7 +61,6 @@ export interface ISlackManifestRemote extends ISlackManifestShared {
   appDirectory?: ManifestAppDirectorySchema;
   userScopes?: Array<string>;
   redirectUrls?: Array<string>;
-  tokenManagementEnabled?: boolean;
   features?: ISlackManifestRemoteFeaturesSchema;
 }
 
@@ -76,6 +76,7 @@ interface ISlackManifestShared {
   functions?: ManifestFunction[];
   workflows?: ManifestWorkflow[];
   outgoingDomains?: Array<string>;
+  events?: ICustomEvent[];
   types?: ICustomType[];
   datastores?: ManifestDatastore[];
 }

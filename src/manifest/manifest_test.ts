@@ -6,6 +6,7 @@ import {
 import { Manifest, SlackManifest } from "./mod.ts";
 import {
   DefineDatastore,
+  DefineEvent,
   DefineFunction,
   DefineOAuth2Provider,
   DefineType,
@@ -228,6 +229,21 @@ Deno.test("Manifest() always sets token_management_enabled to false for function
   assertEquals(manifest.oauth_config.token_management_enabled, false);
 });
 
+Deno.test("Manifest() sets token_management_enabled to true by default for runOnSlack: false apps", () => {
+  const definition: SlackManifestType = {
+    runOnSlack: false,
+    name: "",
+    description: "",
+    backgroundColor: "",
+    longDescription: "",
+    displayName: "",
+    icon: "",
+    botScopes: [],
+  };
+  const manifest = Manifest(definition);
+  assertEquals(manifest.oauth_config.token_management_enabled, true);
+});
+
 Deno.test("Manifest() automatically registers types referenced by datastores", () => {
   const stringTypeId = "test_string_type";
   const objectTypeId = "test_object_type";
@@ -265,6 +281,83 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
   assertEquals(manifest.types, {
     [stringTypeId]: StringType.export(),
     [objectTypeId]: ObjectType.export(),
+  });
+});
+
+Deno.test("Manifest() automatically registers types referenced by events", () => {
+  const objectEventTypeId = "test_object_event_type";
+  const objectTypeId = "test_object_type";
+  const objectEventId = "test_object_event";
+  const stringTypeId = "test_string_type";
+  const booleanTypeId = "test_boolean_type";
+  const arrayTypeId = "test_array_type";
+
+  const BooleanType = DefineType({
+    name: booleanTypeId,
+    type: Schema.types.boolean,
+  });
+
+  const StringType = DefineType({
+    name: stringTypeId,
+    type: Schema.types.string,
+  });
+
+  const ArrayType = DefineType({
+    name: arrayTypeId,
+    type: Schema.types.array,
+    items: {
+      type: StringType,
+    },
+  });
+
+  const ObjectType = DefineType({
+    name: objectTypeId,
+    type: Schema.types.object,
+    properties: {
+      aBoolean: { type: BooleanType },
+    },
+  });
+
+  const ObjectEvent = DefineEvent({
+    name: objectEventId,
+    type: Schema.types.object,
+    properties: {
+      aBoolean: { type: BooleanType },
+      anArray: { type: ArrayType },
+    },
+  });
+
+  const ObjectTypeEvent = DefineEvent({
+    name: objectEventTypeId,
+    type: ObjectType,
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    events: [ObjectTypeEvent, ObjectEvent],
+  };
+  const manifest = Manifest(definition);
+
+  assertEquals(definition.events, [ObjectTypeEvent, ObjectEvent]);
+  assertEquals(manifest.events, {
+    [objectEventTypeId]: ObjectTypeEvent.export(),
+    [objectEventId]: ObjectEvent.export(),
+  });
+  assertEquals(definition.types, [
+    ObjectType,
+    BooleanType,
+    ArrayType,
+    StringType,
+  ]);
+  assertEquals(manifest.types, {
+    [objectTypeId]: ObjectType.export(),
+    [booleanTypeId]: BooleanType.export(),
+    [arrayTypeId]: ArrayType.export(),
+    [stringTypeId]: StringType.export(),
   });
 });
 
@@ -497,7 +590,6 @@ Deno.test("Manifest() correctly assigns oauth properties", () => {
     botScopes: ["channels:history", "chat:write", "commands"],
     userScopes: ["admin", "calls:read"],
     redirectUrls: ["https://api.slack.com/", "https://app.slack.com/"],
-    tokenManagementEnabled: false,
   };
   const manifest = Manifest(definition);
   //oauth
@@ -511,7 +603,7 @@ Deno.test("Manifest() correctly assigns oauth properties", () => {
   );
   assertStrictEquals(
     manifest.oauth_config.token_management_enabled,
-    definition.tokenManagementEnabled,
+    true,
   );
 });
 
