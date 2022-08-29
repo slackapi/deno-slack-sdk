@@ -171,12 +171,6 @@ export type BaseSlackFunctionHandler<
   | AsyncFunctionHandler<InputParameters, OutputParameters>
   | SyncFunctionHandler<InputParameters, OutputParameters>;
 
-// Exporting this alias for backwards compatability
-/**
- * @deprecated Use either SlackFunctionHandler<Definition> or BaseSlackFunctionHandler<Inputs, Outputs>
- */
-export type FunctionHandler<I, O> = BaseSlackFunctionHandler<I, O>;
-
 type SuccessfulFunctionReturnArgs<
   OutputParameters extends FunctionParameters,
 > = {
