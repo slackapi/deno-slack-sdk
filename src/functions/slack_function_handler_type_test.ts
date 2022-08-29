@@ -1,4 +1,4 @@
-import { assertExists } from "../dev_deps.ts";
+import { assertEquals, assertExists } from "../dev_deps.ts";
 import { assertEqualsTypedValues } from "../test_utils.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
 import { DefineFunction } from "./mod.ts";
@@ -370,4 +370,126 @@ Deno.test("SlackFunctionHandler using Custom Types", () => {
   assertExists(result.outputs?.interactivity.interactor.secret);
   assertExists(result.outputs?.user_context.id);
   assertExists(result.outputs?.user_context.secret);
+});
+
+Deno.test("SlackFunctionHandler using Objects with additional properties", () => {
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        addlPropertiesObj: {
+          type: Schema.types.object,
+          properties: {
+            aString: { type: Schema.types.string },
+          },
+        },
+      },
+      required: ["addlPropertiesObj"],
+    },
+    output_parameters: {
+      properties: {
+        addlPropertiesObj: {
+          type: Schema.types.object,
+          properties: {
+            aString: { type: Schema.types.string },
+          },
+        },
+      },
+      required: ["addlPropertiesObj"],
+    },
+  });
+
+  const sharedInputs = {
+    addlPropertiesObj: { aString: "hi" },
+  };
+
+  const handler: SlackFunctionHandler<typeof TestFunction.definition> = (
+    { inputs },
+  ) => {
+    const { addlPropertiesObj } = inputs;
+    assertEqualsTypedValues(addlPropertiesObj, sharedInputs.addlPropertiesObj);
+    assertEqualsTypedValues(
+      addlPropertiesObj.aString,
+      sharedInputs.addlPropertiesObj.aString,
+    );
+    assertEquals(addlPropertiesObj.anythingElse, undefined);
+    return {
+      outputs: inputs,
+    };
+  };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = handler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(sharedInputs, result.outputs);
+  assertExists(result.outputs?.addlPropertiesObj);
+  assertExists(result.outputs?.addlPropertiesObj.aString);
+  assertEquals(result.outputs?.addlPropertiesObj.anythingElse, undefined);
+});
+
+Deno.test("SlackFunctionHandler using Objects without additional properties", () => {
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        noAddlPropertiesObj: {
+          type: Schema.types.object,
+          properties: {
+            aString: { type: Schema.types.string },
+          },
+          additionalProperties: false,
+        },
+      },
+      required: ["noAddlPropertiesObj"],
+    },
+    output_parameters: {
+      properties: {
+        noAddlPropertiesObj: {
+          type: Schema.types.object,
+          properties: {
+            aString: { type: Schema.types.string },
+          },
+          additionalProperties: false,
+        },
+      },
+      required: ["noAddlPropertiesObj"],
+    },
+  });
+
+  const sharedInputs = {
+    noAddlPropertiesObj: { aString: "hi" },
+  };
+
+  const handler: SlackFunctionHandler<typeof TestFunction.definition> = (
+    { inputs },
+  ) => {
+    const { noAddlPropertiesObj } = inputs;
+    assertEqualsTypedValues(
+      noAddlPropertiesObj,
+      sharedInputs.noAddlPropertiesObj,
+    );
+    assertEqualsTypedValues(
+      noAddlPropertiesObj.aString,
+      sharedInputs.noAddlPropertiesObj.aString,
+    );
+    // @ts-expect-error anythingElse cant exist
+    assertEquals(noAddlPropertiesObj.anythingElse, undefined);
+    return {
+      outputs: inputs,
+    };
+  };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = handler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(sharedInputs, result.outputs);
+  assertExists(result.outputs?.noAddlPropertiesObj);
+  assertExists(result.outputs?.noAddlPropertiesObj.aString);
+
+  // @ts-expect-error anythingElse cant exist
+  assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
 });

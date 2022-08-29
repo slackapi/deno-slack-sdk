@@ -39,6 +39,15 @@ export type ViewClosedHandler<Definition> = Definition extends
   }
   : never;
 
+export type UnhandledEventHandler<Definition> = Definition extends
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+    (
+      context: UnhandledEventContext<FunctionRuntimeParameters<I, RI>>,
+      // deno-lint-ignore no-explicit-any
+    ): Promise<any> | any;
+  }
+  : never;
+
 export type BaseInteractivityContext<InputParameters> = Omit<
   FunctionContext<InputParameters>,
   "event"
@@ -56,6 +65,12 @@ export type ViewClosedContext<InputParameters> =
   & BaseInteractivityContext<InputParameters>
   & ViewClosedSpecificContext<InputParameters>;
 
+export type UnhandledEventContext<InputParameters> =
+  & BaseInteractivityContext<
+    InputParameters
+  >
+  & UnhandledEventSpecificContext<InputParameters>;
+
 type ActionSpecificContext<InputParameters extends FunctionParameters> = {
   body: BlockActionInvocationBody<InputParameters>;
   action: BlockAction;
@@ -71,6 +86,17 @@ type ViewClosedSpecificContext<InputParameters extends FunctionParameters> = {
   body: ViewClosedInvocationBody<InputParameters>;
   view: View;
 };
+
+type UnhandledEventSpecificContext<InputParameters extends FunctionParameters> =
+  {
+    // unhandled events will contain at least function_data, but the rest is unknown
+    body:
+      & Pick<FunctionInteractivity<InputParameters>, "function_data">
+      & {
+        // deno-lint-ignore no-explicit-any
+        [key: string]: any;
+      };
+  };
 
 export type BlockActionInvocationBody<
   InputParameters extends FunctionParameters,

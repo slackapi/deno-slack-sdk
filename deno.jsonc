@@ -14,6 +14,7 @@
   "tasks": {
     // TODO: the bundle command should be `deno bundle src/mod.ts > /dev/null` (less noisy), but redirects are not currently supported in task commands
     "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test src",
-    "coverage": "deno test --coverage=.coverage src && deno coverage --exclude=fixtures --exclude=test .coverage"
+    "coverage": "deno test --coverage=.coverage src && deno coverage --exclude=fixtures --exclude=test .coverage",
+    "coverage-lcov": "deno test --coverage=.coverage src && deno coverage --exclude=fixtures --exclude=test .coverage --lcov --output=lcov.info"
   }
 }

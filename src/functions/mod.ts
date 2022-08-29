@@ -9,7 +9,7 @@ import { SlackManifest } from "../manifest/mod.ts";
 /**
  * Define a function and its input and output parameters for use in a Slack application.
  * @param {FunctionDefinitionArgs<InputParameters, OutputParameters, RequiredInput, RequiredOutput>} definition Defines information about your function (title, description) as well as formalizes the input and output parameters of your function
- * @returns {SlackFunction}
+ * @returns {SlackFunctionDefinition}
  */
 export const DefineFunction = <
   InputParameters extends ParameterSetDefinition,
@@ -24,10 +24,10 @@ export const DefineFunction = <
     RequiredOutput
   >,
 ) => {
-  return new SlackFunction(definition);
+  return new SlackFunctionDefinition(definition);
 };
 
-export class SlackFunction<
+export class SlackFunctionDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,

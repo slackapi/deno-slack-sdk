@@ -14,6 +14,14 @@ import {
 import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackManifest } from "../manifest/mod.ts";
+import {
+  BasicConstraintField,
+  BlockActionConstraint,
+  BlockActionHandler,
+  UnhandledEventHandler,
+  ViewClosedHandler,
+  ViewSubmissionHandler,
+} from "./interactivity/types.ts";
 
 export type { BlockActionHandler } from "./interactivity/types.ts";
 
@@ -93,15 +101,20 @@ type UnknownRuntimeType = any;
 
 type TypedObjectFunctionInputRuntimeType<
   Param extends TypedObjectParameterDefinition,
-> =
-  & {
+> = Param["additionalProperties"] extends false ? {
     [k in keyof Param["properties"]]: FunctionInputRuntimeType<
       Param["properties"][k]
     >;
   }
-  & {
-    [key: string]: UnknownRuntimeType;
-  };
+  : 
+    & {
+      [k in keyof Param["properties"]]: FunctionInputRuntimeType<
+        Param["properties"][k]
+      >;
+    }
+    & {
+      [key: string]: UnknownRuntimeType;
+    };
 
 type TypedArrayFunctionInputRuntimeType<
   Param extends TypedArrayParameterDefinition,
@@ -219,7 +232,7 @@ export type FunctionParameters = {
   [key: string]: any;
 } | undefined;
 
-export interface ISlackFunction<
+export interface ISlackFunctionDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
@@ -259,3 +272,32 @@ export type FunctionDefinitionArgs<
     RequiredOutputs
   >;
 };
+
+export type SlackFunctionType<Definition> = Definition extends
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+    (): SlackFunctionHandler<Definition>;
+    addBlockActionsHandler(
+      actionConstraint: BlockActionConstraint,
+      handler: BlockActionHandler<
+        FunctionDefinitionArgs<I, O, RI, RO>
+      >,
+    ): SlackFunctionType<Definition>;
+    addViewClosedHandler(
+      viewConstraint: BasicConstraintField,
+      handler: ViewClosedHandler<
+        FunctionDefinitionArgs<I, O, RI, RO>
+      >,
+    ): SlackFunctionType<Definition>;
+    addViewSubmissionHandler(
+      viewConstraint: BasicConstraintField,
+      handler: ViewSubmissionHandler<
+        FunctionDefinitionArgs<I, O, RI, RO>
+      >,
+    ): SlackFunctionType<Definition>;
+    addUnhandledEventHandler(
+      handler: UnhandledEventHandler<
+        FunctionDefinitionArgs<I, O, RI, RO>
+      >,
+    ): SlackFunctionType<Definition>;
+  }
+  : never;

@@ -30,14 +30,17 @@ Deno.test("Function with required params", () => {
           type: Schema.types.string,
           title: "My string",
           description: "a really neat value",
+          hint: "Ex. my neat value",
         },
         myBoolean: {
           type: Schema.types.boolean,
           title: "My boolean",
+          hint: "Ex: true/false",
         },
         myInteger: {
           type: Schema.types.integer,
           description: "integer",
+          hint: "0-100",
         },
         myNumber: {
           type: Schema.types.number,
@@ -63,6 +66,14 @@ Deno.test("Function with required params", () => {
   assertEquals(AllTypesFunction.definition.output_parameters?.required, [
     "out",
   ]);
+  assertEquals(
+    AllTypesFunction.definition.input_parameters?.properties.myString.hint,
+    "Ex. my neat value",
+  );
+  assertEquals(
+    AllTypesFunction.definition.input_parameters?.properties.myBoolean.hint,
+    "Ex: true/false",
+  );
 });
 
 Deno.test("Function without input and output parameters", () => {

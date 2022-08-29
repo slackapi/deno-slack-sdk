@@ -3,7 +3,7 @@ import {
   ManifestFunction,
   ManifestWorkflowStepSchema,
 } from "../manifest/manifest_schema.ts";
-import { ISlackFunction } from "../functions/types.ts";
+import { ISlackFunctionDefinition } from "../functions/types.ts";
 import {
   CreateUntypedObjectParameterVariable,
   ParameterSetDefinition,
@@ -78,7 +78,7 @@ export class TypedWorkflowStepDefinition<
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > extends BaseWorkflowStepDefinition {
-  public definition: ISlackFunction<
+  public definition: ISlackFunctionDefinition<
     InputParameters,
     OutputParameters,
     RequiredInputs,
@@ -92,7 +92,7 @@ export class TypedWorkflowStepDefinition<
 
   constructor(
     stepId: string,
-    slackFunction: ISlackFunction<
+    slackFunction: ISlackFunctionDefinition<
       InputParameters,
       OutputParameters,
       RequiredInputs,
