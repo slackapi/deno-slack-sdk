@@ -2,7 +2,7 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
-import { SlackFunction } from "../mod.ts";
+import { SlackFunctionDefinition } from "../mod.ts";
 import type { FunctionRuntimeParameters } from "../types.ts";
 import { CreateFunctionContext, SlackFunctionTesterFn } from "./types.ts";
 export const DEFAULT_FUNCTION_TESTER_TITLE = "Function Test Title";
@@ -15,7 +15,7 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
 >(
   funcOrCallbackId:
     | string
-    | SlackFunction<
+    | SlackFunctionDefinition<
       InputParameters,
       OutputParameters,
       RequiredInput,

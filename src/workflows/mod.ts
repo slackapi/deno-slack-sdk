@@ -1,6 +1,6 @@
 import { SlackManifest } from "../manifest/mod.ts";
 import { ManifestWorkflowSchema } from "../manifest/manifest_schema.ts";
-import { ISlackFunction } from "../functions/types.ts";
+import { ISlackFunctionDefinition } from "../functions/types.ts";
 import {
   ParameterSetDefinition,
   ParameterVariable,
@@ -107,8 +107,8 @@ export class WorkflowDefinition<
     }
   }
 
-  // Supports adding a typed step where an ISlackFunction reference is used, which produces typed inputs and outputs
-  // and the functionReference string can be rerived from that ISlackFunction reference
+  // Supports adding a typed step where an ISlackFunctionDefinition reference is used, which produces typed inputs and outputs
+  // and the functionReference string can be rerived from that ISlackFunctionDefinition reference
   // Important that this overload is 1st, as it's the more specific match, and preffered type if it matches
   addStep<
     StepInputs extends ParameterSetDefinition,
@@ -116,7 +116,7 @@ export class WorkflowDefinition<
     RequiredStepInputs extends PossibleParameterKeys<StepInputs>,
     RequiredStepOutputs extends PossibleParameterKeys<StepOutputs>,
   >(
-    slackFunction: ISlackFunction<
+    slackFunction: ISlackFunctionDefinition<
       StepInputs,
       StepOutputs,
       RequiredStepInputs,
@@ -141,7 +141,7 @@ export class WorkflowDefinition<
     >,
   ): UntypedWorkflowStepDefinition;
 
-  // The runtime implementation of addStep handles both signatures (straight function-reference & config, or ISlackFunction)
+  // The runtime implementation of addStep handles both signatures (straight function-reference & config, or ISlackFunctionDefinition)
   addStep<
     StepInputs extends ParameterSetDefinition,
     StepOutputs extends ParameterSetDefinition,
@@ -150,7 +150,7 @@ export class WorkflowDefinition<
   >(
     functionOrReference:
       | string
-      | ISlackFunction<
+      | ISlackFunctionDefinition<
         StepInputs,
         StepOutputs,
         RequiredStepInputs,
@@ -170,7 +170,7 @@ export class WorkflowDefinition<
       return newStep;
     }
 
-    const slackFunction = functionOrReference as ISlackFunction<
+    const slackFunction = functionOrReference as ISlackFunctionDefinition<
       StepInputs,
       StepOutputs,
       RequiredStepInputs,

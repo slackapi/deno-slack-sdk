@@ -2,7 +2,8 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
-import { SlackFunction } from "../mod.ts";
+import { SlackFunctionDefinition } from "../mod.ts";
+import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
 import {
   matchBasicConstraintField,
@@ -24,7 +25,7 @@ export const ViewsRouter = <
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 >(
-  func: SlackFunction<
+  func: SlackFunctionDefinition<
     InputParameters,
     OutputParameters,
     RequiredInput,
@@ -54,7 +55,7 @@ class ViewRouter<
   >;
 
   constructor(
-    private func: SlackFunction<
+    private func: SlackFunctionDefinition<
       InputParameters,
       OutputParameters,
       RequiredInput,
@@ -140,16 +141,11 @@ class ViewRouter<
   ) {
     const handler = this.matchHandler(context.body.type, context.view);
     if (handler === null) {
-      // TODO: what do in this case?
-      // We can potentially throw an "UnhandledEventError" here once this lands: https://github.com/slackapi/deno-slack-runtime/pull/29
-      // perhaps the user typo'ed the action id when registering their handler or defining their callback_id.
-      // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
-      console.warn(
+      throw new UnhandledEventError(
         `Received ${context.body.type} payload ${
           JSON.stringify(context.view)
         } but this app has no view handler defined to handle it!`,
       );
-      return;
     }
     return await handler(context);
   }
@@ -165,16 +161,11 @@ class ViewRouter<
   ) {
     const handler = this.matchHandler(context.body.type, context.view);
     if (handler === null) {
-      // TODO: what do in this case?
-      // We can potentially throw an "UnhandledEventError" here once this lands: https://github.com/slackapi/deno-slack-runtime/pull/29
-      // perhaps the user typo'ed the action id when registering their handler or defining their callback_id.
-      // In the local-run case, this warning should be apparent to the user, but in the deployed context, this might be trickier to isolate
-      console.warn(
+      throw new UnhandledEventError(
         `Received ${context.body.type} payload ${
           JSON.stringify(context.view)
         } but this app has no view handler defined to handle it!`,
       );
-      return;
     }
     return await handler(context);
   }
