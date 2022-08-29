@@ -10,6 +10,7 @@ import {
   DefineFunction,
   DefineOAuth2Provider,
   DefineType,
+  DefineWorkflow,
   Schema,
 } from "../mod.ts";
 import {
@@ -176,6 +177,50 @@ Deno.test("Manifest() automatically registers types used by function input and o
     [inputTypeId]: CustomInputType.export(),
     [stringTypeId]: CustomStringType.export(),
     [outputTypeId]: CustomOutputType.export(),
+  });
+});
+
+Deno.test("Manifest() automatically registers functions used by workflows", () => {
+  const Function = DefineFunction(
+    {
+      callback_id: "test_function",
+      title: "Function title",
+      source_file: "functions/test_function.ts",
+      input_parameters: {
+        properties: { aString: { type: Schema.types.string } },
+        required: [],
+      },
+      output_parameters: {
+        properties: { aType: { type: Schema.types.string } },
+        required: [],
+      },
+    },
+  );
+
+  const Workflow = DefineWorkflow({
+    title: "test workflow",
+    callback_id: "test_workflow",
+  });
+
+  Workflow.addStep(Function, {
+    aString: "test",
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    workflows: [Workflow],
+  };
+  const manifest = Manifest(definition);
+
+  assertEquals(manifest.workflows, {
+    [Workflow.id]: Workflow.export(),
+  });
+  assertEquals(manifest.functions, {
+    [Function.id]: Function.export(),
   });
 });
 
