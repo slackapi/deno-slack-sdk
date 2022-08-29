@@ -7,6 +7,7 @@ import { ICustomType } from "../types/types.ts";
 import { OAuth2Provider } from "../providers/oauth2/mod.ts";
 import { ParameterSetDefinition } from "../parameters/mod.ts";
 import {
+  ManifestCustomEventsSchema,
   ManifestCustomTypesSchema,
   ManifestDataStoresSchema,
   ManifestFunction,
@@ -100,6 +101,16 @@ export class SlackManifest {
       );
     }
 
+    if (def.events) {
+      manifest.events = def.events?.reduce<ManifestCustomEventsSchema>(
+        (acc = {}, event) => {
+          acc[event.id] = event.export();
+          return acc;
+        },
+        {},
+      );
+    }
+
     if (def.features?.appHome) {
       const {
         homeTabEnabled,
@@ -140,6 +151,11 @@ export class SlackManifest {
     // Loop through datastores to automatically register any referenced types
     this.definition.datastores?.forEach((datastore) => {
       datastore.registerAttributeTypes(this);
+    });
+
+    // Loop through events to automatically register any referenced types
+    this.definition.events?.forEach((event) => {
+      event.registerParameterTypes(this);
     });
 
     // Loop through types to automatically register any referenced sub-types

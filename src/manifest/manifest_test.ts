@@ -6,6 +6,7 @@ import {
 import { Manifest, SlackManifest } from "./mod.ts";
 import {
   DefineDatastore,
+  DefineEvent,
   DefineFunction,
   DefineOAuth2Provider,
   DefineType,
@@ -298,6 +299,83 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
   assertEquals(manifest.types, {
     [stringTypeId]: StringType.export(),
     [objectTypeId]: ObjectType.export(),
+  });
+});
+
+Deno.test("Manifest() automatically registers types referenced by events", () => {
+  const objectEventTypeId = "test_object_event_type";
+  const objectTypeId = "test_object_type";
+  const objectEventId = "test_object_event";
+  const stringTypeId = "test_string_type";
+  const booleanTypeId = "test_boolean_type";
+  const arrayTypeId = "test_array_type";
+
+  const BooleanType = DefineType({
+    name: booleanTypeId,
+    type: Schema.types.boolean,
+  });
+
+  const StringType = DefineType({
+    name: stringTypeId,
+    type: Schema.types.string,
+  });
+
+  const ArrayType = DefineType({
+    name: arrayTypeId,
+    type: Schema.types.array,
+    items: {
+      type: StringType,
+    },
+  });
+
+  const ObjectType = DefineType({
+    name: objectTypeId,
+    type: Schema.types.object,
+    properties: {
+      aBoolean: { type: BooleanType },
+    },
+  });
+
+  const ObjectEvent = DefineEvent({
+    name: objectEventId,
+    type: Schema.types.object,
+    properties: {
+      aBoolean: { type: BooleanType },
+      anArray: { type: ArrayType },
+    },
+  });
+
+  const ObjectTypeEvent = DefineEvent({
+    name: objectEventTypeId,
+    type: ObjectType,
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    events: [ObjectTypeEvent, ObjectEvent],
+  };
+  const manifest = Manifest(definition);
+
+  assertEquals(definition.events, [ObjectTypeEvent, ObjectEvent]);
+  assertEquals(manifest.events, {
+    [objectEventTypeId]: ObjectTypeEvent.export(),
+    [objectEventId]: ObjectEvent.export(),
+  });
+  assertEquals(definition.types, [
+    ObjectType,
+    BooleanType,
+    ArrayType,
+    StringType,
+  ]);
+  assertEquals(manifest.types, {
+    [objectTypeId]: ObjectType.export(),
+    [booleanTypeId]: BooleanType.export(),
+    [arrayTypeId]: ArrayType.export(),
+    [stringTypeId]: StringType.export(),
   });
 });
 
