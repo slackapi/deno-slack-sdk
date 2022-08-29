@@ -60,7 +60,6 @@ export interface ISlackManifestRemote extends ISlackManifestShared {
   appDirectory?: ManifestAppDirectorySchema;
   userScopes?: Array<string>;
   redirectUrls?: Array<string>;
-  tokenManagementEnabled?: boolean;
   features?: ISlackManifestRemoteFeaturesSchema;
 }
 

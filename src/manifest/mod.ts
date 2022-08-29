@@ -228,7 +228,9 @@ export class SlackManifest {
     //OauthConfig
     manifest.oauth_config.scopes.user = def.userScopes;
     manifest.oauth_config.redirect_urls = def.redirectUrls;
-    manifest.oauth_config.token_management_enabled = def.tokenManagementEnabled;
+
+    // Remote-hosted Slack apps manage their own tokens
+    manifest.oauth_config.token_management_enabled = true;
 
     // Remote Features
     manifest.features.bot_user!.always_online = def.features?.botUser
