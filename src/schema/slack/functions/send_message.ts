@@ -32,7 +32,7 @@ export default DefineFunction(
         },
         interactive_blocks: {
           type: SlackTypes.blocks,
-          description: "Buttons to be sent with the message",
+          description: "Button(s) to send with the message",
         },
       },
     },
@@ -49,7 +49,7 @@ export default DefineFunction(
         },
         action: {
           type: SchemaTypes.object,
-          description: "Button interactivity specific data",
+          description: "Button interactivity data",
         },
         interactivity: {
           type: SlackTypes.interactivity,
