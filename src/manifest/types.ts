@@ -82,7 +82,10 @@ interface ISlackManifestShared {
 }
 
 interface ISlackManifestRunOnSlackFeaturesSchema {
-  appHome?: CamelCasedPropertiesDeep<ManifestAppHomeSchema>;
+  // currently home_tab_enabled is not supported for RunOnSlack apps
+  appHome?: CamelCasedPropertiesDeep<
+    Omit<ManifestAppHomeSchema, "home_tab_enabled">
+  >;
 }
 interface ISlackManifestRemoteFeaturesSchema {
   appHome?: CamelCasedPropertiesDeep<ManifestAppHomeSchema>;
