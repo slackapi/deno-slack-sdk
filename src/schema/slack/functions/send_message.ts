@@ -29,6 +29,15 @@ export default DefineFunction(
           type: SchemaTypes.object,
           description:
             "Metadata you post to Slack is accessible to any app or user who is a member of that workspace",
+          properties: {
+            event_type: {
+              type: SchemaTypes.string,
+            },
+            event_payload: {
+              type: SchemaTypes.object,
+            },
+          },
+          additionalProperties: true,
         },
         interactive_blocks: {
           type: SlackTypes.blocks,
