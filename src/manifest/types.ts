@@ -1,5 +1,6 @@
 import {
   ManifestAppDirectorySchema,
+  ManifestAppHomeMessagesTabSchema,
   ManifestAppHomeSchema,
   ManifestBotUserSchema,
   ManifestDatastore,
@@ -83,9 +84,7 @@ interface ISlackManifestShared {
 
 interface ISlackManifestRunOnSlackFeaturesSchema {
   // currently home_tab_enabled is not supported for RunOnSlack apps
-  appHome?: CamelCasedPropertiesDeep<
-    Omit<ManifestAppHomeSchema, "home_tab_enabled">
-  >;
+  appHome?: CamelCasedPropertiesDeep<ManifestAppHomeMessagesTabSchema>;
 }
 interface ISlackManifestRemoteFeaturesSchema {
   appHome?: CamelCasedPropertiesDeep<ManifestAppHomeSchema>;
