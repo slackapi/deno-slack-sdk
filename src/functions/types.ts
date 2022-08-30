@@ -268,30 +268,32 @@ export type FunctionDefinitionArgs<
 };
 
 export type SlackFunctionType<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
-    (): SlackFunctionHandler<Definition>;
-    addBlockActionsHandler(
-      actionConstraint: BlockActionConstraint,
-      handler: BlockActionHandler<
-        FunctionDefinitionArgs<I, O, RI, RO>
-      >,
-    ): SlackFunctionType<Definition>;
-    addViewClosedHandler(
-      viewConstraint: BasicConstraintField,
-      handler: ViewClosedHandler<
-        FunctionDefinitionArgs<I, O, RI, RO>
-      >,
-    ): SlackFunctionType<Definition>;
-    addViewSubmissionHandler(
-      viewConstraint: BasicConstraintField,
-      handler: ViewSubmissionHandler<
-        FunctionDefinitionArgs<I, O, RI, RO>
-      >,
-    ): SlackFunctionType<Definition>;
-    addUnhandledEventHandler(
-      handler: UnhandledEventHandler<
-        FunctionDefinitionArgs<I, O, RI, RO>
-      >,
-    ): SlackFunctionType<Definition>;
-  }
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? (
+    & SlackFunctionHandler<Definition>
+    & {
+      addBlockActionsHandler(
+        actionConstraint: BlockActionConstraint,
+        handler: BlockActionHandler<
+          FunctionDefinitionArgs<I, O, RI, RO>
+        >,
+      ): SlackFunctionType<Definition>;
+      addViewClosedHandler(
+        viewConstraint: BasicConstraintField,
+        handler: ViewClosedHandler<
+          FunctionDefinitionArgs<I, O, RI, RO>
+        >,
+      ): SlackFunctionType<Definition>;
+      addViewSubmissionHandler(
+        viewConstraint: BasicConstraintField,
+        handler: ViewSubmissionHandler<
+          FunctionDefinitionArgs<I, O, RI, RO>
+        >,
+      ): SlackFunctionType<Definition>;
+      addUnhandledEventHandler(
+        handler: UnhandledEventHandler<
+          FunctionDefinitionArgs<I, O, RI, RO>
+        >,
+      ): SlackFunctionType<Definition>;
+    }
+  )
   : never;
