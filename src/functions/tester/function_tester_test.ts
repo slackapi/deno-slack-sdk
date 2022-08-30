@@ -1,7 +1,7 @@
-import { assertEquals } from "../../dev_deps.ts";
+import { assertEquals, mock } from "../../dev_deps.ts";
 import { DEFAULT_FUNCTION_TESTER_TITLE, SlackFunctionTester } from "./mod.ts";
 import { DefineFunction } from "../mod.ts";
-import { Schema } from "../../mod.ts";
+import { Schema, SlackFunction } from "../../mod.ts";
 
 Deno.test("SlackFunctionTester.createContext using a string for callback_id", () => {
   const callbackId = "my_callback_id";
@@ -79,4 +79,38 @@ Deno.test("SlackFunctionTester.createContext with empty inputs", () => {
   assertEquals(typeof ctx.token, "string");
   assertEquals(ctx.event.type, "function_executed");
   assertEquals(ctx.event.function.callback_id, callbackId);
+});
+
+Deno.test("SlackFunctionTester with a SlackFunction()", async () => {
+  const callbackId = "my_callback_id";
+  const outputValue = "an-output-value";
+  const { createContext } = SlackFunctionTester(callbackId);
+
+  const TestFunction = DefineFunction({
+    callback_id: callbackId,
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        myValue: { type: Schema.types.string },
+        myOptionalValue: { type: Schema.types.boolean },
+      },
+      required: ["myValue"],
+    },
+    output_parameters: {
+      properties: {
+        myOutput: { type: Schema.types.string },
+      },
+      required: ["myOutput"],
+    },
+  });
+
+  const handlerSpy = mock.spy(() => {
+    return { outputs: { myOutput: outputValue } };
+  });
+
+  const handler = SlackFunction(TestFunction, handlerSpy);
+  const ctx = createContext({ inputs: { myValue: "test" } });
+  const resp = await handler(ctx);
+  assertEquals(resp.outputs?.myOutput, outputValue);
 });
