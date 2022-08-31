@@ -7,6 +7,8 @@ import { ICustomType } from "../types/types.ts";
 import { OAuth2Provider } from "../providers/oauth2/mod.ts";
 import { ParameterSetDefinition } from "../parameters/mod.ts";
 import {
+  ManifestAppHomeMessagesTabSchema,
+  ManifestAppHomeSchema,
   ManifestCustomEventsSchema,
   ManifestCustomTypesSchema,
   ManifestDataStoresSchema,
@@ -51,10 +53,6 @@ export class SlackManifest {
       features: {
         bot_user: {
           display_name: def.displayName || def.name,
-        },
-        app_home: {
-          messages_tab_enabled: true,
-          messages_tab_read_only_enabled: true,
         },
       },
       settings: { function_runtime: this.getFunctionRuntime() },
@@ -109,21 +107,6 @@ export class SlackManifest {
         },
         {},
       );
-    }
-
-    if (def.features?.appHome) {
-      const {
-        homeTabEnabled,
-        messagesTabEnabled,
-        messagesTabReadOnlyEnabled,
-      } = def.features.appHome;
-
-      if (manifest.features.app_home != undefined) {
-        manifest.features.app_home.home_tab_enabled = homeTabEnabled;
-        manifest.features.app_home.messages_tab_enabled = messagesTabEnabled;
-        manifest.features.app_home.messages_tab_read_only_enabled =
-          messagesTabReadOnlyEnabled;
-      }
     }
 
     manifest.outgoing_domains = def.outgoingDomains || [];
@@ -231,6 +214,21 @@ export class SlackManifest {
     manifest.settings.socket_mode_enabled = def.socketModeEnabled;
     manifest.settings.token_rotation_enabled = def.tokenRotationEnabled;
 
+    // Set app home features
+    if (def.features?.appHome) {
+      const {
+        homeTabEnabled,
+        messagesTabEnabled,
+        messagesTabReadOnlyEnabled,
+      } = def.features.appHome;
+
+      manifest.features.app_home = {
+        home_tab_enabled: homeTabEnabled,
+        messages_tab_enabled: messagesTabEnabled,
+        messages_tab_read_only_enabled: messagesTabReadOnlyEnabled,
+      } as ManifestAppHomeSchema;
+    }
+
     // Set org deploy enabled to true unless specified by dev
     // Org deploy enabled is required to use remote functions
     manifest.settings.org_deploy_enabled =
@@ -264,6 +262,28 @@ export class SlackManifest {
     // This is set by default as false
     manifest.oauth_config.token_management_enabled = false;
 
+    // Required App Settings for run on slack apps
+    manifest.settings.org_deploy_enabled = true;
+
+    // App Home
+    // Default to messages enabled
+    manifest.features.app_home = {
+      messages_tab_enabled: true,
+      messages_tab_read_only_enabled: true,
+    } as ManifestAppHomeMessagesTabSchema;
+
+    // Allow App Home override values if provided in apphome
+    if (def.features?.appHome) {
+      const {
+        messagesTabEnabled,
+        messagesTabReadOnlyEnabled,
+      } = def.features.appHome;
+
+      manifest.features.app_home.messages_tab_enabled = messagesTabEnabled;
+      manifest.features.app_home.messages_tab_read_only_enabled =
+        messagesTabReadOnlyEnabled;
+    }
+
     // External Auth providers
     if (def.externalAuthProviders) {
       manifest.external_auth_providers = def.externalAuthProviders?.reduce(
@@ -277,8 +297,5 @@ export class SlackManifest {
         {} as NonNullable<ManifestSchema["external_auth_providers"]>,
       );
     }
-
-    // Required App Settings for run on slack apps
-    manifest.settings.org_deploy_enabled = true;
   }
 }
