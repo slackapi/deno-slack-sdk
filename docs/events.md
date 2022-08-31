@@ -22,6 +22,8 @@ const IncidentEvent = DefineEvent({
 });
 ```
 
+Note: By default the validation will not check if additional properties were provided, but this can be done by setting `additionalProperties: false` if this functionality is desired.
+
 ### Registering an Event to the App
 
 To register the newly defined event, add it to the array assigned to the `events`
