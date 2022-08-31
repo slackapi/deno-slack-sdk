@@ -12,22 +12,11 @@ const IncidentEvent = DefineEvent({
   title: "Incident",
   type: Schema.types.object,
   properties: {
-    id: {
-      type: Schema.types.string,
-      minLength: 3,
-    },
-    title: {
-      type: Schema.types.string,
-    },
-    summary: {
-      type: Schema.types.string,
-    },
-    severity: {
-      type: Schema.types.string,
-    },
-    date_created: {
-      type: Schema.types.number,
-    },
+    id: { type: Schema.types.string },
+    title: { type: Schema.types.string },
+    summary: { type: Schema.types.string },
+    severity: { type: Schema.types.string },
+    date_created: { type: Schema.types.number },
   },
   required: ["id", "title", "summary", "severity"],
 });
