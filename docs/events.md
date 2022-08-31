@@ -114,8 +114,5 @@ const trigger: Trigger = {
 export default trigger;
 ```
 
-[datastores]: ./datastores.md
-[functions]: ./functions.md
 [manifest]: ./manifest.md
 [types]: ./types.md
-[workflows]: ./workflows.md
