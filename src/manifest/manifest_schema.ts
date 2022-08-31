@@ -145,11 +145,11 @@ export type ManifestBotUserSchema = {
 };
 
 // Features: App Home
-export type ManifestAppHomeSchema = AppHomeMessagesTab & {
+export type ManifestAppHomeSchema = ManifestAppHomeMessagesTabSchema & {
   home_tab_enabled?: boolean;
 };
 
-type AppHomeMessagesTab = {
+export type ManifestAppHomeMessagesTabSchema = {
   /** @default true */
   messages_tab_enabled?: true;
   /** @default true */
