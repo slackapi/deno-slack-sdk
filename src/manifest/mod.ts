@@ -279,11 +279,9 @@ export class SlackManifest {
         messagesTabReadOnlyEnabled,
       } = def.features.appHome;
 
-      if (manifest.features.app_home !== undefined) {
-        manifest.features.app_home.messages_tab_enabled = messagesTabEnabled;
-        manifest.features.app_home.messages_tab_read_only_enabled =
-          messagesTabReadOnlyEnabled;
-      }
+      manifest.features.app_home.messages_tab_enabled = messagesTabEnabled;
+      manifest.features.app_home.messages_tab_read_only_enabled =
+        messagesTabReadOnlyEnabled;
     }
 
     // External Auth providers
