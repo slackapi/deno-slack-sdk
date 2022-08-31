@@ -19,12 +19,11 @@ const IncidentEvent = DefineEvent({
     date_created: { type: Schema.types.number },
   },
   required: ["id", "title", "summary", "severity"],
+  additionalProperties: false, // Setting this to false forces the validation to catch any additional properties
 });
 ```
 
-Note: By default the validation will not check if additional properties were provided, but this can be done by setting `additionalProperties: false` if this functionality is desired.
-
-### Registering an Event to the App
+### Registering an Event with the App
 
 To register the newly defined event, add it to the array assigned to the `events`
 parameter while defining the [`Manifest`][manifest].
@@ -70,8 +69,7 @@ MyWorkflow.addStep(Schema.slack.functions.SendMessage, {
 ```ts
 // At function runtime
 // This example assumes all required values are passed to the function's inputs
-client.chat.postMessage({
-  {
+await client.chat.postMessage({
   channel_id: inputs.channel_id,
   message: "We have an incident!",
   metadata: {
@@ -84,7 +82,7 @@ client.chat.postMessage({
       date_created: inputs.incident_date, // Since this isn't required, it doesn't need to exist to pass validation
     }
   }
-})
+});
 ```
 
 #### Creating a Message Metadata Trigger

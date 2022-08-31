@@ -35,7 +35,7 @@ const IncidentType = DefineType({
 });
 ```
 
-### Registering a Type to the App
+### Registering a Type with the App
 
 To register the newly defined type, add it to the array assigned to the `types`
 parameter while defining the [`Manifest`][manifest].
