@@ -4,7 +4,7 @@ Custom Events provide Schema validation for an App's [message metadata](https://
 
 ### Defining a Event
 
-Events can be defined with the top level `DefineEvent` export. Events must be set up as an `object `type or a [`custom Type`][types] of an `object` type. Below is an example of setting up a custom Event that can be used during an incident.
+Events can be defined with the top level `DefineEvent` export. Events must be set up as an `object` type or a [`custom Type`][types] of an `object` type. Below is an example of setting up a custom Event that can be used during an incident.
 
 ```ts
 const IncidentEvent = DefineEvent({
