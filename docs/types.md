@@ -5,7 +5,7 @@ Custom Types provide a way to introduce reusable, sharable types to Apps.
 ### Defining a Type
 
 Types can be defined with the top level `DefineType` export. Below is an example
-of setting up a custom Type used for setting shared boundaries on strings.
+of setting up a custom Type used for incident management.
 
 ```ts
 const IncidentType = DefineType({
@@ -32,7 +32,7 @@ const IncidentType = DefineType({
     },
   },
   required: [],
-}
+});
 ```
 
 ### Registering a Type to the App
