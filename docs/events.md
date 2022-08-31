@@ -1,6 +1,6 @@
 ## Events
 
-Custom Events provide Schema validation for an App's [message metadata](https://api.slack.com/metadata).
+Custom Events provide a way for Apps to validate [message metadata](https://api.slack.com/metadata) against a pre-defined schema.
 
 ### Defining a Event
 
