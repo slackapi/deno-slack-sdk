@@ -45,7 +45,7 @@ There are two places where you can reference your events:
 2. Creating a Message Metadata Trigger
 
 #### Posting a message to Slack
-Event validation happens against the App's manifest when an App posts a message to Slack using the `metadata` parameter. If the `event_type` matches a custom Event specified in the App's manifest, it will validate that all required parameters are provided. If it doesn't meet the validation standards, a warning will be returned in the response and the metadata will be dropped from the message.
+Event validation happens against the App's manifest when an App posts a message to Slack using the [`metadata` parameter](https://api.slack.com/methods/chat.postMessage#arg_metadata). If the `event_type` matches the `name` of a custom Event specified in the App's manifest, it will validate that all required parameters are provided. If it doesn't meet the validation standards, a warning will be returned in the response and the message will still be posted, but the metadata will be dropped from the message.
 
 ```ts
 // At workflow authoring time
