@@ -61,6 +61,7 @@ export class CustomType<Def extends CustomTypeDefinition>
   export(): ManifestCustomTypeSchema {
     // remove name from the definition we pass to the manifest
     const { name: _n, ...definition } = this.definition;
-    return definition;
+    // Using JSON.stringify to force any custom types into their string reference
+    return JSON.parse(JSON.stringify(definition));
   }
 }
