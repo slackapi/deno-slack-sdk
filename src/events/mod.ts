@@ -57,7 +57,6 @@ export class CustomEvent<Def extends CustomEventDefinition>
   export(): ManifestCustomEventSchema {
     // remove name from the definition we pass to the manifest
     const { name: _n, ...definition } = this.definition;
-    // Using JSON.stringify to force any custom types into their string reference
-    return JSON.parse(JSON.stringify(definition));
+    return definition;
   }
 }
