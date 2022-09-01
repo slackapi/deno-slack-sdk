@@ -8,6 +8,7 @@ import type {
 import { ParamReference } from "./param.ts";
 import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 import SchemaTypes from "../schema/schema_types.ts";
+import { CustomType } from "../types/mod.ts";
 
 export type ParameterDefinition = TypedParameterDefinition;
 
@@ -68,8 +69,8 @@ export const ParameterVariable = <P extends ParameterDefinition>(
 ): ParameterVariableType<P> => {
   let param: ParameterVariableType<P> | null = null;
 
-  // TODO: Should be able to use instanceof CustomType here
-  if (definition.type instanceof Object) {
+  if (definition.type instanceof CustomType) {
+    //@ts-expect-error this is hitting an excessively deep or infinite depth error
     param = ParameterVariable(
       namespace,
       paramName,
