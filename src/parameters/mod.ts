@@ -1,6 +1,5 @@
 // import SchemaTypes from "../schema/schema_types.ts";
 import type {
-  CustomTypeParameterDefinition,
   TypedObjectParameterDefinition,
   TypedParameterDefinition,
   UntypedObjectParameterDefinition,
@@ -8,7 +7,7 @@ import type {
 import { ParamReference } from "./param.ts";
 import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 import SchemaTypes from "../schema/schema_types.ts";
-import { CustomType } from "../types/mod.ts";
+import { ICustomType } from "../types/types.ts";
 
 export type ParameterDefinition = TypedParameterDefinition;
 
@@ -29,8 +28,9 @@ export type ParameterPropertiesDefinition<
   required: Required;
 };
 
-export type ParameterVariableType<Def extends ParameterDefinition> = Def extends
-  CustomTypeParameterDefinition // If the ParameterVariable is a Custom type, use it's definition instead
+export type ParameterVariableType<
+  Def extends ParameterDefinition,
+> = Def["type"] extends ICustomType // If the ParameterVariable is a Custom type, use it's definition instead
   ? ParameterVariableType<Def["type"]["definition"]>
   : Def extends TypedObjectParameterDefinition // If the ParameterVariable is of type object, allow access to the object's properties
     ? ObjectParameterVariableType<Def>
@@ -69,13 +69,12 @@ export const ParameterVariable = <P extends ParameterDefinition>(
 ): ParameterVariableType<P> => {
   let param: ParameterVariableType<P> | null = null;
 
-  if (definition.type instanceof CustomType) {
-    //@ts-expect-error this is hitting an excessively deep or infinite depth error
+  if (definition.type instanceof Object) {
     param = ParameterVariable(
       namespace,
       paramName,
       definition.type.definition,
-    ) as ParameterVariableType<P>;
+    );
   } else if (definition.type === SchemaTypes.object) {
     if ("properties" in definition) {
       param = CreateTypedObjectParameterVariable(
