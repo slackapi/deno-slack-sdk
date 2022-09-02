@@ -958,3 +958,41 @@ Deno.test("SlackManifest() oauth2 providers are undefined when not configured", 
   assertEquals(definition.externalAuthProviders, undefined);
   assertEquals(exportedManifest.external_auth_providers, undefined);
 });
+
+Deno.test("Manifest supports multiple workflows with parameters", () => {
+  const workflow1 = DefineWorkflow({
+    callback_id: "test",
+    title: "test",
+    input_parameters: {
+      properties: {
+        one: {
+          type: Schema.types.string,
+        },
+      },
+      required: ["one"],
+    },
+  });
+
+  const workflow2 = DefineWorkflow({
+    callback_id: "test2",
+    title: "test",
+    input_parameters: {
+      properties: {
+        one: {
+          type: Schema.types.string,
+        },
+      },
+      required: ["one"],
+    },
+  });
+
+  const manifest = Manifest({
+    name: "Name",
+    description: "Description",
+    botScopes: [],
+    icon: "icon.png",
+    workflows: [workflow1, workflow2],
+  });
+
+  assertEquals(Object.keys(manifest.workflows || {}).length, 2);
+});
