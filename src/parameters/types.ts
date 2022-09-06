@@ -12,14 +12,13 @@ export type PrimitiveParameterDefinition =
   | TypedArrayParameterDefinition;
 
 export type TypedParameterDefinition =
-  | CustomTypeParameterDefinition
   | TypedObjectParameterDefinition
   | UntypedObjectParameterDefinition
   | PrimitiveParameterDefinition
   | OAuth2ParameterDefinition;
 
 export type CustomTypeParameterDefinition =
-  & Omit<BaseParameterDefinition<AllValues>, "type">
+  & BaseParameterDefinition<AllValues>
   & {
     type: ICustomType;
   };
@@ -27,7 +26,7 @@ export type CustomTypeParameterDefinition =
 // A type is either a string, or a Custom Type!
 type BaseParameterDefinition<T> = {
   /** Defines the parameter type. */
-  type: string;
+  type: string | ICustomType;
   /** An optional parameter title. */
   title?: string;
   /** An optional parameter description. */
@@ -59,9 +58,7 @@ export type TypedObjectParameterDefinition =
     additionalProperties?: boolean;
     /** Object defining what properties are allowed on the parameter. */
     properties: {
-      [key: string]:
-        | PrimitiveParameterDefinition
-        | CustomTypeParameterDefinition;
+      [key: string]: PrimitiveParameterDefinition;
     };
   };
 
