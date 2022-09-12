@@ -10,7 +10,7 @@ import type {
   ActionContext,
   BlockActionConstraint,
   BlockActionHandler,
-  RuntimeBlockActionHandler,
+  RuntimeActionContext,
 } from "./types.ts";
 import { BlockAction } from "./block_actions_types.ts";
 import {
@@ -104,15 +104,12 @@ export class ActionsRouter<
    * Returns a method handling routing of action payloads to the appropriate action handler.
    * The output of export() should be attached to the `blockActions` export of your function.
    */
-  export(): RuntimeBlockActionHandler<
-    FunctionDefinitionArgs<
-      InputParameters,
-      OutputParameters,
-      RequiredInput,
-      RequiredOutput
-    >
-  > {
-    return async (context) => {
+  export() {
+    return async (
+      context: RuntimeActionContext<
+        FunctionRuntimeParameters<InputParameters, RequiredInput>
+      >,
+    ) => {
       const action: BlockAction = context.action;
       const handler = this.matchHandler(action);
       if (handler === null) {

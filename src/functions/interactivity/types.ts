@@ -167,12 +167,3 @@ export type RuntimeViewSubmissionContext<InputParameters> =
 export type RuntimeViewClosedContext<InputParameters> =
   & BaseRuntimeFunctionContext<InputParameters>
   & ViewClosedSpecificContext<InputParameters>;
-
-export type RuntimeBlockActionHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
-    (
-      context: RuntimeActionContext<FunctionRuntimeParameters<I, RI>>,
-      // deno-lint-ignore no-explicit-any
-    ): Promise<any> | any;
-  }
-  : never;
