@@ -52,15 +52,21 @@ Deno.test("SlackFunction unhandledEvent is defined after calling addUnhandledEve
 });
 
 Deno.test("Main handler should pass arguments through", () => {
-  const mainFnHandler = mock.spy(() => ({ outputs: {} }));
+  const args = { test: "arguments" };
+
+  // deno-lint-ignore no-explicit-any
+  const mainFnHandler = mock.spy((ctx: any) => {
+    assertEquals(ctx.test, args.test);
+
+    return { outputs: {} };
+  });
 
   const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
-  const args = { test: "arguments" };
   typedHandlers(args);
 
-  mock.assertSpyCallArgs(mainFnHandler, 0, [args]);
+  mock.assertSpyCalls(mainFnHandler, 1);
 });
 
 Deno.test("addBlockActionsHandler", async () => {

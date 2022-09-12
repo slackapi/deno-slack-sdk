@@ -1,15 +1,14 @@
-import { SlackAPI } from "../deps.ts";
 import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../parameters/mod.ts";
 import {
-  FunctionContext,
   RuntimeFunctionContext,
   SlackFunctionHandler,
   SlackFunctionType,
 } from "./types.ts";
 import { SlackFunctionDefinition } from "./mod.ts";
+import { enrichContext } from "./enrich-context.ts";
 import { BlockActionsRouter } from "./interactivity/action_router.ts";
 import { ViewsRouter } from "./interactivity/view_router.ts";
 
@@ -36,11 +35,9 @@ export const SlackFunction = <
     // deno-lint-ignore no-explicit-any
     ...args: any
   ) => {
-    // add a client instance to the context argument
-    const newContext: FunctionContext<InputParameters> = {
-      ...ctx,
-      client: SlackAPI(ctx.token),
-    };
+    // enrich the context w/ additional properties
+    const newContext = enrichContext(ctx);
+
     //@ts-ignore - intentionally specifying the provided functionHandler as the `this` arg for the handler's call
     return functionHandler.apply(functionHandler, [newContext, ...args]);
   };

@@ -1,6 +1,6 @@
-import type { SlackAPIClient } from "../../deps.ts";
 import {
-  FunctionContext,
+  BaseRuntimeFunctionContext,
+  FunctionContextEnrichment,
   FunctionDefinitionArgs,
   FunctionParameters,
   FunctionRuntimeParameters,
@@ -50,13 +50,8 @@ export type UnhandledEventHandler<Definition> = Definition extends
   : never;
 
 export type BaseInteractivityContext<InputParameters> =
-  & Omit<
-    FunctionContext<InputParameters>,
-    "event"
-  >
-  & {
-    client: SlackAPIClient;
-  };
+  & BaseRuntimeFunctionContext<InputParameters>
+  & FunctionContextEnrichment;
 
 export type ActionContext<InputParameters> =
   & BaseInteractivityContext<InputParameters>
@@ -161,12 +156,9 @@ export type ViewConstraintObject = {
 export type BasicConstraintField = string | string[] | RegExp;
 
 // -- These types represent the deno-slack-runtime function handler interfaces
-export type RuntimeActionContext<InputParameters> = Omit<
-  ActionContext<
-    InputParameters
-  >,
-  "client"
->;
+export type RuntimeActionContext<InputParameters> =
+  & BaseRuntimeFunctionContext<InputParameters>
+  & ActionSpecificContext<InputParameters>;
 
 export type RuntimeViewSubmissionContext<InputParameters> = Omit<
   ViewSubmissionContext<
@@ -186,24 +178,6 @@ export type RuntimeBlockActionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (
       context: RuntimeActionContext<FunctionRuntimeParameters<I, RI>>,
-      // deno-lint-ignore no-explicit-any
-    ): Promise<any> | any;
-  }
-  : never;
-
-export type RuntimeViewSubmissionHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
-    (
-      context: RuntimeViewSubmissionContext<FunctionRuntimeParameters<I, RI>>,
-      // deno-lint-ignore no-explicit-any
-    ): Promise<any> | any;
-  }
-  : never;
-
-export type RuntimeViewClosedHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
-    (
-      context: RuntimeViewClosedContext<FunctionRuntimeParameters<I, RI>>,
       // deno-lint-ignore no-explicit-any
     ): Promise<any> | any;
   }

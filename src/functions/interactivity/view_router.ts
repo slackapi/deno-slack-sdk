@@ -1,10 +1,10 @@
-import { SlackAPI } from "../../deps.ts";
 import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
 import { SlackFunctionDefinition } from "../mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
+import { enrichContext } from "../enrich-context.ts";
 import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
 import {
   matchBasicConstraintField,
@@ -13,13 +13,9 @@ import {
 import type {
   BasicConstraintField,
   RuntimeViewClosedContext,
-  RuntimeViewClosedHandler,
   RuntimeViewSubmissionContext,
-  RuntimeViewSubmissionHandler,
-  ViewClosedContext,
   ViewClosedHandler,
   ViewConstraintObject,
-  ViewSubmissionContext,
   ViewSubmissionHandler,
 } from "./types.ts";
 import { View, ViewEvents } from "./view_types.ts";
@@ -152,19 +148,14 @@ class ViewRouter<
         } but this app has no view handler defined to handle it!`,
       );
     }
-    const enrichedContext: ViewClosedContext<
-      FunctionRuntimeParameters<InputParameters, RequiredInput>
-    > = {
-      ...context,
-      client: SlackAPI(context.token),
-    };
+    const enrichedContext = enrichContext(context);
+
     return await handler(enrichedContext);
   }
 
   /**
    * Method for handling view_submission events. This should be the `viewSubmission` export of your function module.
    */
-
   async viewSubmission(
     context: RuntimeViewSubmissionContext<
       FunctionRuntimeParameters<InputParameters, RequiredInput>
@@ -178,12 +169,8 @@ class ViewRouter<
         } but this app has no view handler defined to handle it!`,
       );
     }
-    const enrichedContext: ViewSubmissionContext<
-      FunctionRuntimeParameters<InputParameters, RequiredInput>
-    > = {
-      ...context,
-      client: SlackAPI(context.token),
-    };
+    const enrichedContext = enrichContext(context);
+
     return await handler(enrichedContext);
   }
 

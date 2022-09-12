@@ -1,10 +1,10 @@
-import { SlackAPI } from "../../deps.ts";
 import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
 import { SlackFunctionDefinition } from "../mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
+import { enrichContext } from "../enrich-context.ts";
 import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
 import type {
   ActionContext,
@@ -123,12 +123,9 @@ export class ActionsRouter<
         );
       }
 
-      const enrichedContext: ActionContext<
+      const enrichedContext = enrichContext(context) as ActionContext<
         FunctionRuntimeParameters<InputParameters, RequiredInput>
-      > = {
-        ...context,
-        client: SlackAPI(context.token),
-      };
+      >;
 
       return await handler(enrichedContext);
     };
