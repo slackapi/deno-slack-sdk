@@ -1,3 +1,4 @@
+import type { SlackAPIClient } from "../../deps.ts";
 import {
   FunctionContext,
   FunctionDefinitionArgs,
@@ -48,10 +49,14 @@ export type UnhandledEventHandler<Definition> = Definition extends
   }
   : never;
 
-export type BaseInteractivityContext<InputParameters> = Omit<
-  FunctionContext<InputParameters>,
-  "event"
->;
+export type BaseInteractivityContext<InputParameters> =
+  & Omit<
+    FunctionContext<InputParameters>,
+    "event"
+  >
+  & {
+    client: SlackAPIClient;
+  };
 
 export type ActionContext<InputParameters> =
   & BaseInteractivityContext<InputParameters>
@@ -154,3 +159,52 @@ export type ViewConstraintObject = {
 };
 
 export type BasicConstraintField = string | string[] | RegExp;
+
+// -- These types represent the deno-slack-runtime function handler interfaces
+export type RuntimeActionContext<InputParameters> = Omit<
+  ActionContext<
+    InputParameters
+  >,
+  "client"
+>;
+
+export type RuntimeViewSubmissionContext<InputParameters> = Omit<
+  ViewSubmissionContext<
+    InputParameters
+  >,
+  "client"
+>;
+
+export type RuntimeViewClosedContext<InputParameters> = Omit<
+  ViewClosedContext<
+    InputParameters
+  >,
+  "client"
+>;
+
+export type RuntimeBlockActionHandler<Definition> = Definition extends
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+    (
+      context: RuntimeActionContext<FunctionRuntimeParameters<I, RI>>,
+      // deno-lint-ignore no-explicit-any
+    ): Promise<any> | any;
+  }
+  : never;
+
+export type RuntimeViewSubmissionHandler<Definition> = Definition extends
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+    (
+      context: RuntimeViewSubmissionContext<FunctionRuntimeParameters<I, RI>>,
+      // deno-lint-ignore no-explicit-any
+    ): Promise<any> | any;
+  }
+  : never;
+
+export type RuntimeViewClosedHandler<Definition> = Definition extends
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+    (
+      context: RuntimeViewClosedContext<FunctionRuntimeParameters<I, RI>>,
+      // deno-lint-ignore no-explicit-any
+    ): Promise<any> | any;
+  }
+  : never;

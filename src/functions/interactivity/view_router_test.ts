@@ -1,3 +1,4 @@
+import { SlackAPI } from "../../deps.ts";
 import {
   assertEquals,
   assertExists,
@@ -196,11 +197,13 @@ const SlackViewSubmissionHandlerTester: SlackViewSubmissionHandlerTesterFn = <
       response_urls: [],
       trigger_id: "12345",
     };
+    const token = args.token || "slack-function-test-token";
 
     return {
       inputs,
       env: args.env || {},
-      token: args.token || "slack-function-test-token",
+      token,
+      client: SlackAPI(token),
       view: args.view || DEFAULT_VIEW,
       body: args.body || DEFAULT_BODY,
       team_id: DEFAULT_VIEW.team_id,
@@ -264,11 +267,13 @@ const SlackViewClosedHandlerTester: SlackViewClosedHandlerTesterFn = <
       token: "123",
       is_cleared: false,
     };
+    const token = args.token || "slack-function-test-token";
 
     return {
       inputs,
       env: args.env || {},
-      token: args.token || "slack-function-test-token",
+      token,
+      client: SlackAPI(token),
       view: args.view || DEFAULT_VIEW,
       body: args.body || DEFAULT_BODY,
       team_id: DEFAULT_VIEW.team_id,

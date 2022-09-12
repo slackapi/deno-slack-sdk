@@ -1,3 +1,4 @@
+import { SlackAPI } from "../../deps.ts";
 import {
   assertEquals,
   assertExists,
@@ -128,11 +129,13 @@ const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
       trigger_id: "123",
       response_url: "asdf",
     };
+    const token = args.token || "slack-function-test-token";
 
     return {
       inputs,
       env: args.env || {},
-      token: args.token || "slack-function-test-token",
+      token,
+      client: SlackAPI(token),
       team_id: args.team_id || "test-team-id",
       action: args.action || DEFAULT_ACTION,
       body: args.body || DEFAULT_BODY,

@@ -1,3 +1,4 @@
+import { SlackAPIClient } from "../deps.ts";
 import { Env } from "../types.ts";
 import { ManifestFunctionSchema } from "../manifest/manifest_schema.ts";
 import {
@@ -218,7 +219,14 @@ export type FunctionContext<
    */
   team_id: string;
   event: FunctionInvocationBody["event"];
+  client: SlackAPIClient;
 };
+
+// TODO: need a base version of this that all other handler ctx types can extend
+
+// This is the context the runtime dispatches handlers with
+export type RuntimeFunctionContext<InputParameters extends FunctionParameters> =
+  Omit<FunctionContext<InputParameters>, "client">;
 
 // Allow undefined here for functions that have no inputs and/or outputs
 export type FunctionParameters = {

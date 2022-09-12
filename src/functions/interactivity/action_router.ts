@@ -1,11 +1,17 @@
+import { SlackAPI } from "../../deps.ts";
 import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
 import { SlackFunctionDefinition } from "../mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
-import { FunctionDefinitionArgs } from "../types.ts";
-import type { BlockActionConstraint, BlockActionHandler } from "./types.ts";
+import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
+import type {
+  ActionContext,
+  BlockActionConstraint,
+  BlockActionHandler,
+  RuntimeBlockActionHandler,
+} from "./types.ts";
 import { BlockAction } from "./block_actions_types.ts";
 import {
   matchBasicConstraintField,
@@ -98,7 +104,7 @@ export class ActionsRouter<
    * Returns a method handling routing of action payloads to the appropriate action handler.
    * The output of export() should be attached to the `blockActions` export of your function.
    */
-  export(): BlockActionHandler<
+  export(): RuntimeBlockActionHandler<
     FunctionDefinitionArgs<
       InputParameters,
       OutputParameters,
@@ -116,7 +122,15 @@ export class ActionsRouter<
           } but this app has no action handler defined to handle it!`,
         );
       }
-      return await handler(context);
+
+      const enrichedContext: ActionContext<
+        FunctionRuntimeParameters<InputParameters, RequiredInput>
+      > = {
+        ...context,
+        client: SlackAPI(context.token),
+      };
+
+      return await handler(enrichedContext);
     };
   }
 
