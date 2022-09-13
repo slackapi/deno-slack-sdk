@@ -5,6 +5,7 @@ Some other references that may be useful to fill this out:
 - https://api.slack.com/changelog/2020-09-full-state-on-view-submisson-and-block-actions
 - https://api.slack.com/reference/interaction-payloads/block-actions#fields
 - https://github.com/slackapi/bolt-js/blob/main/src/types/actions/block-action.ts
+- https://api.slack.com/changelog/2018-05-file-threads-soon-tread
 */
 
 /**
@@ -51,18 +52,25 @@ export type BlockActionsBody = {
    * @description Information about the source message this Block Action interaction originated from.
    * This may be optional in the case that the Block Action interaction originated from a view rather than a message.
    */
-  // TODO: maybe factor this into own type once we need to re-use?
   message?: {
     /**
      * @description The encoded application ID the event was dispatched to, e.g. A123456.
      */
     app_id: string;
     /**
-     * @description The Block Kit elements included in the message.
+     * @description The {@link https://api.slack.com/block-kit Block Kit} elements included in the message.
      */
     blocks: BlockElement[];
     /**
-     * @description Message metadata, if any was attached to the message.
+     * @description Whether the {@link https://api.slack.com/messaging/managing#threading thread} has been locked.
+     */
+    is_locked: boolean;
+    /**
+     * @description If the {@link https://api.slack.com/messaging/managing#threading thread} has at least one reply, points to the most recent reply's `ts` value.
+     */
+    latest_reply?: string;
+    /**
+     * @description {@link https://api.slack.com/metadata Message metadata}, if any was attached to the message.
      */
     metadata?: {
       event_type: string,
@@ -71,6 +79,18 @@ export type BlockActionsBody = {
         [key: string]: any;
       }
     }
+    /**
+     * @description Total number of replies in the {@link https://api.slack.com/messaging/managing#threading thread}.
+     */
+    reply_count: number;
+    /**
+     * @description Array of up to 5 encoded user IDs (i.e. U12345) that replied in the {@link https://api.slack.com/messaging/managing#threading thread}.
+     */
+    reply_users: string[];
+    /**
+     * @description Total number of users that replied in the {@link https://api.slack.com/messaging/managing#threading thread}.
+     */
+    reply_users_count: number;
     /**
      * @description Encoded team ID, e.g. T123456.
      */
