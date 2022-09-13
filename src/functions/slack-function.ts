@@ -2,8 +2,14 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../parameters/mod.ts";
-import { SlackFunctionHandler, SlackFunctionType } from "./types.ts";
+import {
+  EnrichedSlackFunctionHandler,
+  RuntimeFunctionContext,
+  RuntimeUnhandledEventContext,
+  SlackFunctionType,
+} from "./types.ts";
 import { SlackFunctionDefinition } from "./mod.ts";
+import { enrichContext } from "./enrich-context.ts";
 import { BlockActionsRouter } from "./interactivity/action_router.ts";
 import { ViewsRouter } from "./interactivity/view_router.ts";
 
@@ -19,13 +25,23 @@ export const SlackFunction = <
     RequiredInput,
     RequiredOutput
   >,
-  functionHandler: SlackFunctionHandler<typeof func.definition>,
+  functionHandler: EnrichedSlackFunctionHandler<typeof func.definition>,
 ) => {
-  // Start with their fn handler, and we'll wrap it up so we can append some additional functions to it
+  // Start with the provided fn handler, and we'll wrap it up so we can append some additional functions to it
 
-  // @ts-ignore - creating a wrapper around provided fn handler so we don't mutate it directly
+  // Wrap the provided handler's call so we can add additional context
   // deno-lint-ignore no-explicit-any
-  const handlerModule: any = (...args) => functionHandler(...args);
+  const handlerModule: any = (
+    ctx: RuntimeFunctionContext<InputParameters>,
+    // deno-lint-ignore no-explicit-any
+    ...args: any
+  ) => {
+    // enrich the context w/ additional properties
+    const newContext = enrichContext(ctx);
+
+    //@ts-expect-error - intentionally specifying the provided functionHandler as the `this` arg for the handler's call
+    return functionHandler.apply(functionHandler, [newContext, ...args]);
+  };
   // Unhandled events are sent to a single handler, which is not set by default
   handlerModule.unhandledEvent = undefined;
 
@@ -60,7 +76,15 @@ export const SlackFunction = <
   // deno-lint-ignore no-explicit-any
   handlerModule.addUnhandledEventHandler = (handler: any) => {
     // Set the unhandledEvent property directly
-    handlerModule.unhandledEvent = handler;
+    handlerModule.unhandledEvent = (
+      ctx: RuntimeUnhandledEventContext<InputParameters>,
+      // deno-lint-ignore no-explicit-any
+      ...args: any
+    ) => {
+      const newContext = enrichContext(ctx);
+
+      return handler.apply(handler, [newContext, ...args]);
+    };
 
     return handlerModule;
   };

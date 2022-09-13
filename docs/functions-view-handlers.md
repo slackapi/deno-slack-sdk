@@ -99,17 +99,12 @@ type `Schema.slack.types.interactivity` under the `interactivity_pointer` proper
 Check out the code below for an example:
 
 ```typescript
-import type { SlackFunctionHandler } from "deno-slack-sdk/types.ts";
-import { SlackAPI } from "deno-slack-api/mod.ts";
+import { SlackFunction } from "deno-slack-sdk/mod.ts";
 // DiaryFunction is the function we defined in the previous section
 import { DiaryFunction } from "./definition.ts";
 
-const diary: SlackFunctionHandler<
-  typeof DiaryFunction.definition
-> = async ({ inputs, token }) => {
+export default SlackFunction(DiaryFunction, async ({ inputs, client }) => {
   console.log('Someone might want to write a diary entry...');
-  // A Slack API client, so that we can make API calls to Slack
-  const client = SlackAPI(token);
 
   await client.views.open({
     trigger_id: inputs.interactivity.interactivity_pointer,
@@ -182,15 +177,13 @@ You can use the value of `body.trigger_id` within an action handler to open a
 view, like so:
 
 ```typescript
-import type { SlackFunctionHandler } from "deno-slack-sdk/types.ts";
-import { SlackAPI } from "deno-slack-api/mod.ts";
+import { BlockActionsRouter } from "deno-slack-sdk/mod.ts";
 // DiaryFunction is the function we defined in the previous section
 import { DiaryFunction } from "./definition.ts";
 
 export const blockActions = BlockActionsRouter(DiaryFunction).addHandler(
   'deny_request',
-  async ({ action, body, token }) => {
-    const client = SlackAPI(token);
+  async ({ action, body, client }) => {
     await client.views.open({
       trigger_id: body.trigger_id,
       view: { /* your view object goes here */ },
@@ -252,8 +245,7 @@ As an example, consider the following two code snippets. They yield identical be
 ```typescript
 export const { viewSubmission, viewClosed } = ViewRouter
   // A view submission handler that pushes a new view using the API
-  .addSubmissionHandler(/view/, async ({ token, body }) => {
-    const client = SlackAPI(token);
+  .addSubmissionHandler(/view/, async ({ client, body }) => {
     await client.views.push({
       trigger_id: body.trigger_id,
       view: { /* your view object goes here */ },

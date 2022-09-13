@@ -4,8 +4,14 @@ import {
 } from "../../parameters/mod.ts";
 import { SlackFunctionDefinition } from "../mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
-import { FunctionDefinitionArgs } from "../types.ts";
-import type { BlockActionConstraint, BlockActionHandler } from "./types.ts";
+import { enrichContext } from "../enrich-context.ts";
+import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
+import type {
+  ActionContext,
+  BlockActionConstraint,
+  BlockActionHandler,
+  RuntimeActionContext,
+} from "./types.ts";
 import { BlockAction } from "./block_actions_types.ts";
 import {
   matchBasicConstraintField,
@@ -98,15 +104,12 @@ export class ActionsRouter<
    * Returns a method handling routing of action payloads to the appropriate action handler.
    * The output of export() should be attached to the `blockActions` export of your function.
    */
-  export(): BlockActionHandler<
-    FunctionDefinitionArgs<
-      InputParameters,
-      OutputParameters,
-      RequiredInput,
-      RequiredOutput
-    >
-  > {
-    return async (context) => {
+  export() {
+    return async (
+      context: RuntimeActionContext<
+        FunctionRuntimeParameters<InputParameters, RequiredInput>
+      >,
+    ) => {
       const action: BlockAction = context.action;
       const handler = this.matchHandler(action);
       if (handler === null) {
@@ -116,7 +119,12 @@ export class ActionsRouter<
           } but this app has no action handler defined to handle it!`,
         );
       }
-      return await handler(context);
+
+      const enrichedContext = enrichContext(context) as ActionContext<
+        FunctionRuntimeParameters<InputParameters, RequiredInput>
+      >;
+
+      return await handler(enrichedContext);
     };
   }
 

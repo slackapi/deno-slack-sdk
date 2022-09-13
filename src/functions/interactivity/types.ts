@@ -1,5 +1,6 @@
 import {
-  FunctionContext,
+  BaseRuntimeFunctionContext,
+  FunctionContextEnrichment,
   FunctionDefinitionArgs,
   FunctionParameters,
   FunctionRuntimeParameters,
@@ -48,10 +49,9 @@ export type UnhandledEventHandler<Definition> = Definition extends
   }
   : never;
 
-export type BaseInteractivityContext<InputParameters> = Omit<
-  FunctionContext<InputParameters>,
-  "event"
->;
+export type BaseInteractivityContext<InputParameters> =
+  & BaseRuntimeFunctionContext<InputParameters>
+  & FunctionContextEnrichment;
 
 export type ActionContext<InputParameters> =
   & BaseInteractivityContext<InputParameters>
@@ -154,3 +154,16 @@ export type ViewConstraintObject = {
 };
 
 export type BasicConstraintField = string | string[] | RegExp;
+
+// -- These types represent the deno-slack-runtime function handler interfaces
+export type RuntimeActionContext<InputParameters> =
+  & BaseRuntimeFunctionContext<InputParameters>
+  & ActionSpecificContext<InputParameters>;
+
+export type RuntimeViewSubmissionContext<InputParameters> =
+  & BaseRuntimeFunctionContext<InputParameters>
+  & ViewSubmissionSpecificContext<InputParameters>;
+
+export type RuntimeViewClosedContext<InputParameters> =
+  & BaseRuntimeFunctionContext<InputParameters>
+  & ViewClosedSpecificContext<InputParameters>;
