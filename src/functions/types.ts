@@ -69,11 +69,11 @@ type FunctionInputRuntimeType<
   // Recurse through Custom Types, stop when we hit our max depth
   CurrentDepth extends MaxRecursionDepth ? UnknownRuntimeType
     : Param extends CustomTypeParameterDefinition ? FunctionInputRuntimeType<
-        Param["type"]["definition"],
-        IncreaseDepth<CurrentDepth>
-      >
-      // Not a Custom Type, so assign the runtime value
-    : Param["type"] extends typeof SchemaTypes.string ? string
+      Param["type"]["definition"],
+      IncreaseDepth<CurrentDepth>
+    >
+    : // Not a Custom Type, so assign the runtime value
+    Param["type"] extends typeof SchemaTypes.string ? string
     : Param["type"] extends
       | typeof SchemaTypes.integer
       | typeof SchemaTypes.number ? number
@@ -102,10 +102,10 @@ type UnknownRuntimeType = any;
 type TypedObjectFunctionInputRuntimeType<
   Param extends TypedObjectParameterDefinition,
 > = Param["additionalProperties"] extends false ? {
-    [k in keyof Param["properties"]]: FunctionInputRuntimeType<
-      Param["properties"][k]
-    >;
-  }
+  [k in keyof Param["properties"]]: FunctionInputRuntimeType<
+    Param["properties"][k]
+  >;
+}
   : 
     & {
       [k in keyof Param["properties"]]: FunctionInputRuntimeType<
