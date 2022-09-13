@@ -142,12 +142,17 @@ Deno.test("addUnhandledEventHandler", async () => {
   const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
-  const handlerSpy = mock.spy();
+  // deno-lint-ignore no-explicit-any
+  const handlerSpy = mock.spy((ctx: any) => {
+    assertEquals(ctx.some, args.some);
+    assertExists(ctx.client);
+
+    return { outputs: {} };
+  });
   typedHandlers.addUnhandledEventHandler(handlerSpy);
 
   const args = { some: "arguments" };
   await typedHandlers.unhandledEvent(args);
-  mock.assertSpyCallArgs(handlerSpy, 0, [args]);
 });
 
 const typeHandlersForTesting = <HandlerType>(handlers: HandlerType) => {
