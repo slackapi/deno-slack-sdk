@@ -156,8 +156,17 @@ export type BlockActionsBody = {
   };
   // deno-lint-ignore no-explicit-any
   [key: string]: any;
-  /* Other properties seen on this type that should be added at some point:
-   * container: {}; // should be a reference to message or view below, depending on the container for the block kit interactive componenet
+  /* TODO: Other properties seen on this type that should be added at some point:
+   * container: {}; // should be a reference to message or view, depending on the container for the block kit interactive componenet
+   * message container looks like:
+   *  "container": {
+        "type": "message",
+        "message_ts": "1663103912.870299",
+        "channel_id": "C03DS3P5ED6",
+        "is_ephemeral": false
+      },
+      view container looks like:
+      container: { type: "view", view_id: "V041UDW806B" }
    * view: {}; // if the block kit interactive component was part of a view, details for the view are here
    * state: { values: {}}; // seen but usually empty?
    */
