@@ -4,9 +4,13 @@ export type FunctionParameter = {
   name: string;
   description: string;
   type: string | ICustomType;
-  items: {
+  items?: {
     type: string | ICustomType;
   };
+  properties?: {
+    [key: string]: FunctionParameter;
+  };
+  additionalProperties: boolean;
   "is_required": boolean;
 };
 

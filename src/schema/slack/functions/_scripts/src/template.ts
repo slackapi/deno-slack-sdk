@@ -52,7 +52,24 @@ const schemaTypeMap = Object.entries(typeMap).reduce<AllowedTypeValueObject>(
   {},
 );
 
-const appendItems = (param: FunctionParameter) => {
+const appendItemsOrProperties = (param: FunctionParameter) => {
+  if (param.properties) {
+    const properties = Object.entries(param.properties).reduce<string>(
+      (acc, [propertyKey, propertyValue]) => {
+        if (acc) acc += "\n";
+        acc += `${propertyKey}: ${getParamDef(propertyValue, false)},`;
+        return acc;
+      },
+      "",
+    );
+    const propertyString = `properties: {${properties}}`;
+    const additionalPropertyString =
+      // deno-lint-ignore no-prototype-builtins
+      param.hasOwnProperty("additionalProperties")
+        ? `\n, additionalProperties: ${param.additionalProperties}`
+        : "";
+    return propertyString + additionalPropertyString;
+  }
   if (param.items) {
     return `items:{
        type: "${param.items.type}"
@@ -61,14 +78,18 @@ const appendItems = (param: FunctionParameter) => {
   return "";
 };
 
-const templatizeParam = (param: FunctionParameter, useTypeValue = false) => {
-  const paramDef = `{
+const getParamDef = (param: FunctionParameter, useTypeValue = false) => {
+  return `{
     type: ${
     useTypeValue ? `"${param.type}"` : schemaTypeMap[getParamType(param.type)]
   },
-    description: "${param.description}",
-    ${appendItems(param)}
+    ${param.description ? `description: "${param.description}",` : ""}
+    ${appendItemsOrProperties(param)}
   }`;
+};
+
+const templatizeParam = (param: FunctionParameter, useTypeValue = false) => {
+  const paramDef = getParamDef(param, useTypeValue);
   return `${param.name}: ${paramDef}`;
 };
 
