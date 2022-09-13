@@ -29,3 +29,5 @@ export type InvocationPayload<Body> = {
 // Env
 // ----------------------------------------------------------------------------
 export type Env = Record<string, string>;
+
+export type { SlackAPIClient, Trigger } from "./deps.ts";
