@@ -4,6 +4,7 @@ import {
 } from "../parameters/mod.ts";
 import {
   RuntimeFunctionContext,
+  RuntimeUnhandledEventContext,
   SlackFunctionHandler,
   SlackFunctionType,
 } from "./types.ts";
@@ -75,7 +76,15 @@ export const SlackFunction = <
   // deno-lint-ignore no-explicit-any
   handlerModule.addUnhandledEventHandler = (handler: any) => {
     // Set the unhandledEvent property directly
-    handlerModule.unhandledEvent = handler;
+    handlerModule.unhandledEvent = (
+      ctx: RuntimeUnhandledEventContext<InputParameters>,
+      // deno-lint-ignore no-explicit-any
+      ...args: any
+    ) => {
+      const newContext = enrichContext(ctx);
+
+      return handler.apply(handler, [newContext, ...args]);
+    };
 
     return handlerModule;
   };

@@ -316,3 +316,13 @@ export type SlackFunctionType<Definition> = Definition extends
     }
   )
   : never;
+
+// This is the context deno-slack-runtime passes to the unhandledEvent handler
+export type RuntimeUnhandledEventContext<
+  InputParameters extends FunctionParameters,
+> =
+  & BaseRuntimeFunctionContext<InputParameters>
+  & {
+    // deno-lint-ignore no-explicit-any
+    body: any;
+  };

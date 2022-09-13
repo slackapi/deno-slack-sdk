@@ -314,6 +314,7 @@ Deno.test("ViewRouter viewSubmission", async (t) => {
         assertExists(ctx.inputs);
         assertEquals<string>(ctx.inputs.garbage, inputs.garbage);
         assertExists(ctx.token);
+        assertExists(ctx.client);
         assertExists<View>(ctx.view);
         assertExists<
           ViewSubmissionInvocationBody<
@@ -341,6 +342,7 @@ Deno.test("ViewRouter viewSubmission happy path", async (t) => {
       assertExists<string>(ctx.token);
       assertExists<View>(ctx.view);
       assertExists(ctx.env);
+      assertExists(ctx.client);
       handlerCalled = true;
     });
     await router.viewSubmission(createSubmissionContext({ inputs }));
@@ -431,6 +433,7 @@ Deno.test("ViewRouter viewClosed", async (t) => {
         assertExists(ctx.inputs);
         assertEquals<string>(ctx.inputs.garbage, inputs.garbage);
         assertExists(ctx.token);
+        assertExists(ctx.client);
         assertExists<View>(ctx.view);
         assertExists<
           ViewClosedInvocationBody<
@@ -456,6 +459,7 @@ Deno.test("ViewRouter viewClosed happy path", async (t) => {
     router.addClosedHandler(DEFAULT_VIEW.callback_id, (ctx) => {
       assertExists(ctx.inputs);
       assertExists<string>(ctx.token);
+      assertExists(ctx.client);
       assertExists<View>(ctx.view);
       assertExists(ctx.env);
       handlerCalled = true;

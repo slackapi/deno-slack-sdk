@@ -1,4 +1,4 @@
-import { assertEquals, mock } from "../dev_deps.ts";
+import { assertEquals, assertExists, mock } from "../dev_deps.ts";
 import { DefineFunction, SlackFunction } from "../mod.ts";
 
 const TestFunction = DefineFunction({
@@ -57,6 +57,25 @@ Deno.test("Main handler should pass arguments through", () => {
   // deno-lint-ignore no-explicit-any
   const mainFnHandler = mock.spy((ctx: any) => {
     assertEquals(ctx.test, args.test);
+    assertExists(ctx.client);
+
+    return { outputs: {} };
+  });
+
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
+  const typedHandlers = typeHandlersForTesting(handlers);
+
+  typedHandlers(args);
+
+  mock.assertSpyCalls(mainFnHandler, 1);
+});
+
+Deno.test("Main handler should have a client instance", () => {
+  const args = { test: "arguments" };
+
+  // deno-lint-ignore no-explicit-any
+  const mainFnHandler = mock.spy((ctx: any) => {
+    assertExists(ctx.client);
 
     return { outputs: {} };
   });

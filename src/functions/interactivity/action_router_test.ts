@@ -176,6 +176,7 @@ Deno.test("ActionsRouter", async (t) => {
         assertExists(ctx.token);
         assertExists(ctx.action);
         assertExists(ctx.env);
+        assertExists(ctx.client);
         handlerCalled = true;
       });
       await router(createContext({ inputs }));
@@ -193,6 +194,7 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
       assertExists(ctx.token);
       assertExists(ctx.action);
       assertExists(ctx.env);
+      assertExists(ctx.client);
       handlerCalled = true;
     });
     await router(createContext({ inputs }));
