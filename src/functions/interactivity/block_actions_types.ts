@@ -73,12 +73,12 @@ export type BlockActionsBody = {
      * @description {@link https://api.slack.com/metadata Message metadata}, if any was attached to the message.
      */
     metadata?: {
-      event_type: string,
+      event_type: string;
       event_payload: {
         // deno-lint-ignore no-explicit-any
         [key: string]: any;
-      }
-    }
+      };
+    };
     /**
      * @description Total number of replies in the {@link https://api.slack.com/messaging/managing#threading thread}.
      */
@@ -100,7 +100,7 @@ export type BlockActionsBody = {
      * contain the fallback text to display in constrained UIs (like notifications) or in screenreaders. See
      * {@link https://api.slack.com/methods/chat.postMessage#blocks_and_attachments the API documentation for use of text, blocks and attachments in messages}.
      */
-    text: string,
+    text: string;
     /**
      * @description Timestamp of the parent message. If the message is already a parent message, then this value will equal the `ts` value. Use this value if you want to post a message as a {@link https://api.slack.com/messaging/managing#threading threaded reply} to a particular message.
      */
@@ -108,16 +108,16 @@ export type BlockActionsBody = {
     /**
      * @description Timestamp of the message.
      */
-    ts: string,
+    ts: string;
     /**
      * @description The type of message. This is always "message."
      */
-    type: "message",
+    type: "message";
     /**
      * @description Encoded user ID of the user that posted the message, e.g. U123456.
      */
-    user: string,
-  },
+    user: string;
+  };
   response_url: string;
   /**
    * @description The workspace, or team, details the Block Kit interaction originated from.
