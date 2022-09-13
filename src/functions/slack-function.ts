@@ -39,7 +39,7 @@ export const SlackFunction = <
     // enrich the context w/ additional properties
     const newContext = enrichContext(ctx);
 
-    //@ts-ignore - intentionally specifying the provided functionHandler as the `this` arg for the handler's call
+    //@ts-expect-error - intentionally specifying the provided functionHandler as the `this` arg for the handler's call
     return functionHandler.apply(functionHandler, [newContext, ...args]);
   };
   // Unhandled events are sent to a single handler, which is not set by default
