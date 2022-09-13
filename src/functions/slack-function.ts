@@ -3,9 +3,9 @@ import {
   PossibleParameterKeys,
 } from "../parameters/mod.ts";
 import {
+  EnrichedSlackFunctionHandler,
   RuntimeFunctionContext,
   RuntimeUnhandledEventContext,
-  SlackFunctionHandler,
   SlackFunctionType,
 } from "./types.ts";
 import { SlackFunctionDefinition } from "./mod.ts";
@@ -25,7 +25,7 @@ export const SlackFunction = <
     RequiredInput,
     RequiredOutput
   >,
-  functionHandler: SlackFunctionHandler<typeof func.definition>,
+  functionHandler: EnrichedSlackFunctionHandler<typeof func.definition>,
 ) => {
   // Start with the provided fn handler, and we'll wrap it up so we can append some additional functions to it
 

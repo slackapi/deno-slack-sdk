@@ -139,24 +139,32 @@ export type FunctionRuntimeParameters<
     >;
   };
 
-type AsyncFunctionHandler<InputParameters, OutputParameters> = {
+type AsyncFunctionHandler<
+  InputParameters,
+  OutputParameters,
+  Context extends BaseRuntimeFunctionContext<InputParameters>,
+> = {
   (
-    context: FunctionContext<InputParameters>,
+    context: Context,
   ): Promise<FunctionHandlerReturnArgs<OutputParameters>>;
 };
 
-type SyncFunctionHandler<InputParameters, OutputParameters> = {
+type SyncFunctionHandler<
+  InputParameters,
+  OutputParameters,
+  Context extends BaseRuntimeFunctionContext<InputParameters>,
+> = {
   (
-    context: FunctionContext<InputParameters>,
+    context: Context,
   ): FunctionHandlerReturnArgs<OutputParameters>;
 };
 
 /**
  * @description Slack Function handler from a function definition
  */
-export type SlackFunctionHandler<Definition> = Definition extends
+export type RuntimeSlackFunctionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
-  ? BaseSlackFunctionHandler<
+  ? BaseRuntimeSlackFunctionHandler<
     FunctionRuntimeParameters<I, RI>,
     FunctionRuntimeParameters<O, RO>
   >
@@ -165,12 +173,53 @@ export type SlackFunctionHandler<Definition> = Definition extends
 /**
  * @description Slack Function handler from input and output types directly
  */
-export type BaseSlackFunctionHandler<
+export type BaseRuntimeSlackFunctionHandler<
   InputParameters extends FunctionParameters,
   OutputParameters extends FunctionParameters,
 > =
-  | AsyncFunctionHandler<InputParameters, OutputParameters>
-  | SyncFunctionHandler<InputParameters, OutputParameters>;
+  | AsyncFunctionHandler<
+    InputParameters,
+    OutputParameters,
+    RuntimeFunctionContext<InputParameters>
+  >
+  | SyncFunctionHandler<
+    InputParameters,
+    OutputParameters,
+    RuntimeFunctionContext<InputParameters>
+  >;
+
+/**
+ * @description Slack Function handler from a function definition
+ */
+export type EnrichedSlackFunctionHandler<Definition> = Definition extends
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
+  ? (BaseEnrichedSlackFunctionHandler<
+    FunctionRuntimeParameters<I, RI>,
+    FunctionRuntimeParameters<O, RO>
+  >)
+  : never;
+
+/**
+ * @description Slack Function handler from input and output types directly
+ */
+type BaseEnrichedSlackFunctionHandler<
+  InputParameters extends FunctionParameters,
+  OutputParameters extends FunctionParameters,
+> =
+  | AsyncFunctionHandler<
+    InputParameters,
+    OutputParameters,
+    FunctionContext<InputParameters>
+  >
+  | SyncFunctionHandler<
+    InputParameters,
+    OutputParameters,
+    FunctionContext<InputParameters>
+  >;
+
+// export type SlackFunctionHandler<Definition> = EnrichedSlackFunctionHandler<
+//   Definition
+// >;
 
 type SuccessfulFunctionReturnArgs<
   OutputParameters extends FunctionParameters,
@@ -288,7 +337,7 @@ export type FunctionDefinitionArgs<
 
 export type SlackFunctionType<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? (
-    & SlackFunctionHandler<Definition>
+    & EnrichedSlackFunctionHandler<Definition>
     & {
       addBlockActionsHandler(
         actionConstraint: BlockActionConstraint,
