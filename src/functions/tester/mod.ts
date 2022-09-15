@@ -1,3 +1,4 @@
+import { SlackAPI } from "../../deps.ts";
 import {
   ParameterSetDefinition,
   PossibleParameterKeys,
@@ -39,6 +40,7 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
     args,
   ) => {
     const ts = new Date();
+    const token = args.token || "slack-function-test-token";
 
     return {
       inputs: (args.inputs || {}) as FunctionRuntimeParameters<
@@ -46,7 +48,8 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
         RequiredInput
       >,
       env: args.env || {},
-      token: args.token || "slack-function-test-token",
+      token,
+      client: SlackAPI(token),
       team_id: args.team_id || "test-team-id",
       event: args.event || {
         type: "function_executed",

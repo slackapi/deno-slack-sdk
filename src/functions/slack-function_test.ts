@@ -1,4 +1,4 @@
-import { assertEquals, mock } from "../dev_deps.ts";
+import { assertEquals, assertExists, mock } from "../dev_deps.ts";
 import { DefineFunction, SlackFunction } from "../mod.ts";
 
 const TestFunction = DefineFunction({
@@ -52,15 +52,40 @@ Deno.test("SlackFunction unhandledEvent is defined after calling addUnhandledEve
 });
 
 Deno.test("Main handler should pass arguments through", () => {
-  const mainFnHandler = mock.spy(() => ({ outputs: {} }));
+  const args = { test: "arguments" };
+
+  // deno-lint-ignore no-explicit-any
+  const mainFnHandler = mock.spy((ctx: any) => {
+    assertEquals(ctx.test, args.test);
+    assertExists(ctx.client);
+
+    return { outputs: {} };
+  });
 
   const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
-  const args = { test: "arguments" };
   typedHandlers(args);
 
-  mock.assertSpyCallArgs(mainFnHandler, 0, [args]);
+  mock.assertSpyCalls(mainFnHandler, 1);
+});
+
+Deno.test("Main handler should have a client instance", () => {
+  const args = { test: "arguments" };
+
+  // deno-lint-ignore no-explicit-any
+  const mainFnHandler = mock.spy((ctx: any) => {
+    assertExists(ctx.client);
+
+    return { outputs: {} };
+  });
+
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
+  const typedHandlers = typeHandlersForTesting(handlers);
+
+  typedHandlers(args);
+
+  mock.assertSpyCalls(mainFnHandler, 1);
 });
 
 Deno.test("addBlockActionsHandler", async () => {
@@ -117,12 +142,17 @@ Deno.test("addUnhandledEventHandler", async () => {
   const handlers = SlackFunction(TestFunction, mainFnHandler);
   const typedHandlers = typeHandlersForTesting(handlers);
 
-  const handlerSpy = mock.spy();
+  // deno-lint-ignore no-explicit-any
+  const handlerSpy = mock.spy((ctx: any) => {
+    assertEquals(ctx.some, args.some);
+    assertExists(ctx.client);
+
+    return { outputs: {} };
+  });
   typedHandlers.addUnhandledEventHandler(handlerSpy);
 
   const args = { some: "arguments" };
   await typedHandlers.unhandledEvent(args);
-  mock.assertSpyCallArgs(handlerSpy, 0, [args]);
 });
 
 const typeHandlersForTesting = <HandlerType>(handlers: HandlerType) => {

@@ -1,3 +1,4 @@
+import { SlackAPIClient } from "../deps.ts";
 import { Env } from "../types.ts";
 import { ManifestFunctionSchema } from "../manifest/manifest_schema.ts";
 import {
@@ -138,24 +139,32 @@ export type FunctionRuntimeParameters<
     >;
   };
 
-type AsyncFunctionHandler<InputParameters, OutputParameters> = {
+type AsyncFunctionHandler<
+  InputParameters,
+  OutputParameters,
+  Context extends BaseRuntimeFunctionContext<InputParameters>,
+> = {
   (
-    context: FunctionContext<InputParameters>,
+    context: Context,
   ): Promise<FunctionHandlerReturnArgs<OutputParameters>>;
 };
 
-type SyncFunctionHandler<InputParameters, OutputParameters> = {
+type SyncFunctionHandler<
+  InputParameters,
+  OutputParameters,
+  Context extends BaseRuntimeFunctionContext<InputParameters>,
+> = {
   (
-    context: FunctionContext<InputParameters>,
+    context: Context,
   ): FunctionHandlerReturnArgs<OutputParameters>;
 };
 
 /**
  * @description Slack Function handler from a function definition
  */
-export type SlackFunctionHandler<Definition> = Definition extends
+export type RuntimeSlackFunctionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
-  ? BaseSlackFunctionHandler<
+  ? BaseRuntimeSlackFunctionHandler<
     FunctionRuntimeParameters<I, RI>,
     FunctionRuntimeParameters<O, RO>
   >
@@ -164,12 +173,53 @@ export type SlackFunctionHandler<Definition> = Definition extends
 /**
  * @description Slack Function handler from input and output types directly
  */
-export type BaseSlackFunctionHandler<
+export type BaseRuntimeSlackFunctionHandler<
   InputParameters extends FunctionParameters,
   OutputParameters extends FunctionParameters,
 > =
-  | AsyncFunctionHandler<InputParameters, OutputParameters>
-  | SyncFunctionHandler<InputParameters, OutputParameters>;
+  | AsyncFunctionHandler<
+    InputParameters,
+    OutputParameters,
+    RuntimeFunctionContext<InputParameters>
+  >
+  | SyncFunctionHandler<
+    InputParameters,
+    OutputParameters,
+    RuntimeFunctionContext<InputParameters>
+  >;
+
+/**
+ * @description Slack Function handler from a function definition
+ */
+export type EnrichedSlackFunctionHandler<Definition> = Definition extends
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
+  ? (BaseEnrichedSlackFunctionHandler<
+    FunctionRuntimeParameters<I, RI>,
+    FunctionRuntimeParameters<O, RO>
+  >)
+  : never;
+
+/**
+ * @description Slack Function handler from input and output types directly
+ */
+type BaseEnrichedSlackFunctionHandler<
+  InputParameters extends FunctionParameters,
+  OutputParameters extends FunctionParameters,
+> =
+  | AsyncFunctionHandler<
+    InputParameters,
+    OutputParameters,
+    FunctionContext<InputParameters>
+  >
+  | SyncFunctionHandler<
+    InputParameters,
+    OutputParameters,
+    FunctionContext<InputParameters>
+  >;
+
+// export type SlackFunctionHandler<Definition> = EnrichedSlackFunctionHandler<
+//   Definition
+// >;
 
 type SuccessfulFunctionReturnArgs<
   OutputParameters extends FunctionParameters,
@@ -198,7 +248,9 @@ export type FunctionHandlerReturnArgs<
   | ErroredFunctionReturnArgs<OutputParameters>
   | PendingFunctionReturnArgs;
 
-export type FunctionContext<
+// This describes the base-version of context objects deno-slack-runtime passes into different function handlers (i.e. main fn handler, blockActions, etc).
+// Each function handler type extends this with it's own specific additions.
+export type BaseRuntimeFunctionContext<
   InputParameters extends FunctionParameters,
 > = {
   /**
@@ -217,8 +269,24 @@ export type FunctionContext<
    * @description A unique encoded ID representing the Slack team associated with the workspace where the function execution takes place.
    */
   team_id: string;
-  event: FunctionInvocationBody["event"];
 };
+
+// SDK Function handlers receive these additional properties on the function context object
+export type FunctionContextEnrichment = {
+  client: SlackAPIClient;
+};
+
+// This is the context deno-slack-runtime passes to the main function handler
+export type RuntimeFunctionContext<InputParameters extends FunctionParameters> =
+  & BaseRuntimeFunctionContext<InputParameters>
+  & {
+    event: FunctionInvocationBody["event"];
+  };
+
+// This is the enriched context object passed into the main function handler setup with SlackFunction()
+export type FunctionContext<
+  InputParameters extends FunctionParameters,
+> = RuntimeFunctionContext<InputParameters> & FunctionContextEnrichment;
 
 // Allow undefined here for functions that have no inputs and/or outputs
 export type FunctionParameters = {
@@ -269,7 +337,7 @@ export type FunctionDefinitionArgs<
 
 export type SlackFunctionType<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? (
-    & SlackFunctionHandler<Definition>
+    & EnrichedSlackFunctionHandler<Definition>
     & {
       addBlockActionsHandler(
         actionConstraint: BlockActionConstraint,
@@ -297,3 +365,13 @@ export type SlackFunctionType<Definition> = Definition extends
     }
   )
   : never;
+
+// This is the context deno-slack-runtime passes to the unhandledEvent handler
+export type RuntimeUnhandledEventContext<
+  InputParameters extends FunctionParameters,
+> =
+  & BaseRuntimeFunctionContext<InputParameters>
+  & {
+    // deno-lint-ignore no-explicit-any
+    body: any;
+  };

@@ -89,49 +89,44 @@ subdirectory in your app) that posts a message with two buttons: an approval but
 and a deny button:
 
 ```typescript
-import type { SlackFunctionHandler } from "deno-slack-sdk/types.ts";
-import { SlackAPI } from "deno-slack-api/mod.ts";
+import { SlackFunction } from "deno-slack-sdk/mod.ts";
 // ApprovalFunction is the function we defined in the previous section
 import { ApprovalFunction } from "./definition.ts";
 
-const approval: SlackFunctionHandler<typeof ApprovalFunction.definition> =
-  async ({ inputs, token }) => {
-    console.log('Incoming approval!');
-    // A Slack API client, so that we can make API calls to Slack
-    const client = SlackAPI(token);
+export default SlackFunction(ApprovalFunction, async ({ inputs, client }) => {
+  console.log('Incoming approval!');
 
-    await client.chat.postMessage({
-      channel: inputs.approval_channel_id,
-      blocks: [{
-        "type": "actions",
-        "block_id": "mah-buttons",
-        "elements": [{
-          type: "button",
-          text: {
-            type: "plain_text",
-            text: "Approve",
-          },
-          action_id: "approve_request",
-          style: "primary",
+  await client.chat.postMessage({
+    channel: inputs.approval_channel_id,
+    blocks: [{
+      "type": "actions",
+      "block_id": "mah-buttons",
+      "elements": [{
+        type: "button",
+        text: {
+          type: "plain_text",
+          text: "Approve",
         },
-        {
-          type: "button",
-          text: {
-            type: "plain_text",
-            text: "Deny",
-          },
-          action_id: "deny_request",
-          style: "danger",
-        }],
+        action_id: "approve_request",
+        style: "primary",
+      },
+      {
+        type: "button",
+        text: {
+          type: "plain_text",
+          text: "Deny",
+        },
+        action_id: "deny_request",
+        style: "danger",
       }],
-    });
-    // Important to set completed: false! We will set the function's complete
-    // status later - in our action handler
-    return {
-      completed: false,
-    };
+    }],
+  });
+  // Important to set completed: false! We will set the function's complete
+  // status later - in our action handler
+  return {
+    completed: false,
   };
-export default approval;
+});
 ```
 
 The key bit of information we need to remember before moving on to adding an
@@ -161,9 +156,8 @@ const ActionsRouter = BlockActionsRouter(ApprovalFunction);
 export const blockActions = ActionsRouter.addHandler(
   ['approve_request', 'deny_request'], // The first argument to addHandler can accept an array of action_id strings, among many other formats!
   // Check the API reference at the end of this document for the full list of supported options
-  async ({ action, body, token }) => { // The second argument is the handler function itself
+  async ({ action, body, client }) => { // The second argument is the handler function itself
     console.log('Incoming action handler invocation', action);
-    const client = SlackAPI(token);
 
     const outputs = {
       reviewer: body.user.id,

@@ -1,3 +1,4 @@
+import { SlackAPI } from "../../deps.ts";
 import {
   assertEquals,
   assertExists,
@@ -196,11 +197,13 @@ const SlackViewSubmissionHandlerTester: SlackViewSubmissionHandlerTesterFn = <
       response_urls: [],
       trigger_id: "12345",
     };
+    const token = args.token || "slack-function-test-token";
 
     return {
       inputs,
       env: args.env || {},
-      token: args.token || "slack-function-test-token",
+      token,
+      client: SlackAPI(token),
       view: args.view || DEFAULT_VIEW,
       body: args.body || DEFAULT_BODY,
       team_id: DEFAULT_VIEW.team_id,
@@ -264,11 +267,13 @@ const SlackViewClosedHandlerTester: SlackViewClosedHandlerTesterFn = <
       token: "123",
       is_cleared: false,
     };
+    const token = args.token || "slack-function-test-token";
 
     return {
       inputs,
       env: args.env || {},
-      token: args.token || "slack-function-test-token",
+      token,
+      client: SlackAPI(token),
       view: args.view || DEFAULT_VIEW,
       body: args.body || DEFAULT_BODY,
       team_id: DEFAULT_VIEW.team_id,
@@ -309,6 +314,7 @@ Deno.test("ViewRouter viewSubmission", async (t) => {
         assertExists(ctx.inputs);
         assertEquals<string>(ctx.inputs.garbage, inputs.garbage);
         assertExists(ctx.token);
+        assertExists(ctx.client);
         assertExists<View>(ctx.view);
         assertExists<
           ViewSubmissionInvocationBody<
@@ -336,6 +342,7 @@ Deno.test("ViewRouter viewSubmission happy path", async (t) => {
       assertExists<string>(ctx.token);
       assertExists<View>(ctx.view);
       assertExists(ctx.env);
+      assertExists(ctx.client);
       handlerCalled = true;
     });
     await router.viewSubmission(createSubmissionContext({ inputs }));
@@ -426,6 +433,7 @@ Deno.test("ViewRouter viewClosed", async (t) => {
         assertExists(ctx.inputs);
         assertEquals<string>(ctx.inputs.garbage, inputs.garbage);
         assertExists(ctx.token);
+        assertExists(ctx.client);
         assertExists<View>(ctx.view);
         assertExists<
           ViewClosedInvocationBody<
@@ -451,6 +459,7 @@ Deno.test("ViewRouter viewClosed happy path", async (t) => {
     router.addClosedHandler(DEFAULT_VIEW.callback_id, (ctx) => {
       assertExists(ctx.inputs);
       assertExists<string>(ctx.token);
+      assertExists(ctx.client);
       assertExists<View>(ctx.view);
       assertExists(ctx.env);
       handlerCalled = true;
