@@ -82,12 +82,33 @@ particular, the required properties of the object are:
 Now that you have defined your function's input and output parameters, it's time
 to define the body of your function.
 
-1. Create a new file at the location set on the `source_file` parameter.
-2. That file's default export should be a function handler, that can either be
-   sync or async.
+First, create a new file at the location set on the `source_file` parameter of your
+function definition. Next, let's add code for your function! You will want to
+`export default` an instance of `SlackFunction`, like so:
 
-- The function takes a single argument, referred to as the function "context".
-- The function returns an object.
+```typescript
+import { SlackFunction } from "deno-slack-sdk/mod.ts";
+
+export default SlackFunction(
+  // Pass along the function definition you created earlier using `DefineFunction`
+  DinoFunction,
+  ({ inputs }) => { // Provide any context properties, like `inputs`, `env`, or `token`
+
+    // Implement your function
+    const { name } = inputs;
+    const dinoname = `${name}asaurus`;
+
+    // Don't forget any required output parameters
+    return { outputs: { dinoname } };
+  },
+);
+```
+
+Key points:
+
+- The function takes a single argument, referred to as the
+  [function "context"](#function-handler-context).
+- The function [returns an object](#function-return-object).
 
 ##### Function Handler Context
 
@@ -100,6 +121,7 @@ that may be useful to leverage during your function's execution:
   your Function Definition. In the example above, the `name` input parameter is
   available on the `inputs` property of our function handler context.
 - `token`: your application's access token.
+- `team_id`: the encoded team (a.k.a. Slack workspace) ID, i.e. T12345.
 - `event`: an object containing the full incoming event details.
 
 ##### Function Return Object
