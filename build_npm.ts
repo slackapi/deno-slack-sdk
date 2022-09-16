@@ -4,11 +4,24 @@ import { build, emptyDir } from "https://deno.land/x/dnt/mod.ts";
 await emptyDir("./npm");
 
 await build({
+  typeCheck: false,
   entryPoints: ["./src/mod.ts"],
   outDir: "./npm",
   shims: {
     // see JS docs for overview and more options
     deno: true,
+    // custom shims
+    custom: [{
+      package: {
+        name: "node-fetch-commonjs",
+        // Please see: https://www.npmjs.com/package/node-fetch-commonjs
+        version: "~3.1.1", 
+      },
+      globalNames: [{
+        name: "fetch",
+        exportName: "default"
+      }]
+    }],
   },
   package: {
     // package.json properties
