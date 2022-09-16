@@ -13,9 +13,9 @@ await build({
     // custom shims
     custom: [{
       package: {
-        name: "node-fetch-commonjs",
+        name: "node-fetch",
         // Please see: https://www.npmjs.com/package/node-fetch-commonjs
-        version: "~3.1.1", 
+        version: "2.6.7", 
       },
       globalNames: [{
         name: "fetch",
