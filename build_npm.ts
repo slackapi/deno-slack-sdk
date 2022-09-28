@@ -7,6 +7,10 @@ await build({
   typeCheck: false,
   entryPoints: ["./src/mod.ts"],
   outDir: "./npm",
+  // ensures that the emitted package is compatible with node v14 later
+  compilerOptions: {
+    target: "ES2020"
+  },
   shims: {
     // see JS docs for overview and more options
     deno: true,
