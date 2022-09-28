@@ -42,7 +42,7 @@ await build({
     },
     // sets the minimum engine to node v14
     engines: {
-      "node": ">=14.19.0",
+      "node": ">=14.20.1",
       "npm": ">=6.14.15"
     } 
   },
