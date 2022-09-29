@@ -1,4 +1,4 @@
-import { assertEquals } from "../dev_deps.ts";
+import { assertMatch } from "../dev_deps.ts";
 import { FunctionSourceFile, Schema } from "../mod.ts";
 import { DefineFunction } from "./mod.ts";
 
@@ -6,7 +6,8 @@ Deno.test("FunctionSourceFile returns a valid source_file", () => {
   const sourceFile = FunctionSourceFile(
     "file:///path-to-project-dir/functions/hello_world.ts",
   );
-  assertEquals(sourceFile, "functions/hello_world.ts");
+  // .js for npm builds
+  assertMatch(sourceFile, new RegExp("functions/hello_world.(ts|js)"));
 });
 
 Deno.test("FunctionSourceFile returns a valid source_file when depth is given", () => {
@@ -14,12 +15,20 @@ Deno.test("FunctionSourceFile returns a valid source_file when depth is given", 
     "file:///path-to-project-dir/functions/approval/iteractivity_handler.ts",
     1,
   );
-  assertEquals(sourceFile, "functions/approval/iteractivity_handler.ts");
+  // .js for npm builds
+  assertMatch(
+    sourceFile,
+    new RegExp("functions/approval/iteractivity_handler.(ts|js)"),
+  );
 });
 
 Deno.test("FunctionSourceFile returns a valid string for this test file", () => {
   const sourceFile = FunctionSourceFile(import.meta.url);
-  assertEquals(sourceFile, "functions/function_source_file_test.ts");
+  // .js for npm builds
+  assertMatch(
+    sourceFile,
+    new RegExp("functions/function_source_file_test.(ts|js)"),
+  );
 });
 
 Deno.test("FunctionSourceFile can be used for DefineFunction", () => {
@@ -39,8 +48,9 @@ Deno.test("FunctionSourceFile can be used for DefineFunction", () => {
       required: [],
     },
   });
-  assertEquals(
+  // .js for npm builds
+  assertMatch(
     def.definition.source_file,
-    "functions/function_source_file_test.ts",
+    new RegExp("functions/function_source_file_test.(ts|js)"),
   );
 });
