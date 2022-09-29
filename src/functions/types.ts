@@ -140,8 +140,8 @@ export type FunctionRuntimeParameters<
   };
 
 type AsyncFunctionHandler<
-  InputParameters,
-  OutputParameters,
+  InputParameters extends FunctionParameters,
+  OutputParameters extends FunctionParameters,
   Context extends BaseRuntimeFunctionContext<InputParameters>,
 > = {
   (
@@ -150,8 +150,8 @@ type AsyncFunctionHandler<
 };
 
 type SyncFunctionHandler<
-  InputParameters,
-  OutputParameters,
+  InputParameters extends FunctionParameters,
+  OutputParameters extends FunctionParameters,
   Context extends BaseRuntimeFunctionContext<InputParameters>,
 > = {
   (
@@ -231,7 +231,7 @@ type SuccessfulFunctionReturnArgs<
   error?: string;
 };
 
-type ErroredFunctionReturnArgs<OutputParameters> =
+type ErroredFunctionReturnArgs<OutputParameters extends FunctionParameters> =
   & Partial<SuccessfulFunctionReturnArgs<OutputParameters>>
   & Required<Pick<SuccessfulFunctionReturnArgs<OutputParameters>, "error">>;
 
@@ -242,7 +242,7 @@ type PendingFunctionReturnArgs = {
 };
 
 export type FunctionHandlerReturnArgs<
-  OutputParameters,
+  OutputParameters extends FunctionParameters,
 > =
   | SuccessfulFunctionReturnArgs<OutputParameters>
   | ErroredFunctionReturnArgs<OutputParameters>

@@ -15,6 +15,7 @@ import type {
 import type { View } from "./view_types.ts";
 import type {
   FunctionDefinitionArgs,
+  FunctionParameters,
   FunctionRuntimeParameters,
 } from "../types.ts";
 import type {
@@ -27,7 +28,9 @@ import { DefineFunction, Schema } from "../../mod.ts";
 // Helper test types
 // TODO: maybe we want to export this for userland usage at some point?
 // Very much a direct copy from the existing main function tester types and utilties in src/functions/tester
-type SlackViewSubmissionHandlerTesterArgs<InputParameters> =
+type SlackViewSubmissionHandlerTesterArgs<
+  InputParameters extends FunctionParameters,
+> =
   & Partial<
     ViewSubmissionContext<InputParameters>
   >
@@ -35,7 +38,9 @@ type SlackViewSubmissionHandlerTesterArgs<InputParameters> =
     inputs: InputParameters;
   };
 
-type SlackViewClosedHandlerTesterArgs<InputParameters> =
+type SlackViewClosedHandlerTesterArgs<
+  InputParameters extends FunctionParameters,
+> =
   & Partial<
     ViewClosedContext<InputParameters>
   >
