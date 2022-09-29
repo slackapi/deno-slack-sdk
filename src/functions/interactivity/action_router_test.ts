@@ -8,7 +8,10 @@ import {
 import { BlockActionsRouter } from "./action_router.ts";
 import type { ActionContext } from "./types.ts";
 import type { BlockAction } from "./block_actions_types.ts";
-import type { FunctionRuntimeParameters } from "../types.ts";
+import type {
+  FunctionParameters,
+  FunctionRuntimeParameters,
+} from "../types.ts";
 import type {
   ParameterSetDefinition,
   PossibleParameterKeys,
@@ -19,7 +22,7 @@ import { DefineFunction, Schema } from "../../mod.ts";
 // Helper test types
 // TODO: maybe we want to export this for userland usage at some point?
 // Very much a direct copy from the existing main function tester types and utilties in src/functions/tester
-type SlackActionHandlerTesterArgs<InputParameters> =
+type SlackActionHandlerTesterArgs<InputParameters extends FunctionParameters> =
   & Partial<
     ActionContext<InputParameters>
   >

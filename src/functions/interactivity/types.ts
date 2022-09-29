@@ -49,23 +49,25 @@ export type UnhandledEventHandler<Definition> = Definition extends
   }
   : never;
 
-export type BaseInteractivityContext<InputParameters> =
+export type BaseInteractivityContext<
+  InputParameters extends FunctionParameters,
+> =
   & BaseRuntimeFunctionContext<InputParameters>
   & FunctionContextEnrichment;
 
-export type ActionContext<InputParameters> =
+export type ActionContext<InputParameters extends FunctionParameters> =
   & BaseInteractivityContext<InputParameters>
   & ActionSpecificContext<InputParameters>;
 
-export type ViewSubmissionContext<InputParameters> =
+export type ViewSubmissionContext<InputParameters extends FunctionParameters> =
   & BaseInteractivityContext<InputParameters>
   & ViewSubmissionSpecificContext<InputParameters>;
 
-export type ViewClosedContext<InputParameters> =
+export type ViewClosedContext<InputParameters extends FunctionParameters> =
   & BaseInteractivityContext<InputParameters>
   & ViewClosedSpecificContext<InputParameters>;
 
-export type UnhandledEventContext<InputParameters> =
+export type UnhandledEventContext<InputParameters extends FunctionParameters> =
   & BaseInteractivityContext<
     InputParameters
   >
@@ -156,14 +158,18 @@ export type ViewConstraintObject = {
 export type BasicConstraintField = string | string[] | RegExp;
 
 // -- These types represent the deno-slack-runtime function handler interfaces
-export type RuntimeActionContext<InputParameters> =
+export type RuntimeActionContext<InputParameters extends FunctionParameters> =
   & BaseRuntimeFunctionContext<InputParameters>
   & ActionSpecificContext<InputParameters>;
 
-export type RuntimeViewSubmissionContext<InputParameters> =
+export type RuntimeViewSubmissionContext<
+  InputParameters extends FunctionParameters,
+> =
   & BaseRuntimeFunctionContext<InputParameters>
   & ViewSubmissionSpecificContext<InputParameters>;
 
-export type RuntimeViewClosedContext<InputParameters> =
+export type RuntimeViewClosedContext<
+  InputParameters extends FunctionParameters,
+> =
   & BaseRuntimeFunctionContext<InputParameters>
   & ViewClosedSpecificContext<InputParameters>;

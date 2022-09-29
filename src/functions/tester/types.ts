@@ -3,10 +3,14 @@ import type {
   PossibleParameterKeys,
 } from "../../parameters/mod.ts";
 import type { SlackFunctionDefinition } from "../mod.ts";
-import type { FunctionContext, FunctionRuntimeParameters } from "../types.ts";
+import type {
+  FunctionContext,
+  FunctionParameters,
+  FunctionRuntimeParameters,
+} from "../types.ts";
 
 export type SlackFunctionTesterArgs<
-  InputParameters,
+  InputParameters extends FunctionParameters,
 > =
   & Partial<
     FunctionContext<InputParameters>
@@ -58,7 +62,9 @@ export type SlackFunctionTesterFn = {
   // Accept a string
   (funcOrCallbackId: string): {
     createContext: {
-      <I>(args: SlackFunctionTesterArgs<I>): FunctionContext<I>;
+      <I extends FunctionParameters>(
+        args: SlackFunctionTesterArgs<I>,
+      ): FunctionContext<I>;
     };
   };
 };
