@@ -6,6 +6,7 @@ export type {
 } from "./manifest/types.ts";
 export type { ManifestSchema } from "./manifest/manifest_schema.ts";
 export { DefineFunction } from "./functions/mod.ts";
+export { default as FunctionSourceFile } from "./functions/function_source_file.ts";
 export { SlackFunction } from "./functions/slack-function.ts";
 export {
   BlockActionsRouter,
