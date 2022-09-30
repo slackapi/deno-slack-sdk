@@ -40,6 +40,13 @@ await build({
     bugs: {
       url: "https://github.com/slackapi/deno-slack-sdk/issues",
     },
+    // sets the minimum engine to node v14
+    // as of writing, dnt transpilation-generated code 
+    // seems to only be able to successfully compile as far back ES2020
+    engines: {
+      "node": ">=14.20.1",
+      "npm": ">=6.14.15"
+    } 
   },
 });
 
