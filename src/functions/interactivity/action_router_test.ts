@@ -140,6 +140,7 @@ const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
       token,
       client: SlackAPI(token),
       team_id: args.team_id || "test-team-id",
+      enterprise_id: "",
       action: args.action || DEFAULT_ACTION,
       body: args.body || DEFAULT_BODY,
     };
