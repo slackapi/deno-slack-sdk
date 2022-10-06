@@ -11,17 +11,16 @@ to create [modals][modals] composed of [views][views] and how applications can
 respond to the [view submission and closed events][view-events] they can trigger.
 
 If you're already familiar with the main concepts underpinning View Handlers,
-then you may want to skip ahead to the [`ViewsRouter` API Reference](#api-reference).
+then you may want to skip ahead to the [API Reference](#api-reference).
 
 1. [Requirements](#requirements)
 2. [Opening a View](#opening-a-view)
     - [Opening a View from a Function](#opening-a-view-from-a-function)
     - [Opening a View from a Block Action Handler](#opening-a-view-from-a-block-action-handler)
-3. [Defining a Views Router](#defining-a-views-router)
+3. [Adding View Handlers](#adding-view-handlers)
 4. [API Reference](#api-reference)
-    - [`ViewsRouter()`](#viewsrouterfunction_definition)
-    - [`addSubmissionHandler()`](#addsubmissionhandlerconstraint-handler)
-    - [`addClosedHandler()`](#addsubmissionhandlerconstraint-handler)
+    - [`addViewSubmissionHandler()`](#addviewsubmissionhandlerconstraint-handler)
+    - [`addViewClosedHandler()`](#addviewclosedhandlerconstraint-handler)
 
 ### Requirements
 
@@ -77,7 +76,8 @@ export const DiaryFunction = DefineFunction({
 both require the use of a [`trigger_id`][trigger-ids]. These are identifiers
 representing specific user interactions. Slack uses these to prevent applications
 from haphazardly opening modals in users' faces willy-nilly. Without a `trigger_id`,
-your application can't create a modal and open a view.
+your application can't create a modal and open a view. FYI `trigger_id`s are also
+known as `interactivity_pointer`s.
 
 As such, there are two ways to open a view from inside a Run-On-Slack application:
 doing so [from a Function directly](#opening-a-view-from-a-function) vs. doing
@@ -173,53 +173,48 @@ as we did in the previous section, but rather, we want to retrieve a `trigger_id
 that is unique to the Block Kit interactive component.
 
 Luckily for us, this is provided as a parameter to Block Kit Action Handlers!
-You can use the value of `body.trigger_id` within an action handler to open a
-view, like so:
+You can use the value of `body.interactivity.interactivity_pointer` within an action
+handler to open a view, like so:
 
 ```typescript
-import { BlockActionsRouter } from "deno-slack-sdk/mod.ts";
-// DiaryFunction is the function we defined in the previous section
-import { DiaryFunction } from "./definition.ts";
-
-export const blockActions = BlockActionsRouter(DiaryFunction).addHandler(
+export default SlackFunction(DiaryFunction, async ({ inputs, client }) => {
+  // ... the rest of your DiaryFunction logic here ...
+}).addBlockActionsHandler(
   'deny_request',
   async ({ action, body, client }) => {
     await client.views.open({
-      trigger_id: body.trigger_id,
+      trigger_id: body.interactivity.interactivity_pointer,
       view: { /* your view object goes here */ },
     });
   });
 ```
 
-### Defining a Views Router
+### Adding View Handlers
 
 The [Deno Slack SDK][sdk] - which comes bundled in your generated Run-on-Slack
-application - provides a `ViewsRouter`. This is a helpful utility to "route"
-different view-related events to specific handlers inside your application. The
-key identifier that we'll need to keep handy is the `callback_id` we assigned to
-any views we created. This ID will be the property that determines which view
-event handler will respond to incoming view events.
+application - provides a means for defining handlers to execute every time a user
+interacts with a view. In this way you can route view-related events to specific
+handlers inside your application. The key identifier that we'll need to keep handy
+is the `callback_id` we assigned to any views we created. This ID will be the property
+that determines which view event handler will respond to incoming view events.
 
-Continuing with our above example, we can now define a `ViewsRouter` that
-will listen for view submission and closed events and respond accordingly.
+Continuing with our above example, we can now define handlers that will listen
+for view submission and closed events and respond accordingly. The code to add
+view handlers is "chained" off of your top-level function, and would look like
+this:
 
 ```typescript
-import { ViewsRouter } from "deno-slack-sdk/mod.ts";
-// We must pass in the function definition for our main function (we imported this in the earlier example code)
-// when creating a new `ViewsRouter`
-const ViewRouter = ViewsRouter(DiaryFunction);
-// Now can use the router's `addSubmissionHandler` and `addClosedHandler` methods
-// to register different handlers based on the `callback_id` view property
-export const { viewSubmission, viewClosed } = ViewRouter
-  .addSubmissionHandler(
-    /view/, // The first argument to any of the add*Handler methods can accept a string, array of strings, or RegExp.
+export default SlackFunction(DiaryFunction, async ({ inputs, client }) => {
+  // ... the rest of your DiaryFunction logic here ...
+}).addViewSubmissionHandler(
+    /view/, // The first argument to any of the addView*Handler methods can accept a string, array of strings, or RegExp.
     // This first argument will be used to match the view's `callback_id`
     // Check the API reference at the end of this document for the full list of supported options
     async ({ view, body, token }) => { // The second argument is the handler function itself
       console.log('Incoming view submission handler invocation', body);
     }
   )
-  .addClosedHandler(
+  .addViewClosedHandler(
     /view/,
     async({ view, body, token }) => {
       console.log('Incoming view closed handler invocation', body);
@@ -235,7 +230,7 @@ clearing the entire view stack altogether. All of these modal interaction respon
 are [covered in depth on our API documentation site][modifying] - make sure to
 spend the time to understand the concepts presented there.
 
-In particular, modal interactions can be responsed to by using the API, or by returning
+In particular, modal interactions can be responded to by using the API, or by returning
 particularly-crafted responses directly from inside the view handlers. On our
 [API site detailing view modification][modifying], these returned view handler
 responses are called `response_action`s.
@@ -243,48 +238,32 @@ responses are called `response_action`s.
 As an example, consider the following two code snippets. They yield identical behavior!
 
 ```typescript
-export const { viewSubmission, viewClosed } = ViewRouter
+export default SlackFunction(DiaryFunction, async ({ inputs, client }) => {
+  // ... the rest of your DiaryFunction logic here ...
+}).addViewSubmissionHandler(/view/, async ({ client, body }) => {
   // A view submission handler that pushes a new view using the API
-  .addSubmissionHandler(/view/, async ({ client, body }) => {
-    await client.views.push({
-      trigger_id: body.trigger_id,
-      view: { /* your view object goes here */ },
-    });
+  await client.views.push({
+    trigger_id: body.trigger_id,
+    view: { /* your view object goes here */ },
   });
+}).addSubmissionHandler(/view/, async () => {
   // A view submission handler that pushes a new view using the `response_action`
-  .addSubmissionHandler(/view/, async () => {
-    return {
-      response_action: "push",
-      view: { /* your view object goes here */ },
-    });
-  });
+  return {
+    response_action: "push",
+    view: { /* your view object goes here */ },
+  };
+});
 ```
 
 ### API Reference
 
-#### `ViewsRouter(function_definition)`
+##### `addViewSubmissionHandler(constraint, handler)`
 
 ```typescript
-import { ViewsRouter, DefineFunction } from "deno-slack-sdk/mod.ts";
-const myFunction = DefineFunction(...);
-const router = ViewsRouter(myFunction);
-export { viewSubmission, viewClosed } = ViewsRouter.addSubmissionHandler(...).addClosedHandler(...);
+SlackFunction({ ... }).addViewSubmissionHandler("my_view_callback_id", async (ctx) => { ... });
 ```
 
-`ViewsRouter` defines a router instance that helps with routing specific
-view events to particular view handlers.
-
-The sole argument to `ViewsRouter` is a [function definition](./functions.md#defining-a-function).
-
-Once defined, a `ViewsRouter` has the following methods available on it:
-
-##### `addSubmissionHandler(constraint, handler)`
-
-```typescript
-router.addSubmissionHandler("my_view_callback_id", async (ctx) => { ... });
-```
-
-`addSubmissionHandler` registers a view handler based on a `constraint` argument.
+`addViewSubmissionHandler` registers a view handler based on a `constraint` argument.
 If any incoming [`view_submission` event][view-events] matches the `constraint`,
 then the specified `handler` will be invoked with the event payload. This allows
 for authoring focussed, single-purpose view handlers and provides a concise but
@@ -297,16 +276,18 @@ flexible API for registering handlers to specific view interactions.
   the strings in the array.
 - A regular expression `constraint` must match a view's `callback_id`.
 
-##### `addClosedHandler(constraint, handler)`
+##### `addViewClosedHandler(constraint, handler)`
 
 ```typescript
-router.addClosedHandler("my_view_callback_id", async (ctx) => { ... });
+SlackFunction({ ... }).addViewClosedHandler("my_view_callback_id", async (ctx) => { ... });
 ```
 
 ⚠️ IMPORTANT: you must set a view's `notify_on_close` property to `true` for the
-`view_closed` event to trigger; by default this property is `false`.
+`view_closed` event to trigger; by default this property is `false`. See the
+[View reference documentation - in particular the Fields section][view-ref] for
+more information.
 
-`addClosedHandler` registers a view handler based on a `constraint` argument.
+`addViewClosedHandler` registers a view handler based on a `constraint` argument.
 If any incoming [`view_closed` event][view-events] matches the `constraint`,
 then the specified `handler` will be invoked with the event payload. This allows
 for authoring focussed, single-purpose view handlers and provides a concise but
@@ -334,3 +315,4 @@ flexible API for registering handlers to specific view interactions.
 [views-open]: https://api.slack.com/methods/views.open
 [views-update]: https://api.slack.com/methods/views.update
 [views-push]: https://api.slack.com/methods/views.push
+[view-ref]: https://api.slack.com/reference/surfaces/views

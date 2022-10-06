@@ -10,14 +10,13 @@ to leverage these [interactive components][interactivity] and how applications c
 with these [interactive components][interactivity].
 
 If you're already familiar with the main concepts underpinning Block Kit Action Handlers,
-then you may want to skip ahead to the [`BlockActionsRouter` API Reference](#api-reference).
+then you may want to skip ahead to the [`addBlockActionsHandler()` method API Reference](#api-reference).
 
 1. [Requirements](#requirements)
 2. [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
-3. [Defining a Block Actions Router](#defining-a-block-actions-router)
+3. [Adding Block Action Handlers](#adding-block-action-handlers)
 4. [API Reference](#api-reference)
-    - [`BlockActionsRouter()`](#blockactionsrouterfunction_definition)
-    - [`addHandler()`](#addhandlerconstraint-handler)
+    - [`addBlockActionsHandler()`](#addblockactionshandlerconstraint-handler)
 
 ### Requirements
 
@@ -134,27 +133,23 @@ action handler are the `action_id` and `block_id` properties defined in the `blo
 payload. Using these IDs, we will be able to differentiate between the different
 button components that users interacted with in this message.
 
-### Defining a Block Actions Router
+### Adding Block Action Handlers
 
 The [Deno Slack SDK][sdk] - which comes bundled in your generated Run-on-Slack
-application - provides a `BlockActionsRouter`. This is a helpful utility to "route"
-different Block Kit interactions to specific action handlers inside your application.
+application - provides a means for defining a handler to execute every time a user
+interacts with an interactive Block Kit element created by your function.
 
-Continuing with our above example, we can now define a `BlockActionsRouter` that
-will listen for actions on one of the interactive components we attached to the
-message our main function posted: either the approve button being clicked or the
-deny button being clicked. This code would live in the same file as our main function
-code, and would look like this:
+Continuing with our above example, we can now define a handler that will listen
+for actions on one of the interactive components we attached to the message our
+main function posted: either the approve button being clicked or the deny button
+being clicked. The code to add a Block Kit action handler is "chained" off of your
+top-level function, and would look like this:
 
 ```typescript
-import { BlockActionsRouter } from "deno-slack-sdk/mod.ts";
-// We must pass in the function definition for our main function (we imported this in the earlier example code)
-// when creating a new `BlockActionsRouter`
-const ActionsRouter = BlockActionsRouter(ApprovalFunction);
-// Now can use the router's addHandler method to register different handlers based on action properties like
-// action_id or block_id
-export const blockActions = ActionsRouter.addHandler(
-  ['approve_request', 'deny_request'], // The first argument to addHandler can accept an array of action_id strings, among many other formats!
+export default SlackFunction(ApprovalFunction, async ({ inputs, client }) => {
+  // ... the rest of your ApprovalFunction logic here ...
+}).addBlockActionsHandler(
+  ['approve_request', 'deny_request'], // The first argument to addBlockActionsHandler can accept an array of action_id strings, among many other formats!
   // Check the API reference at the end of this document for the full list of supported options
   async ({ action, body, client }) => { // The second argument is the handler function itself
     console.log('Incoming action handler invocation', action);
@@ -191,7 +186,8 @@ export const blockActions = ActionsRouter.addHandler(
       function_execution_id: body.function_data.execution_id,
       outputs,
     });
-});
+  }
+);
 ```
 
 Now when you run your app and trigger your function, you have the basics in place
@@ -199,26 +195,10 @@ to provide interactivity between your application and users in Slack!
 
 ### API Reference
 
-#### `BlockActionsRouter(function_definition)`
+##### `addBlockActionsHandler(constraint, handler)`
 
 ```typescript
-import { BlockActionsRouter, DefineFunction } from "deno-slack-sdk/mod.ts";
-const myFunction = DefineFunction(...);
-const router = BlockActionsRouter(myFunction);
-```
-
-`BlockActionsRouter` defines a router instance that helps with routing specific
-action interactions to particular action handlers. This helps organize your application
-code to have different action handlers for different [interactive Block Kit components][interactivity].
-
-The sole argument to `BlockActionsRouter` is a [function definition](./functions.md#defining-a-function).
-
-Once defined, a `BlockActionsRouter` has the following methods available on it:
-
-##### `addHandler(constraint, handler)`
-
-```typescript
-router.addHandler({ block_id: "mah-buttons", action_id: "approve_request"}, async (ctx) => { ... });
+SlackFunction({ ... }).addBlockActionsHandler({ block_id: "mah-buttons", action_id: "approve_request"}, async (ctx) => { ... });
 ```
 
 `addHandler` registers a block action handler based on a `constraint` argument.
