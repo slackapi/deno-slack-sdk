@@ -123,6 +123,7 @@ that may be useful to leverage during your function's execution:
 - `client`: An API client ready for use in your function. An instance of the `deno-slack-api` library.
 - `token`: your application's access token.
 - `team_id`: the encoded team (a.k.a. Slack workspace) ID, i.e. T12345.
+- `enterprise_id`: the encoded enterprise ID, i.e. E12345. If the Slack workspace the function executes in is not a part of an enterprise grid, then this value will be the empty string (`""`).
 - `event`: an object containing the full incoming event details.
 
 ##### Function Return Object
