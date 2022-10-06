@@ -120,6 +120,7 @@ that may be useful to leverage during your function's execution:
 - `inputs`: an object containing the input parameters you defined as part of
   your Function Definition. In the example above, the `name` input parameter is
   available on the `inputs` property of our function handler context.
+- `client`: An API client ready for use in your function. An instance of the `deno-slack-api` library.
 - `token`: your application's access token.
 - `team_id`: the encoded team (a.k.a. Slack workspace) ID, i.e. T12345.
 - `event`: an object containing the full incoming event details.
