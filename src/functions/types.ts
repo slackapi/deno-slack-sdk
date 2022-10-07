@@ -269,6 +269,10 @@ export type BaseRuntimeFunctionContext<
    * @description A unique encoded ID representing the Slack team associated with the workspace where the function execution takes place.
    */
   team_id: string;
+  /**
+   * @description A unique encoded ID representing the Slack enterprise associated with the workspace where the function execution takes place. In a non-enterprise workspace, this value will be the empty string.
+   */
+  enterprise_id: string;
 };
 
 // SDK Function handlers receive these additional properties on the function context object

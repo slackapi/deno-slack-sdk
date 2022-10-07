@@ -212,6 +212,7 @@ const SlackViewSubmissionHandlerTester: SlackViewSubmissionHandlerTesterFn = <
       view: args.view || DEFAULT_VIEW,
       body: args.body || DEFAULT_BODY,
       team_id: DEFAULT_VIEW.team_id,
+      enterprise_id: "",
     };
   };
 
@@ -282,6 +283,7 @@ const SlackViewClosedHandlerTester: SlackViewClosedHandlerTesterFn = <
       view: args.view || DEFAULT_VIEW,
       body: args.body || DEFAULT_BODY,
       team_id: DEFAULT_VIEW.team_id,
+      enterprise_id: "",
     };
   };
 

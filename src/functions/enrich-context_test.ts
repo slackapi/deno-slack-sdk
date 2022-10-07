@@ -8,6 +8,7 @@ Deno.test("enrichContext with no env.SLACK_API_URL", () => {
     env: {},
     inputs: {},
     team_id: "team",
+    enterprise_id: "",
     token: "token",
   };
 
@@ -24,6 +25,7 @@ Deno.test("enrichContext with env.SLACK_API_URL", () => {
     },
     inputs: {},
     team_id: "team",
+    enterprise_id: "",
     token: "token",
   };
 
