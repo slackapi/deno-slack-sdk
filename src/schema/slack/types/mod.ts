@@ -7,6 +7,7 @@ const SlackPrimitiveTypes = {
   blocks: "slack#/types/blocks",
   oauth2: "slack#/types/credential/oauth2",
   rich_text: "slack#/types/rich_text",
+  message_ts: "string",
 } as const;
 
 export { SlackPrimitiveTypes };
