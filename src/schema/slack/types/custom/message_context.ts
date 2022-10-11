@@ -16,6 +16,7 @@ const MessageContextType = DefineType({
       type: SlackPrimitiveTypes.channel_id,
     },
   },
+  required: ["message_ts"],
 });
 
 export { MessageContextType };

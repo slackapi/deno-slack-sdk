@@ -74,7 +74,8 @@ type FunctionInputRuntimeType<
       | typeof SlackSchemaTypes.user_id
       | typeof SlackSchemaTypes.usergroup_id
       | typeof SlackSchemaTypes.channel_id
-      | typeof SlackSchemaTypes.date ? string // Not a Custom Type, so assign the runtime value
+      | typeof SlackSchemaTypes.date
+      | typeof SlackSchemaTypes.message_ts ? string
     : Param["type"] extends
       | typeof SchemaTypes.integer
       | typeof SchemaTypes.number
