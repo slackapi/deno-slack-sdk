@@ -66,6 +66,10 @@ Deno.test("WorkflowStep export input values", () => {
     },
   });
 
+  assertEquals(workflow.id, workflow.definition.callback_id);
+  assertEquals(workflow.definition.title, "test");
+  assertEquals(workflow.definition.description, undefined);
+
   // Add a DefineFunction result as a step
   const step1 = workflow.addStep(TestFunction, {
     email: workflow.inputs.email,

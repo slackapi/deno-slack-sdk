@@ -30,6 +30,8 @@ Deno.test("Datastore sets appropriate defaults", () => {
       },
     },
   });
+  assertStrictEquals(datastore.definition.name, "dinos");
+  assertStrictEquals(datastore.definition.primary_key, "attr1");
 
   const exported = datastore.export();
   assertStrictEquals(exported.primary_key, "attr1");

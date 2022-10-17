@@ -10,6 +10,7 @@ Deno.test("DefineEvent accepts object types", () => {
     properties: {},
   });
 
+  assertEquals(TestEvent.id, TestEvent.definition.name);
   assertEquals(typeof TestEvent.definition.type, "string");
 });
 
