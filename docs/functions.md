@@ -14,6 +14,8 @@ to get more information about how each of them work:
   Buttons, Menus and Date/Time Pickers](https://api.slack.com/block-kit/interactivity)
 - [View Handlers][view-handlers]: Handle events triggered from [Modals][modals],
   which are composed of [Views][views].
+- [Block Kit Suggestion Handlers][suggest-handlers]: Handle events from
+  [external-data-sourced Block Kit select menus](https://api.slack.com/reference/block-kit/block-elements#external_select)
 
 ### Defining a Function
 
@@ -158,6 +160,7 @@ Manifest({
 [manifest]: ./manifest.md
 [action-handlers]: ./functions-action-handlers.md
 [view-handlers]: ./functions-view-handlers.md
+[suggest-handlers]: ./functions-suggestion-handlers.md
 [block-kit]: https://api.slack.com/block-kit
 [modals]: https://api.slack.com/surfaces/modals
 [views]: https://api.slack.com/surfaces/modals/using
