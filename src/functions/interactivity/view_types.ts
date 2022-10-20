@@ -5,7 +5,7 @@ Possibly helpful links:
 - https://api.slack.com/reference/surfaces/views
 */
 
-import type { BlockElement } from "./block_actions_types.ts";
+import type { BlockElement } from "./block_kit_types.ts";
 
 export type ViewEvents = "view_submission" | "view_closed";
 

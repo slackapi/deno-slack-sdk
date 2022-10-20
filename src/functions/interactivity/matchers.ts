@@ -2,7 +2,7 @@ import type {
   BasicConstraintField,
   BlockActionConstraintObject,
 } from "./types.ts";
-import type { BlockAction } from "./block_actions_types.ts";
+import type { BlockAction } from "./block_kit_types.ts";
 import type { View } from "./view_types.ts";
 
 export function normalizeConstraintToArray(constraint: BasicConstraintField) {

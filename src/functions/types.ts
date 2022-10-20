@@ -19,6 +19,7 @@ import {
   BasicConstraintField,
   BlockActionConstraint,
   BlockActionHandler,
+  BlockSuggestionHandler,
   UnhandledEventHandler,
   ViewClosedHandler,
   ViewSubmissionHandler,
@@ -73,7 +74,7 @@ type FunctionInputRuntimeType<
         Param["type"]["definition"],
         IncreaseDepth<CurrentDepth>
       >
-    // Not a Custom Type, so assign the runtime value
+      // Not a Custom Type, so assign the runtime value
     : Param["type"] extends typeof SchemaTypes.string ? string
     : Param["type"] extends
       | typeof SchemaTypes.integer
@@ -346,6 +347,12 @@ export type SlackFunctionType<Definition> = Definition extends
       addBlockActionsHandler(
         actionConstraint: BlockActionConstraint,
         handler: BlockActionHandler<
+          FunctionDefinitionArgs<I, O, RI, RO>
+        >,
+      ): SlackFunctionType<Definition>;
+      addBlockSuggestionHandler(
+        actionConstraint: BlockActionConstraint,
+        handler: BlockSuggestionHandler<
           FunctionDefinitionArgs<I, O, RI, RO>
         >,
       ): SlackFunctionType<Definition>;

@@ -5,9 +5,8 @@ import {
   assertRejects,
   mock,
 } from "../../dev_deps.ts";
-import { BlockActionsRouter } from "./action_router.ts";
-import type { ActionContext } from "./types.ts";
-import type { BlockAction } from "./block_kit_types.ts";
+import { BlockSuggestionRouter } from "./suggestion_router.ts";
+import type { SuggestionContext } from "./types.ts";
 import type {
   FunctionParameters,
   FunctionRuntimeParameters,
@@ -22,35 +21,37 @@ import { DefineFunction, Schema } from "../../mod.ts";
 // Helper test types
 // TODO: maybe we want to export this for userland usage at some point?
 // Very much a direct copy from the existing main function tester types and utilties in src/functions/tester
-type SlackActionHandlerTesterArgs<InputParameters extends FunctionParameters> =
+type SlackSuggestionHandlerTesterArgs<
+  InputParameters extends FunctionParameters,
+> =
   & Partial<
-    ActionContext<InputParameters>
+    SuggestionContext<InputParameters>
   >
   & {
     inputs: InputParameters;
   };
 
-type CreateActionHandlerContext<
+type CreateSuggestionHandlerContext<
   InputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
 > = {
   (
-    args: SlackActionHandlerTesterArgs<
+    args: SlackSuggestionHandlerTesterArgs<
       FunctionRuntimeParameters<InputParameters, RequiredInput>
     >,
-  ): ActionContext<
+  ): SuggestionContext<
     FunctionRuntimeParameters<InputParameters, RequiredInput>
   >;
 };
 
-type SlackActionHandlerTesterResponse<
+type SlackSuggestionHandlerTesterResponse<
   InputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
 > = {
-  createContext: CreateActionHandlerContext<InputParameters, RequiredInput>;
+  createContext: CreateSuggestionHandlerContext<InputParameters, RequiredInput>;
 };
 
-type SlackActionHandlerTesterFn = {
+type SlackSuggestionHandlerTesterFn = {
   // Accept a Slack Function
   <
     InputParameters extends ParameterSetDefinition,
@@ -64,21 +65,46 @@ type SlackActionHandlerTesterFn = {
       RequiredInput,
       RequiredOutput
     >,
-  ): SlackActionHandlerTesterResponse<
+  ): SlackSuggestionHandlerTesterResponse<
     InputParameters,
     RequiredInput
   >;
 };
-// Helper test fixtures and utilities
-const DEFAULT_ACTION: BlockAction = {
-  type: "button",
-  block_id: "block_id",
-  action_ts: `${new Date().getTime()}`,
-  action_id: "action_id",
-  text: { type: "plain_text", text: "duncare", emoji: false },
-  style: "danger",
-};
-const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
+
+const DEFAULT_ACTION_ID = "action_id";
+const DEFAULT_BLOCK_ID = "block_id";
+// deno-lint-ignore no-explicit-any
+const generateSuggestion = (inputs: any) => ({
+  block_id: DEFAULT_BLOCK_ID,
+  action_id: DEFAULT_ACTION_ID,
+  value: "ohai",
+  type: "block_suggestion",
+  function_data: {
+    execution_id: "123",
+    function: { callback_id: "456" },
+    inputs,
+  },
+  interactivity: {
+    interactor: {
+      secret: "shhhh",
+      id: "123",
+    },
+    interactivity_pointer: "123.asdf",
+  },
+  user: {
+    id: "123",
+    name: "asdf",
+    team_id: "123",
+  },
+  team: {
+    id: "123",
+    domain: "asdf",
+  },
+  enterprise: null,
+  api_app_id: "123",
+});
+
+const SlackSuggestionHandlerTester: SlackSuggestionHandlerTesterFn = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
@@ -91,7 +117,7 @@ const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
     RequiredOutput
   >,
 ) => {
-  const createContext: CreateActionHandlerContext<
+  const createContext: CreateSuggestionHandlerContext<
     InputParameters,
     RequiredInput
   > = (
@@ -101,37 +127,6 @@ const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
       InputParameters,
       RequiredInput
     >;
-    const DEFAULT_BODY = {
-      type: "block_actions",
-      actions: [DEFAULT_ACTION],
-      function_data: {
-        execution_id: "123",
-        function: { callback_id: "456" },
-        inputs,
-      },
-      interactivity: {
-        interactor: {
-          secret: "shhhh",
-          id: "123",
-        },
-        interactivity_pointer: "123.asdf",
-      },
-      user: {
-        id: "123",
-        name: "asdf",
-        team_id: "123",
-      },
-      team: {
-        id: "123",
-        domain: "asdf",
-      },
-      enterprise: null,
-      is_enterprise_install: false,
-      api_app_id: "123",
-      token: "123",
-      trigger_id: "123",
-      response_url: "asdf",
-    };
     const token = args.token || "slack-function-test-token";
 
     return {
@@ -141,8 +136,7 @@ const SlackActionHandlerTester: SlackActionHandlerTesterFn = <
       client: SlackAPI(token),
       team_id: args.team_id || "test-team-id",
       enterprise_id: "",
-      action: args.action || DEFAULT_ACTION,
-      body: args.body || DEFAULT_BODY,
+      body: args.body || generateSuggestion(inputs),
     };
   };
 
@@ -161,53 +155,53 @@ const func = DefineFunction({
     required: ["garbage"],
   },
 });
-const { createContext } = SlackActionHandlerTester(func);
+const { createContext } = SlackSuggestionHandlerTester(func);
 const inputs = { garbage: "in, garbage out" };
 
 const getRouter = () => {
-  return BlockActionsRouter(func);
+  return BlockSuggestionRouter(func);
 };
 
-Deno.test("ActionsRouter", async (t) => {
+Deno.test("SuggestionRouter", async (t) => {
   await t.step(
-    "export method returns result of handler when matching action comes in and baseline handler context parameters are present and exist",
+    "export method returns result of handler when matching suggestion comes in and baseline handler context parameters are present and exist",
     async () => {
       const router = getRouter();
       let handlerCalled = false;
-      router.addHandler(DEFAULT_ACTION.action_id, (ctx) => {
+      router.addHandler(DEFAULT_ACTION_ID, (ctx) => {
         assertExists(ctx.inputs);
         assertEquals<string>(ctx.inputs.garbage, inputs.garbage);
         assertExists(ctx.token);
-        assertExists(ctx.action);
+        assertExists(ctx.body);
         assertExists(ctx.env);
         assertExists(ctx.client);
         handlerCalled = true;
       });
       await router(createContext({ inputs }));
-      assertEquals(handlerCalled, true, "action handler not called!");
+      assertEquals(handlerCalled, true, "suggestion handler not called!");
     },
   );
 });
 
-Deno.test("ActionsRouter action matching happy path", async (t) => {
+Deno.test("SuggestionRouter matching happy path", async (t) => {
   await t.step("simple string matching to action_id", async () => {
     const router = getRouter();
     let handlerCalled = false;
-    router.addHandler(DEFAULT_ACTION.action_id, (ctx) => {
+    router.addHandler(DEFAULT_ACTION_ID, (ctx) => {
       assertExists(ctx.inputs);
       assertExists(ctx.token);
-      assertExists(ctx.action);
+      assertExists(ctx.body);
       assertExists(ctx.env);
       assertExists(ctx.client);
       handlerCalled = true;
     });
     await router(createContext({ inputs }));
-    assertEquals(handlerCalled, true, "action handler not called!");
+    assertEquals(handlerCalled, true, "suggestion handler not called!");
   });
   await t.step("array of strings matching to action_id", async () => {
     const router = getRouter();
     const handler = mock.spy();
-    router.addHandler(["nope", DEFAULT_ACTION.action_id], handler);
+    router.addHandler(["nope", DEFAULT_ACTION_ID], handler);
     await router(createContext({ inputs }));
     mock.assertSpyCalls(handler, 1);
   });
@@ -221,7 +215,7 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
   await t.step("{action_id:string} matching to action_id", async () => {
     const router = getRouter();
     const handler = mock.spy();
-    router.addHandler({ action_id: DEFAULT_ACTION.action_id }, handler);
+    router.addHandler({ action_id: DEFAULT_ACTION_ID }, handler);
     await router(createContext({ inputs }));
     mock.assertSpyCalls(handler, 1);
   });
@@ -229,7 +223,7 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
     const router = getRouter();
     const handler = mock.spy();
     router.addHandler(
-      { action_id: ["hahtrickedyou", DEFAULT_ACTION.action_id] },
+      { action_id: ["hahtrickedyou", DEFAULT_ACTION_ID] },
       handler,
     );
     await router(createContext({ inputs }));
@@ -245,7 +239,7 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
   await t.step("{block_id:string} matching to block_id", async () => {
     const router = getRouter();
     const handler = mock.spy();
-    router.addHandler({ block_id: DEFAULT_ACTION.block_id }, handler);
+    router.addHandler({ block_id: DEFAULT_BLOCK_ID }, handler);
     await router(createContext({ inputs }));
     mock.assertSpyCalls(handler, 1);
   });
@@ -253,7 +247,7 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
     const router = getRouter();
     const handler = mock.spy();
     router.addHandler(
-      { block_id: ["lol", DEFAULT_ACTION.block_id] },
+      { block_id: ["lol", DEFAULT_BLOCK_ID] },
       handler,
     );
     await router(createContext({ inputs }));
@@ -272,8 +266,8 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        block_id: DEFAULT_ACTION.block_id,
-        action_id: DEFAULT_ACTION.action_id,
+        block_id: DEFAULT_BLOCK_ID,
+        action_id: DEFAULT_ACTION_ID,
       }, handler);
       await router(createContext({ inputs }));
       mock.assertSpyCalls(handler, 1);
@@ -285,8 +279,8 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        block_id: DEFAULT_ACTION.block_id,
-        action_id: ["notthisoneeither", DEFAULT_ACTION.action_id],
+        block_id: DEFAULT_BLOCK_ID,
+        action_id: ["notthisoneeither", DEFAULT_ACTION_ID],
       }, handler);
       await router(createContext({ inputs }));
       mock.assertSpyCalls(handler, 1);
@@ -298,7 +292,7 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler(
-        { block_id: DEFAULT_ACTION.block_id, action_id: /action/ },
+        { block_id: DEFAULT_BLOCK_ID, action_id: /action/ },
         handler,
       );
       await router(createContext({ inputs }));
@@ -311,8 +305,8 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        block_id: ["notthistime", DEFAULT_ACTION.block_id],
-        action_id: DEFAULT_ACTION.action_id,
+        block_id: ["notthistime", DEFAULT_BLOCK_ID],
+        action_id: DEFAULT_ACTION_ID,
       }, handler);
       await router(createContext({ inputs }));
       mock.assertSpyCalls(handler, 1);
@@ -324,8 +318,8 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        block_id: ["notthistime", DEFAULT_ACTION.block_id],
-        action_id: ["gotyougood", DEFAULT_ACTION.action_id],
+        block_id: ["notthistime", DEFAULT_BLOCK_ID],
+        action_id: ["gotyougood", DEFAULT_ACTION_ID],
       }, handler);
       await router(createContext({ inputs }));
       mock.assertSpyCalls(handler, 1);
@@ -337,7 +331,7 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        block_id: ["notthistime", DEFAULT_ACTION.block_id],
+        block_id: ["notthistime", DEFAULT_BLOCK_ID],
         action_id: /action/,
       }, handler);
       await router(createContext({ inputs }));
@@ -350,7 +344,7 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler(
-        { block_id: /block/, action_id: DEFAULT_ACTION.action_id },
+        { block_id: /block/, action_id: DEFAULT_ACTION_ID },
         handler,
       );
       await router(createContext({ inputs }));
@@ -364,7 +358,7 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
       const handler = mock.spy();
       router.addHandler({
         block_id: /block/,
-        action_id: ["hahanope", DEFAULT_ACTION.action_id],
+        action_id: ["hahanope", DEFAULT_ACTION_ID],
       }, handler);
       await router(createContext({ inputs }));
       mock.assertSpyCalls(handler, 1);
@@ -382,8 +376,8 @@ Deno.test("ActionsRouter action matching happy path", async (t) => {
   );
 });
 
-Deno.test("ActionsRouter action matching sad path", async (t) => {
-  await t.step("unhandled action should throw", async () => {
+Deno.test("SuggestionRouter matching sad path", async (t) => {
+  await t.step("unhandled suggestion should throw", async () => {
     const router = getRouter();
     await assertRejects(() => router(createContext({ inputs })));
   });
@@ -504,7 +498,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        action_id: "action_id",
+        action_id: DEFAULT_ACTION_ID,
         block_id: /noway/,
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
@@ -518,7 +512,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const handler = mock.spy();
       router.addHandler({
         action_id: "not good enough",
-        block_id: ["notthisonebut", "block_id"],
+        block_id: ["notthisonebut", DEFAULT_BLOCK_ID],
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
       mock.assertSpyCalls(handler, 0);
@@ -530,7 +524,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        action_id: "action_id",
+        action_id: DEFAULT_ACTION_ID,
         block_id: ["this", "wont", "work"],
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
@@ -544,7 +538,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const handler = mock.spy();
       router.addHandler({
         action_id: "not good enough",
-        block_id: "block_id",
+        block_id: DEFAULT_BLOCK_ID,
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
       mock.assertSpyCalls(handler, 0);
@@ -556,7 +550,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        action_id: "action_id",
+        action_id: DEFAULT_ACTION_ID,
         block_id: "nicetry",
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
@@ -582,7 +576,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        action_id: ["decoy", "action_id"],
+        action_id: ["decoy", DEFAULT_ACTION_ID],
         block_id: /noway/,
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
@@ -596,7 +590,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const handler = mock.spy();
       router.addHandler({
         action_id: ["not", "good", "enough"],
-        block_id: ["notthisonebut", "block_id"],
+        block_id: ["notthisonebut", DEFAULT_BLOCK_ID],
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
       mock.assertSpyCalls(handler, 0);
@@ -608,7 +602,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        action_id: ["decoy", "action_id"],
+        action_id: ["decoy", DEFAULT_ACTION_ID],
         block_id: ["this", "wont", "work"],
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
@@ -622,7 +616,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const handler = mock.spy();
       router.addHandler({
         action_id: ["not", "good", "enough"],
-        block_id: "block_id",
+        block_id: DEFAULT_BLOCK_ID,
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
       mock.assertSpyCalls(handler, 0);
@@ -634,7 +628,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const router = getRouter();
       const handler = mock.spy();
       router.addHandler({
-        action_id: ["decoy", "action_id"],
+        action_id: ["decoy", DEFAULT_ACTION_ID],
         block_id: "nicetry",
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
@@ -674,7 +668,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const handler = mock.spy();
       router.addHandler({
         action_id: /hah/,
-        block_id: ["notthisonebut", "block_id"],
+        block_id: ["notthisonebut", DEFAULT_BLOCK_ID],
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
       mock.assertSpyCalls(handler, 0);
@@ -700,7 +694,7 @@ Deno.test("ActionsRouter action matching sad path", async (t) => {
       const handler = mock.spy();
       router.addHandler({
         action_id: /huh/,
-        block_id: "block_id",
+        block_id: DEFAULT_BLOCK_ID,
       }, handler);
       await assertRejects(() => router(createContext({ inputs })));
       mock.assertSpyCalls(handler, 0);

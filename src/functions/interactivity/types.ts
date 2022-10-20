@@ -5,7 +5,9 @@ import {
   FunctionParameters,
   FunctionRuntimeParameters,
 } from "../types.ts";
-import { BlockAction, BlockActionsBody } from "./block_actions_types.ts";
+import { BlockActionsBody } from "./block_actions_types.ts";
+import { BlockSuggestionBody } from "./block_suggestion_types.ts";
+import { BlockAction } from "./block_kit_types.ts";
 import {
   View,
   ViewClosedBody,
@@ -17,6 +19,15 @@ export type BlockActionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (
       context: ActionContext<FunctionRuntimeParameters<I, RI>>,
+      // deno-lint-ignore no-explicit-any
+    ): Promise<any> | any;
+  }
+  : never;
+
+export type BlockSuggestionHandler<Definition> = Definition extends
+  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+    (
+      context: SuggestionContext<FunctionRuntimeParameters<I, RI>>,
       // deno-lint-ignore no-explicit-any
     ): Promise<any> | any;
   }
@@ -59,6 +70,10 @@ export type ActionContext<InputParameters extends FunctionParameters> =
   & BaseInteractivityContext<InputParameters>
   & ActionSpecificContext<InputParameters>;
 
+export type SuggestionContext<InputParameters extends FunctionParameters> =
+  & BaseInteractivityContext<InputParameters>
+  & SuggestionSpecificContext<InputParameters>;
+
 export type ViewSubmissionContext<InputParameters extends FunctionParameters> =
   & BaseInteractivityContext<InputParameters>
   & ViewSubmissionSpecificContext<InputParameters>;
@@ -76,6 +91,10 @@ export type UnhandledEventContext<InputParameters extends FunctionParameters> =
 type ActionSpecificContext<InputParameters extends FunctionParameters> = {
   body: BlockActionInvocationBody<InputParameters>;
   action: BlockAction;
+};
+
+type SuggestionSpecificContext<InputParameters extends FunctionParameters> = {
+  body: BlockSuggestionInvocationBody<InputParameters>;
 };
 
 type ViewSubmissionSpecificContext<InputParameters extends FunctionParameters> =
@@ -104,6 +123,12 @@ export type BlockActionInvocationBody<
   InputParameters extends FunctionParameters,
 > =
   & BlockActionsBody
+  & FunctionInteractivity<InputParameters>;
+
+export type BlockSuggestionInvocationBody<
+  InputParameters extends FunctionParameters,
+> =
+  & BlockSuggestionBody
   & FunctionInteractivity<InputParameters>;
 
 export type ViewSubmissionInvocationBody<
@@ -141,6 +166,9 @@ type UserContext = {
   id: string;
 };
 
+// TODO: with the arrival of block_suggestion payloads, the naming here is not
+// fully accurate: these constraint fields can apply to both block_actions and block_suggestion
+// payloads. Perhaps worth renaming to BlockConstraint?
 export type BlockActionConstraint =
   | BasicConstraintField
   | BlockActionConstraintObject;
@@ -158,6 +186,12 @@ export type ViewConstraintObject = {
 export type BasicConstraintField = string | string[] | RegExp;
 
 // -- These types represent the deno-slack-runtime function handler interfaces
+export type RuntimeSuggestionContext<
+  InputParameters extends FunctionParameters,
+> =
+  & BaseRuntimeFunctionContext<InputParameters>
+  & SuggestionSpecificContext<InputParameters>;
+
 export type RuntimeActionContext<InputParameters extends FunctionParameters> =
   & BaseRuntimeFunctionContext<InputParameters>
   & ActionSpecificContext<InputParameters>;
