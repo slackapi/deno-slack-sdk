@@ -132,7 +132,7 @@ export class SuggestionRouter<
    * Return the first registered SuggestionHandler that matches the action and/or block ID string(s) provided.
    */
   matchHandler(
-    action: BlockAction,
+    action: BlockAction, // TODO: this type name is a bit misleading; BlockAction just has both action_id and block_id props on it, so it applies to both block_suggestion and block_action payloads
   ):
     | BlockSuggestionHandler<
       FunctionDefinitionArgs<

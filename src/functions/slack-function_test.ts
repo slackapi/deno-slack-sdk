@@ -102,6 +102,20 @@ Deno.test("addBlockActionsHandler", async () => {
   mock.assertSpyCalls(actionSpy, 1);
 });
 
+Deno.test("addBlockSuggestionHandler", async () => {
+  const mainFnHandler = mock.spy(() => ({ outputs: {} }));
+
+  const handlers = SlackFunction(TestFunction, mainFnHandler);
+  const typedHandlers = typeHandlersForTesting(handlers);
+
+  const actionId = "whatever";
+  const suggestionSpy = mock.spy();
+  typedHandlers.addBlockSuggestionHandler(actionId, suggestionSpy);
+
+  await typedHandlers.blockSuggestion({ body: { action_id: actionId } });
+  mock.assertSpyCalls(suggestionSpy, 1);
+});
+
 Deno.test("addViewClosedHandler", async () => {
   const mainFnHandler = mock.spy(() => ({ outputs: {} }));
 
@@ -159,6 +173,7 @@ const typeHandlersForTesting = <HandlerType>(handlers: HandlerType) => {
   return handlers as HandlerType & {
     (...args: unknown[]): unknown;
     blockActions: (...args: unknown[]) => void;
+    blockSuggestion: (...args: unknown[]) => void;
     viewSubmission: (...args: unknown[]) => void;
     viewClosed: (...args: unknown[]) => void;
     unhandledEvent: (...args: unknown[]) => void;
