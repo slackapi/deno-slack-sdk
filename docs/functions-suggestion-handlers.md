@@ -5,7 +5,7 @@ things: post messages, create channels, or anything available to developers via
 the [Slack API][api]. One of the more compelling features available to app developers
 is the ability to use [Block Kit][block-kit] to add richness and depth to messages
 in Slack. Even better, [Block Kit][block-kit] supports a variety of [interactive components][interactivity]!
-This document explores the how to implement responding to interactions with
+This document explores how to implement responding to interactions with
 [external-data-sourced Block Kit drop-down menus](https://api.slack.com/reference/block-kit/block-elements#external_select).
 
 If you're already familiar with the main concepts underpinning Block Kit Suggestion Handlers,
