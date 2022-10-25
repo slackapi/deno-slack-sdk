@@ -109,7 +109,7 @@ Deno.test("addBlockSuggestionHandler", async () => {
   const typedHandlers = typeHandlersForTesting(handlers);
 
   const actionId = "whatever";
-  const suggestionSpy = mock.spy();
+  const suggestionSpy = mock.spy(() => ({ options: [] }));
   typedHandlers.addBlockSuggestionHandler(actionId, suggestionSpy);
 
   await typedHandlers.blockSuggestion({ body: { action_id: actionId } });

@@ -28,10 +28,55 @@ export type BlockSuggestionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (
       context: SuggestionContext<FunctionRuntimeParameters<I, RI>>,
-      // deno-lint-ignore no-explicit-any
-    ): Promise<any> | any;
+    ): Promise<BlockSuggestionHandlerResponse> | BlockSuggestionHandlerResponse;
   }
   : never;
+
+type BlockSuggestionHandlerResponse =
+  | BlockSuggestionHandlerOptionsResponse
+  | BlockSuggestionHandlerOptionGroupsResponse;
+
+type BlockSuggestionHandlerOptionsResponse = {
+  options: MenuOption[];
+};
+
+type BlockSuggestionHandlerOptionGroupsResponse = {
+  option_groups: MenuOptionGroup[];
+};
+
+type MenuOptionGroup = {
+  /**
+   * @description A {@link PlainTextObject} that defines the label shown above this group of options. Maximum length for the `text` property inside this field is 75 characters.
+   */
+  label: PlainTextObject;
+  /**
+   * @description An array of {@link MenuOption} objects that belong to this specific group. Maximum of 100 items.
+   */
+  options: MenuOption[];
+};
+
+type MenuOption = {
+  /**
+   * @description A {@link PlainTextObject} that defines the text shown in the option on the menu. Maximum length for the `text` property inside this field is 75 characters.
+   */
+  text: PlainTextObject;
+  /**
+   * @description A unique string value that will be passed to your app when this option is chosen. Maximum length for this filed is 75 characters.
+   */
+  value: string;
+};
+
+type PlainTextObject = {
+  type: "plain_text";
+  /**
+   * @description The text for the object.
+   */
+  text: string;
+  /**
+   * @description Indicates whether emojis in the text field shoul be escaped into a colon emoji format.
+   */
+  emoji?: boolean;
+};
 
 export type ViewSubmissionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
@@ -169,12 +214,25 @@ type UserContext = {
 // TODO: with the arrival of block_suggestion payloads, the naming here is not
 // fully accurate: these constraint fields can apply to both block_actions and block_suggestion
 // payloads. Perhaps worth renaming to BlockConstraint?
+/**
+ * @description An {@link BlockActionConstraintObject} or {@link BasicConstraintField} constraining which Block Kit interaction payloads get handled by particular interactivity handlers.
+ */
 export type BlockActionConstraint =
   | BasicConstraintField
   | BlockActionConstraintObject;
 
+/**
+ * @description An object constraining which Block Kit interaction payloads get handled by particular interactivity handlers.
+ * If both `block_id` and `action_id` properties are specified, then both properties must have their constraint satisfied in order for there to be a match.
+ */
 export type BlockActionConstraintObject = {
+  /**
+   * @description A {@link BasicConstraintField} to match against the `block_id` property of a Block Kit interactivity event.
+   */
   block_id?: BasicConstraintField;
+  /**
+   * @description A {@link BasicConstraintField} to match against the `action_id` property of a Block Kit interactivity event.
+   */
   action_id?: BasicConstraintField;
 };
 
