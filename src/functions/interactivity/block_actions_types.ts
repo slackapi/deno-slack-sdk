@@ -118,9 +118,6 @@ export type BlockActionsBody = {
      */
     user: string;
   };
-  /**
-   * @deprecated Will be removed in a future release. See {@link https://api.slack.com/future/changelog} for more details.
-   */
   response_url: string;
   /**
    * @description The workspace, or team, details the Block Kit interaction originated from.
