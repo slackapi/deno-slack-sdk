@@ -8,11 +8,12 @@ Some other references that may be useful to fill this out:
 - https://api.slack.com/changelog/2018-05-file-threads-soon-tread
 */
 
+import type { BlockAction, BlockElement } from "./block_kit_types.ts";
+
 /**
  * @description Block Actions-specific type for the `body` property of a `block_actions` event
  */
 export type BlockActionsBody = {
-  // type: "block_actions";
   actions: BlockAction[];
   /**
    * @description The encoded application ID the event was dispatched to, e.g. A123456.
@@ -170,29 +171,4 @@ export type BlockActionsBody = {
    * view: {}; // if the block kit interactive component was part of a view, details for the view are here
    * state: { values: {}}; // seen but usually empty?
    */
-};
-
-/**
- * @description A single Block Kit interactive component interaction.
- */
-export type BlockAction =
-  & {
-    /**
-     * @description Identifies the Block Kit interactive component that was interacted with.
-     */
-    action_id: string;
-  }
-  & BlockElement;
-
-/**
- * @description A single Block element
- */
-export type BlockElement = {
-  /**
-   * @description Identifies the block within a surface.
-   */
-  block_id: string;
-  type: string;
-  // deno-lint-ignore no-explicit-any
-  [key: string]: any;
 };

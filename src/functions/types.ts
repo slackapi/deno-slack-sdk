@@ -19,6 +19,7 @@ import {
   BasicConstraintField,
   BlockActionConstraint,
   BlockActionHandler,
+  BlockSuggestionHandler,
   UnhandledEventHandler,
   ViewClosedHandler,
   ViewSubmissionHandler,
@@ -343,9 +344,25 @@ export type SlackFunctionType<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? (
     & EnrichedSlackFunctionHandler<Definition>
     & {
+      /**
+       * @description Add an interactivity handler responding to specific {@link https://api.slack.com/reference/interaction-payloads/block-actions `block_actions` events}.
+       * @param {BlockActionConstraint} actionConstraint - A {@link BlockActionConstraint} filter; only `block_actions` payloads that satisfy the constraints provided in this parameter will be routed to the provided handler.
+       * @param {BlockActionHandler} handler - A {@link BlockActionHandler} function handler that will be invoked when a matching {@link https://api.slack.com/reference/interaction-payloads/block-actions `block_actions` payload} is dispatched to your application.
+       */
       addBlockActionsHandler(
         actionConstraint: BlockActionConstraint,
         handler: BlockActionHandler<
+          FunctionDefinitionArgs<I, O, RI, RO>
+        >,
+      ): SlackFunctionType<Definition>;
+      /**
+       * @description Add an interactivity handler responding to specific `block_suggestion` events.
+       * @param {BlockActionConstraint} actionConstraint - A {@link BlockActionConstraint} filter; only `block_suggestion` payloads that satisfy the constraints provided in this parameter will be routed to the provided handler.
+       * @param {BlockSuggestionHandler} handler - A {@link BlockSuggestionHandler} function handler that will be invoked when a matching `block_suggestion` payload is dispatched to your application.
+       */
+      addBlockSuggestionHandler(
+        actionConstraint: BlockActionConstraint,
+        handler: BlockSuggestionHandler<
           FunctionDefinitionArgs<I, O, RI, RO>
         >,
       ): SlackFunctionType<Definition>;

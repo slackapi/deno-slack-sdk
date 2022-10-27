@@ -7,23 +7,23 @@ import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { enrichContext } from "../enrich-context.ts";
 import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
 import type {
-  ActionContext,
   BlockActionConstraint,
-  BlockActionHandler,
-  RuntimeActionContext,
+  BlockSuggestionHandler,
+  RuntimeSuggestionContext,
+  SuggestionContext,
 } from "./types.ts";
-import { BlockAction } from "./block_actions_types.ts";
+import { BlockAction } from "./block_kit_types.ts";
 import {
   matchBasicConstraintField,
   normalizeConstraintToArray,
 } from "./matchers.ts";
 
 /**
- * Define an actions "router" and its input and output parameters for use in a Slack application. The ActionsRouter will route incoming action events to action-specific handlers.
+ * Define a suggestion "router" and its input and output parameters for use in a Slack application. The SuggestionRouter will route incoming action events to action-specific handlers.
  * @param {SlackFunctionDefinition<InputParameters, OutputParameters, RequiredInput, RequiredOutput>} func Reference to your previously-created SlackFunction, defined via DefineFunction
- * @returns {ActionsRouter}
+ * @returns {SuggestionRouter}
  */
-export const BlockActionsRouter = <
+export const BlockSuggestionRouter = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
@@ -36,7 +36,7 @@ export const BlockActionsRouter = <
     RequiredOutput
   >,
 ) => {
-  const router = new ActionsRouter(func);
+  const router = new SuggestionRouter(func);
 
   // deno-lint-ignore no-explicit-any
   const exportedHandler: any = router.export();
@@ -53,14 +53,14 @@ export const BlockActionsRouter = <
     & Pick<typeof router, "addHandler">;
 };
 
-export class ActionsRouter<
+export class SuggestionRouter<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 > {
   private routes: Array<
-    [BlockActionConstraint, BlockActionHandler<typeof this.func.definition>]
+    [BlockActionConstraint, BlockSuggestionHandler<typeof this.func.definition>]
   >;
 
   constructor(
@@ -76,13 +76,13 @@ export class ActionsRouter<
   }
 
   /**
-   * Add an action handler for something that can match an action event.
-   * @param {BlockActionConstraint} actionConstraint A BlockActionConstraintField(i.e. a string, array of strings or regular expression) or more complex BlockActionConstraintObject to match incoming block action events. A BlockActionConstraintField parameter are matched with a block action event's `action_id` property. A BlockActionConstraintObject parameter allows to match with other block action event properties like `block_id` as well as `action_id`. If multiple properties are specified using BlockActionConstraintObject, then the event must match ALL provided BlockActionConstraintObject properties.
-   * @returns {ActionsRouter}
+   * Add a suggestion handler for something that can match an action event.
+   * @param {BlockActionConstraint} actionConstraint A BlockActionConstraintField(i.e. a string, array of strings or regular expression) or more complex BlockActionConstraintObject to match incoming block suggestion events. A BlockActionConstraintField parameter are matched with a block suggestion event's `action_id` property. A BlockActionConstraintObject parameter allows to match with other block suggestion event properties like `block_id` as well as `action_id`. If multiple properties are specified using BlockActionConstraintObject, then the event must match ALL provided BlockActionConstraintObject properties.
+   * @returns {SuggestionRouter}
    */
   addHandler(
     actionConstraint: BlockActionConstraint,
-    handler: BlockActionHandler<
+    handler: BlockSuggestionHandler<
       FunctionDefinitionArgs<
         InputParameters,
         OutputParameters,
@@ -90,7 +90,7 @@ export class ActionsRouter<
         RequiredOutput
       >
     >,
-  ): ActionsRouter<
+  ): SuggestionRouter<
     InputParameters,
     OutputParameters,
     RequiredInput,
@@ -101,26 +101,26 @@ export class ActionsRouter<
   }
 
   /**
-   * Returns a method handling routing of action payloads to the appropriate action handler.
-   * The output of export() should be attached to the `blockActions` export of your function.
+   * Returns a method handling routing of suggestion payloads to the appropriate suggestion handler.
+   * The output of export() should be attached to the `blockSuggestion` export of your function.
    */
   export() {
     return async (
-      context: RuntimeActionContext<
+      context: RuntimeSuggestionContext<
         FunctionRuntimeParameters<InputParameters, RequiredInput>
       >,
     ) => {
-      const action: BlockAction = context.action;
-      const handler = this.matchHandler(action);
+      const suggestion = context.body;
+      const handler = this.matchHandler(suggestion);
       if (handler === null) {
         throw new UnhandledEventError(
-          `Received block action payload with action=${
-            JSON.stringify(action)
-          } but this app has no action handler defined to handle it!`,
+          `Received block suggestion payload with suggestion=${
+            JSON.stringify(suggestion)
+          } but this app has no suggestion handler defined to handle it!`,
         );
       }
 
-      const enrichedContext = enrichContext(context) as ActionContext<
+      const enrichedContext = enrichContext(context) as SuggestionContext<
         FunctionRuntimeParameters<InputParameters, RequiredInput>
       >;
 
@@ -129,12 +129,12 @@ export class ActionsRouter<
   }
 
   /**
-   * Return the first registered ActionHandler that matches the action ID string provided.
+   * Return the first registered SuggestionHandler that matches the action and/or block ID string(s) provided.
    */
   matchHandler(
-    action: BlockAction,
+    action: BlockAction, // TODO: this type name is a bit misleading; BlockAction just has both action_id and block_id props on it, so it applies to both block_suggestion and block_action payloads
   ):
-    | BlockActionHandler<
+    | BlockSuggestionHandler<
       FunctionDefinitionArgs<
         InputParameters,
         OutputParameters,

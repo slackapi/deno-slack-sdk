@@ -10,7 +10,8 @@ import {
 } from "./types.ts";
 import { SlackFunctionDefinition } from "./mod.ts";
 import { enrichContext } from "./enrich-context.ts";
-import { BlockActionsRouter } from "./interactivity/action_router.ts";
+import { BlockActionsRouter } from "./interactivity/block_actions_router.ts";
+import { BlockSuggestionRouter } from "./interactivity/block_suggestion_router.ts";
 import { ViewsRouter } from "./interactivity/view_router.ts";
 
 export const SlackFunction = <
@@ -48,6 +49,7 @@ export const SlackFunction = <
   // Create routers for block/view actions
   // TODO: we could probably lazily create these when corresponding add* functions are called
   const blockActionsRouter = BlockActionsRouter(func);
+  const blockSuggestionRouter = BlockSuggestionRouter(func);
   const viewsRouter = ViewsRouter(func);
 
   // Add fns for additional function handlers
@@ -55,6 +57,13 @@ export const SlackFunction = <
   // deno-lint-ignore no-explicit-any
   handlerModule.addBlockActionsHandler = (...args: any) => {
     blockActionsRouter.addHandler.apply(blockActionsRouter, args);
+
+    return handlerModule;
+  };
+
+  // deno-lint-ignore no-explicit-any
+  handlerModule.addBlockSuggestionHandler = (...args: any) => {
+    blockSuggestionRouter.addHandler.apply(blockSuggestionRouter, args);
 
     return handlerModule;
   };
@@ -91,6 +100,7 @@ export const SlackFunction = <
 
   // Expose named handlers that the deno-slack-runtime will invoke
   handlerModule.blockActions = blockActionsRouter;
+  handlerModule.blockSuggestion = blockSuggestionRouter;
   handlerModule.viewClosed = viewsRouter.viewClosed;
   handlerModule.viewSubmission = viewsRouter.viewSubmission;
 
