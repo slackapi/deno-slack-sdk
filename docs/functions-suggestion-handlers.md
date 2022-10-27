@@ -5,11 +5,18 @@ things: post messages, create channels, or anything available to developers via
 the [Slack API][api]. One of the more compelling features available to app developers
 is the ability to use [Block Kit][block-kit] to add richness and depth to messages
 in Slack. Even better, [Block Kit][block-kit] supports a variety of [interactive components][interactivity]!
-This document explores how to implement responding to interactions with
+This document explores how to provide dynamic menu options for
 [external-data-sourced Block Kit drop-down menus](https://api.slack.com/reference/block-kit/block-elements#external_select).
 
 If you're already familiar with the main concepts underpinning Block Kit Suggestion Handlers,
 then you may want to skip ahead to the [`addBlockSuggestionHandler()` method API Reference](#api-reference).
+
+Worthwhile noting that while this document covers how to render custom menu options
+for external-data-sourced Block Kit drop-down menus, it does _not_ cover how to
+respond to a user selecting one of the custom menu options. Do not fear, though!
+The same approach discussed in our [Block Kit Action Handlers][action-handlers]
+document can be used to  register an action handler to respond to drop-down menu
+selections.
 
 1. [Requirements](#requirements)
 2. [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
@@ -23,9 +30,8 @@ Your app needs to have an existing [Function][functions] defined, implemented an
 before you can add interactivity handlers like Block Kit Suggestion Handlers to them.
 Make sure you have followed our [Functions documentation][functions] and have a
 function in your app ready that we can expand with interactivity. Familiarity with
-the [Block Kit Actions Handlers](./functions-action-handlers.md) would be a huge
-plus as the handling Block Kit Actions and handling Block Kit Suggestions is practically
-identical.
+the [Block Kit Actions Handlers][action-handlers] would be a huge plus as the
+handling Block Kit Actions and handling Block Kit Suggestions is practically identical.
 
 As part of exploring how Block Kit Suggestion Handlers work, we'll walk through an
 example that posts an inspirational quote. A user would trigger our app's function,
@@ -211,6 +217,7 @@ If both `action_id` and `block_id` properties exist on the `constraint`, then bo
 one of these properties is provided, then only the provided property must match.
 
 [functions]: ./functions.md
+[action-handlers]: ./functions-action-handlers.md
 [api]: https://api.slack.com/methods
 [block-kit]: https://api.slack.com/block-kit
 [interactivity]: https://api.slack.com/block-kit/interactivity
