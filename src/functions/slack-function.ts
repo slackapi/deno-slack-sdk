@@ -10,8 +10,8 @@ import {
 } from "./types.ts";
 import { SlackFunctionDefinition } from "./mod.ts";
 import { enrichContext } from "./enrich-context.ts";
-import { BlockActionsRouter } from "./interactivity/action_router.ts";
-import { BlockSuggestionRouter } from "./interactivity/suggestion_router.ts";
+import { BlockActionsRouter } from "./interactivity/block_actions_router.ts";
+import { BlockSuggestionRouter } from "./interactivity/block_suggestion_router.ts";
 import { ViewsRouter } from "./interactivity/view_router.ts";
 
 export const SlackFunction = <
