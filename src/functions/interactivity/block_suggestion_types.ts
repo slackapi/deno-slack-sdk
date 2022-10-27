@@ -7,7 +7,6 @@ import type { BlockAction, BlockElement } from "./block_kit_types.ts";
 export type BlockSuggestionBody =
   & BlockAction // adds block_id and action_id properties
   & {
-    // type: "block_suggestion";
     /**
      * @description The encoded application ID the event was dispatched to, e.g. A123456.
      */

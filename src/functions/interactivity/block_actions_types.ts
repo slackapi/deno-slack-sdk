@@ -14,7 +14,6 @@ import type { BlockAction, BlockElement } from "./block_kit_types.ts";
  * @description Block Actions-specific type for the `body` property of a `block_actions` event
  */
 export type BlockActionsBody = {
-  // type: "block_actions";
   actions: BlockAction[];
   /**
    * @description The encoded application ID the event was dispatched to, e.g. A123456.
