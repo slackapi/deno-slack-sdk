@@ -27,12 +27,14 @@ Releases for this library are automatically generated off of git tags. Before cr
 To create a new release:
 
 1. Create a new GitHub Release from the [Releases page](https://github.com/slackapi/deno-slack-sdk/releases) by clicking the "Draft a new release" button.
-2. Input a new version manually into the "Choose a tag" input. Ensure that this version adheres to [semantic versioning][semver] based on what's being released. Version tags should match the following pattern: `1.0.1` (no `v` preceding the number).
-  - After you input the new version, click the "Create a new tag: x.x.x on publish" button.
+2. Input a new version manually into the "Choose a tag" input. You can start off by incrementing the version to reflect a patch. (i.e. 1.16.0 -> 1.16.1)
+    - After you input the new version, click the "Create a new tag: x.x.x on publish" button. This won't create your tag immediately.
+    - Auto-generate the release notes by clicking the "Auto-generate release notes" button. This will pull in changes that will be included in your release. 
+    - Flip to the preview mode and review the pull request labels of the changes included in this release (i.e. `semver:minor` `semver:patch`, `semver:major`). Tip: Your release version should be based on the tag of the largest change, so if this release includes a `semver:minor`, the release version in your tag should be upgraded to reflect a minor. 
+    - Ensure that this version adheres to [semantic versioning][semver]. See [Versioning](#versioning) for correct version format. Version tags should match the following pattern: `1.0.1` (no `v` preceding the number).
 3. Set the "Target" input to the "main" branch.
 4. Name the release title after the version tag.
-5. Auto-generate the release notes by clicking the "Auto-generate release notes" button. Review the generated release notes, make sure they are accessible and approachable and that an end-user with little context about this project could still understand.
-6. Make sure "This is a pre-release" is _not_ checked.
+5. Make any adjustments to generated release notes to make sure they are accessible and approachable and that an end-user with little context about this project could still understand.
 7. Publish the release by clicking the "Publish release" button!
 8. After a few minutes, the corresponding version will be available on https://deno.land/x/deno_slack_sdk.
 
