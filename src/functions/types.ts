@@ -74,8 +74,7 @@ type FunctionInputRuntimeType<
         Param["type"]["definition"],
         IncreaseDepth<CurrentDepth>
       >
-      // Not a Custom Type, so assign the runtime value
-    : Param["type"] extends typeof SchemaTypes.string ? string
+    : Param["type"] extends typeof SchemaTypes.string ? string // Not a Custom Type, so assign the runtime value
     : Param["type"] extends
       | typeof SchemaTypes.integer
       | typeof SchemaTypes.number ? number
