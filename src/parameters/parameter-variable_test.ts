@@ -230,6 +230,7 @@ Deno.test("ParameterVariable using Custom Type array", () => {
     type: customType,
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{myCustomTypeArray}}");
 });
 
@@ -252,6 +253,7 @@ Deno.test("ParameterVariable using Custom Type object referencing another Custom
     type: customType,
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{myNestedCustomType}}");
   assertStrictEquals(
     `${param.customType}`,
@@ -275,6 +277,7 @@ Deno.test("ParameterVariable typed object with Custom Type property", () => {
     },
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{myObjectParam}}");
   assertStrictEquals(`${param.aString}`, "{{myObjectParam.aString}}");
 });
