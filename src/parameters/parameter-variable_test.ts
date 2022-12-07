@@ -1,13 +1,15 @@
 import SchemaTypes from "../schema/schema_types.ts";
 import { ParameterVariable } from "./mod.ts";
 import { DefineType } from "../types/mod.ts";
-import { assertStrictEquals } from "../dev_deps.ts";
+import { assert, assertStrictEquals } from "../dev_deps.ts";
+import type { IsAny } from "../dev_deps.ts";
 
 Deno.test("ParameterVariable string", () => {
   const param = ParameterVariable("", "incident_name", {
     type: SchemaTypes.string,
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{incident_name}}");
 });
 
@@ -22,8 +24,10 @@ Deno.test("ParameterVariable typed object", () => {
         type: SchemaTypes.string,
       },
     },
+    required: [],
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
@@ -42,9 +46,11 @@ Deno.test("ParameterVariable typed object allows access to additional properties
     },
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  // Below should be allowed due to undefined additionalProperties
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
@@ -59,9 +65,11 @@ Deno.test("ParameterVariable typed object with additional properties", () => {
         type: SchemaTypes.string,
       },
     },
+    required: [],
     additionalProperties: true,
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
@@ -82,6 +90,7 @@ Deno.test("ParameterVariable typed object with no additional properties", () => 
     additionalProperties: false,
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
@@ -95,6 +104,7 @@ Deno.test("ParameterVariable untyped object", () => {
     type: SchemaTypes.object,
   });
 
+  assert<IsAny<typeof param>>(true);
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
@@ -108,7 +118,7 @@ Deno.test("ParameterVariable array of strings", () => {
       type: SchemaTypes.string,
     },
   });
-
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{myArray}}");
 });
 
@@ -121,6 +131,7 @@ Deno.test("ParameterVariable using CustomType string", () => {
     type: customType,
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{myCustomTypeString}}");
 });
 
@@ -138,6 +149,7 @@ Deno.test("ParameterVariable using Custom Type typed object", () => {
     type: customType,
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{myCustomType}}");
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
   // additionalProperties on the custom type definition is undefined, so accessing random
@@ -160,6 +172,7 @@ Deno.test("ParameterVariable using Custom Type typed object with additionalPrope
     type: customType,
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{myCustomType}}");
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
   // additionalProperties on the custom type definition is true, so accessing random
@@ -182,9 +195,10 @@ Deno.test("ParameterVariable using Custom Type typed object with additionalPrope
     type: customType,
   });
 
+  assert<IsAny<typeof param>>(false);
   assertStrictEquals(`${param}`, "{{myCustomType}}");
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
-  //@ts-expect-error foo doesn't exist
+  //@ts-expect-error anything doesn't exist
   assertStrictEquals(`${param.anything}`, "{{myCustomType.anything}}");
 });
 
@@ -197,6 +211,7 @@ Deno.test("ParameterVariable using Custom Type untyped object", () => {
     type: customType,
   });
 
+  assert<IsAny<typeof param>>(true);
   assertStrictEquals(`${param}`, "{{myCustomTypeObject}}");
   assertStrictEquals(`${param.foo}`, "{{myCustomTypeObject.foo}}");
   assertStrictEquals(`${param.foo.bar}`, "{{myCustomTypeObject.foo.bar}}");
