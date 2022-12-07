@@ -140,6 +140,52 @@ Deno.test("ParameterVariable using Custom Type typed object", () => {
 
   assertStrictEquals(`${param}`, "{{myCustomType}}");
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  // additionalProperties on the custom type definition is undefined, so accessing random
+  // additional properties should be allowed
+  assertStrictEquals(`${param.anything}`, "{{myCustomType.anything}}");
+});
+
+Deno.test("ParameterVariable using Custom Type typed object with additionalProperties=true should allow accessing additional props", () => {
+  const customType = DefineType({
+    name: "customType",
+    type: SchemaTypes.object,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    additionalProperties: true,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: customType,
+  });
+
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  // additionalProperties on the custom type definition is true, so accessing random
+  // additional properties should be allowed
+  assertStrictEquals(`${param.anything}`, "{{myCustomType.anything}}");
+});
+
+Deno.test("ParameterVariable using Custom Type typed object with additionalProperties=false should deny accessing additional props", () => {
+  const customType = DefineType({
+    name: "customType",
+    type: SchemaTypes.object,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    additionalProperties: false,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: customType,
+  });
+
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  //@ts-expect-error foo doesn't exist
+  assertStrictEquals(`${param.anything}`, "{{myCustomType.anything}}");
 });
 
 Deno.test("ParameterVariable using Custom Type untyped object", () => {
