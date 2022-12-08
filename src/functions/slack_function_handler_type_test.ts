@@ -6,12 +6,12 @@ import {
   EnrichedSlackFunctionHandler,
   RuntimeSlackFunctionHandler,
 } from "./types.ts";
-import { Schema } from "../mod.ts";
+import { DefineType, Schema } from "../mod.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
 // Any "failures" here will most likely be reflected in Type errors
 
-Deno.test("EnrichedSlackFunctionHandler with inputs and outputs", () => {
+Deno.test("EnrichedSlackFunctionHandler with string input passed to string output echoes output appropriately", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -59,7 +59,7 @@ Deno.test("EnrichedSlackFunctionHandler with inputs and outputs", () => {
   );
 });
 
-Deno.test("EnrichedSlackFunctionHandler with optional input", () => {
+Deno.test("EnrichedSlackFunctionHandler with optional string input that echoes it or returns default fallback value returns fallback value when input is undefined", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -96,7 +96,7 @@ Deno.test("EnrichedSlackFunctionHandler with optional input", () => {
   assertEqualsTypedValues(result.outputs?.out, "default");
 });
 
-Deno.test("EnrichedSlackFunctionHandler with no inputs or outputs", () => {
+Deno.test("EnrichedSlackFunctionHandler with no inputs or outputs and implementation that returns empty object yields empty object", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -113,7 +113,7 @@ Deno.test("EnrichedSlackFunctionHandler with no inputs or outputs", () => {
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("EnrichedSlackFunctionHandler with undefined inputs and outputs", () => {
+Deno.test("EnrichedSlackFunctionHandler with undefined inputs and outputs and implementation that returns empty object yields empty object", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -132,7 +132,7 @@ Deno.test("EnrichedSlackFunctionHandler with undefined inputs and outputs", () =
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("EnrichedSlackFunctionHandler with empty inputs and outputs", () => {
+Deno.test("EnrichedSlackFunctionHandler with empty inputs and outputs and implementation that returns empty object yields empty object", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -151,7 +151,7 @@ Deno.test("EnrichedSlackFunctionHandler with empty inputs and outputs", () => {
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("EnrichedSlackFunctionHandler with only inputs", () => {
+Deno.test("EnrichedSlackFunctionHandler with only string input and implementation that returns empty object yields empty object", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -180,7 +180,7 @@ Deno.test("EnrichedSlackFunctionHandler with only inputs", () => {
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("EnrichedSlackFunctionHandler with only outputs", () => {
+Deno.test("EnrichedSlackFunctionHandler with only string output and implementation that returns a 'test' string yields 'test' string", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -207,7 +207,7 @@ Deno.test("EnrichedSlackFunctionHandler with only outputs", () => {
   assertEqualsTypedValues(result.outputs?.out, "test");
 });
 
-Deno.test("EnrichedSlackFunctionHandler with input and output object", () => {
+Deno.test("EnrichedSlackFunctionHandler with input and output objects that have a single required string property and implementation that passed input object string to output object yields expected string", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -251,7 +251,7 @@ Deno.test("EnrichedSlackFunctionHandler with input and output object", () => {
   assertEqualsTypedValues(result.outputs?.anObject.out, "test");
 });
 
-Deno.test("EnrichedSlackFunctionHandler with only completed false", () => {
+Deno.test("EnrichedSlackFunctionHandler that returns { completed: false } should be acceptable", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -276,7 +276,7 @@ Deno.test("EnrichedSlackFunctionHandler with only completed false", () => {
   assertEqualsTypedValues(result.completed, false);
 });
 
-Deno.test("EnrichedSlackFunctionHandler with only error", () => {
+Deno.test("EnrichedSlackFunctionHandler that returns { error } should be acceptable", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -301,7 +301,156 @@ Deno.test("EnrichedSlackFunctionHandler with only error", () => {
   assertEqualsTypedValues(result.error, "error");
 });
 
-Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
+// TODO: custom type tests:
+// - typedobject custom type with various use of `required`
+// - the other kinds of acceptable custom type tests (primitive, untypedobject, the array types)
+Deno.test("EnrichedSlackFunctionHandler with a Custom Type of type:object with undefined additionalProperties should allow for referencing extra properties on the Custom Type input", () => {
+  const myType = DefineType({
+    name: "myType",
+    type: Schema.types.object,
+    properties: {
+      first: { type: Schema.types.string },
+    },
+    required: ["first"],
+  });
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        custom: { type: myType },
+      },
+      required: ["custom"],
+    },
+    output_parameters: {
+      properties: {
+        out: { type: Schema.types.string },
+      },
+      required: ["out"],
+    },
+  });
+  const sharedInputs = {
+    custom: { first: "test" },
+  };
+  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
+    (
+      { inputs },
+    ) => {
+      assertEquals<string>(inputs.custom.first, "test");
+      // Next line should compile / be allowed by TS
+      inputs.custom.anything;
+      return {
+        outputs: {
+          out: inputs.custom.first,
+        },
+      };
+    };
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = handler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(result.outputs?.out, sharedInputs.custom.first);
+});
+
+Deno.test("EnrichedSlackFunctionHandler with a Custom Type of type:object with additionalProperties=true should allow for referencing extra properties on the Custom Type input", () => {
+  const myType = DefineType({
+    name: "myType",
+    type: Schema.types.object,
+    properties: {
+      first: { type: Schema.types.string },
+    },
+    required: ["first"],
+    additionalProperties: true,
+  });
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        custom: { type: myType },
+      },
+      required: ["custom"],
+    },
+    output_parameters: {
+      properties: {
+        out: { type: Schema.types.string },
+      },
+      required: ["out"],
+    },
+  });
+  const sharedInputs = {
+    custom: { first: "test" },
+  };
+  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
+    (
+      { inputs },
+    ) => {
+      assertEquals<string>(inputs.custom.first, "test");
+      // Next line should compile / be allowed by TS
+      inputs.custom.anything;
+      return {
+        outputs: {
+          out: inputs.custom.first,
+        },
+      };
+    };
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = handler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(result.outputs?.out, sharedInputs.custom.first);
+});
+
+Deno.test("EnrichedSlackFunctionHandler with a Custom Type of type:object with additionalProperties=false should prevent referencing extra properties on the Custom Type input", () => {
+  const myType = DefineType({
+    name: "myType",
+    type: Schema.types.object,
+    properties: {
+      first: { type: Schema.types.string },
+    },
+    required: ["first"],
+    additionalProperties: false,
+  });
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        custom: { type: myType },
+      },
+      required: ["custom"],
+    },
+    output_parameters: {
+      properties: {
+        out: { type: Schema.types.string },
+      },
+      required: ["out"],
+    },
+  });
+  const sharedInputs = {
+    custom: { first: "test" },
+  };
+  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
+    (
+      { inputs },
+    ) => {
+      assertEquals<string>(inputs.custom.first, "test");
+      // @ts-expect-error anything cannot exist
+      inputs.custom.anything;
+      return {
+        outputs: {
+          out: inputs.custom.first,
+        },
+      };
+    };
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = handler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(result.outputs?.out, sharedInputs.custom.first);
+});
+
+Deno.test("EnrichedSlackFunctionHandler using Slack Custom Types (interactivity and user context) should propagate inputs to outputs", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
@@ -340,8 +489,8 @@ Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
     (
       { inputs },
     ) => {
-      inputs.interactivity.interactor.secret;
       const { interactivity, user_context } = inputs;
+      // TODO: is there a assertDeepEquals or equiv we can use instead of the below multiple assert statements?
       assertEqualsTypedValues(interactivity, sharedInputs.interactivity);
       assertEqualsTypedValues(
         interactivity.interactivity_pointer,
