@@ -531,6 +531,71 @@ Deno.test("EnrichedSlackFunctionHandler using Slack Custom Types (interactivity 
   assertExists(result.outputs?.user_context.secret);
 });
 
+Deno.test("EnrichedSlackFunctionHandler using Objects with optional properties", () => {
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        addlPropertiesObj: {
+          type: Schema.types.object,
+          properties: {
+            aString: { type: Schema.types.string },
+          },
+        },
+      },
+      required: [],
+    },
+    output_parameters: {
+      properties: {
+        addlPropertiesObj: {
+          type: Schema.types.object,
+          properties: {
+            aString: { type: Schema.types.string },
+          },
+        },
+      },
+      required: ["addlPropertiesObj"],
+    },
+  });
+
+  const sharedInputs = {
+    addlPropertiesObj: { aString: "hi" },
+  };
+
+  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
+    (
+      { inputs },
+    ) => {
+      const { addlPropertiesObj } = inputs;
+      assertEqualsTypedValues(
+        addlPropertiesObj,
+        sharedInputs.addlPropertiesObj,
+      );
+      assertEqualsTypedValues(
+        addlPropertiesObj?.aString,
+        sharedInputs.addlPropertiesObj.aString,
+      );
+      assertEquals(addlPropertiesObj?.anythingElse, undefined);
+      return {
+        outputs: {
+          addlPropertiesObj: {
+            aString: addlPropertiesObj?.aString || "hi",
+          },
+        },
+      };
+    };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = handler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(sharedInputs, result.outputs);
+  assertExists(result.outputs?.addlPropertiesObj);
+  assertExists(result.outputs?.addlPropertiesObj.aString);
+  assertEquals(result.outputs?.addlPropertiesObj.anythingElse, undefined);
+});
+
 Deno.test("EnrichedSlackFunctionHandler using Objects with additional properties", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
