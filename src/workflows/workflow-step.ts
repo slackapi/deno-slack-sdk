@@ -47,9 +47,7 @@ abstract class BaseWorkflowStepDefinition {
     for (const [inputName, inputValue] of Object.entries(this.inputs)) {
       try {
         templatizedInputs[inputName] = JSON.parse(JSON.stringify(inputValue));
-      } finally {
-        // Nothing else to do
-      }
+      } catch {}
     }
 
     return templatizedInputs;
