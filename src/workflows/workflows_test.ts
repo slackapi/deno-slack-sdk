@@ -1,8 +1,7 @@
-import { assertEquals, assertExists } from "../dev_deps.ts";
+import { assertEquals } from "../dev_deps.ts";
 import { DefineWorkflow } from "./mod.ts";
-import { DefineFunction, SlackFunction } from "../mod.ts";
+import { DefineFunction } from "../mod.ts";
 import SlackTypes from "../schema/slack/schema_types.ts";
-import { SlackFunctionDefinition } from "../functions/mod.ts";
 
 Deno.test("WorkflowStep export input values", () => {
   const TestFunction = DefineFunction({
