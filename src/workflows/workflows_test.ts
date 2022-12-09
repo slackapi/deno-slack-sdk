@@ -1,7 +1,8 @@
-import { assertEquals } from "../dev_deps.ts";
+import { assertEquals, assertExists } from "../dev_deps.ts";
 import { DefineWorkflow } from "./mod.ts";
-import { DefineFunction } from "../mod.ts";
+import { DefineFunction, SlackFunction } from "../mod.ts";
 import SlackTypes from "../schema/slack/schema_types.ts";
+import { SlackFunctionDefinition } from "../functions/mod.ts";
 
 Deno.test("WorkflowStep export input values", () => {
   const TestFunction = DefineFunction({
@@ -172,4 +173,39 @@ Deno.test("Workflows properly treats interactivity and user context types", () =
     `${step1.outputs.user?.secret}`,
     `{{steps.0.user.secret}}`,
   );
+});
+
+Deno.test("A malformed function's amelioration steps are provided to the manifest validation method", () => {
+  const TestFunction = DefineFunction({
+    callback_id: "test_undefined",
+    title: "Test Function",
+    source_file: "",
+    input_parameters: {
+      properties: {
+        message: {
+          type: "string",
+        },
+      },
+      required: ["message"],
+    },
+  });
+
+  const workflow = DefineWorkflow({
+    callback_id: "test_wf",
+    title: "test",
+  });
+
+  const malformedFunctionStep = workflow.addStep(TestFunction, {
+    message: undefined,
+  });
+
+  // Malformed return result from custom function sent to a send_message step
+  workflow.addStep("slack#/functions/send_message", {
+    channel_id: "C12345",
+    message: malformedFunctionStep.outputs.message,
+  });
+
+  const exportedWorkflow = workflow.export();
+
+  assertEquals(exportedWorkflow.steps[0].inputs.message, undefined);
 });
