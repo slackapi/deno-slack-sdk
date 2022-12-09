@@ -174,7 +174,7 @@ Deno.test("Workflows properly treats interactivity and user context types", () =
   );
 });
 
-Deno.test("A malformed function's amelioration steps are provided to the manifest validation method", () => {
+Deno.test("Malformed workflow step inputs are set to undefined", () => {
   const TestFunction = DefineFunction({
     callback_id: "test_undefined",
     title: "Test Function",
@@ -198,7 +198,6 @@ Deno.test("A malformed function's amelioration steps are provided to the manifes
     message: undefined,
   });
 
-  // Malformed return result from custom function sent to a send_message step
   workflow.addStep("slack#/functions/send_message", {
     channel_id: "C12345",
     message: malformedFunctionStep.outputs.message,
