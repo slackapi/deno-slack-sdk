@@ -47,6 +47,7 @@ abstract class BaseWorkflowStepDefinition {
     for (const [inputName, inputValue] of Object.entries(this.inputs)) {
       try {
         templatizedInputs[inputName] = JSON.parse(JSON.stringify(inputValue));
+        // deno-lint-ignore no-empty
       } catch {}
     }
 
