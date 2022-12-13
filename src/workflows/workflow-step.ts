@@ -45,7 +45,11 @@ abstract class BaseWorkflowStepDefinition {
       {} as ManifestWorkflowStepSchema["inputs"];
 
     for (const [inputName, inputValue] of Object.entries(this.inputs)) {
-      templatizedInputs[inputName] = JSON.parse(JSON.stringify(inputValue));
+      try {
+        templatizedInputs[inputName] = JSON.parse(JSON.stringify(inputValue));
+      } catch {
+        templatizedInputs[inputName] = undefined;
+      }
     }
 
     return templatizedInputs;
