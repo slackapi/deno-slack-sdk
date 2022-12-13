@@ -174,6 +174,15 @@ Deno.test("Workflows properly treats interactivity and user context types", () =
   );
 });
 
+/*
+  Deno will exit on uncaught exceptions. 
+  JSON.parse will raise an exception when given undefined. 
+  By setting undefined manually to reflect the case of an 
+  undefined inputValue, which will allow Deno to continue 
+  and pass the undefined values up to the validation API 
+  -- which will then communicate back to the CLI the specific 
+  validation errors it ran in to.
+*/
 Deno.test("Malformed workflow step inputs are set to undefined", () => {
   const TestFunction = DefineFunction({
     callback_id: "test_undefined",
