@@ -22,20 +22,23 @@ interface IParameterDefinition<
 
 export type ParameterDefinition =
   | PrimitiveParameterDefinition
+  | PrimitiveSlackParameterDefinition
   | ComplexParameterDefinition;
 
 export type PrimitiveParameterDefinition =
   | BooleanParameterDefinition
   | StringParameterDefinition
   | NumberParameterDefinition
-  | IntegerParameterDefinition;
-// TODO: removed array types here for now, re-add at some point
+  | IntegerParameterDefinition
+  | TypedArrayParameterDefinition
+  | UntypedArrayParameterDefinition;
 
 type DistributePrimitiveSlackTypes<T> = T extends string ? IParameterDefinition<
     T,
     string
   >
   : never;
+
 export type PrimitiveSlackParameterDefinition = DistributePrimitiveSlackTypes<
   typeof SlackPrimitiveTypes[keyof typeof SlackPrimitiveTypes]
 >;
@@ -43,8 +46,8 @@ export type PrimitiveSlackParameterDefinition = DistributePrimitiveSlackTypes<
 export type ComplexParameterDefinition =
   | CustomTypeParameterDefinition
   | TypedObjectParameterDefinition
-  | UntypedObjectParameterDefinition
-  | OAuth2ParameterDefinition;
+  | UntypedObjectParameterDefinition;
+//| OAuth2ParameterDefinition;
 
 export type CustomTypeParameterDefinition =
   & IParameterDefinition<
@@ -72,9 +75,29 @@ export type TypedObjectParameterDefinition =
     properties: {
       [key: string]:
         | PrimitiveParameterDefinition
-        | CustomTypeParameterDefinition;
+        | CustomTypeParameterDefinition
+        | PrimitiveSlackParameterDefinition
+        | UntypedObjectParameterDefinition;
     };
   };
+
+// TODO: maybe break out the `type` discriminant for arrays into separate 'typed' and 'untyped' literals
+export type UntypedArrayParameterDefinition =
+  & IParameterDefinition<
+    typeof SchemaTypes.array,
+    AllPrimitiveValues[]
+  >
+  & {
+    /** Minimum number of items comprising the array */
+    minItems?: number;
+    /** Maximum number of items comprising the array */
+    maxItems?: number;
+  };
+
+export type TypedArrayParameterDefinition = UntypedArrayParameterDefinition & {
+  /** Defines the type of the items contained within the array parameter. */
+  items: ParameterDefinition;
+};
 
 export type OAuth2ParameterDefinition =
   & IParameterDefinition<typeof SlackPrimitiveTypes.oauth2, string>

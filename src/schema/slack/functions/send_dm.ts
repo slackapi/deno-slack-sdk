@@ -43,13 +43,10 @@ export default DefineFunction(
           description: "Message link",
         },
         action: {
-          type: SchemaTypes.object,
+          type: SchemaTypes.untypedobject,
           description: "Button interactivity data",
         },
-        interactivity: {
-          type: SlackTypes.interactivity,
-          description: "Interactivity context",
-        },
+        interactivity: SlackTypes.interactivity,
       },
     },
   },

@@ -20,6 +20,7 @@ export class CustomType<Def extends CustomTypeDefinition>
   public id: string;
   public title: string | undefined;
   public description: string | undefined;
+  public type: typeof SchemaTypes.custom;
 
   constructor(
     public definition: Def,
@@ -28,6 +29,7 @@ export class CustomType<Def extends CustomTypeDefinition>
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;
+    this.type = SchemaTypes.custom;
   }
 
   private generateReferenceString() {

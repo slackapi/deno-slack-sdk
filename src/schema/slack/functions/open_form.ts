@@ -25,28 +25,19 @@ export default DefineFunction(
           type: SchemaTypes.string,
           description: "Submit Label of the form",
         },
-        fields: {
-          type: InternalSlackTypes.form_input_object,
-          description: "Input fields to be shown on the form",
-        },
-        interactivity: {
-          type: SlackTypes.interactivity,
-          description:
-            "Context about the interactive event that led to opening of the form",
-        },
+        fields: InternalSlackTypes.form_input_object,
+
+        interactivity: SlackTypes.interactivity,
       },
     },
     output_parameters: {
       required: ["fields", "interactivity"],
       properties: {
         fields: {
-          type: SchemaTypes.object,
+          type: SchemaTypes.untypedobject,
           description: "fields",
         },
-        interactivity: {
-          type: SlackTypes.interactivity,
-          description: "Context about the form submit action interactive event",
-        },
+        interactivity: SlackTypes.interactivity,
       },
     },
   },

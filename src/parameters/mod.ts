@@ -1,13 +1,18 @@
 // import SchemaTypes from "../schema/schema_types.ts";
 import type {
+  CustomTypeParameterDefinition,
   ParameterDefinition,
   TypedObjectParameterDefinition,
   UntypedObjectParameterDefinition,
 } from "./types.ts";
 import { ParamReference } from "./param.ts";
+import {
+  IncreaseDepth,
+  MaxRecursionDepth,
+  RecursionDepthLevel,
+} from "../functions/types.ts";
 import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 import SchemaTypes from "../schema/schema_types.ts";
-import { ICustomType } from "../types/types.ts";
 
 // Used for defining a set of input or output parameters
 export type ParameterSetDefinition = {
@@ -28,8 +33,10 @@ export type ParameterPropertiesDefinition<
 
 export type ParameterVariableType<
   Def extends ParameterDefinition,
-> = Def["type"] extends ICustomType // If the ParameterVariable is a Custom type, use it's definition instead
-  ? ParameterVariableType<Def["type"]["definition"]>
+  CurrentDepth extends RecursionDepthLevel = 0,
+> = CurrentDepth extends MaxRecursionDepth ? UntypedObjectParameterVariableType // i.e. any
+  : Def extends CustomTypeParameterDefinition // If the ParameterVariable is a Custom type, use it's definition instead
+    ? ParameterVariableType<Def["definition"], IncreaseDepth<CurrentDepth>>
   : Def extends TypedObjectParameterDefinition // If the ParameterVariable is of type object, allow access to the object's properties
     ? ObjectParameterVariableType<Def>
   : Def extends UntypedObjectParameterDefinition
@@ -91,6 +98,7 @@ export const ParameterVariable = <P extends ParameterDefinition>(
         paramName,
       ) as ParameterVariableType<P>;
   }
+  // TODO: the following type assertion seems to ignore the case where param could be null
   return param as ParameterVariableType<P>;
 };
 
