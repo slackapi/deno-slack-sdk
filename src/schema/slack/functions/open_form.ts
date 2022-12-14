@@ -25,9 +25,14 @@ export default DefineFunction(
           type: SchemaTypes.string,
           description: "Submit Label of the form",
         },
-        fields: InternalSlackTypes.form_input_object,
-
-        interactivity: SlackTypes.interactivity,
+        fields: {
+          type: SchemaTypes.custom,
+          custom: InternalSlackTypes.form_input_object,
+        },
+        interactivity: {
+          type: SchemaTypes.custom,
+          custom: SlackTypes.interactivity,
+        },
       },
     },
     output_parameters: {
@@ -37,7 +42,10 @@ export default DefineFunction(
           type: SchemaTypes.untypedobject,
           description: "fields",
         },
-        interactivity: SlackTypes.interactivity,
+        interactivity: {
+          type: SchemaTypes.custom,
+          custom: SlackTypes.interactivity,
+        },
       },
     },
   },

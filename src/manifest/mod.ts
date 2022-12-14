@@ -161,7 +161,7 @@ export class SlackManifest {
   registerTypes(parameterSet: ParameterSetDefinition) {
     Object.values(parameterSet ?? {}).forEach((param) => {
       if (param.type === SchemaTypes.custom) {
-        this.registerType(param);
+        this.registerType(param.custom);
       }
     });
   }

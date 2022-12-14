@@ -6,7 +6,7 @@ Deno.test("DefineType test against id using the name parameter", () => {
     title: "Title",
     description: "Description",
     name: "Name",
-    type: "Type",
+    type: "string",
   });
 
   assertEquals(Type.id, "Name");
@@ -17,7 +17,7 @@ Deno.test("DefineType test toString using the name parameter", () => {
     title: "Title",
     description: "Description",
     name: "Name",
-    type: "Type",
+    type: "string",
   });
 
   const typeJson = Type.toJSON();
@@ -30,7 +30,7 @@ Deno.test("DefineType test export using the name parameter", () => {
     title: "Title",
     description: "Description",
     name: "Name",
-    type: "Type",
+    type: "string",
   });
 
   const exportType = Type.export();
@@ -38,6 +38,6 @@ Deno.test("DefineType test export using the name parameter", () => {
   assertEquals(exportType, {
     title: "Title",
     description: "Description",
-    type: "Type",
+    type: "string",
   });
 });

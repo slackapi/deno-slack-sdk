@@ -36,7 +36,10 @@ export type ParameterVariableType<
   CurrentDepth extends RecursionDepthLevel = 0,
 > = CurrentDepth extends MaxRecursionDepth ? UntypedObjectParameterVariableType // i.e. any
   : Def extends CustomTypeParameterDefinition // If the ParameterVariable is a Custom type, use it's definition instead
-    ? ParameterVariableType<Def["definition"], IncreaseDepth<CurrentDepth>>
+    ? ParameterVariableType<
+      Def["custom"]["definition"],
+      IncreaseDepth<CurrentDepth>
+    >
   : Def extends TypedObjectParameterDefinition // If the ParameterVariable is of type object, allow access to the object's properties
     ? ObjectParameterVariableType<Def>
   : Def extends UntypedObjectParameterDefinition
@@ -79,7 +82,7 @@ export const ParameterVariable = <P extends ParameterDefinition>(
       param = ParameterVariable(
         namespace,
         paramName,
-        definition.definition,
+        definition.custom.definition,
       );
       break;
     case SchemaTypes.typedobject:

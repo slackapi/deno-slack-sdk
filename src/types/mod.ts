@@ -46,22 +46,22 @@ export class CustomType<Def extends CustomTypeDefinition>
   registerParameterTypes(manifest: SlackManifest) {
     switch (this.definition.type) {
       // TODO: reintroduce array types
-      /*
-      case SchemaTypes.array:
-        if (this.definition.items.type instanceof Object) {
-          manifest.registerType(this.definition.items.type);
+
+      case SchemaTypes.typedarray:
+        if (this.definition.items.type === SchemaTypes.custom) {
+          manifest.registerType(this.definition.items.custom);
         }
         break;
-      */
+
       case SchemaTypes.typedobject:
         Object.values(this.definition.properties)?.forEach((property) => {
           if (property.type === SchemaTypes.custom) {
-            manifest.registerType(property);
+            manifest.registerType(property.custom);
           }
         });
         break;
       case SchemaTypes.custom:
-        manifest.registerType(this.definition);
+        manifest.registerType(this.definition.custom);
         break;
       default:
         break;

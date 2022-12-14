@@ -2,6 +2,7 @@ import { assertEquals } from "../dev_deps.ts";
 import { DefineWorkflow } from "./mod.ts";
 import { DefineFunction } from "../mod.ts";
 import SlackTypes from "../schema/slack/schema_types.ts";
+import SchemaTypes from "../schema/schema_types.ts";
 
 Deno.test("WorkflowStep export input values", () => {
   const TestFunction = DefineFunction({
@@ -17,7 +18,7 @@ Deno.test("WorkflowStep export input values", () => {
           type: "string",
         },
         manager: {
-          type: "object",
+          type: "typedobject",
           properties: {
             email: { type: "string" },
             name: { type: "string" },
@@ -32,7 +33,7 @@ Deno.test("WorkflowStep export input values", () => {
           type: "string",
         },
         manager: {
-          type: "object",
+          type: "typedobject",
           properties: {
             email: { type: "string" },
             name: { type: "string" },
@@ -55,7 +56,7 @@ Deno.test("WorkflowStep export input values", () => {
           type: "string",
         },
         manager: {
-          type: "object",
+          type: "typedobject",
           properties: {
             email: { type: "string" },
             name: { type: "string" },
@@ -127,10 +128,12 @@ Deno.test("Workflows properly treats interactivity and user context types", () =
     output_parameters: {
       properties: {
         interactivity: {
-          type: SlackTypes.interactivity,
+          type: SchemaTypes.custom,
+          custom: SlackTypes.interactivity,
         },
         user: {
-          type: SlackTypes.user_context,
+          type: SchemaTypes.custom,
+          custom: SlackTypes.user_context,
         },
       },
       required: ["interactivity"],

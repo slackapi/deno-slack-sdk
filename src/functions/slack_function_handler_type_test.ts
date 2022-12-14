@@ -7,6 +7,7 @@ import {
   RuntimeSlackFunctionHandler,
 } from "./types.ts";
 import { Schema } from "../mod.ts";
+import SchemaTypes from "../schema/schema_types.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
 // Any "failures" here will most likely be reflected in Type errors
@@ -215,7 +216,7 @@ Deno.test("EnrichedSlackFunctionHandler with input and output object", () => {
     input_parameters: {
       properties: {
         anObject: {
-          type: "object",
+          type: "typedobject",
           properties: { in: { type: "string" } },
           required: ["in"],
         },
@@ -225,7 +226,7 @@ Deno.test("EnrichedSlackFunctionHandler with input and output object", () => {
     output_parameters: {
       properties: {
         anObject: {
-          type: "object",
+          type: "typedobject",
           properties: { out: { type: "string" } },
           required: ["out"],
         },
@@ -308,15 +309,27 @@ Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
     title: "Test",
     input_parameters: {
       properties: {
-        interactivity: { type: Schema.slack.types.interactivity },
-        user_context: { type: Schema.slack.types.user_context },
+        interactivity: {
+          type: SchemaTypes.custom,
+          custom: Schema.slack.types.interactivity,
+        },
+        user_context: {
+          type: SchemaTypes.custom,
+          custom: Schema.slack.types.user_context,
+        },
       },
       required: ["interactivity", "user_context"],
     },
     output_parameters: {
       properties: {
-        interactivity: { type: Schema.slack.types.interactivity },
-        user_context: { type: Schema.slack.types.user_context },
+        interactivity: {
+          type: SchemaTypes.custom,
+          custom: Schema.slack.types.interactivity,
+        },
+        user_context: {
+          type: SchemaTypes.custom,
+          custom: Schema.slack.types.user_context,
+        },
       },
       required: ["interactivity", "user_context"],
     },
@@ -390,7 +403,7 @@ Deno.test("EnrichedSlackFunctionHandler using Objects with additional properties
     input_parameters: {
       properties: {
         addlPropertiesObj: {
-          type: Schema.types.object,
+          type: Schema.types.typedobject,
           properties: {
             aString: { type: Schema.types.string },
           },
@@ -401,7 +414,7 @@ Deno.test("EnrichedSlackFunctionHandler using Objects with additional properties
     output_parameters: {
       properties: {
         addlPropertiesObj: {
-          type: Schema.types.object,
+          type: Schema.types.typedobject,
           properties: {
             aString: { type: Schema.types.string },
           },
@@ -451,7 +464,7 @@ Deno.test("EnrichedSlackFunctionHandler using Objects without additional propert
     input_parameters: {
       properties: {
         noAddlPropertiesObj: {
-          type: Schema.types.object,
+          type: Schema.types.typedobject,
           properties: {
             aString: { type: Schema.types.string },
           },
@@ -463,7 +476,7 @@ Deno.test("EnrichedSlackFunctionHandler using Objects without additional propert
     output_parameters: {
       properties: {
         noAddlPropertiesObj: {
-          type: Schema.types.object,
+          type: Schema.types.typedobject,
           properties: {
             aString: { type: Schema.types.string },
           },

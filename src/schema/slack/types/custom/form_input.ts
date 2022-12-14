@@ -7,13 +7,13 @@ const FormInput = DefineType({
   type: SchemaTypes.typedobject,
   properties: {
     required: {
-      type: SchemaTypes.array,
+      type: SchemaTypes.typedarray,
       items: {
         type: SchemaTypes.string,
       },
     },
     elements: {
-      type: SchemaTypes.array,
+      type: SchemaTypes.typedarray,
       items: {
         type: SchemaTypes.untypedobject,
       },

@@ -48,12 +48,12 @@ export class CustomEvent<Def extends CustomEventDefinition>
         // Loop through the properties and register any types
         Object.values(this.definition.properties)?.forEach((property) => {
           if (property.type === SchemaTypes.custom) {
-            manifest.registerType(property);
+            manifest.registerType(property.custom);
           }
         });
         break;
       case SchemaTypes.custom:
-        manifest.registerType(this.definition);
+        manifest.registerType(this.definition.custom);
         break;
     }
   }

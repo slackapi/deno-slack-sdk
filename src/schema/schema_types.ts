@@ -5,7 +5,8 @@ const SchemaTypes = {
   number: "number",
   untypedobject: "untypedobject",
   typedobject: "typedobject",
-  array: "array",
+  typedarray: "typedarray",
+  untypedarray: "untypedarray",
   custom: "custom",
 } as const;
 

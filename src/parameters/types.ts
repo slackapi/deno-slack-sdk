@@ -54,7 +54,9 @@ export type CustomTypeParameterDefinition =
     typeof SchemaTypes.custom,
     AllValues
   >
-  & ICustomType;
+  & {
+    custom: ICustomType;
+  };
 
 export type UntypedObjectParameterDefinition = IParameterDefinition<
   typeof SchemaTypes.untypedobject,
@@ -84,7 +86,7 @@ export type TypedObjectParameterDefinition =
 // TODO: maybe break out the `type` discriminant for arrays into separate 'typed' and 'untyped' literals
 export type UntypedArrayParameterDefinition =
   & IParameterDefinition<
-    typeof SchemaTypes.array,
+    typeof SchemaTypes.untypedarray,
     AllPrimitiveValues[]
   >
   & {
@@ -94,10 +96,19 @@ export type UntypedArrayParameterDefinition =
     maxItems?: number;
   };
 
-export type TypedArrayParameterDefinition = UntypedArrayParameterDefinition & {
-  /** Defines the type of the items contained within the array parameter. */
-  items: ParameterDefinition;
-};
+export type TypedArrayParameterDefinition =
+  & IParameterDefinition<
+    typeof SchemaTypes.typedarray,
+    AllPrimitiveValues[]
+  >
+  & {
+    /** Minimum number of items comprising the array */
+    minItems?: number;
+    /** Maximum number of items comprising the array */
+    maxItems?: number;
+    /** Defines the type of the items contained within the array parameter. */
+    items: ParameterDefinition;
+  };
 
 export type OAuth2ParameterDefinition =
   & IParameterDefinition<typeof SlackPrimitiveTypes.oauth2, string>

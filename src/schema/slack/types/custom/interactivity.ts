@@ -10,7 +10,10 @@ const InteractivityType = DefineType({
     interactivity_pointer: {
       type: SchemaTypes.string,
     },
-    interactor: UserContextType,
+    interactor: {
+      type: SchemaTypes.custom,
+      custom: UserContextType,
+    },
   },
 });
 

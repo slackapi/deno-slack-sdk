@@ -103,7 +103,7 @@ Deno.test("ParameterVariable untyped object", () => {
 
 Deno.test("ParameterVariable array of strings", () => {
   const param = ParameterVariable("", "myArray", {
-    type: SchemaTypes.array,
+    type: SchemaTypes.typedarray,
     items: {
       type: SchemaTypes.string,
     },
@@ -117,7 +117,10 @@ Deno.test("ParameterVariable using CustomType string", () => {
     name: "customTypeString",
     type: SchemaTypes.string,
   });
-  const param = ParameterVariable("", "myCustomTypeString", customType);
+  const param = ParameterVariable("", "myCustomTypeString", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
 
   assertStrictEquals(`${param}`, "{{myCustomTypeString}}");
 });
@@ -132,7 +135,10 @@ Deno.test("ParameterVariable using Custom Type typed object", () => {
       },
     },
   });
-  const param = ParameterVariable("", "myCustomType", customType);
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
 
   assertStrictEquals(`${param}`, "{{myCustomType}}");
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
@@ -143,7 +149,10 @@ Deno.test("ParameterVariable using Custom Type untyped object", () => {
     name: "customTypeObject",
     type: SchemaTypes.untypedobject,
   });
-  const param = ParameterVariable("", "myCustomTypeObject", customType);
+  const param = ParameterVariable("", "myCustomTypeObject", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
 
   assertStrictEquals(`${param}`, "{{myCustomTypeObject}}");
   assertStrictEquals(`${param.foo}`, "{{myCustomTypeObject.foo}}");
@@ -157,9 +166,12 @@ Deno.test("ParameterVariable using Custom Type untyped object", () => {
 Deno.test("ParameterVariable using Custom Type with untypedarray", () => {
   const customType = DefineType({
     name: "customTypeArray",
-    type: SchemaTypes.array,
+    type: SchemaTypes.untypedarray,
   });
-  const param = ParameterVariable("", "myCustomTypeArray", customType);
+  const param = ParameterVariable("", "myCustomTypeArray", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
 
   assertStrictEquals(`${param}`, "{{myCustomTypeArray}}");
 });
@@ -174,10 +186,16 @@ Deno.test("ParameterVariable using Custom Type object referencing another Custom
     name: "customTypeWithCustomType",
     type: SchemaTypes.typedobject,
     properties: {
-      customType: StringType,
+      customType: {
+        type: SchemaTypes.custom,
+        custom: StringType,
+      },
     },
   });
-  const param = ParameterVariable("", "myNestedCustomType", customType);
+  const param = ParameterVariable("", "myNestedCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
 
   assertStrictEquals(`${param}`, "{{myNestedCustomType}}");
   assertStrictEquals(
@@ -196,7 +214,10 @@ Deno.test("ParameterVariable typed object with Custom Type property", () => {
   const param = ParameterVariable("", "myObjectParam", {
     type: SchemaTypes.typedobject,
     properties: {
-      aString: StringType,
+      aString: {
+        type: SchemaTypes.custom,
+        custom: StringType,
+      },
     },
   });
 

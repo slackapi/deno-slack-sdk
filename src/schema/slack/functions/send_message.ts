@@ -60,7 +60,10 @@ export default DefineFunction(
           type: SchemaTypes.untypedobject,
           description: "Button interactivity data",
         },
-        interactivity: SlackTypes.interactivity,
+        interactivity: {
+          type: SchemaTypes.custom,
+          custom: SlackTypes.interactivity,
+        },
       },
     },
   },

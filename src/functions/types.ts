@@ -7,6 +7,7 @@ import {
   PossibleParameterKeys,
 } from "../parameters/mod.ts";
 import {
+  CustomTypeParameterDefinition,
   ParameterDefinition,
   TypedArrayParameterDefinition,
   TypedObjectParameterDefinition,
@@ -23,7 +24,6 @@ import {
   ViewClosedHandler,
   ViewSubmissionHandler,
 } from "./interactivity/types.ts";
-import { ICustomType } from "../types/types.ts";
 
 export type { BlockActionHandler } from "./interactivity/types.ts";
 
@@ -71,31 +71,35 @@ type FunctionInputRuntimeType<
 > =
   // Recurse through Custom Types, stop when we hit our max depth
   CurrentDepth extends MaxRecursionDepth ? UnknownRuntimeType
-    : Param extends ICustomType ? FunctionInputRuntimeType<
-        Param["definition"],
-        IncreaseDepth<CurrentDepth>
-      >
-    : Param["type"] extends typeof SchemaTypes.string ? string // Not a Custom Type, so assign the runtime value
+    : Param["type"] extends typeof SchemaTypes.custom
+      ? Param extends CustomTypeParameterDefinition ? FunctionInputRuntimeType<
+          Param["custom"]["definition"],
+          IncreaseDepth<CurrentDepth>
+        >
+      : UnknownRuntimeType
+    : Param["type"] extends
+      | typeof SchemaTypes.string
+      | typeof SlackSchemaTypes.user_id
+      | typeof SlackSchemaTypes.usergroup_id
+      | typeof SlackSchemaTypes.channel_id
+      | typeof SlackSchemaTypes.date ? string // Not a Custom Type, so assign the runtime value
     : Param["type"] extends
       | typeof SchemaTypes.integer
-      | typeof SchemaTypes.number ? number
+      | typeof SchemaTypes.number
+      | typeof SlackSchemaTypes.timestamp ? number
     : Param["type"] extends typeof SchemaTypes.boolean ? boolean
-    : Param["type"] extends typeof SchemaTypes.array
+    : Param["type"] extends typeof SchemaTypes.typedarray
       ? Param extends TypedArrayParameterDefinition
         ? TypedArrayFunctionInputRuntimeType<Param>
       : UnknownRuntimeType[]
+    : Param["type"] extends typeof SchemaTypes.untypedarray
+      ? UnknownRuntimeType[]
     : Param["type"] extends typeof SchemaTypes.typedobject
       ? Param extends TypedObjectParameterDefinition
         ? TypedObjectFunctionInputRuntimeType<Param>
       : UnknownRuntimeType
     : Param["type"] extends typeof SchemaTypes.untypedobject
       ? UnknownRuntimeType
-    : Param["type"] extends
-      | typeof SlackSchemaTypes.user_id
-      | typeof SlackSchemaTypes.usergroup_id
-      | typeof SlackSchemaTypes.channel_id
-      | typeof SlackSchemaTypes.date ? string
-    : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
     : Param["type"] extends typeof SlackSchemaTypes.rich_text
       ? UnknownRuntimeType
     : UnknownRuntimeType;

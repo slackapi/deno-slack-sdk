@@ -19,6 +19,7 @@ import {
   assertStrictEquals,
   IsExact,
 } from "../dev_deps.ts";
+import SchemaTypes from "../schema/schema_types.ts";
 
 Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
   const definition: SlackManifestType = {
@@ -135,7 +136,8 @@ Deno.test("Manifest() automatically registers types used by function input and o
 
   const CustomInputType = DefineType({
     name: inputTypeId,
-    type: CustomStringType,
+    type: SchemaTypes.custom,
+    custom: CustomStringType,
   });
 
   const CustomOutputType = DefineType({
@@ -149,11 +151,15 @@ Deno.test("Manifest() automatically registers types used by function input and o
       title: "Function title",
       source_file: "functions/test_function.ts",
       input_parameters: {
-        properties: { aType: { type: CustomInputType } },
+        properties: {
+          aType: { type: SchemaTypes.custom, custom: CustomInputType },
+        },
         required: [],
       },
       output_parameters: {
-        properties: { aType: { type: CustomOutputType } },
+        properties: {
+          aType: { type: SchemaTypes.custom, custom: CustomOutputType },
+        },
         required: [],
       },
     },
@@ -299,9 +305,9 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
 
   const ObjectType = DefineType({
     name: objectTypeId,
-    type: Schema.types.object,
+    type: Schema.types.typedobject,
     properties: {
-      aString: { type: StringType },
+      aString: { type: SchemaTypes.custom, custom: StringType },
     },
   });
 
@@ -349,32 +355,34 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
 
   const ArrayType = DefineType({
     name: arrayTypeId,
-    type: Schema.types.array,
+    type: Schema.types.typedarray,
     items: {
-      type: StringType,
+      type: SchemaTypes.custom,
+      custom: StringType,
     },
   });
 
   const ObjectType = DefineType({
     name: objectTypeId,
-    type: Schema.types.object,
+    type: Schema.types.typedobject,
     properties: {
-      aBoolean: { type: BooleanType },
+      aBoolean: { type: SchemaTypes.custom, custom: BooleanType },
     },
   });
 
   const ObjectEvent = DefineEvent({
     name: objectEventId,
-    type: Schema.types.object,
+    type: Schema.types.typedobject,
     properties: {
-      aBoolean: { type: BooleanType },
-      anArray: { type: ArrayType },
+      aBoolean: { type: SchemaTypes.custom, custom: BooleanType },
+      anArray: { type: SchemaTypes.custom, custom: ArrayType },
     },
   });
 
   const ObjectTypeEvent = DefineEvent({
     name: objectEventTypeId,
-    type: ObjectType,
+    type: SchemaTypes.custom,
+    custom: ObjectType,
   });
 
   const definition: SlackManifestType = {
@@ -424,17 +432,21 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
 
   const ObjectType = DefineType({
     name: objectTypeId,
-    type: Schema.types.object,
+    type: Schema.types.typedobject,
     properties: {
-      aBoolean: { type: BooleanType },
+      aBoolean: {
+        type: SchemaTypes.custom,
+        custom: BooleanType,
+      },
     },
   });
 
   const ArrayType = DefineType({
     name: arrayTypeId,
-    type: Schema.types.array,
+    type: Schema.types.typedarray,
     items: {
-      type: StringType,
+      type: SchemaTypes.custom,
+      custom: StringType,
     },
   });
 
@@ -747,19 +759,21 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
 
   const CustomObjectType = DefineType({
     name: objectTypeId,
-    type: Schema.types.object,
+    type: Schema.types.typedobject,
     properties: {
       aString: {
-        type: CustomStringType,
+        type: SchemaTypes.custom,
+        custom: CustomStringType,
       },
     },
   });
 
   const CustomArrayType = DefineType({
     name: arrayTypeId,
-    type: Schema.types.array,
+    type: Schema.types.typedarray,
     items: {
-      type: CustomStringType,
+      type: SchemaTypes.custom,
+      custom: CustomStringType,
     },
   });
 
