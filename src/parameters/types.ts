@@ -2,21 +2,77 @@ import SchemaTypes from "../schema/schema_types.ts";
 import { SlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
 import { ICustomType } from "../types/types.ts";
 
+interface ParameterDefinition<TypeDescriptor, Type> {
+  /** Defines the parameter type. */
+  type: TypeDescriptor;
+  /** An optional parameter title. */
+  title?: string;
+  /** An optional parameter description. */
+  description?: string;
+  /** An optional parameter hint. */
+  hint?: string;
+  /** An optional parameter default value. */
+  default?: Type;
+  /** An option list of examples; intended for future use in a possible app type schemas page. */
+  examples?: Type[];
+}
+
 export type PrimitiveParameterDefinition =
   | BooleanParameterDefinition
   | StringParameterDefinition
   | NumberParameterDefinition
-  | IntegerParameterDefinition
-  | BaseParameterDefinition<AllValues>
-  // | UntypedArrayParameterDefinition
-  | TypedArrayParameterDefinition;
+  | IntegerParameterDefinition;
+// TODO: removed array types here for now
 
 export type TypedParameterDefinition =
   | CustomTypeParameterDefinition
   | TypedObjectParameterDefinition
   | UntypedObjectParameterDefinition
-  | PrimitiveParameterDefinition
   | OAuth2ParameterDefinition;
+
+type BooleanParameterDefinition = ParameterDefinition<
+  typeof SchemaTypes.boolean,
+  boolean
+>;
+
+type StringParameterDefinition =
+  & ParameterDefinition<typeof SchemaTypes.string, string>
+  & {
+    /** Minimum number of characters comprising the string */
+    minLength?: number;
+    /** Maximum number of characters comprising the string */
+    maxLength?: number;
+    /** Constrain the available string options to just the list of strings denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
+    enum?: string[];
+    /** Defines labels that correspond to the `enum` values. */
+    choices?: EnumChoice<string>[];
+  };
+
+type IntegerParameterDefinition =
+  & ParameterDefinition<typeof SchemaTypes.integer, number>
+  & {
+    /** Absolute minimum acceptable value for the integer */
+    minimum?: number;
+    /** Absolute maximum acceptable value for the integer */
+    maximum?: number;
+    /** Constrain the available integer options to just the list of integers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
+    enum?: number[];
+    /** Defines labels that correspond to the `enum` values. */
+    choices?: EnumChoice<number>[];
+  };
+
+type NumberParameterDefinition =
+  & ParameterDefinition<typeof SchemaTypes.number, number>
+  & {
+    /** Absolute minimum acceptable value for the number */
+    minimum?: number;
+    /** Absolute maximum acceptable value for the number */
+    maximum?: number;
+    /** Constrain the available number options to just the list of numbers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
+    enum?: number[];
+    /** Defines labels that correspond to the `enum` values. */
+    choices?: EnumChoice<number>[];
+  };
 
 export type CustomTypeParameterDefinition =
   & Omit<BaseParameterDefinition<AllValues>, "type">
@@ -41,7 +97,7 @@ type BaseParameterDefinition<T> = {
 };
 
 export type UntypedObjectParameterDefinition =
-  & BaseParameterDefinition<ObjectValue>
+  & BaseParameterDefinition<FlatObjectValue>
   & {
     type: typeof SchemaTypes.object;
   };
@@ -65,46 +121,6 @@ export type TypedObjectParameterDefinition =
     };
   };
 
-type BooleanParameterDefinition = BaseParameterDefinition<boolean> & {
-  type: typeof SchemaTypes.boolean;
-};
-
-type StringParameterDefinition = BaseParameterDefinition<string> & {
-  type: typeof SchemaTypes.string;
-  /** Minimum number of characters comprising the string */
-  minLength?: number;
-  /** Maximum number of characters comprising the string */
-  maxLength?: number;
-  /** Constrain the available string options to just the list of strings denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-  enum?: string[];
-  /** Defines labels that correspond to the `enum` values. */
-  choices?: EnumChoice<string>[];
-};
-
-type IntegerParameterDefinition = BaseParameterDefinition<number> & {
-  type: typeof SchemaTypes.integer;
-  /** Absolute minimum acceptable value for the integer */
-  minimum?: number;
-  /** Absolute maximum acceptable value for the integer */
-  maximum?: number;
-  /** Constrain the available integer options to just the list of integers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-  enum?: number[];
-  /** Defines labels that correspond to the `enum` values. */
-  choices?: EnumChoice<number>[];
-};
-
-type NumberParameterDefinition = BaseParameterDefinition<number> & {
-  type: typeof SchemaTypes.number;
-  /** Absolute minimum acceptable value for the number */
-  minimum?: number;
-  /** Absolute maximum acceptable value for the number */
-  maximum?: number;
-  /** Constrain the available number options to just the list of numbers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-  enum?: number[];
-  /** Defines labels that correspond to the `enum` values. */
-  choices?: EnumChoice<number>[];
-};
-
 export type OAuth2ParameterDefinition = BaseParameterDefinition<string> & {
   type: typeof SlackPrimitiveTypes.oauth2;
   oauth2_provider_key: string;
@@ -119,27 +135,10 @@ type EnumChoice<T> = {
   description?: string;
 };
 
-export type UntypedArrayParameterDefinition =
-  & BaseParameterDefinition<ArrayValue>
-  & {
-    type: typeof SchemaTypes.array;
-    /** Minimum number of items comprising the array */
-    minItems?: number;
-    /** Maximum number of items comprising the array */
-    maxItems?: number;
-  };
-export type TypedArrayParameterDefinition = UntypedArrayParameterDefinition & {
-  /** Defines the type of the items contained within the array parameter. */
-  items: TypedParameterDefinition;
-};
-
-type AllValues = AllPrimitiveValues | ObjectValue | ArrayValue;
+type AllValues = AllPrimitiveValues | AllPrimitiveValues[] | FlatObjectValue;
 
 type AllPrimitiveValues = string | number | boolean;
 
-type ObjectValue = {
+type FlatObjectValue = {
   [key: string]: AllPrimitiveValues | AllPrimitiveValues[];
 };
-
-// TODO: Add object and create an union type when its available
-type ArrayValue = AllPrimitiveValues[];

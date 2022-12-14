@@ -9,8 +9,6 @@ import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import { ICustomType } from "../types/types.ts";
 
-export type ParameterDefinition = TypedParameterDefinition;
-
 // Used for defining a set of input or output parameters
 export type ParameterSetDefinition = {
   [key: string]: ParameterDefinition;
