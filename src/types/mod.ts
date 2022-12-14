@@ -5,6 +5,7 @@ import {
   DefineTypeFunction,
   ICustomType,
 } from "./types.ts";
+import SchemaTypes from "../schema/schema_types.ts";
 
 export const DefineType: DefineTypeFunction = <
   Def extends CustomTypeDefinition,
@@ -41,21 +42,27 @@ export class CustomType<Def extends CustomTypeDefinition>
   }
 
   registerParameterTypes(manifest: SlackManifest) {
-    if ("items" in this.definition) {
-      // Register the item if its a type
-      if (this.definition.items.type instanceof Object) {
-        manifest.registerType(this.definition.items.type);
-      }
-    } else if ("properties" in this.definition) {
-      // Loop through the properties and register any types
-      Object.values(this.definition.properties)?.forEach((property) => {
-        if ("type" in property && property.type instanceof Object) {
-          manifest.registerType(property.type);
+    switch (this.definition.type) {
+      // TODO: reintroduce array types
+      /*
+      case SchemaTypes.array:
+        if (this.definition.items.type instanceof Object) {
+          manifest.registerType(this.definition.items.type);
         }
-      });
-    } else if (this.definition.type instanceof Object) {
-      // The referenced type is a Custom Type
-      manifest.registerType(this.definition.type);
+        break;
+      */
+      case SchemaTypes.typedobject:
+        Object.values(this.definition.properties)?.forEach((property) => {
+          if (property.type === SchemaTypes.custom) {
+            manifest.registerType(property);
+          }
+        });
+        break;
+      case SchemaTypes.custom:
+        manifest.registerType(this.definition);
+        break;
+      default:
+        break;
     }
   }
   export(): ManifestCustomTypeSchema {

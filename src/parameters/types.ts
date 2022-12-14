@@ -2,7 +2,10 @@ import SchemaTypes from "../schema/schema_types.ts";
 import { SlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
 import { ICustomType } from "../types/types.ts";
 
-interface ParameterDefinition<TypeDescriptor, Type> {
+interface IParameterDefinition<
+  TypeDescriptor extends string,
+  Type,
+> {
   /** Defines the parameter type. */
   type: TypeDescriptor;
   /** An optional parameter title. */
@@ -17,94 +20,46 @@ interface ParameterDefinition<TypeDescriptor, Type> {
   examples?: Type[];
 }
 
+export type ParameterDefinition =
+  | PrimitiveParameterDefinition
+  | ComplexParameterDefinition;
+
 export type PrimitiveParameterDefinition =
   | BooleanParameterDefinition
   | StringParameterDefinition
   | NumberParameterDefinition
   | IntegerParameterDefinition;
-// TODO: removed array types here for now
+// TODO: removed array types here for now, re-add at some point
 
-export type TypedParameterDefinition =
+type DistributePrimitiveSlackTypes<T> = T extends string ? IParameterDefinition<
+    T,
+    string
+  >
+  : never;
+export type PrimitiveSlackParameterDefinition = DistributePrimitiveSlackTypes<
+  typeof SlackPrimitiveTypes[keyof typeof SlackPrimitiveTypes]
+>;
+
+export type ComplexParameterDefinition =
   | CustomTypeParameterDefinition
   | TypedObjectParameterDefinition
   | UntypedObjectParameterDefinition
   | OAuth2ParameterDefinition;
 
-type BooleanParameterDefinition = ParameterDefinition<
-  typeof SchemaTypes.boolean,
-  boolean
+export type CustomTypeParameterDefinition =
+  & IParameterDefinition<
+    typeof SchemaTypes.custom,
+    AllValues
+  >
+  & ICustomType;
+
+export type UntypedObjectParameterDefinition = IParameterDefinition<
+  typeof SchemaTypes.untypedobject,
+  FlatObjectValue
 >;
 
-type StringParameterDefinition =
-  & ParameterDefinition<typeof SchemaTypes.string, string>
-  & {
-    /** Minimum number of characters comprising the string */
-    minLength?: number;
-    /** Maximum number of characters comprising the string */
-    maxLength?: number;
-    /** Constrain the available string options to just the list of strings denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-    enum?: string[];
-    /** Defines labels that correspond to the `enum` values. */
-    choices?: EnumChoice<string>[];
-  };
-
-type IntegerParameterDefinition =
-  & ParameterDefinition<typeof SchemaTypes.integer, number>
-  & {
-    /** Absolute minimum acceptable value for the integer */
-    minimum?: number;
-    /** Absolute maximum acceptable value for the integer */
-    maximum?: number;
-    /** Constrain the available integer options to just the list of integers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-    enum?: number[];
-    /** Defines labels that correspond to the `enum` values. */
-    choices?: EnumChoice<number>[];
-  };
-
-type NumberParameterDefinition =
-  & ParameterDefinition<typeof SchemaTypes.number, number>
-  & {
-    /** Absolute minimum acceptable value for the number */
-    minimum?: number;
-    /** Absolute maximum acceptable value for the number */
-    maximum?: number;
-    /** Constrain the available number options to just the list of numbers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-    enum?: number[];
-    /** Defines labels that correspond to the `enum` values. */
-    choices?: EnumChoice<number>[];
-  };
-
-export type CustomTypeParameterDefinition =
-  & Omit<BaseParameterDefinition<AllValues>, "type">
-  & {
-    type: ICustomType;
-  };
-
-// A type is either a string, or a Custom Type!
-type BaseParameterDefinition<T> = {
-  /** Defines the parameter type. */
-  type: string;
-  /** An optional parameter title. */
-  title?: string;
-  /** An optional parameter description. */
-  description?: string;
-  /** An optional parameter hint. */
-  hint?: string;
-  /** An optional parameter default value. */
-  default?: T;
-  /** An option list of examples; intended for future use in a possible app type schemas page. */
-  examples?: T[];
-};
-
-export type UntypedObjectParameterDefinition =
-  & BaseParameterDefinition<FlatObjectValue>
-  & {
-    type: typeof SchemaTypes.object;
-  };
-
-// TODO: Required field should be limited to the names(key) of each property
 export type TypedObjectParameterDefinition =
-  & UntypedObjectParameterDefinition
+  & IParameterDefinition<typeof SchemaTypes.typedobject, FlatObjectValue> // TODO: the second type parameter would not accurately reflect what typed objects would look like - would limit to flat objects only.
   & {
     /** A list of required property names (must reference names defined on the `properties` property). Only for use with Object types. */
     required?: string[];
@@ -121,10 +76,55 @@ export type TypedObjectParameterDefinition =
     };
   };
 
-export type OAuth2ParameterDefinition = BaseParameterDefinition<string> & {
-  type: typeof SlackPrimitiveTypes.oauth2;
-  oauth2_provider_key: string;
-};
+export type OAuth2ParameterDefinition =
+  & IParameterDefinition<typeof SlackPrimitiveTypes.oauth2, string>
+  & {
+    oauth2_provider_key: string;
+  };
+
+type BooleanParameterDefinition = IParameterDefinition<
+  typeof SchemaTypes.boolean,
+  boolean
+>;
+
+type StringParameterDefinition =
+  & IParameterDefinition<typeof SchemaTypes.string, string>
+  & {
+    /** Minimum number of characters comprising the string */
+    minLength?: number;
+    /** Maximum number of characters comprising the string */
+    maxLength?: number;
+    /** Constrain the available string options to just the list of strings denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
+    enum?: string[];
+    /** Defines labels that correspond to the `enum` values. */
+    choices?: EnumChoice<string>[];
+  };
+
+type IntegerParameterDefinition =
+  & IParameterDefinition<typeof SchemaTypes.integer, number>
+  & {
+    /** Absolute minimum acceptable value for the integer */
+    minimum?: number;
+    /** Absolute maximum acceptable value for the integer */
+    maximum?: number;
+    /** Constrain the available integer options to just the list of integers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
+    enum?: number[];
+    /** Defines labels that correspond to the `enum` values. */
+    choices?: EnumChoice<number>[];
+  };
+
+type NumberParameterDefinition =
+  & IParameterDefinition<typeof SchemaTypes.number, number>
+  & {
+    /** Absolute minimum acceptable value for the number */
+    minimum?: number;
+    /** Absolute maximum acceptable value for the number */
+    maximum?: number;
+    /** Constrain the available number options to just the list of numbers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
+    enum?: number[];
+    /** Defines labels that correspond to the `enum` values. */
+    choices?: EnumChoice<number>[];
+  };
 
 type EnumChoice<T> = {
   /** The `enum` value this {@link EnumChoice} corresponds to. */

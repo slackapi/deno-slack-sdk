@@ -1,7 +1,7 @@
 // import SchemaTypes from "../schema/schema_types.ts";
 import type {
+  ParameterDefinition,
   TypedObjectParameterDefinition,
-  TypedParameterDefinition,
   UntypedObjectParameterDefinition,
 } from "./types.ts";
 import { ParamReference } from "./param.ts";
@@ -67,29 +67,30 @@ export const ParameterVariable = <P extends ParameterDefinition>(
 ): ParameterVariableType<P> => {
   let param: ParameterVariableType<P> | null = null;
 
-  if (definition.type instanceof Object) {
-    param = ParameterVariable(
-      namespace,
-      paramName,
-      definition.type.definition,
-    );
-  } else if (definition.type === SchemaTypes.object) {
-    if ("properties" in definition) {
+  switch (definition.type) {
+    case SchemaTypes.custom:
+      param = ParameterVariable(
+        namespace,
+        paramName,
+        definition.definition,
+      );
+      break;
+    case SchemaTypes.typedobject:
       param = CreateTypedObjectParameterVariable(
         namespace,
         paramName,
         definition,
       ) as ParameterVariableType<P>;
-    } else {
+      break;
+    case SchemaTypes.untypedobject:
       param = CreateUntypedObjectParameterVariable(namespace, paramName);
-    }
-  } else {
-    param = CreateSingleParameterVariable(
-      namespace,
-      paramName,
-    ) as ParameterVariableType<P>;
+      break;
+    default:
+      param = CreateSingleParameterVariable(
+        namespace,
+        paramName,
+      ) as ParameterVariableType<P>;
   }
-
   return param as ParameterVariableType<P>;
 };
 

@@ -4,7 +4,7 @@ import { UserContextType } from "./user_context.ts";
 
 const InteractivityType = DefineType({
   name: "slack#/types/interactivity",
-  type: SchemaTypes.object,
+  type: SchemaTypes.typedobject,
   properties: {
     interactivity_pointer: {
       type: SchemaTypes.string,

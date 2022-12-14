@@ -3,8 +3,10 @@ const SchemaTypes = {
   boolean: "boolean",
   integer: "integer",
   number: "number",
-  object: "object",
+  untypedobject: "untypedobject",
+  typedobject: "typedobject",
   array: "array",
+  custom: "custom",
 } as const;
 
 export default SchemaTypes;

@@ -18,6 +18,7 @@ import {
   ManifestSchema,
   ManifestWorkflowsSchema,
 } from "./manifest_schema.ts";
+import SchemaTypes from "../schema/schema_types.ts";
 
 export const Manifest = (
   definition: Omit<ISlackManifestRunOnSlack, "runOnSlack">,
@@ -159,8 +160,8 @@ export class SlackManifest {
   // Loop through a ParameterSetDefinition to register each individual type
   registerTypes(parameterSet: ParameterSetDefinition) {
     Object.values(parameterSet ?? {}).forEach((param) => {
-      if (param.type instanceof Object) {
-        this.registerType(param.type);
+      if (param.type === SchemaTypes.custom) {
+        this.registerType(param);
       }
     });
   }
