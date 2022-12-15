@@ -1,9 +1,9 @@
 import SchemaTypes from "../../../schema_types.ts";
 import { SlackPrimitiveTypes } from "../../types/mod.ts";
 import { DefineType } from "../../../../types/mod.ts";
+import { DefineObject } from "../../../../types/objects.ts";
 
-const UserContextType = DefineType({
-  name: "slack#/types/user_context",
+const UserContextObject = DefineObject({
   type: SchemaTypes.typedobject,
   properties: {
     id: {
@@ -14,6 +14,10 @@ const UserContextType = DefineType({
     },
   },
   required: ["id", "secret"],
+});
+const UserContextType = DefineType({
+  name: "slack#/types/user_context",
+  ...UserContextObject,
 });
 
 export { UserContextType };
