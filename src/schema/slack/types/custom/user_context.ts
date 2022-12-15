@@ -13,6 +13,7 @@ const UserContextType = DefineType({
       type: SchemaTypes.string,
     },
   },
+  required: ["id", "secret"],
 });
 
 export { UserContextType };

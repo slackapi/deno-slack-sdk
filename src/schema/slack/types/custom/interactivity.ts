@@ -15,6 +15,7 @@ const InteractivityType = DefineType({
       custom: UserContextType,
     },
   },
+  required: ["interactivity_pointer", "interactor"],
 });
 
 export { InteractivityType };

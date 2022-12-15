@@ -11,6 +11,8 @@ import {
   ParameterDefinition,
   TypedArrayParameterDefinition,
   TypedObjectParameterDefinition,
+  TypedObjectProperties,
+  TypedObjectRequiredProperties,
 } from "../parameters/types.ts";
 import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
@@ -95,8 +97,10 @@ type FunctionInputRuntimeType<
     : Param["type"] extends typeof SchemaTypes.untypedarray
       ? UnknownRuntimeType[]
     : Param["type"] extends typeof SchemaTypes.typedobject
-      ? Param extends TypedObjectParameterDefinition
-        ? TypedObjectFunctionInputRuntimeType<Param>
+      ? Param extends TypedObjectParameterDefinition<
+        TypedObjectProperties,
+        TypedObjectRequiredProperties<TypedObjectProperties>
+      > ? TypedObjectFunctionInputRuntimeType<Param>
       : UnknownRuntimeType
     : Param["type"] extends typeof SchemaTypes.untypedobject
       ? UnknownRuntimeType
@@ -108,7 +112,8 @@ type FunctionInputRuntimeType<
 type UnknownRuntimeType = any;
 
 type TypedObjectFunctionInputRuntimeType<
-  Param extends TypedObjectParameterDefinition,
+  // deno-lint-ignore no-explicit-any
+  Param extends TypedObjectParameterDefinition<any, any>, // TODO
 > = Param["additionalProperties"] extends false ? {
     [k in keyof Param["properties"]]: FunctionInputRuntimeType<
       Param["properties"][k]

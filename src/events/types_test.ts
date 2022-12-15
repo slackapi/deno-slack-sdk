@@ -9,6 +9,7 @@ Deno.test("DefineEvent accepts object types", () => {
     name: "test",
     type: Schema.types.typedobject,
     properties: {},
+    required: [],
   });
 
   assertEquals(TestEvent.id, TestEvent.definition.name);
@@ -20,6 +21,7 @@ Deno.test("DefineEvent accepts custom types", () => {
     name: "test",
     type: Schema.types.typedobject,
     properties: {},
+    required: [],
   });
 
   const TestEvent = DefineEvent({
@@ -38,6 +40,7 @@ Deno.test("DefineEvent is properly stringified", () => {
     name: "test",
     type: Schema.types.typedobject,
     properties: {},
+    required: [],
   });
 
   assertEquals(`${TestEvent}`, TestEvent.id);

@@ -37,6 +37,7 @@ export default DefineFunction(
               type: SchemaTypes.untypedobject,
             },
           },
+          required: [],
           additionalProperties: true,
         },
         interactive_blocks: {

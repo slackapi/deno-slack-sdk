@@ -11,7 +11,7 @@ Deno.test("ParameterVariable string", () => {
   assertStrictEquals(`${param}`, "{{incident_name}}");
 });
 
-Deno.test("ParameterVariable typed object", () => {
+Deno.test("ParameterVariable typed object with all optional properties", () => {
   const param = ParameterVariable("", "incident", {
     type: SchemaTypes.typedobject,
     properties: {
@@ -22,6 +22,26 @@ Deno.test("ParameterVariable typed object", () => {
         type: SchemaTypes.string,
       },
     },
+    required: [],
+  });
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+});
+
+Deno.test("ParameterVariable typed object with all required properties", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id", "name"],
   });
 
   assertStrictEquals(`${param}`, "{{incident}}");
@@ -40,6 +60,7 @@ Deno.test("ParameterVariable typed object allows access to additional properties
         type: SchemaTypes.string,
       },
     },
+    required: [],
   });
 
   assertStrictEquals(`${param}`, "{{incident}}");
@@ -59,6 +80,7 @@ Deno.test("ParameterVariable typed object with additional properties", () => {
         type: SchemaTypes.string,
       },
     },
+    required: [],
     additionalProperties: true,
   });
 
@@ -79,8 +101,10 @@ Deno.test("ParameterVariable typed object with no additional properties", () => 
         type: SchemaTypes.string,
       },
     },
+    required: [],
     additionalProperties: false,
   });
+  param;
 
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
@@ -134,6 +158,7 @@ Deno.test("ParameterVariable using Custom Type typed object", () => {
         type: SchemaTypes.string,
       },
     },
+    required: [],
   });
   const param = ParameterVariable("", "myCustomType", {
     type: SchemaTypes.custom,
@@ -191,6 +216,7 @@ Deno.test("ParameterVariable using Custom Type object referencing another Custom
         custom: StringType,
       },
     },
+    required: [],
   });
   const param = ParameterVariable("", "myNestedCustomType", {
     type: SchemaTypes.custom,
@@ -219,6 +245,7 @@ Deno.test("ParameterVariable typed object with Custom Type property", () => {
         custom: StringType,
       },
     },
+    required: [],
   });
 
   assertStrictEquals(`${param}`, "{{myObjectParam}}");

@@ -309,6 +309,7 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
     properties: {
       aString: { type: SchemaTypes.custom, custom: StringType },
     },
+    required: ["aString"],
   });
 
   const Store = DefineDatastore({
@@ -368,6 +369,7 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
     properties: {
       aBoolean: { type: SchemaTypes.custom, custom: BooleanType },
     },
+    required: ["aBoolean"],
   });
 
   const ObjectEvent = DefineEvent({
@@ -377,6 +379,7 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
       aBoolean: { type: SchemaTypes.custom, custom: BooleanType },
       anArray: { type: SchemaTypes.custom, custom: ArrayType },
     },
+    required: ["aBoolean", "anArray"],
   });
 
   const ObjectTypeEvent = DefineEvent({
@@ -439,6 +442,7 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
         custom: BooleanType,
       },
     },
+    required: ["aBoolean"],
   });
 
   const ArrayType = DefineType({
@@ -766,6 +770,7 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
         custom: CustomStringType,
       },
     },
+    required: ["aString"],
   });
 
   const CustomArrayType = DefineType({

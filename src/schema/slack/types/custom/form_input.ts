@@ -19,6 +19,7 @@ const FormInput = DefineType({
       },
     },
   },
+  required: [],
 });
 
 export { FormInput };

@@ -31,6 +31,7 @@ export type PrimitiveParameterDefinition =
   | NumberParameterDefinition
   | IntegerParameterDefinition
   | TypedArrayParameterDefinition
+  | UntypedObjectParameterDefinition
   | UntypedArrayParameterDefinition;
 
 type DistributePrimitiveSlackTypes<T> = T extends string ? IParameterDefinition<
@@ -45,8 +46,11 @@ export type PrimitiveSlackParameterDefinition = DistributePrimitiveSlackTypes<
 
 export type ComplexParameterDefinition =
   | CustomTypeParameterDefinition
-  | TypedObjectParameterDefinition
-  | UntypedObjectParameterDefinition;
+  | TypedObjectParameterDefinition<
+    TypedObjectProperties,
+    TypedObjectRequiredProperties<TypedObjectProperties>
+  >;
+
 //| OAuth2ParameterDefinition;
 
 export type CustomTypeParameterDefinition =
@@ -63,24 +67,32 @@ export type UntypedObjectParameterDefinition = IParameterDefinition<
   FlatObjectValue
 >;
 
-export type TypedObjectParameterDefinition =
+export type TypedObjectProperties = {
+  [key: string]:
+    | PrimitiveParameterDefinition
+    | CustomTypeParameterDefinition
+    | PrimitiveSlackParameterDefinition
+    | UntypedObjectParameterDefinition;
+};
+
+export type TypedObjectRequiredProperties<Props extends TypedObjectProperties> =
+  (Exclude<keyof Props, symbol>)[];
+
+export type TypedObjectParameterDefinition<
+  Props extends TypedObjectProperties,
+  RequiredProps extends TypedObjectRequiredProperties<Props>,
+> =
   & IParameterDefinition<typeof SchemaTypes.typedobject, FlatObjectValue> // TODO: the second type parameter would not accurately reflect what typed objects would look like - would limit to flat objects only.
   & {
-    /** A list of required property names (must reference names defined on the `properties` property). Only for use with Object types. */
-    required?: string[];
     /**
      * Whether the parameter can accept objects with additional keys beyond those defined via `properties`
      * @default "true"
      */
     additionalProperties?: boolean;
     /** Object defining what properties are allowed on the parameter. */
-    properties: {
-      [key: string]:
-        | PrimitiveParameterDefinition
-        | CustomTypeParameterDefinition
-        | PrimitiveSlackParameterDefinition
-        | UntypedObjectParameterDefinition;
-    };
+    properties: Props;
+    /** A list of required property names (must reference names defined on the `properties` property). Only for use with Object types. */
+    required: RequiredProps;
   };
 
 // TODO: maybe break out the `type` discriminant for arrays into separate 'typed' and 'untyped' literals
