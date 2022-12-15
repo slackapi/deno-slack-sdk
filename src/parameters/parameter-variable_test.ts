@@ -2,7 +2,12 @@ import SchemaTypes from "../schema/schema_types.ts";
 import { ParameterVariable } from "./mod.ts";
 import { DefineObject } from "../types/objects.ts";
 import { DefineType } from "../types/mod.ts";
-import { assertStrictEquals } from "../dev_deps.ts";
+import {
+  assert,
+  assertStrictEquals,
+  CanBeUndefined,
+  CannotBeUndefined,
+} from "../dev_deps.ts";
 
 Deno.test("ParameterVariable string", () => {
   const param = ParameterVariable("", "incident_name", {
@@ -27,13 +32,15 @@ Deno.test("ParameterVariable typed object with all optional properties", () => {
   });
   const param = ParameterVariable("", "incident", obj);
 
+  assert<CanBeUndefined<typeof param.id>>(true);
+  assert<CanBeUndefined<typeof param.name>>(true);
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
 
 Deno.test("ParameterVariable typed object with all required properties", () => {
-  const param = ParameterVariable("", "incident", {
+  const obj = DefineObject({
     type: SchemaTypes.typedobject,
     properties: {
       id: {
@@ -45,7 +52,9 @@ Deno.test("ParameterVariable typed object with all required properties", () => {
     },
     required: ["id", "name"],
   });
-
+  const param = ParameterVariable("", "incident", obj);
+  assert<CannotBeUndefined<typeof param.id>>(true);
+  assert<CannotBeUndefined<typeof param.name>>(true);
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");

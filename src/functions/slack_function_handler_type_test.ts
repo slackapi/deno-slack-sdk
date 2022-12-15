@@ -1,4 +1,12 @@
-import { assertEquals, assertExists } from "../dev_deps.ts";
+import {
+  assert,
+  assertEquals,
+  assertExists,
+  CanBe,
+  CanBeUndefined,
+  CannotBeUndefined,
+  IsExact,
+} from "../dev_deps.ts";
 import { assertEqualsTypedValues } from "../test_utils.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
 import { DefineFunction } from "./mod.ts";
@@ -8,11 +16,12 @@ import {
 } from "./types.ts";
 import { Schema } from "../mod.ts";
 import SchemaTypes from "../schema/schema_types.ts";
+import { DefineObject } from "../types/objects.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
 // Any "failures" here will most likely be reflected in Type errors
 
-Deno.test("EnrichedSlackFunctionHandler with inputs and outputs", () => {
+Deno.test("EnrichedSlackFunctionHandler with string inputs and outputs", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -60,7 +69,7 @@ Deno.test("EnrichedSlackFunctionHandler with inputs and outputs", () => {
   );
 });
 
-Deno.test("EnrichedSlackFunctionHandler with optional input", () => {
+Deno.test("EnrichedSlackFunctionHandler with optional string input", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -152,7 +161,7 @@ Deno.test("EnrichedSlackFunctionHandler with empty inputs and outputs", () => {
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("EnrichedSlackFunctionHandler with only inputs", () => {
+Deno.test("EnrichedSlackFunctionHandler with only string input", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -181,7 +190,7 @@ Deno.test("EnrichedSlackFunctionHandler with only inputs", () => {
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("EnrichedSlackFunctionHandler with only outputs", () => {
+Deno.test("EnrichedSlackFunctionHandler with only string output", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -208,28 +217,28 @@ Deno.test("EnrichedSlackFunctionHandler with only outputs", () => {
   assertEqualsTypedValues(result.outputs?.out, "test");
 });
 
-Deno.test("EnrichedSlackFunctionHandler with input and output object", () => {
+Deno.test("EnrichedSlackFunctionHandler with a required input typedobject with a required string property, and required output typedobject with a required string property", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
     source_file: "test.ts",
     input_parameters: {
       properties: {
-        anObject: {
+        anObject: DefineObject({
           type: "typedobject",
           properties: { in: { type: "string" } },
           required: ["in"],
-        },
+        }),
       },
       required: ["anObject"],
     },
     output_parameters: {
       properties: {
-        anObject: {
+        anObject: DefineObject({
           type: "typedobject",
           properties: { out: { type: "string" } },
           required: ["out"],
-        },
+        }),
       },
       required: ["anObject"],
     },
@@ -237,6 +246,8 @@ Deno.test("EnrichedSlackFunctionHandler with input and output object", () => {
   const handler: EnrichedSlackFunctionHandler<typeof TestFn.definition> = (
     { inputs },
   ) => {
+    assert<CannotBeUndefined<typeof inputs.anObject.in>>(true);
+    assert<IsExact<typeof inputs.anObject.in, string>>(true);
     return {
       outputs: {
         anObject: {
@@ -252,7 +263,38 @@ Deno.test("EnrichedSlackFunctionHandler with input and output object", () => {
   assertEqualsTypedValues(result.outputs?.anObject.out, "test");
 });
 
-Deno.test("EnrichedSlackFunctionHandler with only completed false", () => {
+Deno.test("EnrichedSlackFunctionHandler with a required input typedobject with an optional string property", () => {
+  const TestFn = DefineFunction({
+    callback_id: "test",
+    title: "test fn",
+    source_file: "test.ts",
+    input_parameters: {
+      properties: {
+        anObject: DefineObject({
+          type: "typedobject",
+          properties: { in: { type: "string" } },
+          required: [],
+        }),
+      },
+      required: ["anObject"],
+    },
+  });
+  const handler: EnrichedSlackFunctionHandler<typeof TestFn.definition> = (
+    { inputs },
+  ) => {
+    assert<CanBeUndefined<typeof inputs.anObject.in>>(true);
+    assert<CanBe<typeof inputs.anObject.in, string>>(true);
+    return {
+      outputs: {},
+    };
+  };
+  const { createContext } = SlackFunctionTester(TestFn);
+  const _result = handler(
+    createContext({ inputs: { anObject: { in: "test" } } }),
+  );
+});
+
+Deno.test("EnrichedSlackFunctionHandler that returns completed false", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -277,7 +319,7 @@ Deno.test("EnrichedSlackFunctionHandler with only completed false", () => {
   assertEqualsTypedValues(result.completed, false);
 });
 
-Deno.test("EnrichedSlackFunctionHandler with only error", () => {
+Deno.test("EnrichedSlackFunctionHandler that returns error", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -407,6 +449,7 @@ Deno.test("EnrichedSlackFunctionHandler using Objects with additional properties
           properties: {
             aString: { type: Schema.types.string },
           },
+          required: [],
         },
       },
       required: ["addlPropertiesObj"],
@@ -418,6 +461,7 @@ Deno.test("EnrichedSlackFunctionHandler using Objects with additional properties
           properties: {
             aString: { type: Schema.types.string },
           },
+          required: [],
         },
       },
       required: ["addlPropertiesObj"],
@@ -468,6 +512,7 @@ Deno.test("EnrichedSlackFunctionHandler using Objects without additional propert
           properties: {
             aString: { type: Schema.types.string },
           },
+          required: [],
           additionalProperties: false,
         },
       },
@@ -480,6 +525,7 @@ Deno.test("EnrichedSlackFunctionHandler using Objects without additional propert
           properties: {
             aString: { type: Schema.types.string },
           },
+          required: [],
           additionalProperties: false,
         },
       },

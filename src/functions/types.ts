@@ -98,9 +98,9 @@ type FunctionInputRuntimeType<
       ? UnknownRuntimeType[]
     : Param["type"] extends typeof SchemaTypes.typedobject
       ? Param extends TypedObjectParameterDefinition<
-        TypedObjectProperties,
-        TypedObjectRequiredProperties<TypedObjectProperties>
-      > ? TypedObjectFunctionInputRuntimeType<Param>
+        infer P,
+        infer RP
+      > ? TypedObjectFunctionInputRuntimeType<P, RP, Param>
       : UnknownRuntimeType
     : Param["type"] extends typeof SchemaTypes.untypedobject
       ? UnknownRuntimeType
@@ -112,17 +112,29 @@ type FunctionInputRuntimeType<
 type UnknownRuntimeType = any;
 
 type TypedObjectFunctionInputRuntimeType<
-  // deno-lint-ignore no-explicit-any
-  Param extends TypedObjectParameterDefinition<any, any>, // TODO
-> = Param["additionalProperties"] extends false ? {
-    [k in keyof Param["properties"]]: FunctionInputRuntimeType<
-      Param["properties"][k]
-    >;
-  }
+  Props extends TypedObjectProperties,
+  RequiredProps extends TypedObjectRequiredProperties<Props>,
+  Param extends TypedObjectParameterDefinition<Props, RequiredProps>,
+> = Param["additionalProperties"] extends false ? 
+    & {
+      [prop in RequiredProps[number]]: FunctionInputRuntimeType<
+        Props[prop]
+      >;
+    }
+    & {
+      [prop in Exclude<keyof Props, RequiredProps>]?: FunctionInputRuntimeType<
+        Props[prop]
+      >;
+    }
   : 
     & {
-      [k in keyof Param["properties"]]: FunctionInputRuntimeType<
-        Param["properties"][k]
+      [prop in RequiredProps[number]]: FunctionInputRuntimeType<
+        Props[prop]
+      >;
+    }
+    & {
+      [prop in Exclude<keyof Props, RequiredProps>]?: FunctionInputRuntimeType<
+        Props[prop]
       >;
     }
     & {

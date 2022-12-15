@@ -15,14 +15,6 @@ export const DefineObject = <
   return obj.definition;
 };
 
-// export interface ITypedObject<
-//   Props extends TypedObjectProperties,
-//   RequiredProps extends TypedObjectRequiredProperties<Props>,
-//   Def extends TypedObjectParameterDefinition<Props, RequiredProps>,
-// > {
-//   definition: Def;
-// }
-
 export class TypedObject<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
