@@ -95,7 +95,6 @@ export type TypedObjectParameterDefinition<
     required: RequiredProps;
   };
 
-// TODO: maybe break out the `type` discriminant for arrays into separate 'typed' and 'untyped' literals
 export type UntypedArrayParameterDefinition =
   & IParameterDefinition<
     typeof SchemaTypes.untypedarray,

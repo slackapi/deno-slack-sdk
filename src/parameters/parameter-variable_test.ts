@@ -1,5 +1,6 @@
 import SchemaTypes from "../schema/schema_types.ts";
 import { ParameterVariable } from "./mod.ts";
+import { DefineObject } from "../types/objects.ts";
 import { DefineType } from "../types/mod.ts";
 import { assertStrictEquals } from "../dev_deps.ts";
 
@@ -12,7 +13,7 @@ Deno.test("ParameterVariable string", () => {
 });
 
 Deno.test("ParameterVariable typed object with all optional properties", () => {
-  const param = ParameterVariable("", "incident", {
+  const obj = DefineObject({
     type: SchemaTypes.typedobject,
     properties: {
       id: {
@@ -24,6 +25,7 @@ Deno.test("ParameterVariable typed object with all optional properties", () => {
     },
     required: [],
   });
+  const param = ParameterVariable("", "incident", obj);
 
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
