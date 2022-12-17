@@ -7,13 +7,13 @@ const FormInputObject = DefineObject({
   type: SchemaTypes.object,
   properties: {
     required: {
-      type: SchemaTypes.typedarray,
+      type: SchemaTypes.array,
       items: {
         type: SchemaTypes.string,
       },
     },
     elements: {
-      type: SchemaTypes.typedarray,
+      type: SchemaTypes.array,
       items: {
         type: SchemaTypes.object,
       },

@@ -90,12 +90,10 @@ type FunctionInputRuntimeType<
       | typeof SchemaTypes.number
       | typeof SlackSchemaTypes.timestamp ? number
     : Param["type"] extends typeof SchemaTypes.boolean ? boolean
-    : Param["type"] extends typeof SchemaTypes.typedarray
+    : Param["type"] extends typeof SchemaTypes.array
       ? Param extends TypedArrayParameterDefinition
         ? TypedArrayFunctionInputRuntimeType<Param>
       : UnknownRuntimeType[]
-    : Param["type"] extends typeof SchemaTypes.untypedarray
-      ? UnknownRuntimeType[]
     : Param["type"] extends typeof SchemaTypes.object
     // Does this work with infer? If we can't infer P, RP it should just be UnknownRuntimeType
       ? Param extends TypedObjectParameterDefinition<

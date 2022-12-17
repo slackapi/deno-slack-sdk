@@ -47,9 +47,11 @@ export class CustomType<Def extends CustomTypeDefinition>
     switch (this.definition.type) {
       // TODO: reintroduce array types
 
-      case SchemaTypes.typedarray:
-        if (this.definition.items.type === SchemaTypes.custom) {
-          manifest.registerType(this.definition.items.custom);
+      case SchemaTypes.array:
+        if ("items" in this.definition) {
+          if (this.definition.items.type === SchemaTypes.custom) {
+            manifest.registerType(this.definition.items.custom);
+          }
         }
         break;
 

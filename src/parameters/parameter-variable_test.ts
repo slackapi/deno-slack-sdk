@@ -294,12 +294,13 @@ Deno.test("ParameterVariable untyped object should yield a parameter of type any
 
 Deno.test("ParameterVariable array of strings", () => {
   const param = ParameterVariable("", "myArray", {
-    type: SchemaTypes.typedarray,
+    type: SchemaTypes.array,
     items: {
       type: SchemaTypes.string,
     },
   });
 
+  assertStrictEquals(`${param}`, "{{myArray}}");
   assertStrictEquals(`${param}`, "{{myArray}}");
 });
 
@@ -496,7 +497,7 @@ Deno.test("ParameterVariable using Custom Type untyped object", () => {
 Deno.test("ParameterVariable using Custom Type with untypedarray", () => {
   const customType = DefineType({
     name: "customTypeArray",
-    type: SchemaTypes.untypedarray,
+    type: SchemaTypes.array,
   });
   const param = ParameterVariable("", "myCustomTypeArray", {
     type: SchemaTypes.custom,

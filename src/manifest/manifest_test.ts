@@ -356,7 +356,7 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
 
   const ArrayType = DefineType({
     name: arrayTypeId,
-    type: Schema.types.typedarray,
+    type: Schema.types.array,
     items: {
       type: SchemaTypes.custom,
       custom: StringType,
@@ -447,7 +447,7 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
 
   const ArrayType = DefineType({
     name: arrayTypeId,
-    type: Schema.types.typedarray,
+    type: Schema.types.array,
     items: {
       type: SchemaTypes.custom,
       custom: StringType,
@@ -775,7 +775,7 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
 
   const CustomArrayType = DefineType({
     name: arrayTypeId,
-    type: Schema.types.typedarray,
+    type: Schema.types.array,
     items: {
       type: SchemaTypes.custom,
       custom: CustomStringType,

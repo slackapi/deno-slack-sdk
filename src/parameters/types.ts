@@ -97,7 +97,7 @@ export type TypedObjectParameterDefinition<
 
 export type UntypedArrayParameterDefinition =
   & IParameterDefinition<
-    typeof SchemaTypes.untypedarray,
+    typeof SchemaTypes.array,
     AllPrimitiveValues[]
   >
   & {
@@ -109,7 +109,7 @@ export type UntypedArrayParameterDefinition =
 
 export type TypedArrayParameterDefinition =
   & IParameterDefinition<
-    typeof SchemaTypes.typedarray,
+    typeof SchemaTypes.array,
     AllPrimitiveValues[]
   >
   & {

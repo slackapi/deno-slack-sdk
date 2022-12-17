@@ -244,7 +244,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
       required: ["anObject"],
     },
   });
-  const handler: EnrichedSlackFunctionHandler<typeof TestFn.definition> = (
+  const validHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> = (
     { inputs },
   ) => {
     assert<CannotBeUndefined<typeof inputs.anObject.in>>(true);
@@ -257,8 +257,21 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
       },
     };
   };
+
+  // @ts-expect-error Type error if required property isn't returned
+  const _invalidHandler: EnrichedSlackFunctionHandler<
+    typeof TestFn.definition
+  > = (
+    { inputs: _inputs },
+  ) => {
+    return {
+      outputs: {
+        anObject: {},
+      },
+    };
+  };
   const { createContext } = SlackFunctionTester(TestFn);
-  const result = handler(
+  const result = validHandler(
     createContext({ inputs: { anObject: { in: "test" } } }),
   );
   assertEqualsTypedValues(result.outputs?.anObject.out, "test");
@@ -400,6 +413,20 @@ Deno.test("EnrichedSlackFunctionHandler that returns error", () => {
 });
 
 Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
+  const myObject = DefineObject({
+    type: "object",
+    properties: {
+      required_property: { type: "string" },
+      optional_property: { type: "string" },
+    },
+    required: ["required_property"],
+  });
+
+  const myType = DefineType({
+    name: "custom",
+    ...myObject,
+  });
+
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
@@ -414,8 +441,12 @@ Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
           type: SchemaTypes.custom,
           custom: Schema.slack.types.user_context,
         },
+        custom_type: {
+          type: "custom",
+          custom: myType,
+        },
       },
-      required: ["interactivity", "user_context"],
+      required: ["interactivity", "user_context", "custom_type"],
     },
     output_parameters: {
       properties: {
@@ -427,8 +458,12 @@ Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
           type: SchemaTypes.custom,
           custom: Schema.slack.types.user_context,
         },
+        custom_type: {
+          type: "custom",
+          custom: myType,
+        },
       },
-      required: ["interactivity", "user_context"],
+      required: ["interactivity", "user_context", "custom_type"],
     },
   });
 
@@ -444,52 +479,84 @@ Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
       id: "user_context id",
       secret: "user_context secret",
     },
+    custom_type: {
+      required_property: "i am a necessity",
+    },
   };
 
-  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
-    (
-      { inputs },
-    ) => {
-      inputs.interactivity.interactor.secret;
-      const { interactivity, user_context } = inputs;
-      assertEqualsTypedValues(interactivity, sharedInputs.interactivity);
-      assertEqualsTypedValues(
-        interactivity.interactivity_pointer,
-        sharedInputs.interactivity.interactivity_pointer,
-      );
-      assertEqualsTypedValues(
-        interactivity.interactor.id,
-        sharedInputs.interactivity.interactor.id,
-      );
-      assertEqualsTypedValues(
-        interactivity.interactor.secret,
-        sharedInputs.interactivity.interactor.secret,
-      );
-      assertEqualsTypedValues(user_context, sharedInputs.user_context);
-      assertEqualsTypedValues(
-        user_context.secret,
-        sharedInputs.user_context.secret,
-      );
-      assertEqualsTypedValues(user_context.id, sharedInputs.user_context.id);
-      assertEqualsTypedValues(
-        user_context.secret,
-        sharedInputs.user_context.secret,
-      );
+  const validHandler: EnrichedSlackFunctionHandler<
+    typeof TestFunction.definition
+  > = (
+    { inputs },
+  ) => {
+    const { interactivity, user_context, custom_type } = inputs;
 
-      return {
-        outputs: inputs,
-      };
+    assert<CannotBeUndefined<typeof interactivity.interactivity_pointer>>(
+      true,
+    );
+    assert<CannotBeUndefined<typeof interactivity.interactor.id>>(true);
+    assert<CannotBeUndefined<typeof interactivity.interactor.secret>>(true);
+    assert<CannotBeUndefined<typeof user_context.id>>(true);
+    assert<CannotBeUndefined<typeof user_context.secret>>(true);
+    assert<CannotBeUndefined<typeof custom_type.required_property>>(true);
+    assert<CanBeUndefined<typeof custom_type.optional_property>>(true);
+
+    assertEqualsTypedValues(interactivity, sharedInputs.interactivity);
+    assertEqualsTypedValues(
+      interactivity.interactivity_pointer,
+      sharedInputs.interactivity.interactivity_pointer,
+    );
+    assertEqualsTypedValues(
+      interactivity.interactor.id,
+      sharedInputs.interactivity.interactor.id,
+    );
+    assertEqualsTypedValues(
+      interactivity.interactor.secret,
+      sharedInputs.interactivity.interactor.secret,
+    );
+    assertEqualsTypedValues(user_context, sharedInputs.user_context);
+    assertEqualsTypedValues(
+      user_context.secret,
+      sharedInputs.user_context.secret,
+    );
+    assertEqualsTypedValues(user_context.id, sharedInputs.user_context.id);
+    assertEqualsTypedValues(
+      user_context.secret,
+      sharedInputs.user_context.secret,
+    );
+
+    return {
+      outputs: inputs,
     };
+  };
 
   const { createContext } = SlackFunctionTester(TestFunction);
 
-  const result = handler(createContext({ inputs: sharedInputs }));
+  const result = validHandler(createContext({ inputs: sharedInputs }));
   assertEqualsTypedValues(sharedInputs, result.outputs);
   assertExists(result.outputs?.interactivity.interactivity_pointer);
   assertExists(result.outputs?.interactivity.interactor.id);
   assertExists(result.outputs?.interactivity.interactor.secret);
   assertExists(result.outputs?.user_context.id);
   assertExists(result.outputs?.user_context.secret);
+
+  // @ts-expect-error Type error if required property isn't returned
+  const _invalidHandler: EnrichedSlackFunctionHandler<
+    typeof TestFunction.definition
+  > = (
+    { inputs },
+  ) => {
+    const { interactivity, user_context } = inputs;
+    return {
+      outputs: {
+        custom_type: {
+          optional_property: "im useless",
+        },
+        interactivity,
+        user_context,
+      },
+    };
+  };
 });
 
 Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of DefineObject-wrapped typed objects should honor required and optional properties", () => {
@@ -710,6 +777,107 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects witho
 
   // @ts-expect-error anythingElse cant exist
   assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
+});
+
+Deno.test("EnrichedSlackFunctionHandler using Objects without additional properties", () => {
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        anUntypedArray: {
+          type: Schema.types.array,
+        },
+        aTypedArray: {
+          type: Schema.types.array,
+          items: {
+            type: "string",
+          },
+        },
+        aTypedArrayOfObjects: {
+          type: Schema.types.array,
+          items: DefineObject({
+            type: "object",
+            properties: {
+              requiredString: { type: "string" },
+              optionalString: { type: "string" },
+            },
+            required: ["requiredString"],
+          }),
+        },
+      },
+      required: ["aTypedArray", "aTypedArrayOfObjects", "anUntypedArray"],
+    },
+    output_parameters: {
+      properties: {
+        anUntypedArray: {
+          type: Schema.types.array,
+        },
+        aTypedArray: {
+          type: Schema.types.array,
+          items: {
+            type: "string",
+          },
+        },
+        aTypedArrayOfObjects: {
+          type: Schema.types.array,
+          items: DefineObject({
+            type: "object",
+            properties: {
+              requiredString: { type: "string" },
+              optionalString: { type: "string" },
+            },
+            required: ["requiredString"],
+          }),
+        },
+      },
+      required: ["aTypedArray", "aTypedArrayOfObjects", "anUntypedArray"],
+    },
+  });
+
+  const sharedInputs = {
+    aTypedArray: ["hello"],
+    anUntypedArray: [1, "goodbye"],
+    aTypedArrayOfObjects: [{ requiredString: "hello from the other side" }],
+  };
+
+  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
+    (
+      { inputs },
+    ) => {
+      const { aTypedArray, aTypedArrayOfObjects, anUntypedArray } = inputs;
+      assert<IsAny<typeof anUntypedArray[0]>>(true);
+      assert<IsAny<typeof aTypedArray[0]>>(false);
+      assert<IsAny<typeof aTypedArrayOfObjects[0]>>(false);
+
+      assert<CannotBeUndefined<typeof aTypedArray>>(true);
+      assert<CannotBeUndefined<typeof aTypedArrayOfObjects>>(true);
+      assert<CannotBeUndefined<typeof anUntypedArray>>(true);
+
+      // These tests are a little weird, could technically be undefined if these arrays are empty
+      assert<CannotBeUndefined<typeof aTypedArray[0]>>(true);
+      assert<CannotBeUndefined<typeof aTypedArray[0]>>(true);
+      assert<CannotBeUndefined<typeof aTypedArrayOfObjects[0]>>(true);
+      assert<
+        CannotBeUndefined<typeof aTypedArrayOfObjects[0]["requiredString"]>
+      >(true);
+
+      assert<CanBeUndefined<typeof aTypedArrayOfObjects[0]["optionalString"]>>(
+        // @ts-expect-error TODO: Fix this error complaining that optionalString can't be undefined
+        true,
+      );
+
+      return {
+        outputs: inputs,
+      };
+    };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  // @ts-expect-error TODO: Fix this error complaining that optionalString isn't being passed
+  const result = handler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(sharedInputs, result.outputs);
 });
 
 Deno.test("RuntimeSlackFunctionHandler type should not include a client property", () => {
