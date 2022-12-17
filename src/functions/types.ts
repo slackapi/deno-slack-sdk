@@ -96,14 +96,13 @@ type FunctionInputRuntimeType<
       : UnknownRuntimeType[]
     : Param["type"] extends typeof SchemaTypes.untypedarray
       ? UnknownRuntimeType[]
-    : Param["type"] extends typeof SchemaTypes.typedobject
+    : Param["type"] extends typeof SchemaTypes.object
+    // Does this work with infer? If we can't infer P, RP it should just be UnknownRuntimeType
       ? Param extends TypedObjectParameterDefinition<
         infer P,
         infer RP
       > ? TypedObjectFunctionInputRuntimeType<P, RP, Param>
       : UnknownRuntimeType
-    : Param["type"] extends typeof SchemaTypes.untypedobject
-      ? UnknownRuntimeType
     : Param["type"] extends typeof SlackSchemaTypes.rich_text
       ? UnknownRuntimeType
     : UnknownRuntimeType;

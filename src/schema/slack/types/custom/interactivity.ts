@@ -5,7 +5,7 @@ import { DefineObject } from "../../../../types/objects.ts";
 
 const InteractivityObject = DefineObject({
   description: "Context about a user interaction",
-  type: SchemaTypes.typedobject,
+  type: SchemaTypes.object,
   properties: {
     interactivity_pointer: {
       type: SchemaTypes.string,

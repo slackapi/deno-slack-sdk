@@ -39,7 +39,7 @@ export default DefineFunction(
       required: ["fields", "interactivity"],
       properties: {
         fields: {
-          type: SchemaTypes.untypedobject,
+          type: SchemaTypes.object,
           description: "fields",
         },
         interactivity: {

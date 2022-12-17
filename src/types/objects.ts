@@ -21,12 +21,12 @@ export class TypedObject<
   RequiredProps extends TypedObjectRequiredProperties<Props>,
   Def extends TypedObjectParameterDefinition<Props, RequiredProps>,
 > {
-  public type: typeof SchemaTypes.typedobject;
+  public type: typeof SchemaTypes.object;
 
   constructor(
     public definition: Def,
   ) {
     this.definition = definition;
-    this.type = SchemaTypes.typedobject;
+    this.type = SchemaTypes.object;
   }
 }

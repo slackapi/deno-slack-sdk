@@ -94,15 +94,16 @@ export const ParameterVariable = <P extends ParameterDefinition>(
         definition.custom.definition,
       );
       break;
-    case SchemaTypes.typedobject:
-      param = CreateTypedObjectParameterVariable(
-        namespace,
-        paramName,
-        definition,
-      ) as ParameterVariableType<P>;
-      break;
-    case SchemaTypes.untypedobject:
-      param = CreateUntypedObjectParameterVariable(namespace, paramName);
+    case SchemaTypes.object:
+      if ("properties" in definition) {
+        param = CreateTypedObjectParameterVariable(
+          namespace,
+          paramName,
+          definition,
+        ) as ParameterVariableType<P>;
+      } else {
+        param = CreateUntypedObjectParameterVariable(namespace, paramName);
+      }
       break;
     default:
       param = CreateSingleParameterVariable(

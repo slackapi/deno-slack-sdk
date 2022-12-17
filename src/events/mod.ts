@@ -44,7 +44,7 @@ export class CustomEvent<Def extends CustomEventDefinition>
 
   registerParameterTypes(manifest: SlackManifest) {
     switch (this.definition.type) {
-      case SchemaTypes.typedobject:
+      case SchemaTypes.object:
         // Loop through the properties and register any types
         Object.values(this.definition.properties)?.forEach((property) => {
           if (property.type === SchemaTypes.custom) {

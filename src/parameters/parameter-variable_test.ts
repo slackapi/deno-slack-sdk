@@ -18,7 +18,7 @@ Deno.test("ParameterVariable of type string yields a SingleParameterVariable typ
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties should never yield object with potentially undefined properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -40,7 +40,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties should yield object with properties that cannot be undefined", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -62,7 +62,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all required
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of optional and required properties should yield object with no undefined properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -84,7 +84,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of optio
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties and undefined additionalProperties allows access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -105,7 +105,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties and undefined additionalProperties allows access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -126,7 +126,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all required
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of required and optional properties and undefined additionalProperties allows access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -147,7 +147,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of requi
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties and additionalProperties=true allows access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -169,7 +169,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties and additionalProperties=true allows access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -191,7 +191,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all required
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of required and optional properties and additionalProperties=true allows access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -213,7 +213,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of requi
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties and additionalProperties=false prevents access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -236,7 +236,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties and additionalProperties=false prevents access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -259,7 +259,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all required
 
 Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of required and optional properties and additionalProperties=false prevents access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       id: {
         type: SchemaTypes.integer,
@@ -282,7 +282,7 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of requi
 
 Deno.test("ParameterVariable untyped object should yield a parameter of type any", () => {
   const param = ParameterVariable("", "incident", {
-    type: SchemaTypes.untypedobject,
+    type: SchemaTypes.object,
   });
 
   assert<IsAny<typeof param>>(true);
@@ -318,7 +318,7 @@ Deno.test("ParameterVariable using CustomType string", () => {
 
 Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with optional property yields object with no undefined property", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       aString: {
         type: SchemaTypes.string,
@@ -342,7 +342,7 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
 
 Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with required property yields object with no undefined property", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       aString: {
         type: SchemaTypes.string,
@@ -366,7 +366,7 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
 
 Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with optional property and additionalProperties=true yields object that allows access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       aString: {
         type: SchemaTypes.string,
@@ -393,7 +393,7 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
 
 Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with required property and additionalProperties=true yields object that allows access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       aString: {
         type: SchemaTypes.string,
@@ -420,7 +420,7 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
 
 Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with optional property and additionalProperties=false yields object that prevents access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       aString: {
         type: SchemaTypes.string,
@@ -448,7 +448,7 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
 
 Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with required property and additionalProperties=false yields object that prevents access to additional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       aString: {
         type: SchemaTypes.string,
@@ -477,7 +477,7 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
 Deno.test("ParameterVariable using Custom Type untyped object", () => {
   const customType = DefineType({
     name: "customTypeObject",
-    type: SchemaTypes.untypedobject,
+    type: SchemaTypes.object,
   });
   const param = ParameterVariable("", "myCustomTypeObject", {
     type: SchemaTypes.custom,

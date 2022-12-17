@@ -26,7 +26,7 @@ export default DefineFunction(
             "Provide another message's ts value to make this message a reply",
         },
         metadata: {
-          type: SchemaTypes.typedobject,
+          type: SchemaTypes.object,
           description:
             "Metadata you post to Slack is accessible to any app or user who is a member of that workspace",
           properties: {
@@ -34,7 +34,7 @@ export default DefineFunction(
               type: SchemaTypes.string,
             },
             event_payload: {
-              type: SchemaTypes.untypedobject,
+              type: SchemaTypes.object,
             },
           },
           required: [],
@@ -58,7 +58,7 @@ export default DefineFunction(
           description: "Message link",
         },
         action: {
-          type: SchemaTypes.untypedobject,
+          type: SchemaTypes.object,
           description: "Button interactivity data",
         },
         interactivity: {

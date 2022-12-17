@@ -53,12 +53,14 @@ export class CustomType<Def extends CustomTypeDefinition>
         }
         break;
 
-      case SchemaTypes.typedobject:
-        Object.values(this.definition.properties)?.forEach((property) => {
-          if (property.type === SchemaTypes.custom) {
-            manifest.registerType(property.custom);
-          }
-        });
+      case SchemaTypes.object:
+        if ("properties" in this.definition) {
+          Object.values(this.definition.properties)?.forEach((property) => {
+            if (property.type === SchemaTypes.custom) {
+              manifest.registerType(property.custom);
+            }
+          });
+        }
         break;
       case SchemaTypes.custom:
         manifest.registerType(this.definition.custom);

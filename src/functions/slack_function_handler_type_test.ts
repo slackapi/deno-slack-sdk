@@ -226,7 +226,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
     input_parameters: {
       properties: {
         anObject: DefineObject({
-          type: "typedobject",
+          type: "object",
           properties: { in: { type: "string" } },
           required: ["in"],
         }),
@@ -236,7 +236,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
     output_parameters: {
       properties: {
         anObject: DefineObject({
-          type: "typedobject",
+          type: "object",
           properties: { out: { type: "string" } },
           required: ["out"],
         }),
@@ -272,7 +272,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
     input_parameters: {
       properties: {
         anObject: DefineObject({
-          type: "typedobject",
+          type: "object",
           properties: { in: { type: "string" } },
           required: [],
         }),
@@ -578,7 +578,7 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects with 
     input_parameters: {
       properties: {
         addlPropertiesObj: DefineObject({
-          type: Schema.types.typedobject,
+          type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
           },
@@ -591,7 +591,7 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects with 
     output_parameters: {
       properties: {
         addlPropertiesObj: DefineObject({
-          type: Schema.types.typedobject,
+          type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
           },
@@ -651,7 +651,7 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects witho
     input_parameters: {
       properties: {
         noAddlPropertiesObj: DefineObject({
-          type: Schema.types.typedobject,
+          type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
           },
@@ -664,7 +664,7 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects witho
     output_parameters: {
       properties: {
         noAddlPropertiesObj: DefineObject({
-          type: Schema.types.typedobject,
+          type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
           },

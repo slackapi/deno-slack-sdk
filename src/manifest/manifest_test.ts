@@ -305,7 +305,7 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
 
   const ObjectType = DefineType({
     name: objectTypeId,
-    type: Schema.types.typedobject,
+    type: Schema.types.object,
     properties: {
       aString: { type: SchemaTypes.custom, custom: StringType },
     },
@@ -365,7 +365,7 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
 
   const ObjectType = DefineType({
     name: objectTypeId,
-    type: Schema.types.typedobject,
+    type: Schema.types.object,
     properties: {
       aBoolean: { type: SchemaTypes.custom, custom: BooleanType },
     },
@@ -374,7 +374,7 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
 
   const ObjectEvent = DefineEvent({
     name: objectEventId,
-    type: Schema.types.typedobject,
+    type: Schema.types.object,
     properties: {
       aBoolean: { type: SchemaTypes.custom, custom: BooleanType },
       anArray: { type: SchemaTypes.custom, custom: ArrayType },
@@ -435,7 +435,7 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
 
   const ObjectType = DefineType({
     name: objectTypeId,
-    type: Schema.types.typedobject,
+    type: Schema.types.object,
     properties: {
       aBoolean: {
         type: SchemaTypes.custom,
@@ -763,7 +763,7 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
 
   const CustomObjectType = DefineType({
     name: objectTypeId,
-    type: Schema.types.typedobject,
+    type: Schema.types.object,
     properties: {
       aString: {
         type: SchemaTypes.custom,

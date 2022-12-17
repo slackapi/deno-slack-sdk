@@ -63,7 +63,7 @@ export type CustomTypeParameterDefinition =
   };
 
 export type UntypedObjectParameterDefinition = IParameterDefinition<
-  typeof SchemaTypes.untypedobject,
+  typeof SchemaTypes.object,
   FlatObjectValue
 >;
 
@@ -82,7 +82,7 @@ export type TypedObjectParameterDefinition<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
 > =
-  & IParameterDefinition<typeof SchemaTypes.typedobject, FlatObjectValue> // TODO: the second type parameter would not accurately reflect what typed objects would look like - would limit to flat objects only.
+  & IParameterDefinition<typeof SchemaTypes.object, FlatObjectValue> // TODO: the second type parameter would not accurately reflect what typed objects would look like - would limit to flat objects only.
   & {
     /**
      * Whether the parameter can accept objects with additional keys beyond those defined via `properties`

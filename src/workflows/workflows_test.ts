@@ -18,7 +18,7 @@ Deno.test("WorkflowStep export input values", () => {
           type: "string",
         },
         manager: {
-          type: "typedobject",
+          type: "object",
           properties: {
             email: { type: "string" },
             name: { type: "string" },
@@ -34,7 +34,7 @@ Deno.test("WorkflowStep export input values", () => {
           type: "string",
         },
         manager: {
-          type: "typedobject",
+          type: "object",
           properties: {
             email: { type: "string" },
             name: { type: "string" },
@@ -58,12 +58,12 @@ Deno.test("WorkflowStep export input values", () => {
           type: "string",
         },
         manager: {
-          type: "typedobject",
+          type: "object",
           properties: {
             email: { type: "string" },
             name: { type: "string" },
           },
-          required: [],
+          required: ["name"],
         },
       },
       required: ["email", "manager"],

@@ -43,7 +43,7 @@ export default DefineFunction(
           description: "Message link",
         },
         action: {
-          type: SchemaTypes.untypedobject,
+          type: SchemaTypes.object,
           description: "Button interactivity data",
         },
         interactivity: {

@@ -4,7 +4,7 @@ import { DefineObject } from "../../../../types/objects.ts";
 
 const FormInputObject = DefineObject({
   description: "Input fields to be shown on the form",
-  type: SchemaTypes.typedobject,
+  type: SchemaTypes.object,
   properties: {
     required: {
       type: SchemaTypes.typedarray,
@@ -15,7 +15,7 @@ const FormInputObject = DefineObject({
     elements: {
       type: SchemaTypes.typedarray,
       items: {
-        type: SchemaTypes.untypedobject,
+        type: SchemaTypes.object,
       },
     },
   },

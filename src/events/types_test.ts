@@ -7,7 +7,7 @@ import SchemaTypes from "../schema/schema_types.ts";
 Deno.test("DefineEvent accepts object types", () => {
   const TestEvent = DefineEvent({
     name: "test",
-    type: Schema.types.typedobject,
+    type: Schema.types.object,
     properties: {},
     required: [],
   });
@@ -19,7 +19,7 @@ Deno.test("DefineEvent accepts object types", () => {
 Deno.test("DefineEvent accepts custom types", () => {
   const TestType = DefineType({
     name: "test",
-    type: Schema.types.typedobject,
+    type: Schema.types.object,
     properties: {},
     required: [],
   });
@@ -38,7 +38,7 @@ Deno.test("DefineEvent accepts custom types", () => {
 Deno.test("DefineEvent is properly stringified", () => {
   const TestEvent = DefineEvent({
     name: "test",
-    type: Schema.types.typedobject,
+    type: Schema.types.object,
     properties: {},
     required: [],
   });
