@@ -2,17 +2,22 @@ import SchemaTypes from "../schema/schema_types.ts";
 import { ParameterVariable } from "./mod.ts";
 import { DefineObject } from "../types/objects.ts";
 import { DefineType } from "../types/mod.ts";
-import { assert, assertStrictEquals, CannotBeUndefined } from "../dev_deps.ts";
+import {
+  assert,
+  assertStrictEquals,
+  CanBeUndefined,
+  CannotBeUndefined,
+  IsAny,
+} from "../dev_deps.ts";
 
-Deno.test("ParameterVariable string", () => {
+Deno.test("ParameterVariable of type string yields a SingleParameterVariable type that coerces into a string containing the provided parameter name", () => {
   const param = ParameterVariable("", "incident_name", {
     type: SchemaTypes.string,
   });
-
   assertStrictEquals(`${param}`, "{{incident_name}}");
 });
 
-Deno.test("ParameterVariable typed object with all optional properties", () => {
+Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties should yield object with potentially undefined properties", () => {
   const obj = DefineObject({
     type: SchemaTypes.typedobject,
     properties: {
@@ -34,7 +39,29 @@ Deno.test("ParameterVariable typed object with all optional properties", () => {
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
 
-Deno.test("ParameterVariable typed object with all required properties", () => {
+Deno.test("ParameterVariable unwrapped typed object with all optional properties should yield object with potentially undefined properties", () => {
+  const obj = {
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: [],
+  };
+  const param = ParameterVariable("", "incident", obj);
+
+  assert<CanBeUndefined<typeof param.id>>(true);
+  assert<CanBeUndefined<typeof param.name>>(true);
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+});
+
+Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties should yield object with properties that cannot be undefined", () => {
   const obj = DefineObject({
     type: SchemaTypes.typedobject,
     properties: {
@@ -47,6 +74,7 @@ Deno.test("ParameterVariable typed object with all required properties", () => {
     },
     required: ["id", "name"],
   });
+
   const param = ParameterVariable("", "incident", obj);
   assert<CannotBeUndefined<typeof param.id>>(true);
   assert<CannotBeUndefined<typeof param.name>>(true);
@@ -55,7 +83,96 @@ Deno.test("ParameterVariable typed object with all required properties", () => {
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
 
-Deno.test("ParameterVariable typed object allows access to additional properties", () => {
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable unwrapped typed object with all required properties should yield object with properties that cannot be undefined", () => {
+  const obj = {
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id", "name"],
+  };
+
+  const param = ParameterVariable("", "incident", obj);
+  assert<CannotBeUndefined<typeof param.id>>(true);
+  assert<CannotBeUndefined<typeof param.name>>(true);
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+});
+
+Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of optional and required properties should yield object with potentially undefined and never undefined properties (as appropriate)", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id"],
+  });
+  const param = ParameterVariable("", "incident", obj);
+
+  assert<CannotBeUndefined<typeof param.id>>(true);
+  assert<CanBeUndefined<typeof param.name>>(true);
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+});
+
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable unwrapped typed object with mix of optional and required properties should yield object with potentially undefined and never undefined properties (as appropriate)", () => {
+  const obj = {
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id"],
+  };
+  const param = ParameterVariable("", "incident", obj);
+
+  assert<CannotBeUndefined<typeof param.id>>(true);
+  assert<CanBeUndefined<typeof param.name>>(true);
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+});
+
+Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties and undefined additionalProperties allows access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: [],
+  });
+  const param = ParameterVariable("", "incident", obj);
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable unwrapped typed object with all optional properties and undefined additionalProperties allows access to additional properties", () => {
   const param = ParameterVariable("", "incident", {
     type: SchemaTypes.typedobject,
     properties: {
@@ -75,7 +192,113 @@ Deno.test("ParameterVariable typed object allows access to additional properties
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable typed object with additional properties", () => {
+Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties and undefined additionalProperties allows access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id", "name"],
+  });
+  const param = ParameterVariable("", "incident", obj);
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable unwrapped typed object with all required properties and undefined additionalProperties allows access to additional properties", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id", "name"],
+  });
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of required and optional properties and undefined additionalProperties allows access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id"],
+  });
+  const param = ParameterVariable("", "incident", obj);
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable unwrapped typed object with mix of required and optional properties and undefined additionalProperties allows access to additional properties", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id"],
+  });
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties and additionalProperties=true allows access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: [],
+    additionalProperties: true,
+  });
+  const param = ParameterVariable("", "incident", obj);
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable unwrapped typed object with all optional properties and additionalProperties=true allows access to additional properties", () => {
   const param = ParameterVariable("", "incident", {
     type: SchemaTypes.typedobject,
     properties: {
@@ -96,7 +319,118 @@ Deno.test("ParameterVariable typed object with additional properties", () => {
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable typed object with no additional properties", () => {
+Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties and additionalProperties=true allows access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id", "name"],
+    additionalProperties: true,
+  });
+  const param = ParameterVariable("", "incident", obj);
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable unwrapped typed object with all required properties and additionalProperties=true allows access to additional properties", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id", "name"],
+    additionalProperties: true,
+  });
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of required and optional properties and additionalProperties=true allows access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id"],
+    additionalProperties: true,
+  });
+  const param = ParameterVariable("", "incident", obj);
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable unwrapped typed object with mix of required and optional properties and additionalProperties=true allows access to additional properties", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id"],
+    additionalProperties: true,
+  });
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties and additionalProperties=false prevents access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: [],
+    additionalProperties: false,
+  });
+  const param = ParameterVariable("", "incident", obj);
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  //@ts-expect-error foo doesn't exist
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable unwrapped typed object with all optional properties and additionalProperties=false prevents access to additional properties", () => {
   const param = ParameterVariable("", "incident", {
     type: SchemaTypes.typedobject,
     properties: {
@@ -110,21 +444,114 @@ Deno.test("ParameterVariable typed object with no additional properties", () => 
     required: [],
     additionalProperties: false,
   });
-  param;
 
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
-
   //@ts-expect-error foo doesn't exist
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable untyped object", () => {
+Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties and additionalProperties=false prevents access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id", "name"],
+    additionalProperties: false,
+  });
+  const param = ParameterVariable("", "incident", obj);
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  //@ts-expect-error foo doesn't exist
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable unwrapped typed object with all required properties and additionalProperties=false prevents access to additional properties", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id", "name"],
+    additionalProperties: false,
+  });
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  // TODO: current failure mode of this test actually causes this next line to incorrectly pass
+  //@ts-expect-error foo doesn't exist
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of required and optional properties and additionalProperties=false prevents access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id"],
+    additionalProperties: false,
+  });
+  const param = ParameterVariable("", "incident", obj);
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  //@ts-expect-error foo doesn't exist
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable unwrapped typed object with mix of required and optional properties and additionalProperties=false prevents access to additional properties", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.typedobject,
+    properties: {
+      id: {
+        type: SchemaTypes.integer,
+      },
+      name: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["id"],
+    additionalProperties: false,
+  });
+
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  // TODO: current failure mode of this test actually causes this next line to incorrectly pass
+  //@ts-expect-error foo doesn't exist
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable untyped object should yield a parameter of type any", () => {
   const param = ParameterVariable("", "incident", {
     type: SchemaTypes.untypedobject,
   });
 
+  assert<IsAny<typeof param>>(true);
   assertStrictEquals(`${param}`, "{{incident}}");
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
@@ -155,7 +582,7 @@ Deno.test("ParameterVariable using CustomType string", () => {
   assertStrictEquals(`${param}`, "{{myCustomTypeString}}");
 });
 
-Deno.test("ParameterVariable using Custom Type typed object", () => {
+Deno.test("ParameterVariable using Custom Type with unwrapped typed object with optional property yields object with optional property", () => {
   const customType = DefineType({
     name: "customType",
     type: SchemaTypes.typedobject,
@@ -171,8 +598,282 @@ Deno.test("ParameterVariable using Custom Type typed object", () => {
     custom: customType,
   });
 
+  assert<CanBeUndefined<typeof param.aString>>(true);
   assertStrictEquals(`${param}`, "{{myCustomType}}");
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+});
+
+Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with optional property yields object with optional property", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: [],
+  });
+  const customType = DefineType({
+    name: "customType",
+    ...obj,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CanBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+});
+
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable using Custom Type with unwrapped typed object with required property yields object with required property", () => {
+  const customType = DefineType({
+    name: "customType",
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["aString"],
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CannotBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+});
+
+Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with required property yields object with required property", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["aString"],
+  });
+  const customType = DefineType({
+    name: "customType",
+    ...obj,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CannotBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+});
+
+Deno.test("ParameterVariable using Custom Type with unwrapped typed object with optional property and additionalProperties=true yields object that allows access to additional properties", () => {
+  const customType = DefineType({
+    name: "customType",
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: [],
+    additionalProperties: true,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CanBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with optional property and additionalProperties=true yields object that allows access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: [],
+    additionalProperties: true,
+  });
+  const customType = DefineType({
+    name: "customType",
+    ...obj,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CanBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable using Custom Type with unwrapped typed object with required property and additionalProperties=true yields object that allows access to additional properties", () => {
+  const customType = DefineType({
+    name: "customType",
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["aString"],
+    additionalProperties: true,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CannotBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with required property and additionalProperties=true yields object that allows access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["aString"],
+    additionalProperties: true,
+  });
+  const customType = DefineType({
+    name: "customType",
+    ...obj,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CannotBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable using Custom Type with unwrapped typed object with optional property and additionalProperties=false yields object that prevents access to additional properties", () => {
+  const customType = DefineType({
+    name: "customType",
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: [],
+    additionalProperties: false,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CanBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  //@ts-expect-error foo doesn't exist
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with optional property and additionalProperties=false yields object that prevents access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: [],
+    additionalProperties: false,
+  });
+  const customType = DefineType({
+    name: "customType",
+    ...obj,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CanBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  //@ts-expect-error foo doesn't exist
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+// TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
+Deno.test("ParameterVariable using Custom Type with unwrapped typed object with required property and additionalProperties=false yields object that allows access to additional properties", () => {
+  const customType = DefineType({
+    name: "customType",
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["aString"],
+    additionalProperties: false,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CannotBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  // TODO: current failure mode of this test actually causes this next line to incorrectly pass
+  //@ts-expect-error foo doesn't exist
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+});
+
+Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with required property and additionalProperties=false yields object that prevents access to additional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["aString"],
+    additionalProperties: false,
+  });
+  const customType = DefineType({
+    name: "customType",
+    ...obj,
+  });
+  const param = ParameterVariable("", "myCustomType", {
+    type: SchemaTypes.custom,
+    custom: customType,
+  });
+
+  assert<CannotBeUndefined<typeof param.aString>>(true);
+  assertStrictEquals(`${param}`, "{{myCustomType}}");
+  assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
+  //@ts-expect-error foo doesn't exist
+  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
 Deno.test("ParameterVariable using Custom Type untyped object", () => {
