@@ -42,8 +42,9 @@ export type ParameterVariableType<
       Def["custom"]["definition"],
       IncreaseDepth<CurrentDepth>
     >
-  : Def extends TypedObjectParameterDefinition<infer P, infer RP> // If the ParameterVariable is of type object, allow access to the object's properties
-    ? ObjectParameterVariableType<P, RP, Def>
+  // If the ParameterVariable is of type object, allow access to the object's properties
+  : Def extends TypedObjectParameterDefinition<infer _P, infer _RP>
+    ? ObjectParameterVariableType<Def>
   : Def extends UntypedObjectParameterDefinition
     ? UntypedObjectParameterVariableType
   : SingleParameterVariable;
@@ -56,32 +57,23 @@ type UntypedObjectParameterVariableType = any;
 
 type ObjectParameterPropertyTypes<
   Props extends TypedObjectProperties,
-  RequiredProps extends TypedObjectRequiredProperties<Props>,
-> =
-  & {
-    [name in RequiredProps[number]]: ParameterVariableType<
-      Props[name]
-    >;
-  }
-  & {
-    [name in Exclude<keyof Props, RequiredProps>]?: ParameterVariableType<
-      Props[name]
-    >;
-  };
+> = {
+  [name in keyof Props]: ParameterVariableType<
+    Props[name]
+  >;
+};
 
 // If additionalProperties is set to true, allow access to any key.
 // Otherwise, only allow keys provided through use of properties
 type ObjectParameterVariableType<
-  Props extends TypedObjectProperties,
-  RequiredProps extends TypedObjectRequiredProperties<Props>,
   Def extends TypedObjectParameterDefinition<
-    Props,
-    RequiredProps
+    TypedObjectProperties,
+    (string | number)[]
   >,
 > = Def["additionalProperties"] extends false
-  ? ObjectParameterPropertyTypes<Props, RequiredProps>
+  ? ObjectParameterPropertyTypes<Def["properties"]>
   : 
-    & ObjectParameterPropertyTypes<Props, RequiredProps>
+    & ObjectParameterPropertyTypes<Def["properties"]>
     & {
       // deno-lint-ignore no-explicit-any
       [key: string]: any;
@@ -133,7 +125,7 @@ const CreateTypedObjectParameterVariable = <
   namespace: string,
   paramName: string,
   definition: P,
-): ObjectParameterVariableType<Props, RequiredProps, P> => {
+): ObjectParameterVariableType<P> => {
   const ns = namespace ? `${namespace}.` : "";
   const pathReference = `${ns}${paramName}`;
   const param = ParamReference(pathReference);
@@ -155,7 +147,7 @@ const CreateTypedObjectParameterVariable = <
     param,
     namespace,
     paramName,
-  ) as ObjectParameterVariableType<Props, RequiredProps, P>;
+  ) as ObjectParameterVariableType<P>;
 };
 
 export const CreateUntypedObjectParameterVariable = (
