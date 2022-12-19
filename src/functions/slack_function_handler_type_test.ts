@@ -779,7 +779,7 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects witho
   assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
 });
 
-Deno.test("EnrichedSlackFunctionHandler using Objects without additional properties", () => {
+Deno.test("EnrichedSlackFunctionHandler using Arrays", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
