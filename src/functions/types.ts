@@ -95,7 +95,6 @@ type FunctionInputRuntimeType<
         ? TypedArrayFunctionInputRuntimeType<Param>
       : UnknownRuntimeType[]
     : Param["type"] extends typeof SchemaTypes.object
-    // Does this work with infer? If we can't infer P, RP it should just be UnknownRuntimeType
       ? Param extends TypedObjectParameterDefinition<
         infer P,
         infer RP
