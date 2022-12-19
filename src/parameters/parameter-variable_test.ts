@@ -5,7 +5,6 @@ import { DefineType } from "../types/mod.ts";
 import {
   assert,
   assertStrictEquals,
-  CanBeUndefined,
   CannotBeUndefined,
   IsAny,
 } from "../dev_deps.ts";
