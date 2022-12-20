@@ -4,6 +4,7 @@ import {
   assertExists,
   CanBe,
   CanBeUndefined,
+  CannotBe,
   CannotBeUndefined,
   IsAny,
   IsExact,
@@ -15,7 +16,7 @@ import {
   EnrichedSlackFunctionHandler,
   RuntimeSlackFunctionHandler,
 } from "./types.ts";
-import { Schema } from "../mod.ts";
+import { DefineType, Schema } from "../mod.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import { DefineObject } from "../types/objects.ts";
 
@@ -436,6 +437,84 @@ Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
   assertExists(result.outputs?.interactivity.interactor.secret);
   assertExists(result.outputs?.user_context.id);
   assertExists(result.outputs?.user_context.secret);
+});
+
+Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of DefineObject-wrapped typed objects should honor required and optional properties", () => {
+  const obj = DefineObject({
+    type: SchemaTypes.typedobject,
+    properties: {
+      aString: {
+        type: SchemaTypes.string,
+      },
+      anOptionalString: {
+        type: SchemaTypes.string,
+      },
+    },
+    required: ["aString"],
+    additionalProperties: true,
+  });
+  const customType = DefineType({
+    name: "customType",
+    ...obj,
+  });
+
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        arr: {
+          type: Schema.types.typedarray,
+          items: {
+            type: SchemaTypes.custom,
+            custom: customType,
+          },
+        },
+      },
+      required: ["arr"],
+    },
+  });
+
+  const sharedInputs = {
+    arr: [{ aString: "hi" }, { aString: "hello", anOptionalString: "goodbye" }],
+  };
+
+  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
+    (
+      { inputs },
+    ) => {
+      const { arr } = inputs;
+      const first = arr[0];
+      const second = arr[1];
+      assert<CannotBeUndefined<typeof first.aString>>(true);
+      assert<CanBeUndefined<typeof first.anOptionalString>>(true);
+      assert<CannotBeUndefined<typeof second.aString>>(true);
+      assert<CanBeUndefined<typeof second.anOptionalString>>(true);
+      assertEqualsTypedValues(
+        first.aString,
+        sharedInputs.arr[0].aString,
+      );
+      assertEqualsTypedValues(
+        first.anOptionalString,
+        undefined,
+      );
+      assertEqualsTypedValues(
+        second.aString,
+        sharedInputs.arr[1].aString,
+      );
+      assertEqualsTypedValues(
+        second.anOptionalString,
+        sharedInputs.arr[1].anOptionalString,
+      );
+
+      return {
+        outputs: inputs,
+      };
+    };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+  handler(createContext({ inputs: sharedInputs }));
 });
 
 Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects with additional properties", () => {
