@@ -4,7 +4,6 @@ import {
   assertExists,
   CanBe,
   CanBeUndefined,
-  CannotBe,
   CannotBeUndefined,
   IsAny,
   IsExact,
@@ -219,7 +218,7 @@ Deno.test("EnrichedSlackFunctionHandler with only string output", () => {
   assertEqualsTypedValues(result.outputs?.out, "test");
 });
 
-Deno.test("EnrichedSlackFunctionHandler with a required input typedobject with a required string property, and required output typedobject with a required string property", () => {
+Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapped typedobject with a required string property, and required output typedobject with a required string property", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -265,7 +264,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required input typedobject with a
   assertEqualsTypedValues(result.outputs?.anObject.out, "test");
 });
 
-Deno.test("EnrichedSlackFunctionHandler with a required input typedobject with an optional string property", () => {
+Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapped typedobject with an optional string property", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -597,138 +596,6 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects witho
           required: [],
           additionalProperties: false,
         }),
-      },
-      required: ["noAddlPropertiesObj"],
-    },
-    output_parameters: {
-      properties: {
-        noAddlPropertiesObj: {
-          type: Schema.types.typedobject,
-          properties: {
-            aString: { type: Schema.types.string },
-          },
-          required: [],
-          additionalProperties: false,
-        },
-      },
-      required: ["noAddlPropertiesObj"],
-    },
-  });
-
-  const sharedInputs = {
-    noAddlPropertiesObj: { aString: "hi" },
-  };
-
-  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
-    (
-      { inputs },
-    ) => {
-      const { noAddlPropertiesObj } = inputs;
-      assertEqualsTypedValues(
-        noAddlPropertiesObj,
-        sharedInputs.noAddlPropertiesObj,
-      );
-      assertEqualsTypedValues(
-        noAddlPropertiesObj.aString,
-        sharedInputs.noAddlPropertiesObj.aString,
-      );
-      // @ts-expect-error anythingElse cant exist
-      assertEquals(noAddlPropertiesObj.anythingElse, undefined);
-      return {
-        outputs: inputs,
-      };
-    };
-
-  const { createContext } = SlackFunctionTester(TestFunction);
-
-  const result = handler(createContext({ inputs: sharedInputs }));
-  assertEqualsTypedValues(sharedInputs, result.outputs);
-  assertExists(result.outputs?.noAddlPropertiesObj);
-  assertExists(result.outputs?.noAddlPropertiesObj.aString);
-
-  // @ts-expect-error anythingElse cant exist
-  assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
-});
-
-Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects with additional properties", () => {
-  const TestFunction = DefineFunction({
-    callback_id: "my_callback_id",
-    source_file: "test",
-    title: "Test",
-    input_parameters: {
-      properties: {
-        addlPropertiesObj: {
-          type: Schema.types.typedobject,
-          properties: {
-            aString: { type: Schema.types.string },
-          },
-          required: [],
-        },
-      },
-      required: ["addlPropertiesObj"],
-    },
-    output_parameters: {
-      properties: {
-        addlPropertiesObj: {
-          type: Schema.types.typedobject,
-          properties: {
-            aString: { type: Schema.types.string },
-          },
-          required: [],
-        },
-      },
-      required: ["addlPropertiesObj"],
-    },
-  });
-
-  const sharedInputs = {
-    addlPropertiesObj: { aString: "hi" },
-  };
-
-  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
-    (
-      { inputs },
-    ) => {
-      const { addlPropertiesObj } = inputs;
-      assertEqualsTypedValues(
-        addlPropertiesObj,
-        sharedInputs.addlPropertiesObj,
-      );
-      assertEqualsTypedValues(
-        addlPropertiesObj.aString,
-        sharedInputs.addlPropertiesObj.aString,
-      );
-      assert<IsAny<typeof addlPropertiesObj.anythingElse>>(true);
-      assertEquals(addlPropertiesObj.anythingElse, undefined);
-      return {
-        outputs: inputs,
-      };
-    };
-
-  const { createContext } = SlackFunctionTester(TestFunction);
-
-  const result = handler(createContext({ inputs: sharedInputs }));
-  assertEqualsTypedValues(sharedInputs, result.outputs);
-  assertExists(result.outputs?.addlPropertiesObj);
-  assertExists(result.outputs?.addlPropertiesObj.aString);
-  assertEquals(result.outputs?.addlPropertiesObj.anythingElse, undefined);
-});
-
-Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects without additional properties", () => {
-  const TestFunction = DefineFunction({
-    callback_id: "my_callback_id",
-    source_file: "test",
-    title: "Test",
-    input_parameters: {
-      properties: {
-        noAddlPropertiesObj: {
-          type: Schema.types.typedobject,
-          properties: {
-            aString: { type: Schema.types.string },
-          },
-          required: [],
-          additionalProperties: false,
-        },
       },
       required: ["noAddlPropertiesObj"],
     },
