@@ -261,9 +261,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
   // @ts-expect-error Type error if required property isn't returned
   const _invalidHandler: EnrichedSlackFunctionHandler<
     typeof TestFn.definition
-  > = (
-    { inputs: _inputs },
-  ) => {
+  > = (_arg) => {
     return {
       outputs: {
         anObject: {},
