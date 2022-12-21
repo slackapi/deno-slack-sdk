@@ -582,10 +582,6 @@ Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of De
             type: customType,
           },
         },
-        // TODO: need to remove this but it shouldn't allow items, we should have tests for this
-        // j: {
-        //   type: Schema.types.number,
-        // },
       },
       required: ["arr"],
     },

@@ -34,7 +34,6 @@ export type PrimitiveParameterDefinition =
   | UntypedArrayParameterDefinition;
 
 // TODO: Revisit as I don't think passing a string here is valid as `default` and `examples` need to be of the specified type (boolean, number, etc.)
-// We also aren't getting a discriminate union here, so if you specify `number` you aren't getting the fields unique to number
 type DistributePrimitiveSlackTypes = IParameterDefinition<
   string
 >;
