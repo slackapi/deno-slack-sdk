@@ -218,7 +218,7 @@ Deno.test("EnrichedSlackFunctionHandler with only string output", () => {
   assertEqualsTypedValues(result.outputs?.out, "test");
 });
 
-Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapped typedobject with a required string property, and required output typedobject with a required string property", () => {
+Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapped typedobject with a required string property", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -293,6 +293,60 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
   const _result = handler(
     createContext({ inputs: { anObject: { in: "test" } } }),
   );
+});
+
+Deno.test("EnrichedSlackFunctionHandler with a required output DefineObject-wrapped typedobject with mixed property requirements", () => {
+  const TestFn = DefineFunction({
+    callback_id: "test",
+    title: "test fn",
+    source_file: "test.ts",
+    output_parameters: {
+      properties: {
+        anObject: DefineObject({
+          type: "typedobject",
+          properties: { req: { type: "string" }, opt: { type: "string" } },
+          required: ["req"],
+        }),
+      },
+      required: ["anObject"],
+    },
+  });
+  const _reqHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> = (
+    _arg,
+  ) => {
+    return {
+      outputs: {
+        anObject: { req: "i'm here" },
+      },
+    };
+  };
+
+  //@ts-expect-error anObject.req is a required property and must be defined
+  const _optHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> = (
+    _arg,
+  ) => {
+    return {
+      outputs: {
+        anObject: { opt: "i'm here" },
+      },
+    };
+  };
+
+  const _mixedHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> =
+    (
+      _arg,
+    ) => {
+      return {
+        outputs: {
+          anObject: {
+            req: "i'm here",
+            opt: "i'm here",
+          },
+        },
+      };
+    };
+
+  assert(true);
 });
 
 Deno.test("EnrichedSlackFunctionHandler that returns completed false", () => {
@@ -536,20 +590,21 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects with 
     },
     output_parameters: {
       properties: {
-        addlPropertiesObj: {
+        addlPropertiesObj: DefineObject({
           type: Schema.types.typedobject,
           properties: {
             aString: { type: Schema.types.string },
           },
           required: [],
-        },
+          additionalProperties: true,
+        }),
       },
       required: ["addlPropertiesObj"],
     },
   });
 
   const sharedInputs = {
-    addlPropertiesObj: { aString: "hi" },
+    addlPropertiesObj: { aString: "hi", somethingElse: "ello" },
   };
 
   const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
@@ -565,7 +620,9 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects with 
         addlPropertiesObj.aString,
         sharedInputs.addlPropertiesObj.aString,
       );
+      assert<IsAny<typeof addlPropertiesObj.somethingElse>>(true);
       assert<IsAny<typeof addlPropertiesObj.anythingElse>>(true);
+      assertEquals(addlPropertiesObj.somethingElse, "ello");
       assertEquals(addlPropertiesObj.anythingElse, undefined);
       return {
         outputs: inputs,
@@ -578,7 +635,12 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects with 
   assertEqualsTypedValues(sharedInputs, result.outputs);
   assertExists(result.outputs?.addlPropertiesObj);
   assertExists(result.outputs?.addlPropertiesObj.aString);
+  assertEquals(result.outputs?.addlPropertiesObj.somethingElse, "ello");
   assertEquals(result.outputs?.addlPropertiesObj.anythingElse, undefined);
+  if (result.outputs) {
+    assert<IsAny<typeof result.outputs.addlPropertiesObj.anythingElse>>(true);
+  }
+  result.outputs.addlPropertiesObj.anothaOne;
 });
 
 Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects without additional properties", () => {
@@ -601,14 +663,14 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects witho
     },
     output_parameters: {
       properties: {
-        noAddlPropertiesObj: {
+        noAddlPropertiesObj: DefineObject({
           type: Schema.types.typedobject,
           properties: {
             aString: { type: Schema.types.string },
           },
           required: [],
           additionalProperties: false,
-        },
+        }),
       },
       required: ["noAddlPropertiesObj"],
     },
@@ -631,6 +693,7 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects witho
         noAddlPropertiesObj.aString,
         sharedInputs.noAddlPropertiesObj.aString,
       );
+
       // @ts-expect-error anythingElse cant exist
       assertEquals(noAddlPropertiesObj.anythingElse, undefined);
       return {
