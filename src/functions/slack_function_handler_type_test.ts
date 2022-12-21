@@ -226,7 +226,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
     input_parameters: {
       properties: {
         anObject: DefineObject({
-          type: "object",
+          type: Schema.types.object,
           properties: { in: { type: "string" } },
           required: ["in"],
         }),
@@ -236,7 +236,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
     output_parameters: {
       properties: {
         anObject: DefineObject({
-          type: "object",
+          type: Schema.types.object,
           properties: { out: { type: "string" } },
           required: ["out"],
         }),
@@ -285,7 +285,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
     input_parameters: {
       properties: {
         anObject: DefineObject({
-          type: "object",
+          type: Schema.types.object,
           properties: { in: { type: "string" } },
           required: [],
         }),
@@ -414,7 +414,7 @@ Deno.test("EnrichedSlackFunctionHandler that returns error", () => {
 
 Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
   const myObject = DefineObject({
-    type: "object",
+    type: Schema.types.object,
     properties: {
       required_property: { type: "string" },
       optional_property: { type: "string" },
@@ -851,7 +851,7 @@ Deno.test("EnrichedSlackFunctionHandler using Arrays", () => {
         aTypedArrayOfObjects: {
           type: Schema.types.array,
           items: DefineObject({
-            type: "object",
+            type: Schema.types.object,
             properties: {
               requiredString: { type: "string" },
               optionalString: { type: "string" },
@@ -876,7 +876,7 @@ Deno.test("EnrichedSlackFunctionHandler using Arrays", () => {
         aTypedArrayOfObjects: {
           type: Schema.types.array,
           items: DefineObject({
-            type: "object",
+            type: Schema.types.object,
             properties: {
               requiredString: { type: "string" },
               optionalString: { type: "string" },
