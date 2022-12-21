@@ -5,7 +5,11 @@ import {
   DefineTypeFunction,
   ICustomType,
 } from "./types.ts";
-import SchemaTypes from "../schema/schema_types.ts";
+import { isTypedArray, isTypedObject } from "../parameters/mod.ts";
+
+// Helper that uses a type predicate for narrowing down to a Custom Type
+export const isCustomType = (type: string | ICustomType): type is ICustomType =>
+  type instanceof CustomType;
 
 export const DefineType: DefineTypeFunction = <
   Def extends CustomTypeDefinition,
@@ -20,7 +24,6 @@ export class CustomType<Def extends CustomTypeDefinition>
   public id: string;
   public title: string | undefined;
   public description: string | undefined;
-  public type: typeof SchemaTypes.custom;
 
   constructor(
     public definition: Def,
@@ -29,7 +32,6 @@ export class CustomType<Def extends CustomTypeDefinition>
     this.definition = definition;
     this.description = definition.description;
     this.title = definition.title;
-    this.type = SchemaTypes.custom;
   }
 
   private generateReferenceString() {
@@ -44,31 +46,18 @@ export class CustomType<Def extends CustomTypeDefinition>
   }
 
   registerParameterTypes(manifest: SlackManifest) {
-    switch (this.definition.type) {
-      // TODO: reintroduce array types
-
-      case SchemaTypes.array:
-        if ("items" in this.definition) {
-          if (this.definition.items.type === SchemaTypes.custom) {
-            manifest.registerType(this.definition.items.custom);
-          }
+    if (isCustomType(this.definition.type)) {
+      manifest.registerType(this.definition.type);
+    } else if (isTypedArray(this.definition)) {
+      if (isCustomType(this.definition.items.type)) {
+        manifest.registerType(this.definition.items.type);
+      }
+    } else if (isTypedObject(this.definition)) {
+      Object.values(this.definition.properties)?.forEach((property) => {
+        if (isCustomType(property.type)) {
+          manifest.registerType(property.type);
         }
-        break;
-
-      case SchemaTypes.object:
-        if ("properties" in this.definition) {
-          Object.values(this.definition.properties)?.forEach((property) => {
-            if (property.type === SchemaTypes.custom) {
-              manifest.registerType(property.custom);
-            }
-          });
-        }
-        break;
-      case SchemaTypes.custom:
-        manifest.registerType(this.definition.custom);
-        break;
-      default:
-        break;
+      });
     }
   }
   export(): ManifestCustomTypeSchema {

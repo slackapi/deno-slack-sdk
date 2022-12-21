@@ -26,6 +26,7 @@ import {
   ViewClosedHandler,
   ViewSubmissionHandler,
 } from "./interactivity/types.ts";
+import { ICustomType } from "../types/types.ts";
 
 export type { BlockActionHandler } from "./interactivity/types.ts";
 
@@ -73,9 +74,9 @@ type FunctionInputRuntimeType<
 > =
   // Recurse through Custom Types, stop when we hit our max depth
   CurrentDepth extends MaxRecursionDepth ? UnknownRuntimeType
-    : Param["type"] extends typeof SchemaTypes.custom
+    : Param["type"] extends ICustomType
       ? Param extends CustomTypeParameterDefinition ? FunctionInputRuntimeType<
-          Param["custom"]["definition"],
+          Param["type"]["definition"],
           IncreaseDepth<CurrentDepth>
         >
       : UnknownRuntimeType

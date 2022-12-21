@@ -2,6 +2,8 @@
 import type {
   CustomTypeParameterDefinition,
   ParameterDefinition,
+  TypedArrayParameterDefinition,
+  TypedObjectParameter,
   TypedObjectParameterDefinition,
   TypedObjectProperties,
   TypedObjectRequiredProperties,
@@ -15,6 +17,15 @@ import {
 } from "../functions/types.ts";
 import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 import SchemaTypes from "../schema/schema_types.ts";
+import { isCustomType } from "../types/mod.ts";
+
+// Helpers that use type predicate for narrowing down to a Typed Object or Array
+export const isTypedObject = (
+  def: ParameterDefinition,
+): def is TypedObjectParameter => ("properties" in def);
+export const isTypedArray = (
+  def: ParameterDefinition,
+): def is TypedArrayParameterDefinition => ("items" in def);
 
 // Used for defining a set of input or output parameters
 export type ParameterSetDefinition = {
@@ -39,7 +50,7 @@ export type ParameterVariableType<
 > = CurrentDepth extends MaxRecursionDepth ? UntypedObjectParameterVariableType // i.e. any
   : Def extends CustomTypeParameterDefinition // If the ParameterVariable is a Custom type, use it's definition instead
     ? ParameterVariableType<
-      Def["custom"]["definition"],
+      Def["type"]["definition"],
       IncreaseDepth<CurrentDepth>
     >
   // If the ParameterVariable is of type object, allow access to the object's properties
@@ -66,10 +77,7 @@ type ObjectParameterPropertyTypes<
 // If additionalProperties is set to true, allow access to any key.
 // Otherwise, only allow keys provided through use of properties
 type ObjectParameterVariableType<
-  Def extends TypedObjectParameterDefinition<
-    TypedObjectProperties,
-    (string | number)[]
-  >,
+  Def extends TypedObjectParameter,
 > = Def["additionalProperties"] extends false
   ? ObjectParameterPropertyTypes<Def["properties"]>
   : 
@@ -86,16 +94,16 @@ export const ParameterVariable = <P extends ParameterDefinition>(
 ): ParameterVariableType<P> => {
   let param: ParameterVariableType<P> | null = null;
 
+  if (isCustomType(definition.type)) {
+    return ParameterVariable(
+      namespace,
+      paramName,
+      definition.type.definition,
+    );
+  }
   switch (definition.type) {
-    case SchemaTypes.custom:
-      param = ParameterVariable(
-        namespace,
-        paramName,
-        definition.custom.definition,
-      );
-      break;
     case SchemaTypes.object:
-      if ("properties" in definition) {
+      if (isTypedObject(definition)) {
         param = CreateTypedObjectParameterVariable(
           namespace,
           paramName,

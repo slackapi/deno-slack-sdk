@@ -5,7 +5,6 @@ const SchemaTypes = {
   number: "number",
   object: "object",
   array: "array",
-  custom: "custom",
 } as const;
 
 export default SchemaTypes;

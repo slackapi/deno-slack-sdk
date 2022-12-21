@@ -35,8 +35,7 @@ Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of un
         arr: {
           type: Schema.types.array,
           items: {
-            type: SchemaTypes.custom,
-            custom: customType,
+            type: customType,
           },
         },
       },

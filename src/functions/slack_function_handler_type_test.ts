@@ -432,16 +432,13 @@ Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
     input_parameters: {
       properties: {
         interactivity: {
-          type: SchemaTypes.custom,
-          custom: Schema.slack.types.interactivity,
+          type: Schema.slack.types.interactivity,
         },
         user_context: {
-          type: SchemaTypes.custom,
-          custom: Schema.slack.types.user_context,
+          type: Schema.slack.types.user_context,
         },
         custom_type: {
-          type: "custom",
-          custom: myType,
+          type: myType,
         },
       },
       required: ["interactivity", "user_context", "custom_type"],
@@ -449,16 +446,13 @@ Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
     output_parameters: {
       properties: {
         interactivity: {
-          type: SchemaTypes.custom,
-          custom: Schema.slack.types.interactivity,
+          type: Schema.slack.types.interactivity,
         },
         user_context: {
-          type: SchemaTypes.custom,
-          custom: Schema.slack.types.user_context,
+          type: Schema.slack.types.user_context,
         },
         custom_type: {
-          type: "custom",
-          custom: myType,
+          type: myType,
         },
       },
       required: ["interactivity", "user_context", "custom_type"],
@@ -585,10 +579,13 @@ Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of De
         arr: {
           type: Schema.types.array,
           items: {
-            type: SchemaTypes.custom,
-            custom: customType,
+            type: customType,
           },
         },
+        // TODO: need to remove this but it shouldn't allow items, we should have tests for this
+        // j: {
+        //   type: Schema.types.number,
+        // },
       },
       required: ["arr"],
     },

@@ -5,7 +5,8 @@ import {
   DefineEventSignature,
   ICustomEvent,
 } from "./types.ts";
-import SchemaTypes from "../schema/schema_types.ts";
+import { isCustomType } from "../types/mod.ts";
+import { isTypedObject } from "../parameters/mod.ts";
 
 export const DefineEvent: DefineEventSignature = <
   Def extends CustomEventDefinition,
@@ -43,18 +44,14 @@ export class CustomEvent<Def extends CustomEventDefinition>
   }
 
   registerParameterTypes(manifest: SlackManifest) {
-    switch (this.definition.type) {
-      case SchemaTypes.object:
-        // Loop through the properties and register any types
-        Object.values(this.definition.properties)?.forEach((property) => {
-          if (property.type === SchemaTypes.custom) {
-            manifest.registerType(property.custom);
-          }
-        });
-        break;
-      case SchemaTypes.custom:
-        manifest.registerType(this.definition.custom);
-        break;
+    if (isCustomType(this.definition.type)) {
+      manifest.registerType(this.definition.type);
+    } else if (isTypedObject(this.definition)) {
+      Object.values(this.definition.properties)?.forEach((property) => {
+        if (isCustomType(property.type)) {
+          manifest.registerType(property.type);
+        }
+      });
     }
   }
   export(): ManifestCustomEventSchema {

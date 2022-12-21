@@ -19,7 +19,6 @@ import {
   assertStrictEquals,
   IsExact,
 } from "../dev_deps.ts";
-import SchemaTypes from "../schema/schema_types.ts";
 
 Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
   const definition: SlackManifestType = {
@@ -136,8 +135,7 @@ Deno.test("Manifest() automatically registers types used by function input and o
 
   const CustomInputType = DefineType({
     name: inputTypeId,
-    type: SchemaTypes.custom,
-    custom: CustomStringType,
+    type: CustomStringType,
   });
 
   const CustomOutputType = DefineType({
@@ -152,13 +150,13 @@ Deno.test("Manifest() automatically registers types used by function input and o
       source_file: "functions/test_function.ts",
       input_parameters: {
         properties: {
-          aType: { type: SchemaTypes.custom, custom: CustomInputType },
+          aType: { type: CustomInputType },
         },
         required: [],
       },
       output_parameters: {
         properties: {
-          aType: { type: SchemaTypes.custom, custom: CustomOutputType },
+          aType: { type: CustomOutputType },
         },
         required: [],
       },
@@ -307,7 +305,7 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
     name: objectTypeId,
     type: Schema.types.object,
     properties: {
-      aString: { type: SchemaTypes.custom, custom: StringType },
+      aString: { type: StringType },
     },
     required: ["aString"],
   });
@@ -358,8 +356,7 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
     name: arrayTypeId,
     type: Schema.types.array,
     items: {
-      type: SchemaTypes.custom,
-      custom: StringType,
+      type: StringType,
     },
   });
 
@@ -367,7 +364,7 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
     name: objectTypeId,
     type: Schema.types.object,
     properties: {
-      aBoolean: { type: SchemaTypes.custom, custom: BooleanType },
+      aBoolean: { type: BooleanType },
     },
     required: ["aBoolean"],
   });
@@ -376,16 +373,15 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
     name: objectEventId,
     type: Schema.types.object,
     properties: {
-      aBoolean: { type: SchemaTypes.custom, custom: BooleanType },
-      anArray: { type: SchemaTypes.custom, custom: ArrayType },
+      aBoolean: { type: BooleanType },
+      anArray: { type: ArrayType },
     },
     required: ["aBoolean", "anArray"],
   });
 
   const ObjectTypeEvent = DefineEvent({
     name: objectEventTypeId,
-    type: SchemaTypes.custom,
-    custom: ObjectType,
+    type: ObjectType,
   });
 
   const definition: SlackManifestType = {
@@ -438,8 +434,7 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
     type: Schema.types.object,
     properties: {
       aBoolean: {
-        type: SchemaTypes.custom,
-        custom: BooleanType,
+        type: BooleanType,
       },
     },
     required: ["aBoolean"],
@@ -449,8 +444,7 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
     name: arrayTypeId,
     type: Schema.types.array,
     items: {
-      type: SchemaTypes.custom,
-      custom: StringType,
+      type: StringType,
     },
   });
 
@@ -766,8 +760,7 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
     type: Schema.types.object,
     properties: {
       aString: {
-        type: SchemaTypes.custom,
-        custom: CustomStringType,
+        type: CustomStringType,
       },
     },
     required: ["aString"],
@@ -777,8 +770,7 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
     name: arrayTypeId,
     type: Schema.types.array,
     items: {
-      type: SchemaTypes.custom,
-      custom: CustomStringType,
+      type: CustomStringType,
     },
   });
 

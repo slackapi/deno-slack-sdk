@@ -11,8 +11,7 @@ const InteractivityObject = DefineObject({
       type: SchemaTypes.string,
     },
     interactor: {
-      type: SchemaTypes.custom,
-      custom: UserContextType,
+      type: UserContextType,
     },
   },
   required: ["interactivity_pointer", "interactor"],

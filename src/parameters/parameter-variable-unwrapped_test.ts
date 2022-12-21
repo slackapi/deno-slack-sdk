@@ -287,8 +287,7 @@ Deno.test("ParameterVariable with unwrapped typed object with Custom Type proper
     type: SchemaTypes.object,
     properties: {
       aString: {
-        type: SchemaTypes.custom,
-        custom: StringType,
+        type: StringType,
       },
     },
     required: [],
@@ -309,15 +308,13 @@ Deno.test("ParameterVariable using Custom Type with unwrapped object referencing
     type: SchemaTypes.object,
     properties: {
       customType: {
-        type: SchemaTypes.custom,
-        custom: StringType,
+        type: StringType,
       },
     },
     required: [],
   });
   const param = ParameterVariable("", "myNestedCustomType", {
-    type: SchemaTypes.custom,
-    custom: customType,
+    type: customType,
   });
 
   assertStrictEquals(`${param}`, "{{myNestedCustomType}}");
@@ -339,8 +336,7 @@ Deno.test("ParameterVariable using Custom Type with unwrapped typed object with 
     required: [],
   });
   const param = ParameterVariable("", "myCustomType", {
-    type: SchemaTypes.custom,
-    custom: customType,
+    type: customType,
   });
 
   assert<CannotBeUndefined<typeof param.aString>>(true);
@@ -361,8 +357,7 @@ Deno.test("ParameterVariable using Custom Type with unwrapped typed object with 
     required: ["aString"],
   });
   const param = ParameterVariable("", "myCustomType", {
-    type: SchemaTypes.custom,
-    custom: customType,
+    type: customType,
   });
 
   assert<CannotBeUndefined<typeof param.aString>>(true);
@@ -383,8 +378,7 @@ Deno.test("ParameterVariable using Custom Type with unwrapped typed object with 
     additionalProperties: true,
   });
   const param = ParameterVariable("", "myCustomType", {
-    type: SchemaTypes.custom,
-    custom: customType,
+    type: customType,
   });
 
   assert<CannotBeUndefined<typeof param.aString>>(true);
@@ -407,8 +401,7 @@ Deno.test("ParameterVariable using Custom Type with unwrapped typed object with 
     additionalProperties: true,
   });
   const param = ParameterVariable("", "myCustomType", {
-    type: SchemaTypes.custom,
-    custom: customType,
+    type: customType,
   });
 
   assert<CannotBeUndefined<typeof param.aString>>(true);
@@ -430,8 +423,7 @@ Deno.test("ParameterVariable using Custom Type with unwrapped typed object with 
     additionalProperties: false,
   });
   const param = ParameterVariable("", "myCustomType", {
-    type: SchemaTypes.custom,
-    custom: customType,
+    type: customType,
   });
 
   assert<CannotBeUndefined<typeof param.aString>>(true);
@@ -455,8 +447,7 @@ Deno.test("ParameterVariable using Custom Type with unwrapped typed object with 
     additionalProperties: false,
   });
   const param = ParameterVariable("", "myCustomType", {
-    type: SchemaTypes.custom,
-    custom: customType,
+    type: customType,
   });
 
   assert<CannotBeUndefined<typeof param.aString>>(true);
