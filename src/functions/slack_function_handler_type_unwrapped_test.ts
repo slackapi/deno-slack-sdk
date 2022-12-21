@@ -9,7 +9,7 @@ import { Schema } from "../mod.ts";
 /*
 Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of unwrapped typed objects should honor required and optional properties", () => {
   const obj = {
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       aString: {
         type: SchemaTypes.string,
@@ -33,7 +33,7 @@ Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of un
     input_parameters: {
       properties: {
         arr: {
-          type: Schema.types.typedarray,
+          type: Schema.types.array,
           items: {
             type: SchemaTypes.custom,
             custom: customType,
@@ -93,7 +93,7 @@ Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects with additional 
     input_parameters: {
       properties: {
         addlPropertiesObj: {
-          type: Schema.types.typedobject,
+          type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
           },
@@ -105,7 +105,7 @@ Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects with additional 
     output_parameters: {
       properties: {
         addlPropertiesObj: {
-          type: Schema.types.typedobject,
+          type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
           },
@@ -157,7 +157,7 @@ Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects without addition
     input_parameters: {
       properties: {
         noAddlPropertiesObj: {
-          type: Schema.types.typedobject,
+          type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
           },
@@ -170,7 +170,7 @@ Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects without addition
     output_parameters: {
       properties: {
         noAddlPropertiesObj: {
-          type: Schema.types.typedobject,
+          type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
           },

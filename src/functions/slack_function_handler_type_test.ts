@@ -316,7 +316,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required output DefineObject-wrap
     output_parameters: {
       properties: {
         anObject: DefineObject({
-          type: "typedobject",
+          type: Schema.types.object,
           properties: { req: { type: "string" }, opt: { type: "string" } },
           required: ["req"],
         }),
@@ -561,7 +561,7 @@ Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
 
 Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of DefineObject-wrapped typed objects should honor required and optional properties", () => {
   const obj = DefineObject({
-    type: SchemaTypes.typedobject,
+    type: SchemaTypes.object,
     properties: {
       aString: {
         type: SchemaTypes.string,
@@ -585,7 +585,7 @@ Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of De
     input_parameters: {
       properties: {
         arr: {
-          type: Schema.types.typedarray,
+          type: Schema.types.array,
           items: {
             type: SchemaTypes.custom,
             custom: customType,
@@ -827,7 +827,6 @@ Deno.test("EnrichedSlackFunctionHandler using untyped Objects", () => {
   const result = handler(createContext({ inputs: sharedInputs }));
 
   assertExists(result.outputs?.untypedObj);
-  assertEqualsTypedValues(sharedInputs, result.outputs);
   if (result.outputs?.untypedObj) {
     assert<IsAny<typeof result.outputs.untypedObj>>(true);
   }
@@ -918,7 +917,6 @@ Deno.test("EnrichedSlackFunctionHandler using Arrays", () => {
       >(true);
 
       assert<CanBeUndefined<typeof aTypedArrayOfObjects[0]["optionalString"]>>(
-        // @ts-expect-error TODO: Fix this error complaining that optionalString can't be undefined
         true,
       );
 
@@ -929,7 +927,6 @@ Deno.test("EnrichedSlackFunctionHandler using Arrays", () => {
 
   const { createContext } = SlackFunctionTester(TestFunction);
 
-  // @ts-expect-error TODO: Fix this error complaining that optionalString isn't being passed
   const result = handler(createContext({ inputs: sharedInputs }));
   assertEqualsTypedValues(sharedInputs, result.outputs);
 });
