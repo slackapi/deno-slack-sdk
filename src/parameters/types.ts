@@ -24,12 +24,13 @@ export type ParameterDefinition =
   | PrimitiveSlackParameterDefinition
   | ComplexParameterDefinition;
 
-export type PrimitiveParameterDefinition =
+type PrimitiveParameterDefinition =
   | BooleanParameterDefinition
   | StringParameterDefinition
   | NumberParameterDefinition
   | IntegerParameterDefinition
   | TypedArrayParameterDefinition
+  | OAuth2ParameterDefinition
   | UntypedObjectParameterDefinition
   | UntypedArrayParameterDefinition;
 
@@ -38,14 +39,11 @@ type DistributePrimitiveSlackTypes = IParameterDefinition<
   string
 >;
 
-export type PrimitiveSlackParameterDefinition = DistributePrimitiveSlackTypes;
+type PrimitiveSlackParameterDefinition = DistributePrimitiveSlackTypes;
 
-export type ComplexParameterDefinition =
+type ComplexParameterDefinition =
   | CustomTypeParameterDefinition
   | TypedObjectParameter;
-
-// TODO: Address OAuth2
-//| OAuth2ParameterDefinition;
 
 export interface CustomTypeParameterDefinition extends
   IParameterDefinition<
@@ -93,7 +91,7 @@ export type TypedObjectParameter = TypedObjectParameterDefinition<
   TypedObjectProperties,
   TypedObjectRequiredProperties<TypedObjectProperties>
 >;
-export interface UntypedArrayParameterDefinition
+interface UntypedArrayParameterDefinition
   extends IParameterDefinition<AllPrimitiveValues[]> {
   type: typeof SchemaTypes.array;
 }
@@ -109,8 +107,7 @@ export interface TypedArrayParameterDefinition
   items: ParameterDefinition;
 }
 
-export interface OAuth2ParameterDefinition
-  extends IParameterDefinition<string> {
+interface OAuth2ParameterDefinition extends IParameterDefinition<string> {
   type: typeof SlackPrimitiveTypes.oauth2;
   oauth2_provider_key: string;
 }
