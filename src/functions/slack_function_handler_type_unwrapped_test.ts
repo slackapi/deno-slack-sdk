@@ -215,3 +215,56 @@ Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects without addition
   // @ts-expect-error anythingElse cant exist
   assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
 });
+
+Deno.test("EnrichedSlackFunctionHandler using unwrapped untyped Objects", () => {
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        untypedObj: {
+          type: Schema.types.object,
+        },
+      },
+      required: ["untypedObj"],
+    },
+    output_parameters: {
+      properties: {
+        untypedObj: {
+          type: Schema.types.object,
+        },
+      },
+      required: ["untypedObj"],
+    },
+  });
+
+  const sharedInputs = {
+    untypedObj: { aString: "hi" },
+  };
+
+  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
+    (
+      { inputs },
+    ) => {
+      const { untypedObj } = inputs;
+
+      assert<IsAny<typeof untypedObj>>(true);
+      assert<IsAny<typeof untypedObj.aString>>(true);
+
+      return {
+        outputs: {
+          untypedObj: { literallyAnything: "ok" },
+        },
+      };
+    };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = handler(createContext({ inputs: sharedInputs }));
+
+  assertExists(result.outputs?.untypedObj);
+  if (result.outputs?.untypedObj) {
+    assert<IsAny<typeof result.outputs.untypedObj>>(true);
+  }
+});

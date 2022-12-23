@@ -112,31 +112,21 @@ type TypedObjectFunctionInputRuntimeType<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
   Param extends TypedObjectParameterDefinition<Props, RequiredProps>,
-> = Param["additionalProperties"] extends false ? 
-    & {
+> =
+  & {
+    [prop in keyof Props]?: FunctionInputRuntimeType<
+      Props[prop]
+    >;
+  }
+  & (RequiredProps extends Array<keyof Props> ? {
       [prop in RequiredProps[number]]: FunctionInputRuntimeType<
         Props[prop]
       >;
     }
-    & {
-      [prop in Exclude<keyof Props, RequiredProps>]?: FunctionInputRuntimeType<
-        Props[prop]
-      >;
-    }
-  : 
-    & {
-      [prop in RequiredProps[number]]: FunctionInputRuntimeType<
-        Props[prop]
-      >;
-    }
-    & {
-      [prop in Exclude<keyof Props, RequiredProps>]?: FunctionInputRuntimeType<
-        Props[prop]
-      >;
-    }
-    & {
-      [key: string]: UnknownRuntimeType;
-    };
+    : Record<never, never>)
+  & (Param["additionalProperties"] extends false ? Record<never, never> : {
+    [key: string]: UnknownRuntimeType;
+  });
 
 type TypedArrayFunctionInputRuntimeType<
   Param extends TypedArrayParameterDefinition,

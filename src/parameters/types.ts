@@ -68,7 +68,8 @@ export type TypedObjectProperties = {
 };
 
 export type TypedObjectRequiredProperties<Props extends TypedObjectProperties> =
-  (Exclude<keyof Props, symbol>)[];
+  | (Exclude<keyof Props, symbol>)[]
+  | undefined;
 
 export interface TypedObjectParameterDefinition<
   Props extends TypedObjectProperties,
@@ -84,7 +85,7 @@ export interface TypedObjectParameterDefinition<
   /** Object defining what properties are allowed on the parameter. */
   properties: Props;
   /** A list of required property names (must reference names defined on the `properties` property). Only for use with Object types. */
-  required: RequiredProps;
+  required?: RequiredProps;
 }
 
 export type TypedObjectParameter = TypedObjectParameterDefinition<

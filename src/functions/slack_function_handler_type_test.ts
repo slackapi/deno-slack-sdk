@@ -770,59 +770,6 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects witho
   assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
 });
 
-Deno.test("EnrichedSlackFunctionHandler using untyped Objects", () => {
-  const TestFunction = DefineFunction({
-    callback_id: "my_callback_id",
-    source_file: "test",
-    title: "Test",
-    input_parameters: {
-      properties: {
-        untypedObj: {
-          type: Schema.types.object,
-        },
-      },
-      required: ["untypedObj"],
-    },
-    output_parameters: {
-      properties: {
-        untypedObj: {
-          type: Schema.types.object,
-        },
-      },
-      required: ["untypedObj"],
-    },
-  });
-
-  const sharedInputs = {
-    untypedObj: { aString: "hi" },
-  };
-
-  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
-    (
-      { inputs },
-    ) => {
-      const { untypedObj } = inputs;
-
-      assert<IsAny<typeof untypedObj>>(true);
-      assert<IsAny<typeof untypedObj.aString>>(true);
-
-      return {
-        outputs: {
-          untypedObj: { literallyAnything: "ok" },
-        },
-      };
-    };
-
-  const { createContext } = SlackFunctionTester(TestFunction);
-
-  const result = handler(createContext({ inputs: sharedInputs }));
-
-  assertExists(result.outputs?.untypedObj);
-  if (result.outputs?.untypedObj) {
-    assert<IsAny<typeof result.outputs.untypedObj>>(true);
-  }
-});
-
 Deno.test("EnrichedSlackFunctionHandler using Arrays", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
@@ -920,6 +867,62 @@ Deno.test("EnrichedSlackFunctionHandler using Arrays", () => {
 
   const result = handler(createContext({ inputs: sharedInputs }));
   assertEqualsTypedValues(sharedInputs, result.outputs);
+});
+
+Deno.test("EnrichedSlackFunctionHandler using DefineObject construct without required properties", () => {
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        optObj: DefineObject({
+          type: Schema.types.object,
+          properties: {
+            optString: { type: Schema.types.string },
+          },
+        }),
+      },
+      required: ["optObj"],
+    },
+    output_parameters: {
+      properties: {
+        optObj: DefineObject({
+          type: Schema.types.object,
+          properties: {
+            optString: { type: Schema.types.string },
+          },
+        }),
+      },
+      required: ["optObj"],
+    },
+  });
+
+  const sharedInputs = {
+    optObj: { aString: "hi" },
+  };
+
+  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
+    (
+      { inputs },
+    ) => {
+      const { optObj } = inputs;
+
+      assert<CanBeUndefined<typeof optObj.optString>>(true);
+
+      return {
+        outputs: inputs,
+      };
+    };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = handler(createContext({ inputs: sharedInputs }));
+
+  assertExists(result.outputs?.optObj);
+  if (result.outputs) {
+    assert<CanBeUndefined<typeof result.outputs.optObj.optString>>(true);
+  }
 });
 
 Deno.test("RuntimeSlackFunctionHandler type should not include a client property", () => {
