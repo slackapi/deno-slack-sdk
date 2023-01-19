@@ -1,7 +1,7 @@
 import SchemaTypes from "../../../schema_types.ts";
 import { SlackPrimitiveTypes } from "../../types/mod.ts";
 import { DefineType } from "../../../../types/mod.ts";
-import { DefineParameter } from "../../../../types/objects.ts";
+import { DefineParameter } from "../../../../types/define_parameter.ts";
 
 const UserContextObject = DefineParameter({
   type: SchemaTypes.object,

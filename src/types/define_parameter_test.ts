@@ -1,4 +1,4 @@
-import { DefineParameter } from "./objects.ts";
+import { DefineParameter } from "./define_parameter.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import { assert, IsExact } from "../dev_deps.ts";
 

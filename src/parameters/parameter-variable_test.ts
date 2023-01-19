@@ -1,6 +1,6 @@
 import SchemaTypes from "../schema/schema_types.ts";
 import { ParameterVariable } from "./mod.ts";
-import { DefineParameter } from "../types/objects.ts";
+import { DefineParameter } from "../types/define_parameter.ts";
 import { DefineType } from "../types/mod.ts";
 import {
   assert,
