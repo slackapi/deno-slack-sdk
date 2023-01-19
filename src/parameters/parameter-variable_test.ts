@@ -1,6 +1,6 @@
 import SchemaTypes from "../schema/schema_types.ts";
 import { ParameterVariable } from "./mod.ts";
-import { DefineObject } from "../types/objects.ts";
+import { DefineParameter } from "../types/objects.ts";
 import { DefineType } from "../types/mod.ts";
 import {
   assert,
@@ -16,8 +16,8 @@ Deno.test("ParameterVariable of type string yields a SingleParameterVariable typ
   assertStrictEquals(`${param}`, "{{incident_name}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties should never yield object with potentially undefined properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with all optional properties should never yield object with potentially undefined properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -38,8 +38,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties should yield object with properties that cannot be undefined", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with all required properties should yield object with properties that cannot be undefined", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -60,8 +60,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all required
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of optional and required properties should yield object with no undefined properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with mix of optional and required properties should yield object with no undefined properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -82,8 +82,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of optio
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties and undefined additionalProperties allows access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with all optional properties and undefined additionalProperties allows access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -103,8 +103,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties and undefined additionalProperties allows access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with all required properties and undefined additionalProperties allows access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -124,8 +124,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all required
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of required and optional properties and undefined additionalProperties allows access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with mix of required and optional properties and undefined additionalProperties allows access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -145,8 +145,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of requi
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties and additionalProperties=true allows access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with all optional properties and additionalProperties=true allows access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -167,8 +167,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties and additionalProperties=true allows access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with all required properties and additionalProperties=true allows access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -189,8 +189,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all required
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of required and optional properties and additionalProperties=true allows access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with mix of required and optional properties and additionalProperties=true allows access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -211,8 +211,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of requi
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional properties and additionalProperties=false prevents access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with all optional properties and additionalProperties=false prevents access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -234,8 +234,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all optional
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with all required properties and additionalProperties=false prevents access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with all required properties and additionalProperties=false prevents access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -257,8 +257,8 @@ Deno.test("ParameterVariable DefineObject-wrapped typed object with all required
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
 
-Deno.test("ParameterVariable DefineObject-wrapped typed object with mix of required and optional properties and additionalProperties=false prevents access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable DefineParameter-wrapped typed object with mix of required and optional properties and additionalProperties=false prevents access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       id: {
@@ -316,8 +316,8 @@ Deno.test("ParameterVariable using CustomType string", () => {
   assertStrictEquals(`${param}`, "{{myCustomTypeString}}");
 });
 
-Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with optional property yields object with no undefined property", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable using Custom Type with DefineParameter-wrapped typed object with optional property yields object with no undefined property", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       aString: {
@@ -339,8 +339,8 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
 });
 
-Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with required property yields object with no undefined property", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable using Custom Type with DefineParameter-wrapped typed object with required property yields object with no undefined property", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       aString: {
@@ -362,8 +362,8 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
 });
 
-Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with optional property and additionalProperties=true yields object that allows access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable using Custom Type with DefineParameter-wrapped typed object with optional property and additionalProperties=true yields object that allows access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       aString: {
@@ -388,8 +388,8 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
   assertStrictEquals(`${param.foo.bar}`, `{{${paramName}.foo.bar}}`);
 });
 
-Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with required property and additionalProperties=true yields object that allows access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable using Custom Type with DefineParameter-wrapped typed object with required property and additionalProperties=true yields object that allows access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       aString: {
@@ -414,8 +414,8 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
   assertStrictEquals(`${param.foo.bar}`, `{{${paramName}.foo.bar}}`);
 });
 
-Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with optional property and additionalProperties=false yields object that prevents access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable using Custom Type with DefineParameter-wrapped typed object with optional property and additionalProperties=false yields object that prevents access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       aString: {
@@ -441,8 +441,8 @@ Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed o
   assertStrictEquals(`${param.foo.bar}`, `{{${paramName}.foo.bar}}`);
 });
 
-Deno.test("ParameterVariable using Custom Type with DefineObject-wrapped typed object with required property and additionalProperties=false yields object that prevents access to additional properties", () => {
-  const obj = DefineObject({
+Deno.test("ParameterVariable using Custom Type with DefineParameter-wrapped typed object with required property and additionalProperties=false yields object that prevents access to additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       aString: {

@@ -1,9 +1,9 @@
-import { DefineObject } from "./objects.ts";
+import { DefineParameter } from "./objects.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import { assert, IsExact } from "../dev_deps.ts";
 
-Deno.test("DefineObject should allow for object property names to be specified in the required field", () => {
-  const obj = DefineObject({
+Deno.test("DefineParameter should allow for object property names to be specified in the required field", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       aString: {
@@ -20,9 +20,9 @@ Deno.test("DefineObject should allow for object property names to be specified i
 });
 
 /*
-TODO: DefineObject fails to constrain the required field to property names :(
-Deno.test("DefineObject should prevent non-object property names to be specified in the required field", () => {
-  const obj = DefineObject({
+TODO: DefineParameter fails to constrain the required field to property names :(
+Deno.test("DefineParameter should prevent non-object property names to be specified in the required field", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       aString: {

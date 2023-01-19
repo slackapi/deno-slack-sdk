@@ -17,7 +17,7 @@ import {
 } from "./types.ts";
 import { DefineType, Schema } from "../mod.ts";
 import SchemaTypes from "../schema/schema_types.ts";
-import { DefineObject } from "../types/objects.ts";
+import { DefineParameter } from "../types/objects.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
 // Any "failures" here will most likely be reflected in Type errors
@@ -218,14 +218,14 @@ Deno.test("EnrichedSlackFunctionHandler with only string output", () => {
   assertEqualsTypedValues(result.outputs?.out, "test");
 });
 
-Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapped typedobject with a required string property", () => {
+Deno.test("EnrichedSlackFunctionHandler with a required input DefineParameter-wrapped typedobject with a required string property", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
     source_file: "test.ts",
     input_parameters: {
       properties: {
-        anObject: DefineObject({
+        anObject: DefineParameter({
           type: Schema.types.object,
           properties: { in: { type: "string" } },
           required: ["in"],
@@ -235,7 +235,7 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
     },
     output_parameters: {
       properties: {
-        anObject: DefineObject({
+        anObject: DefineParameter({
           type: Schema.types.object,
           properties: { out: { type: "string" } },
           required: ["out"],
@@ -275,14 +275,14 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
   assertEqualsTypedValues(result.outputs?.anObject.out, "test");
 });
 
-Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapped typedobject with an optional string property", () => {
+Deno.test("EnrichedSlackFunctionHandler with a required input DefineParameter-wrapped typedobject with an optional string property", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
     source_file: "test.ts",
     input_parameters: {
       properties: {
-        anObject: DefineObject({
+        anObject: DefineParameter({
           type: Schema.types.object,
           properties: { in: { type: "string" } },
           required: [],
@@ -306,14 +306,14 @@ Deno.test("EnrichedSlackFunctionHandler with a required input DefineObject-wrapp
   );
 });
 
-Deno.test("EnrichedSlackFunctionHandler with a required output DefineObject-wrapped typedobject with mixed property requirements", () => {
+Deno.test("EnrichedSlackFunctionHandler with a required output DefineParameter-wrapped typedobject with mixed property requirements", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
     source_file: "test.ts",
     output_parameters: {
       properties: {
-        anObject: DefineObject({
+        anObject: DefineParameter({
           type: Schema.types.object,
           properties: { req: { type: "string" }, opt: { type: "string" } },
           required: ["req"],
@@ -411,7 +411,7 @@ Deno.test("EnrichedSlackFunctionHandler that returns error", () => {
 });
 
 Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
-  const myObject = DefineObject({
+  const myObject = DefineParameter({
     type: Schema.types.object,
     properties: {
       required_property: { type: "string" },
@@ -551,8 +551,8 @@ Deno.test("EnrichedSlackFunctionHandler using Custom Types", () => {
   };
 });
 
-Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of DefineObject-wrapped typed objects should honor required and optional properties and allow for referencing additional properties", () => {
-  const obj = DefineObject({
+Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of DefineParameter-wrapped typed objects should honor required and optional properties and allow for referencing additional properties", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       aString: {
@@ -630,8 +630,8 @@ Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of De
   handler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of DefineObject-wrapped typed objects should honor additionalProperties=false", () => {
-  const obj = DefineObject({
+Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of DefineParameter-wrapped typed objects should honor additionalProperties=false", () => {
+  const obj = DefineParameter({
     type: SchemaTypes.object,
     properties: {
       aString: {
@@ -777,14 +777,14 @@ Deno.test("EnrichedSlackFunctionHandler using untyped Arrays and typed arrays of
   assertEqualsTypedValues(sharedInputs, result.outputs);
 });
 
-Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects with additional properties", () => {
+Deno.test("EnrichedSlackFunctionHandler using DefineParameter-wrapped Objects with additional properties", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
     title: "Test",
     input_parameters: {
       properties: {
-        addlPropertiesObj: DefineObject({
+        addlPropertiesObj: DefineParameter({
           type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
@@ -797,7 +797,7 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects with 
     },
     output_parameters: {
       properties: {
-        addlPropertiesObj: DefineObject({
+        addlPropertiesObj: DefineParameter({
           type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
@@ -850,14 +850,14 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects with 
   result.outputs.addlPropertiesObj.anothaOne;
 });
 
-Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects without additional properties", () => {
+Deno.test("EnrichedSlackFunctionHandler using DefineParameter-wrapped Objects without additional properties", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
     title: "Test",
     input_parameters: {
       properties: {
-        noAddlPropertiesObj: DefineObject({
+        noAddlPropertiesObj: DefineParameter({
           type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
@@ -870,7 +870,7 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects witho
     },
     output_parameters: {
       properties: {
-        noAddlPropertiesObj: DefineObject({
+        noAddlPropertiesObj: DefineParameter({
           type: Schema.types.object,
           properties: {
             aString: { type: Schema.types.string },
@@ -919,14 +919,14 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject-wrapped Objects witho
   assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
 });
 
-Deno.test("EnrichedSlackFunctionHandler using DefineObject construct without required properties", () => {
+Deno.test("EnrichedSlackFunctionHandler using DefineParameter construct without required properties", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
     title: "Test",
     input_parameters: {
       properties: {
-        optObj: DefineObject({
+        optObj: DefineParameter({
           type: Schema.types.object,
           properties: {
             optString: { type: Schema.types.string },
@@ -937,7 +937,7 @@ Deno.test("EnrichedSlackFunctionHandler using DefineObject construct without req
     },
     output_parameters: {
       properties: {
-        optObj: DefineObject({
+        optObj: DefineParameter({
           type: Schema.types.object,
           properties: {
             optString: { type: Schema.types.string },

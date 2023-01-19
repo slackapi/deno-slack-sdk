@@ -5,7 +5,7 @@ import {
 } from "../parameters/types.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 
-export const DefineObject = <
+export const DefineParameter = <
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
   Def extends TypedObjectParameterDefinition<Props, RequiredProps>,

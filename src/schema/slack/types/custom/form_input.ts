@@ -1,8 +1,8 @@
 import SchemaTypes from "../../../schema_types.ts";
 import { DefineType } from "../../../../types/mod.ts";
-import { DefineObject } from "../../../../types/objects.ts";
+import { DefineParameter } from "../../../../types/objects.ts";
 
-const FormInputObject = DefineObject({
+const FormInputObject = DefineParameter({
   description: "Input fields to be shown on the form",
   type: SchemaTypes.object,
   properties: {
