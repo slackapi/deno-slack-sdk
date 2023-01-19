@@ -1,7 +1,7 @@
 import SchemaTypes from "../../../schema_types.ts";
 import { DefineType } from "../../../../types/mod.ts";
 import { UserContextType } from "./user_context.ts";
-import { DefineParameter } from "../../../../types/define_parameter.ts";
+import { DefineParameter } from "../../../../parameters/define_parameter.ts";
 
 const InteractivityObject = DefineParameter({
   description: "Context about a user interaction",

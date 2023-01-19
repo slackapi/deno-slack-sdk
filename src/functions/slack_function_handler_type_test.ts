@@ -17,7 +17,7 @@ import {
 } from "./types.ts";
 import { DefineType, Schema } from "../mod.ts";
 import SchemaTypes from "../schema/schema_types.ts";
-import { DefineParameter } from "../types/define_parameter.ts";
+import { DefineParameter } from "../parameters/define_parameter.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
 // Any "failures" here will most likely be reflected in Type errors
