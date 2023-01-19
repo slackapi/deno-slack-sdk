@@ -1,17 +1,9 @@
-import {
-  assert,
-  assertEquals,
-  assertExists,
-  CanBeUndefined,
-  CannotBeUndefined,
-  IsAny,
-} from "../dev_deps.ts";
+import { assert, assertEquals, assertExists, IsAny } from "../dev_deps.ts";
 import { assertEqualsTypedValues } from "../test_utils.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
 import { DefineFunction } from "./mod.ts";
 import { EnrichedSlackFunctionHandler } from "./types.ts";
-import { DefineType, Schema } from "../mod.ts";
-import { DefineObject } from "../types/objects.ts";
+import { Schema } from "../mod.ts";
 
 // TODO: unwrapped typed object, in a custom type, fed to a typed array, yields an array of `any` items at runtime
 /*
