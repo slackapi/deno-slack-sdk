@@ -42,6 +42,7 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
     const ts = new Date();
     const token = args.token || "slack-function-test-token";
 
+    // TODO: can we reuse some of our existing types for modeling payloads to ensure this structure doesnt become out of date?
     return {
       inputs: (args.inputs || {}) as FunctionRuntimeParameters<
         InputParameters,

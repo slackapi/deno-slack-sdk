@@ -1,13 +1,21 @@
-import { assert, assertEquals, assertExists, IsAny } from "../dev_deps.ts";
-import { assertEqualsTypedValues } from "../test_utils.ts";
-import { SlackFunctionTester } from "./tester/mod.ts";
-import { DefineFunction } from "./mod.ts";
-import { EnrichedSlackFunctionHandler } from "./types.ts";
-import { Schema } from "../mod.ts";
+import { assert, assertEquals, assertExists, IsAny } from "../../../src/dev_deps.ts";
+import { assertEqualsTypedValues } from "../../../src/test_utils.ts";
+import { SlackFunctionTester } from "../../../src/functions/tester/mod.ts";
+import { DefineFunction } from "../../../src/mod.ts";
+import { EnrichedSlackFunctionHandler } from "../../../src/functions/types.ts";
+import { Schema } from "../../../src/mod.ts";
+
+/**
+ * Custom Function handler tests, exercising inputs of unwrapped typed object parameters
+ * Unwrapped typed object parameters are object parameters that are not defined using the DefineParameter helper
+ * TODO: some of these are commented out and failing as we attempt to address the issues
+ * TODO: May want to split this file up down the road if it gets too big, possibly organize under further sub-dirs
+ */
+
 
 // TODO: unwrapped typed object, in a custom type, fed to a typed array, yields an array of `any` items at runtime
 /*
-Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of unwrapped typed objects should honor required and optional properties", () => {
+Deno.test("Custom Function using Typed Arrays of Custom Types of unwrapped typed objects should honor required and optional properties", () => {
   const obj = {
     type: Schema.types.object,
     properties: {
@@ -84,7 +92,7 @@ Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of Custom Types of un
   handler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of unwrapped typed objects should honor required and optional properties", () => {
+Deno.test("Custom Function using Typed Arrays of unwrapped typed objects should honor required and optional properties", () => {
   const obj = {
     type: Schema.types.object,
     properties: {
@@ -155,7 +163,8 @@ Deno.test("EnrichedSlackFunctionHandler using Typed Arrays of unwrapped typed ob
   handler(createContext({ inputs: sharedInputs }));
 });
 */
-Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects with additional properties", () => {
+
+Deno.test("Custom Function using an unwrapped Typed Object input with additionalProperties=undefined should allow referencing additional properties in a function handler context", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
@@ -219,7 +228,7 @@ Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects with additional 
   assertEquals(result.outputs?.addlPropertiesObj.anythingElse, undefined);
 });
 
-Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects without additional properties", () => {
+Deno.test("Custom Function using an unwrapped Typed Object input with additionalProperties=false should prevent referencing additional properties in a function handler context", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
@@ -285,57 +294,4 @@ Deno.test("EnrichedSlackFunctionHandler using unwrapped Objects without addition
 
   // @ts-expect-error anythingElse cant exist
   assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
-});
-
-Deno.test("EnrichedSlackFunctionHandler using unwrapped untyped Objects", () => {
-  const TestFunction = DefineFunction({
-    callback_id: "my_callback_id",
-    source_file: "test",
-    title: "Test",
-    input_parameters: {
-      properties: {
-        untypedObj: {
-          type: Schema.types.object,
-        },
-      },
-      required: ["untypedObj"],
-    },
-    output_parameters: {
-      properties: {
-        untypedObj: {
-          type: Schema.types.object,
-        },
-      },
-      required: ["untypedObj"],
-    },
-  });
-
-  const sharedInputs = {
-    untypedObj: { aString: "hi" },
-  };
-
-  const handler: EnrichedSlackFunctionHandler<typeof TestFunction.definition> =
-    (
-      { inputs },
-    ) => {
-      const { untypedObj } = inputs;
-
-      assert<IsAny<typeof untypedObj>>(true);
-      assert<IsAny<typeof untypedObj.aString>>(true);
-
-      return {
-        outputs: {
-          untypedObj: { literallyAnything: "ok" },
-        },
-      };
-    };
-
-  const { createContext } = SlackFunctionTester(TestFunction);
-
-  const result = handler(createContext({ inputs: sharedInputs }));
-
-  assertExists(result.outputs?.untypedObj);
-  if (result.outputs?.untypedObj) {
-    assert<IsAny<typeof result.outputs.untypedObj>>(true);
-  }
 });
