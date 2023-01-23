@@ -96,7 +96,7 @@ Deno.test("ParameterVariable using Custom Type with unwrapped typed object with 
   assert<CannotBeUndefined<typeof param.aString>>(true);
   assertStrictEquals(`${param}`, "{{myCustomType}}");
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
-  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{myCustomType.foo.bar}}");
 });
 
 Deno.test("ParameterVariable using Custom Type with unwrapped typed object with optional property and additionalProperties=false yields object that prevents access to additional properties", () => {
@@ -119,7 +119,7 @@ Deno.test("ParameterVariable using Custom Type with unwrapped typed object with 
   assertStrictEquals(`${param}`, "{{myCustomType}}");
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
   //@ts-expect-error foo doesn't exist
-  assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
+  assertStrictEquals(`${param.foo.bar}`, "{{myCustomType.foo.bar}}");
 });
 
 /**
