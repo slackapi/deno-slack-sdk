@@ -61,12 +61,12 @@ export type ParameterVariableType<
   : SingleParameterVariable;
 
 // deno-lint-ignore ban-types
-type SingleParameterVariable = {};
+export type SingleParameterVariable = {};
 
 // deno-lint-ignore no-explicit-any
 type UntypedObjectParameterVariableType = any;
 
-type ObjectParameterPropertyTypes<
+export type ObjectParameterPropertyTypes<
   Props extends TypedObjectProperties,
 > = {
   [name in keyof Props]: ParameterVariableType<
