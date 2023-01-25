@@ -14,29 +14,29 @@ functions.
 2. With this `_scripts` directory as your working directory, run the generate
    script:
 
-```
-> ./generate
-```
+   ```sh
+   > ./generate
+   ```
 
 3. This will output something like the following:
 
-```
-Generating code for Slack Function: add_pin
-Generating code for Slack Function: add_user_to_usergroup
-Generating code for Slack Function: archive_channel
-Generating code for Slack Function: create_channel
-Generating code for Slack Function: create_usergroup
-Generating code for Slack Function: delay
-Generating code for Slack Function: invite_user_to_channel
-Generating code for Slack Function: rename_channel
-Generating code for Slack Function: send_ephemeral_message
-Generating code for Slack Function: send_message
-Generating code for Slack Function: update_channel_topic
-Wrote 11 files
-Updated functions module export
-Formatting Slack function files...
-Linting Slack function files...
-```
+   ```txt
+   Generating code for Slack Function: add_pin
+   Generating code for Slack Function: add_user_to_usergroup
+   Generating code for Slack Function: archive_channel
+   Generating code for Slack Function: create_channel
+   Generating code for Slack Function: create_usergroup
+   Generating code for Slack Function: delay
+   Generating code for Slack Function: invite_user_to_channel
+   Generating code for Slack Function: rename_channel
+   Generating code for Slack Function: send_ephemeral_message
+   Generating code for Slack Function: send_message
+   Generating code for Slack Function: update_channel_topic
+   Wrote 11 files
+   Updated functions module export
+   Formatting Slack function files...
+   Linting Slack function files...
+   ```
 
 If it completes without any linter errors, you should be good to go, with new,
 formatted and linted TypeScript files for all of the Slack Functions included in
