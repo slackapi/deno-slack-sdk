@@ -1,25 +1,24 @@
-import { FunctionsPayload } from "./types.ts";
-import { SlackFunctionModTemplate, SlackFunctionTemplate } from "./template.ts";
+import {
+  getSlackFunctions,
+  isValidFunctionFile,
+  redText,
+  yellowText,
+} from "./utils.ts";
 
-const yellow = "\x1b[38;5;214m";
-const reset = "\x1b[0m";
-const colorizeText = (text: string) => yellow + text + reset;
+const slackFunctions = await getSlackFunctions();
 
-const functionsPayload: FunctionsPayload = await Deno.readTextFile(
-  "functions.json",
-).then(JSON.parse);
-
-// Filter out any non slack functions (i.e. has an app_id)
-const slackFunctionCallbackIds = functionsPayload.functions.filter((fn) =>
-  !fn.app_id
-).map((slackFunction) => slackFunction.callback_id);
+// We just need the CallbackIds here
+const slackFunctionCallbackIds = new Set(
+  slackFunctions.map((slackFunction) => slackFunction.callback_id),
+);
 
 const remove_file = async (filePath: string) => {
   try {
     await Deno.remove(filePath);
   } catch (error) {
     if (error instanceof Deno.errors.NotFound) {
-      console.warn(`${filePath} was not found while trying to remove it`);
+      console.warn(`Could not remove file!`);
+      console.warn(`File not found: ${yellowText(filePath)}`);
     } else {
       throw error;
     }
@@ -27,16 +26,17 @@ const remove_file = async (filePath: string) => {
 };
 
 for await (const file of Deno.readDir(`../`)) {
-  if (file.name.endsWith("_test.ts")) {
-    continue;
-  }
-  if (["_scripts", "mod.ts"].includes(file.name)) {
+  if (!isValidFunctionFile(file.name)) {
     continue;
   }
   const callback_id: string = file.name.split(".")[0];
-  if (slackFunctionCallbackIds.includes(callback_id)) {
-    console.log(file.name);
+  if (slackFunctionCallbackIds.has(callback_id)) {
     continue;
   }
+  console.log(
+    `Function ${callback_id} not found in function list, removing file ${
+      redText(`${callback_id}.ts`)
+    } `,
+  );
   await remove_file(`../${callback_id}.ts`);
 }

@@ -189,12 +189,16 @@ export const SlackFunctionModTemplate = (slackFunctions: FunctionRecord[]) => {
   `;
 };
 
-const renderImport = (callbackId: string) => {
-  const functionName = pascalCase(callbackId);
-  return `import ${functionName} from "./${callbackId}.ts";`;
+export const getFunctionName = (callbackId: string) => {
+  return pascalCase(callbackId);
+};
+
+export const renderImport = (callbackId: string) => {
+  return `import ${getFunctionName(callbackId)} from "./${callbackId}.ts";`;
 };
 
 const renderFunctionPropWithType = (fn: FunctionRecord) => {
-  const functionName = pascalCase(fn.callback_id);
-  return `${functionName}: ${functionName}`;
+  return `${getFunctionName(fn.callback_id)}: ${
+    getFunctionName(fn.callback_id)
+  }`;
 };
