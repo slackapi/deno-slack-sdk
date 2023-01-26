@@ -1,5 +1,5 @@
 import {
-  ParameterDefinitionWithStupidGenerics,
+  ParameterDefinitionWithGenerics,
   TypedObjectParameterDefinition,
   TypedObjectProperties,
   TypedObjectRequiredProperties,
@@ -15,7 +15,7 @@ export type CustomTypeDefinition<
   RequiredProps extends TypedObjectRequiredProperties<Props>,
 > =
   & ICustomTypeDefinition
-  & ParameterDefinitionWithStupidGenerics<Props, RequiredProps>;
+  & ParameterDefinitionWithGenerics<Props, RequiredProps>;
 
 export type CustomObjectTypeDefinition<
   Props extends TypedObjectProperties,

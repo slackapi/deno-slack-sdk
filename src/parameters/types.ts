@@ -24,7 +24,7 @@ export type ParameterDefinition =
   | PrimitiveSlackParameterDefinition
   | ComplexParameterDefinition;
 
-export type ParameterDefinitionWithStupidGenerics<
+export type ParameterDefinitionWithGenerics<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
 > =

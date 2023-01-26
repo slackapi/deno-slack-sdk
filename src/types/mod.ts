@@ -37,7 +37,6 @@ export function DefineType<
   definition: Def,
 ): CustomType<Props, RequiredProps, Def> {
   if (isTypedObject(definition)) {
-    definition;
     const obj: CustomObjectTypeDefinition<Props, RequiredProps> = definition;
     return new CustomObjectType(obj) as unknown as CustomType<
       Props,
@@ -48,7 +47,7 @@ export function DefineType<
   return new CustomType(definition);
 }
 
-export class CustomType<
+abstract class BaseCustomType<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
   Def extends CustomTypeDefinition<Props, RequiredProps>,
@@ -66,6 +65,8 @@ export class CustomType<
     this.title = definition.title;
   }
 
+  abstract registerParameterTypes(manifest: SlackManifest): void;
+
   private generateReferenceString() {
     return this.id.includes("#/") ? this.id : `#/types/${this.id}`;
   }
@@ -77,6 +78,19 @@ export class CustomType<
     return this.generateReferenceString();
   }
 
+  export(): ManifestCustomTypeSchema {
+    // remove name from the definition we pass to the manifest
+    const { name: _n, ...definition } = this.definition;
+    // Using JSON.stringify to force any custom types into their string reference
+    return JSON.parse(JSON.stringify(definition));
+  }
+}
+
+export class CustomType<
+  Props extends TypedObjectProperties,
+  RequiredProps extends TypedObjectRequiredProperties<Props>,
+  Def extends CustomTypeDefinition<Props, RequiredProps>,
+> extends BaseCustomType<Props, RequiredProps, Def> implements ICustomType {
   registerParameterTypes(manifest: SlackManifest) {
     if (isCustomType(this.definition.type)) {
       manifest.registerType(this.definition.type);
@@ -92,43 +106,13 @@ export class CustomType<
       });
     }
   }
-  export(): ManifestCustomTypeSchema {
-    // remove name from the definition we pass to the manifest
-    const { name: _n, ...definition } = this.definition;
-    // Using JSON.stringify to force any custom types into their string reference
-    return JSON.parse(JSON.stringify(definition));
-  }
 }
 
 export class CustomObjectType<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
   Def extends CustomObjectTypeDefinition<Props, RequiredProps>,
-> implements ICustomType {
-  public id: string;
-  public title: string | undefined;
-  public description: string | undefined;
-
-  constructor(
-    public definition: Def,
-  ) {
-    this.id = definition.name;
-    this.definition = definition;
-    this.description = definition.description;
-    this.title = definition.title;
-  }
-
-  private generateReferenceString() {
-    return this.id.includes("#/") ? this.id : `#/types/${this.id}`;
-  }
-
-  toString() {
-    return this.generateReferenceString();
-  }
-  toJSON() {
-    return this.generateReferenceString();
-  }
-
+> extends BaseCustomType<Props, RequiredProps, Def> implements ICustomType {
   registerParameterTypes(manifest: SlackManifest) {
     if (isCustomType(this.definition.type)) {
       manifest.registerType(this.definition.type);
@@ -139,11 +123,5 @@ export class CustomObjectType<
         }
       });
     }
-  }
-  export(): ManifestCustomTypeSchema {
-    // remove name from the definition we pass to the manifest
-    const { name: _n, ...definition } = this.definition;
-    // Using JSON.stringify to force any custom types into their string reference
-    return JSON.parse(JSON.stringify(definition));
   }
 }
