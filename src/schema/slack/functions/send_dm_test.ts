@@ -33,7 +33,7 @@ Deno.test("SendDm generates valid FunctionManifests", () => {
       },
     },
     output_parameters: {
-      required: ["message_ts", "message_link", "message_context"],
+      required: ["message_ts", "message_link"],
       properties: {
         message_ts: {
           type: SchemaTypes.string,
@@ -50,10 +50,6 @@ Deno.test("SendDm generates valid FunctionManifests", () => {
         interactivity: {
           type: SlackTypes.interactivity,
           description: "Interactivity context",
-        },
-        message_context: {
-          type: SchemaTypes.string,
-          description: "Reference to the message sent",
         },
       },
     },

@@ -27,7 +27,7 @@ Deno.test("InviteUserToChannel generates valid FunctionManifests", () => {
       },
     },
     output_parameters: {
-      required: [],
+      required: ["user_id"],
       properties: {
         user_id: {
           type: SlackTypes.user_id,
