@@ -296,16 +296,7 @@ Deno.test("Custom Function using an unwrapped Typed Object input with additional
   assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
 });
 
-Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with mixed required/optional properties should provide correct typedobject typing in a function handler context and should complain if typedobject output does not include required property", () => {
-  const myObject = {
-    type: Schema.types.object,
-    properties: {
-      required_property: { type: "string" },
-      optional_property: { type: "string" },
-    },
-    required: ["required_property"],
-  };
-
+Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with mixed required/optional properties should provide correct typedobject typing in a function handler context", () => {
   const myType = DefineType({
     name: "custom",
     type: Schema.types.object,
@@ -322,46 +313,23 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
     title: "Test",
     input_parameters: {
       properties: {
-        interactivity: {
-          type: Schema.slack.types.interactivity,
-        },
-        user_context: {
-          type: Schema.slack.types.user_context,
-        },
         custom_type: {
           type: myType,
         },
       },
-      required: ["interactivity", "user_context", "custom_type"],
+      required: ["custom_type"],
     },
     output_parameters: {
       properties: {
-        interactivity: {
-          type: Schema.slack.types.interactivity,
-        },
-        user_context: {
-          type: Schema.slack.types.user_context,
-        },
         custom_type: {
           type: myType,
         },
       },
-      required: ["interactivity", "user_context", "custom_type"],
+      required: ["custom_type"],
     },
   });
 
   const sharedInputs = {
-    interactivity: {
-      interactivity_pointer: "interactivity_pointer",
-      interactor: {
-        id: "interactor id",
-        secret: "interactor secret",
-      },
-    },
-    user_context: {
-      id: "user_context id",
-      secret: "user_context secret",
-    },
     custom_type: {
       required_property: "i am a necessity",
     },
@@ -372,43 +340,12 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
   > = (
     { inputs },
   ) => {
-    const { interactivity, user_context, custom_type } = inputs;
+    const { custom_type } = inputs;
 
-    assert<CannotBeUndefined<typeof interactivity.interactivity_pointer>>(
-      true,
-    );
-    assert<CannotBeUndefined<typeof interactivity.interactor.id>>(true);
-    assert<CannotBeUndefined<typeof interactivity.interactor.secret>>(true);
-    assert<CannotBeUndefined<typeof user_context.id>>(true);
-    assert<CannotBeUndefined<typeof user_context.secret>>(true);
     assert<IsAny<typeof custom_type>>(false);
     assert<IsExact<typeof custom_type.required_property, string>>(true);
     assert<CanBeUndefined<typeof custom_type.optional_property>>(true);
     assert<CanBe<typeof custom_type.optional_property, string>>(true);
-
-    assertEqualsTypedValues(interactivity, sharedInputs.interactivity);
-    assertEqualsTypedValues(
-      interactivity.interactivity_pointer,
-      sharedInputs.interactivity.interactivity_pointer,
-    );
-    assertEqualsTypedValues(
-      interactivity.interactor.id,
-      sharedInputs.interactivity.interactor.id,
-    );
-    assertEqualsTypedValues(
-      interactivity.interactor.secret,
-      sharedInputs.interactivity.interactor.secret,
-    );
-    assertEqualsTypedValues(user_context, sharedInputs.user_context);
-    assertEqualsTypedValues(
-      user_context.secret,
-      sharedInputs.user_context.secret,
-    );
-    assertEqualsTypedValues(user_context.id, sharedInputs.user_context.id);
-    assertEqualsTypedValues(
-      user_context.secret,
-      sharedInputs.user_context.secret,
-    );
 
     return {
       outputs: inputs,
@@ -419,11 +356,48 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
 
   const result = validHandler(createContext({ inputs: sharedInputs }));
   assertEqualsTypedValues(sharedInputs, result.outputs);
-  assertExists(result.outputs?.interactivity.interactivity_pointer);
-  assertExists(result.outputs?.interactivity.interactor.id);
-  assertExists(result.outputs?.interactivity.interactor.secret);
-  assertExists(result.outputs?.user_context.id);
-  assertExists(result.outputs?.user_context.secret);
+});
+
+Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with mixed required/optional properties should complain if required output not provided", () => {
+  const myType = DefineType({
+    name: "custom",
+    type: Schema.types.object,
+    properties: {
+      required_property: { type: "string" },
+      optional_property: { type: "string" },
+    },
+    required: ["required_property"],
+  });
+
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        custom_type: {
+          type: myType,
+        },
+      },
+      required: ["custom_type"],
+    },
+    output_parameters: {
+      properties: {
+        custom_type: {
+          type: myType,
+        },
+      },
+      required: ["custom_type"],
+    },
+  });
+
+  const sharedInputs = {
+    custom_type: {
+      required_property: "i am a necessity",
+    },
+  };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
 
   // @ts-expect-error Type error if required property isn't returned
   const _invalidHandler: EnrichedSlackFunctionHandler<
@@ -431,15 +405,195 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
   > = (
     { inputs },
   ) => {
-    const { interactivity, user_context } = inputs;
     return {
       outputs: {
         custom_type: {
           optional_property: "im useless",
         },
-        interactivity,
-        user_context,
       },
     };
   };
+});
+
+Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with additionalProperties=undefined should allow for referencing additional properties", () => {
+  const myType = DefineType({
+    name: "custom",
+    type: Schema.types.object,
+    properties: {
+      required_property: { type: "string" },
+      optional_property: { type: "string" },
+    },
+    required: ["required_property"],
+  });
+
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        custom_type: {
+          type: myType,
+        },
+      },
+      required: ["custom_type"],
+    },
+    output_parameters: {
+      properties: {
+        custom_type: {
+          type: myType,
+        },
+      },
+      required: ["custom_type"],
+    },
+  });
+
+  const sharedInputs = {
+    custom_type: {
+      required_property: "i am a necessity",
+    },
+  };
+
+  const validHandler: EnrichedSlackFunctionHandler<
+    typeof TestFunction.definition
+  > = (
+    { inputs },
+  ) => {
+    const { custom_type } = inputs;
+
+    assert<IsAny<typeof custom_type>>(false);
+    assert<IsAny<typeof custom_type.something>>(true);
+
+    return {
+      outputs: inputs,
+    };
+  };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = validHandler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(sharedInputs, result.outputs);
+});
+
+Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with additionalProperties=true should allow for referencing additional properties", () => {
+  const myType = DefineType({
+    name: "custom",
+    type: Schema.types.object,
+    properties: {
+      required_property: { type: "string" },
+      optional_property: { type: "string" },
+    },
+    required: ["required_property"],
+    additionalProperties: true
+  });
+
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        custom_type: {
+          type: myType,
+        },
+      },
+      required: ["custom_type"],
+    },
+    output_parameters: {
+      properties: {
+        custom_type: {
+          type: myType,
+        },
+      },
+      required: ["custom_type"],
+    },
+  });
+
+  const sharedInputs = {
+    custom_type: {
+      required_property: "i am a necessity",
+    },
+  };
+
+  const validHandler: EnrichedSlackFunctionHandler<
+    typeof TestFunction.definition
+  > = (
+    { inputs },
+  ) => {
+    const { custom_type } = inputs;
+
+    assert<IsAny<typeof custom_type>>(false);
+    assert<IsAny<typeof custom_type.something>>(true);
+
+    return {
+      outputs: inputs,
+    };
+  };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = validHandler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(sharedInputs, result.outputs);
+});
+
+Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with additionalProperties=false should prevent referencing additional properties", () => {
+  const myType = DefineType({
+    name: "custom",
+    type: Schema.types.object,
+    properties: {
+      required_property: { type: "string" },
+      optional_property: { type: "string" },
+    },
+    required: ["required_property"],
+    additionalProperties: false
+  });
+
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        custom_type: {
+          type: myType,
+        },
+      },
+      required: ["custom_type"],
+    },
+    output_parameters: {
+      properties: {
+        custom_type: {
+          type: myType,
+        },
+      },
+      required: ["custom_type"],
+    },
+  });
+
+  const sharedInputs = {
+    custom_type: {
+      required_property: "i am a necessity",
+    },
+  };
+
+  const validHandler: EnrichedSlackFunctionHandler<
+    typeof TestFunction.definition
+  > = (
+    { inputs },
+  ) => {
+    const { custom_type } = inputs;
+
+    assert<IsAny<typeof custom_type>>(false);
+    // @ts-expect-error somethingElse cant exist
+    custom_type.somethingElse;
+
+    return {
+      outputs: inputs,
+    };
+  };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = validHandler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(sharedInputs, result.outputs);
 });
