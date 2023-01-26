@@ -24,6 +24,15 @@ export type ParameterDefinition =
   | PrimitiveSlackParameterDefinition
   | ComplexParameterDefinition;
 
+export type ParameterDefinitionWithStupidGenerics<
+  Props extends TypedObjectProperties,
+  RequiredProps extends TypedObjectRequiredProperties<Props>,
+> =
+  | PrimitiveParameterDefinition
+  | PrimitiveSlackParameterDefinition
+  | CustomTypeParameterDefinition
+  | TypedObjectParameterDefinition<Props, RequiredProps>;
+
 type PrimitiveParameterDefinition =
   | BooleanParameterDefinition
   | StringParameterDefinition

@@ -381,6 +381,7 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
     assert<CannotBeUndefined<typeof interactivity.interactor.secret>>(true);
     assert<CannotBeUndefined<typeof user_context.id>>(true);
     assert<CannotBeUndefined<typeof user_context.secret>>(true);
+    assert<IsAny<typeof custom_type>>(false);
     assert<IsExact<typeof custom_type.required_property, string>>(true);
     assert<CanBeUndefined<typeof custom_type.optional_property>>(true);
     assert<CanBe<typeof custom_type.optional_property, string>>(true);
