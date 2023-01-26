@@ -14,10 +14,6 @@ const slackFunctionCallbackIds = functionsPayload.functions.filter((fn) =>
   !fn.app_id
 ).map((slackFunction) => slackFunction.callback_id);
 
-const remove_file_and_test = async (callback_id: string) => {
-  await remove_file(`../${callback_id}.ts`);
-};
-
 const remove_file = async (filePath: string) => {
   try {
     await Deno.remove(filePath);
@@ -42,5 +38,5 @@ for await (const file of Deno.readDir(`../`)) {
     console.log(file.name);
     continue;
   }
-  await remove_file_and_test(callback_id);
+  await remove_file(`../${callback_id}.ts`);
 }
