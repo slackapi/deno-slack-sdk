@@ -1,10 +1,11 @@
 # Generating Slack Function Source Files
 
-This script will generate the necessary function TypeScript files in the
-`schema/slack/functions` directory, i.e.
-`schema/slack/functions/send_message.ts`. It will also update the
-`schema/slack/functions/mod.ts` file to import/export all of the defined
-functions.
+This script will generate the necessary function TypeScript files along with
+ their tests in the `schema/slack/functions` directory, i.e.
+`schema/slack/functions/send_message.ts` and `schema/slack/functions/send_message_test.ts`.
+It will also update the `schema/slack/functions/mod.ts` file to import/export all of the defined
+functions. It will also remove outdated function TypeScript files but not
+their corresponding test, the tests must be removed manually.
 
 ## Instructions
 
@@ -34,6 +35,17 @@ functions.
    Generating code for Slack Function: update_channel_topic
    Wrote 11 files
    Updated functions module export
+   Generating unit test for Slack Function: add_pin
+   Generating unit test for Slack Function: add_user_to_usergroup
+   Generating unit test for Slack Function: archive_channel
+   Generating unit test for Slack Function: create_channel
+   Generating unit test for Slack Function: create_usergroup
+   Generating unit test for Slack Function: delay
+   Generating unit test for Slack Function: invite_user_to_channel
+   Generating unit test for Slack Function: rename_channel
+   Generating unit test for Slack Function: send_ephemeral_message
+   Generating unit test for Slack Function: send_message
+   Generating unit test for Slack Function: update_channel_topic
    Formatting Slack function files...
    Linting Slack function files...
    ```
