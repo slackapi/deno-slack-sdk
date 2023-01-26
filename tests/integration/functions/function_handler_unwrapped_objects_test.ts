@@ -1,7 +1,7 @@
-import { assert, assertEquals, assertExists, IsAny } from "../../../src/dev_deps.ts";
+import { assert, assertEquals, assertExists, CanBe, CanBeUndefined, CannotBeUndefined, IsAny, IsExact } from "../../../src/dev_deps.ts";
 import { assertEqualsTypedValues } from "../../../src/test_utils.ts";
 import { SlackFunctionTester } from "../../../src/functions/tester/mod.ts";
-import { DefineFunction } from "../../../src/mod.ts";
+import { DefineFunction, DefineType } from "../../../src/mod.ts";
 import { EnrichedSlackFunctionHandler } from "../../../src/functions/types.ts";
 import { Schema } from "../../../src/mod.ts";
 
@@ -294,4 +294,151 @@ Deno.test("Custom Function using an unwrapped Typed Object input with additional
 
   // @ts-expect-error anythingElse cant exist
   assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
+});
+
+Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with mixed required/optional properties should provide correct typedobject typing in a function handler context and should complain if typedobject output does not include required property", () => {
+  const myObject = {
+    type: Schema.types.object,
+    properties: {
+      required_property: { type: "string" },
+      optional_property: { type: "string" },
+    },
+    required: ["required_property"],
+  };
+
+  const myType = DefineType({
+    name: "custom",
+    type: Schema.types.object,
+    properties: {
+      required_property: { type: "string" },
+      optional_property: { type: "string" },
+    },
+    required: ["required_property"],
+  });
+
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        interactivity: {
+          type: Schema.slack.types.interactivity,
+        },
+        user_context: {
+          type: Schema.slack.types.user_context,
+        },
+        custom_type: {
+          type: myType,
+        },
+      },
+      required: ["interactivity", "user_context", "custom_type"],
+    },
+    output_parameters: {
+      properties: {
+        interactivity: {
+          type: Schema.slack.types.interactivity,
+        },
+        user_context: {
+          type: Schema.slack.types.user_context,
+        },
+        custom_type: {
+          type: myType,
+        },
+      },
+      required: ["interactivity", "user_context", "custom_type"],
+    },
+  });
+
+  const sharedInputs = {
+    interactivity: {
+      interactivity_pointer: "interactivity_pointer",
+      interactor: {
+        id: "interactor id",
+        secret: "interactor secret",
+      },
+    },
+    user_context: {
+      id: "user_context id",
+      secret: "user_context secret",
+    },
+    custom_type: {
+      required_property: "i am a necessity",
+    },
+  };
+
+  const validHandler: EnrichedSlackFunctionHandler<
+    typeof TestFunction.definition
+  > = (
+    { inputs },
+  ) => {
+    const { interactivity, user_context, custom_type } = inputs;
+
+    assert<CannotBeUndefined<typeof interactivity.interactivity_pointer>>(
+      true,
+    );
+    assert<CannotBeUndefined<typeof interactivity.interactor.id>>(true);
+    assert<CannotBeUndefined<typeof interactivity.interactor.secret>>(true);
+    assert<CannotBeUndefined<typeof user_context.id>>(true);
+    assert<CannotBeUndefined<typeof user_context.secret>>(true);
+    assert<IsExact<typeof custom_type.required_property, string>>(true);
+    assert<CanBeUndefined<typeof custom_type.optional_property>>(true);
+    assert<CanBe<typeof custom_type.optional_property, string>>(true);
+
+    assertEqualsTypedValues(interactivity, sharedInputs.interactivity);
+    assertEqualsTypedValues(
+      interactivity.interactivity_pointer,
+      sharedInputs.interactivity.interactivity_pointer,
+    );
+    assertEqualsTypedValues(
+      interactivity.interactor.id,
+      sharedInputs.interactivity.interactor.id,
+    );
+    assertEqualsTypedValues(
+      interactivity.interactor.secret,
+      sharedInputs.interactivity.interactor.secret,
+    );
+    assertEqualsTypedValues(user_context, sharedInputs.user_context);
+    assertEqualsTypedValues(
+      user_context.secret,
+      sharedInputs.user_context.secret,
+    );
+    assertEqualsTypedValues(user_context.id, sharedInputs.user_context.id);
+    assertEqualsTypedValues(
+      user_context.secret,
+      sharedInputs.user_context.secret,
+    );
+
+    return {
+      outputs: inputs,
+    };
+  };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = validHandler(createContext({ inputs: sharedInputs }));
+  assertEqualsTypedValues(sharedInputs, result.outputs);
+  assertExists(result.outputs?.interactivity.interactivity_pointer);
+  assertExists(result.outputs?.interactivity.interactor.id);
+  assertExists(result.outputs?.interactivity.interactor.secret);
+  assertExists(result.outputs?.user_context.id);
+  assertExists(result.outputs?.user_context.secret);
+
+  // @ts-expect-error Type error if required property isn't returned
+  const _invalidHandler: EnrichedSlackFunctionHandler<
+    typeof TestFunction.definition
+  > = (
+    { inputs },
+  ) => {
+    const { interactivity, user_context } = inputs;
+    return {
+      outputs: {
+        custom_type: {
+          optional_property: "im useless",
+        },
+        interactivity,
+        user_context,
+      },
+    };
+  };
 });

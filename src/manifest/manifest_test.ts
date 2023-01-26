@@ -32,6 +32,7 @@ Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack 
     icon: "icon.png",
     botScopes: ["channels:history", "chat:write", "commands"],
   };
+
   assert<IsExact<typeof definition, ISlackManifestRunOnSlack>>(true);
   assert<IsExact<typeof definition, ISlackManifestRemote>>(false);
 });
