@@ -37,10 +37,10 @@ export type PossibleParameterKeys<
 > = (keyof ParameterSetInternal)[];
 
 export type ParameterPropertiesDefinition<
-  Parameters extends ParameterSetDefinition,
-  Required extends PossibleParameterKeys<Parameters>,
+  Params extends ParameterSetDefinition,
+  Required extends PossibleParameterKeys<Params>,
 > = {
-  properties: Parameters;
+  properties: Params;
   required: Required;
 };
 
