@@ -65,7 +65,6 @@ Deno.test("ParameterVariable unwrapped typed object with all optional properties
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
 
-/*
 // TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
 Deno.test("ParameterVariable unwrapped typed object with all required properties should yield object with properties that cannot be undefined", () => {
   const obj = {
@@ -111,7 +110,6 @@ Deno.test("ParameterVariable unwrapped typed object with mix of optional and req
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
-*/
 
 Deno.test("ParameterVariable unwrapped typed object with all optional properties and undefined additionalProperties allows access to additional properties", () => {
   const param = ParameterVariable("", "incident", {
@@ -261,7 +259,7 @@ Deno.test("ParameterVariable unwrapped typed object with all optional properties
   //@ts-expect-error foo doesn't exist
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
-/*
+
 // TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
 Deno.test("ParameterVariable unwrapped typed object with all required properties and additionalProperties=false prevents access to additional properties", () => {
   const param = ParameterVariable("", "incident", {
@@ -309,4 +307,3 @@ Deno.test("ParameterVariable unwrapped typed object with mix of required and opt
   //@ts-expect-error foo doesn't exist
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
-*/

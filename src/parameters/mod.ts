@@ -54,8 +54,7 @@ export type ParameterVariableType<
       IncreaseDepth<CurrentDepth>
     >
   // If the ParameterVariable is of type object, allow access to the object's properties
-  : Def extends TypedObjectParameterDefinition<infer _P, infer _RP>
-    ? ObjectParameterVariableType<Def>
+  : Def extends TypedObjectParameter ? ObjectParameterVariableType<Def>
   : Def extends UntypedObjectParameterDefinition
     ? UntypedObjectParameterVariableType
   : SingleParameterVariable;
