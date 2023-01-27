@@ -7,21 +7,21 @@ import {
 import { SlackManifest } from "../manifest/mod.ts";
 import { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
 
-export type ICustomTypeDefinition = {
+type CustomTypeProperties = {
   name: string;
 };
 export type CustomTypeDefinition<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
 > =
-  & ICustomTypeDefinition
+  & CustomTypeProperties
   & ParameterDefinitionWithGenerics<Props, RequiredProps>;
 
 export type CustomObjectTypeDefinition<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
 > =
-  & ICustomTypeDefinition
+  & CustomTypeProperties
   & TypedObjectParameterDefinition<Props, RequiredProps>;
 
 export interface ICustomType<
