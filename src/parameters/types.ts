@@ -24,6 +24,14 @@ export type ParameterDefinition =
   | PrimitiveSlackParameterDefinition
   | ComplexParameterDefinition;
 
+/**
+ * Only used for defining Custom Types via `DefineType`
+ * The below type is explicitly different from the above ParameterDefinition type in that:
+ * - It replaces the generic-less ComplexParameterDefinition so that...
+ * - It can lift the generic-ful TypeddObjectParamaterDefinition's generics to ParameterDefinitionWithgenerics so that...
+ * - The props/required props generic pair, which rely on each other, can be exposed in DefineType so that...
+ * - .. the dependency between props/required props can be raised to the dev when authoring function runtime logic, and e.g. not returning a required property in a function output
+ */
 export type ParameterDefinitionWithGenerics<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
@@ -80,6 +88,10 @@ export type TypedObjectRequiredProperties<Props extends TypedObjectProperties> =
   | (Exclude<keyof Props, symbol>)[]
   | undefined;
 
+/**
+ * Models the shape of a Typed Object parameter, and using the two generics,
+ * models the dependent relationship between the properties of an object and which of the properties are required vs. optional
+ */
 export interface TypedObjectParameterDefinition<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
@@ -97,10 +109,16 @@ export interface TypedObjectParameterDefinition<
   required?: RequiredProps;
 }
 
+/**
+ * Models _only_ the shape of a Typed Object parameter
+ * Unlike TypedObjectParameterDefinition above, does _not_ constrain the elements
+ * of the `required` array to the keys of the `properties` object.
+ */
 export type TypedObjectParameter = TypedObjectParameterDefinition<
   TypedObjectProperties,
   TypedObjectRequiredProperties<TypedObjectProperties>
 >;
+
 interface UntypedArrayParameterDefinition
   extends IParameterDefinition<AllPrimitiveValues[]> {
   type: typeof SchemaTypes.array;
