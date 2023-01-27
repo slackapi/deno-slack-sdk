@@ -1,15 +1,47 @@
-// TODO: if we want to support unwrapped object definitions being passed into ParameterVariable, we need to fix these tests.
-// otherwise, we can axe this entire file!
-
-/*
-import { DefineType } from "../types/mod.ts";
 import SchemaTypes from "../schema/schema_types.ts";
-import { ParameterVariable } from "./mod.ts";
+import { ParameterVariable, SingleParameterVariable } from "./mod.ts";
 import {
   assert,
   assertStrictEquals,
   CannotBeUndefined,
+  IsAny,
+  IsExact,
 } from "../dev_deps.ts";
+
+/**
+ * ParameterVariable-wrapped parameters should yield particular types
+ */
+Deno.test("ParameterVariable of type string yields a SingleParameterVariable type that coerces into a string containing the provided parameter name", () => {
+  const param = ParameterVariable("", "incident_name", {
+    type: SchemaTypes.string,
+  });
+  assertStrictEquals(`${param}`, "{{incident_name}}");
+});
+
+Deno.test("ParameterVariable untyped object should yield a parameter of type any", () => {
+  const param = ParameterVariable("", "incident", {
+    type: SchemaTypes.object,
+  });
+
+  assert<IsAny<typeof param>>(true);
+  assertStrictEquals(`${param}`, "{{incident}}");
+  assertStrictEquals(`${param.id}`, "{{incident.id}}");
+  assertStrictEquals(`${param.name}`, "{{incident.name}}");
+  assertStrictEquals(`${param.name.foo.bar}`, "{{incident.name.foo.bar}}");
+});
+
+Deno.test("ParameterVariable array should yield SingleParameterVariable type", () => {
+  const param = ParameterVariable("", "myArray", {
+    type: SchemaTypes.array,
+    items: {
+      type: SchemaTypes.string,
+    },
+  });
+  assert<IsExact<typeof param, SingleParameterVariable>>(true);
+
+  assertStrictEquals(`${param}`, "{{myArray}}");
+  assertStrictEquals(`${param}`, "{{myArray}}");
+});
 
 Deno.test("ParameterVariable unwrapped typed object with all optional properties should never yield object with potentially undefined properties", () => {
   const obj = {
@@ -33,6 +65,7 @@ Deno.test("ParameterVariable unwrapped typed object with all optional properties
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
 
+/*
 // TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
 Deno.test("ParameterVariable unwrapped typed object with all required properties should yield object with properties that cannot be undefined", () => {
   const obj = {
@@ -78,6 +111,7 @@ Deno.test("ParameterVariable unwrapped typed object with mix of optional and req
   assertStrictEquals(`${param.id}`, "{{incident.id}}");
   assertStrictEquals(`${param.name}`, "{{incident.name}}");
 });
+*/
 
 Deno.test("ParameterVariable unwrapped typed object with all optional properties and undefined additionalProperties allows access to additional properties", () => {
   const param = ParameterVariable("", "incident", {
@@ -227,7 +261,7 @@ Deno.test("ParameterVariable unwrapped typed object with all optional properties
   //@ts-expect-error foo doesn't exist
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
-
+/*
 // TODO: below test fails, unwrapped typed object yields a SingleParameterVariable, which is incorrect. Seems to only happen when required properties are set.
 Deno.test("ParameterVariable unwrapped typed object with all required properties and additionalProperties=false prevents access to additional properties", () => {
   const param = ParameterVariable("", "incident", {
@@ -275,5 +309,4 @@ Deno.test("ParameterVariable unwrapped typed object with mix of required and opt
   //@ts-expect-error foo doesn't exist
   assertStrictEquals(`${param.foo.bar}`, "{{incident.foo.bar}}");
 });
-
 */
