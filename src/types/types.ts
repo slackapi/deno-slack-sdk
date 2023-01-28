@@ -1,6 +1,5 @@
 import {
   ParameterDefinitionWithGenerics,
-  TypedObjectParameterDefinition,
   TypedObjectProperties,
   TypedObjectRequiredProperties,
 } from "../parameters/types.ts";
@@ -16,13 +15,6 @@ export type CustomTypeDefinition<
 > =
   & CustomTypeProperties
   & ParameterDefinitionWithGenerics<Props, RequiredProps>;
-
-export type CustomObjectTypeDefinition<
-  Props extends TypedObjectProperties,
-  RequiredProps extends TypedObjectRequiredProperties<Props>,
-> =
-  & CustomTypeProperties
-  & TypedObjectParameterDefinition<Props, RequiredProps>;
 
 export interface ICustomType<
   Props extends TypedObjectProperties = TypedObjectProperties,

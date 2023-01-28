@@ -36,9 +36,7 @@ export type ParameterDefinitionWithGenerics<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
 > =
-  | PrimitiveParameterDefinition
-  | PrimitiveSlackParameterDefinition
-  | CustomTypeParameterDefinition
+  | Exclude<ParameterDefinition, TypedObjectParameter>
   | TypedObjectParameterDefinition<Props, RequiredProps>;
 
 type PrimitiveParameterDefinition =
