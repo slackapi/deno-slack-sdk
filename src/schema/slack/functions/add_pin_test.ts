@@ -1,4 +1,5 @@
 import { assertEquals } from "../../../dev_deps.ts";
+import { DefineWorkflow } from "../../../workflows/mod.ts";
 import { ManifestFunctionSchema } from "../../../manifest/manifest_schema.ts";
 import SchemaTypes from "../../schema_types.ts";
 import SlackTypes from "../schema_types.ts";
@@ -30,4 +31,31 @@ Deno.test("AddPin generates valid FunctionManifests", () => {
   };
   const actual = AddPin.export();
   assertEquals(actual, expected);
+});
+
+Deno.test("AddPin can be used as a built-in function in a workflow step", () => {
+  const testWorkflow = DefineWorkflow({
+    callback_id: "test_AddPin_built_in",
+    title: "Test AddPin",
+    description: "This is a generated test to test AddPin",
+    input_parameters: {
+      properties: {
+        channel: {
+          type: SlackTypes.channel_id,
+        },
+      },
+      required: ["channel"],
+    },
+  });
+  testWorkflow.addStep(AddPin, {
+    channel_id: testWorkflow.inputs.channel,
+    message: "test message",
+  });
+
+  const actual = testWorkflow.steps[0].export();
+  assertEquals(actual.function_id, "slack#/functions/add_pin");
+  assertEquals(actual.inputs, {
+    channel_id: "{{inputs.channel}}",
+    message: "test message",
+  });
 });
