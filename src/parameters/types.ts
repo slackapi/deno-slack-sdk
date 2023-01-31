@@ -162,7 +162,7 @@ type EnumChoice<T> = {
 };
 
 interface UntypedArrayParameterDefinition
-  extends BaseParameterDefinition<AllPrimitiveValues[]> {
+  extends BaseParameterDefinition<ArrayValue> {
   type: typeof SchemaTypes.array;
   /** Minimum number of items comprising the array */
   minItems?: number;
