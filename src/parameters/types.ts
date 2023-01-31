@@ -104,21 +104,6 @@ export type TypedObjectParameter = TypedObjectParameterDefinition<
   TypedObjectRequiredProperties<TypedObjectProperties>
 >;
 
-interface UntypedArrayParameterDefinition
-  extends BaseParameterDefinition<AllPrimitiveValues[]> {
-  type: typeof SchemaTypes.array;
-  /** Minimum number of items comprising the array */
-  minItems?: number;
-  /** Maximum number of items comprising the array */
-  maxItems?: number;
-}
-
-export interface TypedArrayParameterDefinition
-  extends UntypedArrayParameterDefinition {
-  /** Defines the type of the items contained within the array parameter. */
-  items: ParameterDefinition;
-}
-
 interface BooleanParameterDefinition extends
   BaseParameterDefinition<
     boolean
@@ -175,6 +160,21 @@ type EnumChoice<T> = {
   /** An optional description for this {@link EnumChoice}. Intended for potential future use in a possible app type schemas page. */
   description?: string;
 };
+
+interface UntypedArrayParameterDefinition
+  extends BaseParameterDefinition<AllPrimitiveValues[]> {
+  type: typeof SchemaTypes.array;
+  /** Minimum number of items comprising the array */
+  minItems?: number;
+  /** Maximum number of items comprising the array */
+  maxItems?: number;
+}
+
+export interface TypedArrayParameterDefinition
+  extends UntypedArrayParameterDefinition {
+  /** Defines the type of the items contained within the array parameter. */
+  items: ParameterDefinition;
+}
 
 type AllValues = AllPrimitiveValues | ObjectValue | ArrayValue;
 
