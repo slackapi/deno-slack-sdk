@@ -56,10 +56,7 @@ export type ParameterDefinitionWithGenerics<
   | TypedObjectParameterDefinition<Props, RequiredProps>;
 
 export interface UntypedObjectParameterDefinition
-  extends
-    BaseParameterDefinition<
-      ObjectValue
-    > {
+  extends BaseParameterDefinition<ObjectValue> {
   type: typeof SchemaTypes.object;
 }
 
