@@ -3,42 +3,40 @@ import { DefineFunction } from "../../../functions/mod.ts";
 import SchemaTypes from "../../schema_types.ts";
 import SlackTypes from "../schema_types.ts";
 
-export default DefineFunction(
-  {
-    callback_id: "slack#/functions/send_ephemeral_message",
-    source_file: "",
-    title: "Send an ephemeral message",
-    description: "Send a private message to someone in a channel",
-    input_parameters: {
-      required: ["channel_id", "user_id", "message"],
-      properties: {
-        channel_id: {
-          type: SlackTypes.channel_id,
-          description: "Search all channels",
-        },
-        user_id: {
-          type: SlackTypes.user_id,
-          description: "Search all people",
-        },
-        message: {
-          type: SlackTypes.rich_text,
-          description: "Add a message",
-        },
-        thread_ts: {
-          type: SchemaTypes.string,
-          description:
-            "Provide another message's ts value to make this message a reply",
-        },
+export default DefineFunction({
+  callback_id: "slack#/functions/send_ephemeral_message",
+  source_file: "",
+  title: "Send an ephemeral message",
+  description: "Send a private message to someone in a channel",
+  input_parameters: {
+    properties: {
+      channel_id: {
+        type: SlackTypes.channel_id,
+        description: "Search all channels",
+      },
+      user_id: {
+        type: SlackTypes.user_id,
+        description: "Search all people",
+      },
+      message: {
+        type: SlackTypes.rich_text,
+        description: "Add a message",
+      },
+      thread_ts: {
+        type: SchemaTypes.string,
+        description:
+          "Provide another message's ts value to make this message a reply",
       },
     },
-    output_parameters: {
-      required: ["message_ts"],
-      properties: {
-        message_ts: {
-          type: SchemaTypes.string,
-          description: "Message time stamp",
-        },
-      },
-    },
+    required: ["channel_id", "user_id", "message"],
   },
-);
+  output_parameters: {
+    properties: {
+      message_ts: {
+        type: SchemaTypes.string,
+        description: "Message time stamp",
+      },
+    },
+    required: ["message_ts"],
+  },
+});

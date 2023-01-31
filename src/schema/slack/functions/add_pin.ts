@@ -3,28 +3,26 @@ import { DefineFunction } from "../../../functions/mod.ts";
 import SchemaTypes from "../../schema_types.ts";
 import SlackTypes from "../schema_types.ts";
 
-export default DefineFunction(
-  {
-    callback_id: "slack#/functions/add_pin",
-    source_file: "",
-    title: "Pin to channel",
-    description: "Pin a message to a channel",
-    input_parameters: {
-      required: ["channel_id", "message"],
-      properties: {
-        channel_id: {
-          type: SlackTypes.channel_id,
-          description: "Search all channels",
-        },
-        message: {
-          type: SchemaTypes.string,
-          description: "Enter a message URL or message timestamp",
-        },
+export default DefineFunction({
+  callback_id: "slack#/functions/add_pin",
+  source_file: "",
+  title: "Pin to channel",
+  description: "Pin a message to a channel",
+  input_parameters: {
+    properties: {
+      channel_id: {
+        type: SlackTypes.channel_id,
+        description: "Search all channels",
+      },
+      message: {
+        type: SchemaTypes.string,
+        description: "Enter a message URL or message timestamp",
       },
     },
-    output_parameters: {
-      required: [],
-      properties: {},
-    },
+    required: ["channel_id", "message"],
   },
-);
+  output_parameters: {
+    properties: {},
+    required: [],
+  },
+});
