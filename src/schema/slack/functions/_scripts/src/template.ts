@@ -1,6 +1,6 @@
 import { pascalCase } from "https://deno.land/x/case@v2.1.0/mod.ts";
 import {
-  ParameterVariableType,
+  ParameterDefinition,
   ParameterSetDefinition,
 } from "../../../../../parameters/mod.ts";
 import {
@@ -29,39 +29,16 @@ const templatizeRequiredParams = (params: FunctionParameter[]) => {
   return requiredParams;
 };
 
-const templatizeParams = (
-  params: FunctionParameter[],
-  useTypeValue = false,
-) => {
-  const paramEntries = params.map((p) => templatizeParam(p, useTypeValue)).join(
-    ",",
-  );
-  console.log(`{ ${paramEntries} }`);
-  return JSON.parse(`{ ${paramEntries} }`);
-};
-
 const getProperties = (
   params: FunctionParameter[],
-  useTypeValue = false,
-) => {
-  const properties: { [k: string]: any } = {};
+): ParameterSetDefinition => {
+  const properties: ParameterSetDefinition = {};
   params.forEach((p) => {
     properties[p.name !== undefined ? p.name : ""] = getParamDef(
       p,
-      useTypeValue,
     );
   });
-  // const paramEntries = params.map((p) => templatizeParam(p, useTypeValue)).join(
-  //   ",",
-  // );
-  // console.log(`{ ${paramEntries} }`);
-  console.log(properties);
   return properties;
-};
-
-const templatizeParam = (param: FunctionParameter, useTypeValue = false) => {
-  const paramDef = getParamDef(param, useTypeValue);
-  return `${param.name}: ${paramDef}`;
 };
 
 const typeMap: Record<string, AllowedTypeValueObject> = {
@@ -85,19 +62,19 @@ const schemaTypeMap = Object.entries(typeMap).reduce<AllowedTypeValueObject>(
   {},
 );
 
-const getParamDef = (param: FunctionParameter, useTypeValue = false) => {
+const getParamDef = <P extends ParameterDefinition>(
+  param: FunctionParameter,
+): P => {
+  // deno-lint-ignore no-explicit-any
   const paramDef: { [k: string]: any } = {
-    type: useTypeValue
-      ? `"${param.type}"`
-      : schemaTypeMap[getParamType(param.type)],
+    type: schemaTypeMap[getParamType(param.type)],
+    description: param.description,
+    additionalProperties: param.additionalProperties,
   };
-  if (param.description) {
-    paramDef.description = param.description;
-  }
   if (param.properties) {
     paramDef.properties = {};
     Object.entries(param.properties).forEach(([propertyKey, propertyValue]) => {
-      paramDef.properties[propertyKey] = getParamDef(propertyValue, false);
+      paramDef.properties[propertyKey] = getParamDef(propertyValue);
     });
   }
   if (param.items) {
@@ -105,7 +82,7 @@ const getParamDef = (param: FunctionParameter, useTypeValue = false) => {
       type: param.items.type,
     };
   }
-  return paramDef;
+  return paramDef as P;
 };
 
 const getSchemaTypeImport = (fn: FunctionRecord) =>
@@ -144,18 +121,49 @@ const hasParamsFromTypeObject = (
         .includes(getParamType(param.type))
     );
 
-    function propertyToTypeScriptString<ParameterVariableType>(property: ParameterVariableType){
-      let typescriptString = `{
-        type: ${getParamType(property.type)}`;
-      if (property.description) {
-        typescriptString += `,
-        description: "${property.description}"`;
-      }
-      if (property.)
-      typescriptString += `}`;
-      return typescriptString;
+export const getManifestFunctionSchemaFields = (fn: FunctionRecord) => {
+  const ManifestFunctionSchemaFields: ManifestFunctionSchema = {
+    source_file: "",
+    title: fn.title,
+    description: fn.description,
+    input_parameters: {
+      required: templatizeRequiredParams(fn.input_parameters),
+      properties: getProperties(fn.input_parameters),
+    },
+    output_parameters: {
+      required: templatizeRequiredParams(fn.output_parameters),
+      properties: getProperties(fn.output_parameters),
+    },
+  };
+  return ManifestFunctionSchemaFields;
+};
+
+export const propertyToTypeScriptString = <P extends ParameterDefinition>(
+  property: P,
+): string => {
+  let typescriptString = `{
+    type: ${getParamType(property.type)}`;
+  if (property.description) {
+    typescriptString += `,
+    description: "${property.description}"`;
+  }
+  if ("properties" in property) {
+    typescriptString += `,
+        properties: ${propertiesToTypeScriptString(property.properties)}`;
+    console.log("additionalProperties" in property);
+    if ("additionalProperties" in property) {
+      typescriptString += `,
+        additionalProperties: ${property.additionalProperties}`;
     }
-    
+    if (property.required) {
+      typescriptString += `,
+          required: ${JSON.stringify(property.required)}`;
+    }
+  }
+  typescriptString += `}`;
+  return typescriptString;
+};
+
 const propertiesToTypeScriptString = (
   properties: ParameterSetDefinition,
 ) => {
@@ -209,49 +217,6 @@ const functionToTypeScriptString = (
   }
 }`;
   return typescriptString;
-};
-
-export const getManifestFunctionSchemaFields = (fn: FunctionRecord) => {
-  const ManifestFunctionSchemaFields: ManifestFunctionSchema = {
-    source_file: "",
-    title: fn.title,
-    description: fn.description,
-    input_parameters: {
-      required: templatizeRequiredParams(fn.input_parameters),
-      properties: getProperties(fn.input_parameters, false),
-    },
-    output_parameters: {
-      required: templatizeRequiredParams(fn.output_parameters),
-      properties: getProperties(fn.output_parameters, false),
-    },
-  };
-  // // let paramsString = "";
-  // if (fn.input_parameters) {
-  //   ManifestFunctionSchemaFields.input_parameters = {
-  //     required: templatizeRequiredParams(fn.input_parameters),
-  //     properties: getProperties(fn.input_parameters, false),
-  //   };
-  //   //     paramsString = `
-  //   // input_parameters: {
-  //   //   required: ${templatizeRequiredParams(fn.input_parameters)},
-  //   //   properties: ${templatizeParams(fn.input_parameters, false)}
-  //   // }`;
-  // }
-  // if (fn.output_parameters) {
-  //   ManifestFunctionSchemaFields.output_parameters = {
-  //     required: templatizeRequiredParams(fn.output_parameters),
-  //     properties: getProperties(fn.output_parameters, false),
-  //   };
-  //   //     if (paramsString !== "") {
-  //   //       paramsString += ",";
-  //   //     }
-  //   //     paramsString += `
-  //   // output_parameters: {
-  //   //   required: ${templatizeRequiredParams(fn.output_parameters)},
-  //   //   properties: ${templatizeParams(fn.output_parameters, false)}
-  //   // }`;
-  // }
-  return ManifestFunctionSchemaFields;
 };
 
 export const SlackFunctionTemplate = (fn: FunctionRecord) => {
