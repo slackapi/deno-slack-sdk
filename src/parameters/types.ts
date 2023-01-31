@@ -2,11 +2,30 @@ import SchemaTypes from "../schema/schema_types.ts";
 import { SlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
 import { ICustomType } from "../types/types.ts";
 
-interface IParameterDefinition<
-  Type,
-> {
+export type PrimitiveParameterDefinition =
+  | BooleanParameterDefinition
+  | StringParameterDefinition
+  | NumberParameterDefinition
+  | IntegerParameterDefinition
+  | BaseParameterDefinition<AllValues>
+  // | UntypedArrayParameterDefinition
+  | TypedArrayParameterDefinition;
+
+export type TypedParameterDefinition =
+  | CustomTypeParameterDefinition
+  | TypedObjectParameter
+  | UntypedObjectParameterDefinition
+  | PrimitiveParameterDefinition
+  | OAuth2ParameterDefinition;
+
+export interface CustomTypeParameterDefinition
+  extends Omit<BaseParameterDefinition<AllValues>, "type"> {
+  type: ICustomType;
+}
+
+interface BaseParameterDefinition<T> {
   /** Defines the parameter type. */
-  type: string | ICustomType;
+  type: string;
   /** An optional parameter title. */
   title?: string;
   /** An optional parameter description. */
@@ -14,14 +33,14 @@ interface IParameterDefinition<
   /** An optional parameter hint. */
   hint?: string;
   /** An optional parameter default value. */
-  default?: Type;
+  default?: T;
   /** An option list of examples; intended for future use in a possible app type schemas page. */
-  examples?: Type[];
+  examples?: T[];
 }
 
 export type ParameterDefinition =
   | PrimitiveParameterDefinition
-  | PrimitiveSlackParameterDefinition
+  // | PrimitiveSlackParameterDefinition
   | ComplexParameterDefinition;
 
 /**
@@ -39,38 +58,22 @@ export type ParameterDefinitionWithGenerics<
   | Exclude<ParameterDefinition, TypedObjectParameter>
   | TypedObjectParameterDefinition<Props, RequiredProps>;
 
-type PrimitiveParameterDefinition =
-  | BooleanParameterDefinition
-  | StringParameterDefinition
-  | NumberParameterDefinition
-  | IntegerParameterDefinition
-  | TypedArrayParameterDefinition
-  | OAuth2ParameterDefinition
-  | UntypedObjectParameterDefinition
-  | UntypedArrayParameterDefinition;
-
 // TODO: Revisit as I don't think passing a string here is valid as `default` and `examples` need to be of the specified type (boolean, number, etc.)
-type DistributePrimitiveSlackTypes = IParameterDefinition<
-  string
->;
+// type DistributePrimitiveSlackTypes = IParameterDefinition<
+//   string
+// >;
 
-type PrimitiveSlackParameterDefinition = DistributePrimitiveSlackTypes;
+// type PrimitiveSlackParameterDefinition = DistributePrimitiveSlackTypes;
 
 type ComplexParameterDefinition =
   | CustomTypeParameterDefinition
   | TypedObjectParameter;
 
-export interface CustomTypeParameterDefinition extends
-  IParameterDefinition<
-    AllValues
-  > {
-  type: ICustomType;
-}
-
-export interface UntypedObjectParameterDefinition extends
-  IParameterDefinition<
-    FlatObjectValue
-  > {
+export interface UntypedObjectParameterDefinition
+  extends
+    BaseParameterDefinition<
+      ObjectValue
+    > {
   type: typeof SchemaTypes.object;
 }
 
@@ -78,7 +81,7 @@ export type TypedObjectProperties = {
   [key: string]:
     | PrimitiveParameterDefinition
     | CustomTypeParameterDefinition
-    | PrimitiveSlackParameterDefinition
+    // | PrimitiveSlackParameterDefinition
     | UntypedObjectParameterDefinition;
 };
 
@@ -93,9 +96,8 @@ export type TypedObjectRequiredProperties<Props extends TypedObjectProperties> =
 export interface TypedObjectParameterDefinition<
   Props extends TypedObjectProperties,
   RequiredProps extends TypedObjectRequiredProperties<Props>,
-> extends IParameterDefinition<FlatObjectValue> // TODO: the second type parameter would not accurately reflect what typed objects would look like - would limit to flat objects only.
+> extends UntypedObjectParameterDefinition // TODO: the second type parameter would not accurately reflect what typed objects would look like - would limit to flat objects only.
 {
-  type: typeof SchemaTypes.object;
   /**
    * Whether the parameter can accept objects with additional keys beyond those defined via `properties`
    * @default "true"
@@ -118,34 +120,33 @@ export type TypedObjectParameter = TypedObjectParameterDefinition<
 >;
 
 interface UntypedArrayParameterDefinition
-  extends IParameterDefinition<AllPrimitiveValues[]> {
-  type: typeof SchemaTypes.array;
-}
-
-export interface TypedArrayParameterDefinition
-  extends IParameterDefinition<AllPrimitiveValues[]> {
+  extends BaseParameterDefinition<AllPrimitiveValues[]> {
   type: typeof SchemaTypes.array;
   /** Minimum number of items comprising the array */
   minItems?: number;
   /** Maximum number of items comprising the array */
   maxItems?: number;
+}
+
+export interface TypedArrayParameterDefinition
+  extends UntypedArrayParameterDefinition {
   /** Defines the type of the items contained within the array parameter. */
   items: ParameterDefinition;
 }
 
-interface OAuth2ParameterDefinition extends IParameterDefinition<string> {
+interface OAuth2ParameterDefinition extends BaseParameterDefinition<string> {
   type: typeof SlackPrimitiveTypes.oauth2;
   oauth2_provider_key: string;
 }
 
 interface BooleanParameterDefinition extends
-  IParameterDefinition<
+  BaseParameterDefinition<
     boolean
   > {
   type: typeof SchemaTypes.boolean;
 }
 
-interface StringParameterDefinition extends IParameterDefinition<string> {
+interface StringParameterDefinition extends BaseParameterDefinition<string> {
   type: typeof SchemaTypes.string;
   /** Minimum number of characters comprising the string */
   minLength?: number;
@@ -157,7 +158,7 @@ interface StringParameterDefinition extends IParameterDefinition<string> {
   choices?: EnumChoice<string>[];
 }
 
-interface IntegerParameterDefinition extends IParameterDefinition<number> {
+interface IntegerParameterDefinition extends BaseParameterDefinition<number> {
   type: typeof SchemaTypes.integer;
   /** Absolute minimum acceptable value for the integer */
   minimum?: number;
@@ -169,7 +170,7 @@ interface IntegerParameterDefinition extends IParameterDefinition<number> {
   choices?: EnumChoice<number>[];
 }
 
-interface NumberParameterDefinition extends IParameterDefinition<number> {
+interface NumberParameterDefinition extends BaseParameterDefinition<number> {
   type: typeof SchemaTypes.number;
   /** Absolute minimum acceptable value for the number */
   minimum?: number;
@@ -190,10 +191,12 @@ type EnumChoice<T> = {
   description?: string;
 };
 
-type AllValues = AllPrimitiveValues | AllPrimitiveValues[] | FlatObjectValue;
+type AllValues = AllPrimitiveValues | ObjectValue | ArrayValue;
 
 type AllPrimitiveValues = string | number | boolean;
 
-type FlatObjectValue = {
+type ObjectValue = {
   [key: string]: AllPrimitiveValues | AllPrimitiveValues[];
 };
+
+type ArrayValue = AllPrimitiveValues[];
