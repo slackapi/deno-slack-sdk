@@ -2,6 +2,8 @@ import SchemaTypes from "../schema/schema_types.ts";
 import { SlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
 import { ICustomType } from "../types/types.ts";
 
+export type ParameterDefinition = TypedParameterDefinition;
+
 export type PrimitiveParameterDefinition =
   | BooleanParameterDefinition
   | StringParameterDefinition
@@ -38,11 +40,6 @@ interface BaseParameterDefinition<T> {
   examples?: T[];
 }
 
-export type ParameterDefinition =
-  | PrimitiveParameterDefinition
-  // | PrimitiveSlackParameterDefinition
-  | ComplexParameterDefinition;
-
 /**
  * Only used for defining Custom Types via `DefineType`
  * The below type is explicitly different from the above ParameterDefinition type in that:
@@ -57,17 +54,6 @@ export type ParameterDefinitionWithGenerics<
 > =
   | Exclude<ParameterDefinition, TypedObjectParameter>
   | TypedObjectParameterDefinition<Props, RequiredProps>;
-
-// TODO: Revisit as I don't think passing a string here is valid as `default` and `examples` need to be of the specified type (boolean, number, etc.)
-// type DistributePrimitiveSlackTypes = IParameterDefinition<
-//   string
-// >;
-
-// type PrimitiveSlackParameterDefinition = DistributePrimitiveSlackTypes;
-
-type ComplexParameterDefinition =
-  | CustomTypeParameterDefinition
-  | TypedObjectParameter;
 
 export interface UntypedObjectParameterDefinition
   extends
