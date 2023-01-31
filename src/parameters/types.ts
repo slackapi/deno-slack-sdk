@@ -67,7 +67,6 @@ export type TypedObjectProperties = {
   [key: string]:
     | PrimitiveParameterDefinition
     | CustomTypeParameterDefinition
-    // | PrimitiveSlackParameterDefinition
     | UntypedObjectParameterDefinition;
 };
 
@@ -120,11 +119,6 @@ export interface TypedArrayParameterDefinition
   items: ParameterDefinition;
 }
 
-interface OAuth2ParameterDefinition extends BaseParameterDefinition<string> {
-  type: typeof SlackPrimitiveTypes.oauth2;
-  oauth2_provider_key: string;
-}
-
 interface BooleanParameterDefinition extends
   BaseParameterDefinition<
     boolean
@@ -166,6 +160,11 @@ interface NumberParameterDefinition extends BaseParameterDefinition<number> {
   enum?: number[];
   /** Defines labels that correspond to the `enum` values. */
   choices?: EnumChoice<number>[];
+}
+
+interface OAuth2ParameterDefinition extends BaseParameterDefinition<string> {
+  type: typeof SlackPrimitiveTypes.oauth2;
+  oauth2_provider_key: string;
 }
 
 type EnumChoice<T> = {
