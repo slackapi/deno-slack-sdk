@@ -5,6 +5,7 @@ await emptyDir("./npm");
 
 await build({
   typeCheck: false,
+  test: false,
   entryPoints: ["./src/mod.ts"],
   outDir: "./npm",
   // ensures that the emitted package is compatible with node v14 later
@@ -19,7 +20,7 @@ await build({
       package: {
         name: "node-fetch",
         // Please see: https://www.npmjs.com/package/node-fetch-commonjs
-        version: "2.6.7", 
+        version: "2.6.7",
       },
       globalNames: [{
         name: "fetch",
@@ -41,12 +42,12 @@ await build({
       url: "https://github.com/slackapi/deno-slack-sdk/issues",
     },
     // sets the minimum engine to node v14
-    // as of writing, dnt transpilation-generated code 
+    // as of writing, dnt transpilation-generated code
     // seems to only be able to successfully compile as far back ES2020
     engines: {
       "node": ">=14.20.1",
       "npm": ">=6.14.15"
-    } 
+    }
   },
 });
 
