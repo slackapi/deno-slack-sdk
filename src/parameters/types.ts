@@ -66,8 +66,7 @@ export interface UntypedObjectParameterDefinition
 export type TypedObjectProperties = {
   [key: string]:
     | PrimitiveParameterDefinition
-    | CustomTypeParameterDefinition
-    | UntypedObjectParameterDefinition;
+    | CustomTypeParameterDefinition;
 };
 
 export type TypedObjectRequiredProperties<Props extends TypedObjectProperties> =
@@ -104,10 +103,7 @@ export type TypedObjectParameter = TypedObjectParameterDefinition<
   TypedObjectRequiredProperties<TypedObjectProperties>
 >;
 
-interface BooleanParameterDefinition extends
-  BaseParameterDefinition<
-    boolean
-  > {
+interface BooleanParameterDefinition extends BaseParameterDefinition<boolean> {
   type: typeof SchemaTypes.boolean;
 }
 
