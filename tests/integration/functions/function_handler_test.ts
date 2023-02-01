@@ -1,6 +1,7 @@
 import {
-  assert, assertEquals, assertExists, CanBe, CanBeUndefined, CannotBeUndefined, IsAny, IsExact
+  assert, assertEquals, assertExists, IsAny, IsExact
 } from "../../../src/dev_deps.ts";
+import { CanBe, CanBeUndefined, CannotBeUndefined, } from "../../../src/test_utils.ts";
 import { DefineFunction, DefineType, Schema } from "../../../src/mod.ts";
 import { DefineParameter } from "../../../src/parameters/define_parameter.ts";
 import {

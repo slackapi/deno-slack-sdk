@@ -1,13 +1,7 @@
 import SchemaTypes from "../schema/schema_types.ts";
 import { ParameterVariable, SingleParameterVariable } from "./mod.ts";
-import {
-  assert,
-  assertStrictEquals,
-  CannotBeUndefined,
-  IsAny,
-  IsExact,
-} from "../dev_deps.ts";
-
+import { assert, assertStrictEquals, IsAny, IsExact } from "../dev_deps.ts";
+import { CannotBeUndefined } from "../test_utils.ts";
 /**
  * ParameterVariable-wrapped parameters should yield particular types
  */

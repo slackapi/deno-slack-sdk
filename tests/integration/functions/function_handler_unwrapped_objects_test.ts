@@ -1,4 +1,5 @@
-import { assert, assertEquals, assertExists, CanBe, CanBeUndefined, CannotBeUndefined, IsAny, IsExact } from "../../../src/dev_deps.ts";
+import { assert, assertEquals, assertExists, IsAny, IsExact } from "../../../src/dev_deps.ts";
+import { CanBe, CanBeUndefined } from "../../../src/test_utils.ts";
 import { assertEqualsTypedValues } from "../../../src/test_utils.ts";
 import { SlackFunctionTester } from "../../../src/functions/tester/mod.ts";
 import { DefineFunction, DefineType } from "../../../src/mod.ts";

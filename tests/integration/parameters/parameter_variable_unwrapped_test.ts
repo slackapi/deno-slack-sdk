@@ -4,9 +4,9 @@ import { ParameterVariable } from "../../../src/parameters/mod.ts";
 import {
   assert,
   assertStrictEquals,
-  CannotBeUndefined,
-IsAny,
+  IsAny,
 } from "../../../src/dev_deps.ts";
+import { CannotBeUndefined } from "../../../src/test_utils.ts";
 
 Deno.test("ParameterVariable with unwrapped typed object with an optional Custom Type property should yield an object with a definite value for its sub-properties", () => {
   const StringType = DefineType({

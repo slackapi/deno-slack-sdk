@@ -5,11 +5,10 @@ import SchemaTypes from "../../../src/schema/schema_types.ts";
 import {
   assert,
   assertStrictEquals,
-  CannotBeUndefined,
   IsAny,
-IsExact,
+  IsExact,
 } from "../../../src/dev_deps.ts";
-
+import { CannotBeUndefined, } from "../../../src/test_utils.ts";
 /**
  * Typed Object required/optional property definitions should never yield undefined ParameterVariable properties
  */
