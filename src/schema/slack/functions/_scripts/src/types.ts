@@ -11,7 +11,7 @@ export type FunctionParameter = {
     [key: string]: FunctionParameter;
   };
   additionalProperties?: boolean;
-  "is_required"?: boolean;
+  is_required?: boolean;
   title?: string;
   required?: string[];
 };
