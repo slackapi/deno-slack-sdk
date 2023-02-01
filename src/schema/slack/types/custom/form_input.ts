@@ -1,8 +1,8 @@
 import SchemaTypes from "../../../schema_types.ts";
 import { DefineType } from "../../../../types/mod.ts";
-import { DefineParameter } from "../../../../parameters/define_parameter.ts";
 
-const FormInputObject = DefineParameter({
+const FormInput = DefineType({
+  name: "slack#/types/form_input_object",
   description: "Input fields to be shown on the form",
   type: SchemaTypes.object,
   properties: {
@@ -20,10 +20,6 @@ const FormInputObject = DefineParameter({
     },
   },
   required: [],
-});
-const FormInput = DefineType({
-  name: "slack#/types/form_input_object",
-  ...FormInputObject,
 });
 
 export { FormInput };

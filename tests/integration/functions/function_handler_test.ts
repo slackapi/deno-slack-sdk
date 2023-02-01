@@ -9,6 +9,7 @@ import {
 } from "../../../src/functions/types.ts";
 import { SlackFunctionTester } from "../../../src/functions/tester/mod.ts";
 import { assertEqualsTypedValues } from "../../../src/test_utils.ts";
+import { InternalSlackTypes } from "../../../src/schema/slack/types/custom/mod.ts";
 
 /**
  * Custom Function handler tests, exercising all different kinds of combinations of function inputs and outputs
@@ -748,6 +749,62 @@ Deno.test("Custom Function using a Custom Type input for a DefineParameter-wrapp
       },
     };
   };
+});
+Deno.test("Custom Function using Slack's FormInput internal Custom Type input should provide correct typedobject typing in a function handler context", () => {
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        formInput: {
+          type: InternalSlackTypes.form_input_object,
+        },
+      },
+      required: ["formInput"],
+    },
+    output_parameters: {
+      properties: {
+        formInput: {
+          type: InternalSlackTypes.form_input_object,
+        },
+      },
+      required: ["formInput"],
+    },
+  });
+
+  const sharedInputs = {
+    formInput: {
+      required: [],
+      elements: [],
+    }
+  };
+
+  const validHandler: EnrichedSlackFunctionHandler<
+    typeof TestFunction.definition
+  > = (
+    { inputs },
+  ) => {
+    const { formInput } = inputs;
+
+    assert<CanBeUndefined<typeof formInput.required>>(
+      true,
+    );
+    assert<CanBe<typeof formInput.required, string[]>>(true);
+
+    assert<CanBeUndefined<typeof formInput.elements>>(
+      true,
+    );
+    assert<CanBe<typeof formInput.elements, any[]>>(true);
+    
+    return {
+      outputs: inputs,
+    };
+  };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = validHandler(createContext({ inputs: sharedInputs }));
 });
 
 /**

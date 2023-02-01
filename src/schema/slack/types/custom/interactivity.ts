@@ -1,9 +1,9 @@
 import SchemaTypes from "../../../schema_types.ts";
 import { DefineType } from "../../../../types/mod.ts";
 import { UserContextType } from "./user_context.ts";
-import { DefineParameter } from "../../../../parameters/define_parameter.ts";
 
-const InteractivityObject = DefineParameter({
+const InteractivityType = DefineType({
+  name: "slack#/types/interactivity",
   description: "Context about a user interaction",
   type: SchemaTypes.object,
   properties: {
@@ -15,10 +15,6 @@ const InteractivityObject = DefineParameter({
     },
   },
   required: ["interactivity_pointer", "interactor"],
-});
-const InteractivityType = DefineType({
-  name: "slack#/types/interactivity",
-  ...InteractivityObject,
 });
 
 export { InteractivityType };
