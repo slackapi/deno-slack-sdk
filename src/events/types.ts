@@ -1,7 +1,7 @@
 import {
   CustomTypeParameterDefinition,
   TypedObjectParameter,
-} from "../parameters/types.ts";
+} from "../parameters/definition_types.ts";
 import { ManifestCustomEventSchema } from "../manifest/manifest_schema.ts";
 import { CustomEvent } from "./mod.ts";
 import { SlackManifest } from "../manifest/mod.ts";

@@ -13,7 +13,7 @@ import {
   TypedObjectParameterDefinition,
   TypedObjectProperties,
   TypedObjectRequiredProperties,
-} from "../parameters/types.ts";
+} from "../parameters/definition_types.ts";
 import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackManifest } from "../manifest/mod.ts";

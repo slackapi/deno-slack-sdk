@@ -5,7 +5,7 @@ import { isTypedArray, isTypedObject } from "../parameters/mod.ts";
 import {
   TypedObjectProperties,
   TypedObjectRequiredProperties,
-} from "../parameters/types.ts";
+} from "../parameters/definition_types.ts";
 
 // Helper that uses a type predicate for narrowing down to a Custom Type
 export const isCustomType = (type: string | ICustomType): type is ICustomType =>

@@ -2,7 +2,7 @@ import {
   ParameterDefinitionWithGenerics,
   TypedObjectProperties,
   TypedObjectRequiredProperties,
-} from "../parameters/types.ts";
+} from "../parameters/definition_types.ts";
 import { SlackManifest } from "../manifest/mod.ts";
 import { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
 

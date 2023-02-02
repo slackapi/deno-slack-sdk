@@ -1,16 +1,18 @@
 // import SchemaTypes from "../schema/schema_types.ts";
 import type {
   ObjectParameterVariableType,
-  ParameterDefinition,
   ParameterVariableType,
   SingleParameterVariable,
+  UntypedObjectParameterVariableType,
+} from "./types.ts";
+import type {
+  ParameterDefinition,
   TypedArrayParameterDefinition,
   TypedObjectParameter,
   TypedObjectParameterDefinition,
   TypedObjectProperties,
   TypedObjectRequiredProperties,
-  UntypedObjectParameterVariableType,
-} from "./types.ts";
+} from "./definition_types.ts";
 import { ParamReference } from "./param.ts";
 import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 import SchemaTypes from "../schema/schema_types.ts";

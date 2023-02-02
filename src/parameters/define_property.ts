@@ -2,7 +2,7 @@ import {
   TypedObjectParameterDefinition,
   TypedObjectProperties,
   TypedObjectRequiredProperties,
-} from "../parameters/types.ts";
+} from "../parameters/definition_types.ts";
 
 export const DefineProperty = <
   Props extends TypedObjectProperties,
