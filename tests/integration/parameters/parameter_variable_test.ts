@@ -1,4 +1,4 @@
-import { DefineProperty } from "../../../src/parameters/define_parameter.ts";
+import { DefineProperty } from "../../../src/parameters/define_property.ts";
 import { ParameterVariable } from "../../../src/parameters/mod.ts";
 import { SingleParameterVariable } from "../../../src/parameters/types.ts";
 import { DefineType } from "../../../src/types/mod.ts";

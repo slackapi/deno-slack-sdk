@@ -3,7 +3,7 @@ import {
 } from "../../../src/dev_deps.ts";
 import { CanBe, CanBeUndefined, CannotBeUndefined, } from "../../../src/test_utils.ts";
 import { DefineFunction, DefineType, Schema } from "../../../src/mod.ts";
-import { DefineProperty } from "../../../src/parameters/define_parameter.ts";
+import { DefineProperty } from "../../../src/parameters/define_property.ts";
 import {
   EnrichedSlackFunctionHandler,
 } from "../../../src/functions/types.ts";

@@ -1,4 +1,4 @@
-import { DefineProperty } from "./define_parameter.ts";
+import { DefineProperty } from "./define_property.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import { assert, IsExact } from "../dev_deps.ts";
 
