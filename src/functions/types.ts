@@ -27,6 +27,11 @@ import {
   ViewSubmissionHandler,
 } from "./interactivity/types.ts";
 import { ICustomType } from "../types/types.ts";
+import {
+  IncreaseDepth,
+  MaxRecursionDepth,
+  RecursionDepthLevel,
+} from "../type_utils.ts";
 
 export type { BlockActionHandler } from "./interactivity/types.ts";
 
@@ -48,22 +53,6 @@ export type FunctionInvocationBody = {
     "event_ts": string;
   };
 };
-
-/** @description Defines accepted depth values */
-export type RecursionDepthLevel = 0 | 1 | 2 | 3 | 4 | 5;
-
-/** @description Defines the max depth we want to recurse */
-export type MaxRecursionDepth = 5;
-
-/** @description Increases the depth value one at a time */
-export type IncreaseDepth<Depth extends RecursionDepthLevel = 0> = Depth extends
-  0 ? 1
-  : Depth extends 1 ? 2
-  : Depth extends 2 ? 3
-  : Depth extends 3 ? 4
-  : Depth extends 4 ? 5
-  : Depth extends 5 ? MaxRecursionDepth
-  : MaxRecursionDepth;
 
 /**
  * @description Maps a ParameterDefinition into a runtime type, i.e. "string" === string.

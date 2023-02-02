@@ -14,7 +14,7 @@ import {
   IncreaseDepth,
   MaxRecursionDepth,
   RecursionDepthLevel,
-} from "../functions/types.ts";
+} from "../type_utils.ts";
 import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 import SchemaTypes from "../schema/schema_types.ts";
 import { isCustomType } from "../types/mod.ts";
