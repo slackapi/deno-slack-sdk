@@ -55,8 +55,6 @@ export const ParameterVariable = <P extends ParameterDefinition>(
       paramName,
     ) as ParameterVariableType<P>;
   }
-
-  // TODO: the following type assertion seems to ignore the case where param could be null
   return param as ParameterVariableType<P>;
 };
 
