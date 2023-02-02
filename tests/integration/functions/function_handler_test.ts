@@ -750,6 +750,7 @@ Deno.test("Custom Function using a Custom Type input for a DefineProperty-wrappe
     };
   };
 });
+
 Deno.test("Custom Function using Slack's FormInput internal Custom Type input should provide correct typedobject typing in a function handler context", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
@@ -796,6 +797,69 @@ Deno.test("Custom Function using Slack's FormInput internal Custom Type input sh
       true,
     );
     assert<CanBe<typeof formInput.elements, any[]>>(true);
+    
+    return {
+      outputs: inputs,
+    };
+  };
+
+  const { createContext } = SlackFunctionTester(TestFunction);
+
+  const result = validHandler(createContext({ inputs: sharedInputs }));
+});
+
+Deno.test("Custom Function using Slack's message-context Custom Type input should provide correct typedobject typing in a function handler context", () => {
+  const TestFunction = DefineFunction({
+    callback_id: "my_callback_id",
+    source_file: "test",
+    title: "Test",
+    input_parameters: {
+      properties: {
+        msgContext: {
+          type: Schema.slack.types.message_context,
+        },
+      },
+      required: ["msgContext"],
+    },
+    output_parameters: {
+      properties: {
+        msgContext: {
+          type: Schema.slack.types.message_context,
+        },
+      },
+      required: ["msgContext"],
+    },
+  });
+
+  const sharedInputs = {
+    msgContext: {
+      message_ts: "1234.567",
+      channel_id: "C12345"
+    }
+  };
+
+  const validHandler: EnrichedSlackFunctionHandler<
+    typeof TestFunction.definition
+  > = (
+    { inputs },
+  ) => {
+    const { msgContext } = inputs;
+
+    // channel_id sub-property
+    assert<CanBeUndefined<typeof msgContext.channel_id>>(
+      true,
+    );
+    assert<CanBe<typeof msgContext.channel_id, string>>(true);
+    // user_id sub-property
+    assert<CanBeUndefined<typeof msgContext.user_id>>(
+      true,
+    );
+    assert<CanBe<typeof msgContext.user_id, string>>(true);
+    // message_ts sub-property
+    assert<CannotBeUndefined<typeof msgContext.message_ts>>(
+      true,
+    );
+    assert<IsExact<typeof msgContext.message_ts, string>>(true);
     
     return {
       outputs: inputs,
