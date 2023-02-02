@@ -79,6 +79,8 @@ type StringParameterDefinition = BaseParameterDefinition<string> & {
   enum?: string[];
   /** Defines labels that correspond to the `enum` values. */
   choices?: EnumChoice<string>[];
+  /** Define accepted format of the string */
+  format?: "url" | "email";
 };
 
 type IntegerParameterDefinition = BaseParameterDefinition<number> & {
