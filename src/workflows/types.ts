@@ -5,7 +5,7 @@ import {
   ParameterSetDefinition,
   ParameterVariableType,
   PossibleParameterKeys,
-} from "../parameters/mod.ts";
+} from "../parameters/types.ts";
 
 export interface ISlackWorkflow {
   id: string;

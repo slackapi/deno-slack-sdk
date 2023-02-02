@@ -1,147 +1,70 @@
-import SchemaTypes from "../schema/schema_types.ts";
-import { SlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
-import { ICustomType } from "../types/types.ts";
+import {
+  IncreaseDepth,
+  MaxRecursionDepth,
+  RecursionDepthLevel,
+} from "../type_utils.ts";
+import {
+  CustomTypeParameterDefinition,
+  ParameterDefinition,
+  TypedObjectParameter,
+  TypedObjectProperties,
+  UntypedObjectParameterDefinition,
+} from "./definition_types.ts";
 
-export type PrimitiveParameterDefinition =
-  | BooleanParameterDefinition
-  | StringParameterDefinition
-  | NumberParameterDefinition
-  | IntegerParameterDefinition
-  | BaseParameterDefinition<AllValues>
-  // | UntypedArrayParameterDefinition
-  | TypedArrayParameterDefinition;
-
-export type TypedParameterDefinition =
-  | CustomTypeParameterDefinition
-  | TypedObjectParameterDefinition
-  | UntypedObjectParameterDefinition
-  | PrimitiveParameterDefinition
-  | OAuth2ParameterDefinition;
-
-export type CustomTypeParameterDefinition =
-  & Omit<BaseParameterDefinition<AllValues>, "type">
-  & {
-    type: ICustomType;
-  };
-
-// A type is either a string, or a Custom Type!
-type BaseParameterDefinition<T> = {
-  /** Defines the parameter type. */
-  type: string;
-  /** An optional parameter title. */
-  title?: string;
-  /** An optional parameter description. */
-  description?: string;
-  /** An optional parameter hint. */
-  hint?: string;
-  /** An optional parameter default value. */
-  default?: T;
-  /** An option list of examples; intended for future use in a possible app type schemas page. */
-  examples?: T[];
+// Used for defining a set of input or output parameters
+export type ParameterSetDefinition = {
+  [key: string]: ParameterDefinition;
 };
 
-export type UntypedObjectParameterDefinition =
-  & BaseParameterDefinition<ObjectValue>
-  & {
-    type: typeof SchemaTypes.object;
-  };
+export type PossibleParameterKeys<
+  ParameterSetInternal extends ParameterSetDefinition,
+> = (keyof ParameterSetInternal)[];
 
-// TODO: Required field should be limited to the names(key) of each property
-export type TypedObjectParameterDefinition =
-  & UntypedObjectParameterDefinition
-  & {
-    /** A list of required property names (must reference names defined on the `properties` property). Only for use with Object types. */
-    required?: string[];
-    /**
-     * Whether the parameter can accept objects with additional keys beyond those defined via `properties`
-     * @default "true"
-     */
-    additionalProperties?: boolean;
-    /** Object defining what properties are allowed on the parameter. */
-    properties: {
-      [key: string]:
-        | PrimitiveParameterDefinition
-        | CustomTypeParameterDefinition;
-    };
-  };
-
-type BooleanParameterDefinition = BaseParameterDefinition<boolean> & {
-  type: typeof SchemaTypes.boolean;
+export type ParameterPropertiesDefinition<
+  Params extends ParameterSetDefinition,
+  Required extends PossibleParameterKeys<Params>,
+> = {
+  properties: Params;
+  required: Required;
 };
 
-type StringParameterDefinition = BaseParameterDefinition<string> & {
-  type: typeof SchemaTypes.string;
-  /** Minimum number of characters comprising the string */
-  minLength?: number;
-  /** Maximum number of characters comprising the string */
-  maxLength?: number;
-  /** Constrain the available string options to just the list of strings denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-  enum?: string[];
-  /** Defines labels that correspond to the `enum` values. */
-  choices?: EnumChoice<string>[];
-  /** Define accepted format of the string */
-  format?: "url" | "email";
+export type ParameterVariableType<
+  Def extends ParameterDefinition,
+  CurrentDepth extends RecursionDepthLevel = 0,
+> = CurrentDepth extends MaxRecursionDepth ? UntypedObjectParameterVariableType // i.e. any
+  : Def extends CustomTypeParameterDefinition // If the ParameterVariable is a Custom type, use it's definition instead
+    ? ParameterVariableType<
+      Def["type"]["definition"],
+      IncreaseDepth<CurrentDepth>
+    >
+  // If the ParameterVariable is of type object, allow access to the object's properties
+  : Def extends TypedObjectParameter ? ObjectParameterVariableType<Def>
+  : Def extends UntypedObjectParameterDefinition
+    ? UntypedObjectParameterVariableType
+  : SingleParameterVariable;
+
+// deno-lint-ignore ban-types
+export type SingleParameterVariable = {};
+
+// deno-lint-ignore no-explicit-any
+export type UntypedObjectParameterVariableType = any;
+
+export type ObjectParameterPropertyTypes<
+  Props extends TypedObjectProperties,
+> = {
+  [name in keyof Props]: ParameterVariableType<
+    Props[name]
+  >;
 };
 
-type IntegerParameterDefinition = BaseParameterDefinition<number> & {
-  type: typeof SchemaTypes.integer;
-  /** Absolute minimum acceptable value for the integer */
-  minimum?: number;
-  /** Absolute maximum acceptable value for the integer */
-  maximum?: number;
-  /** Constrain the available integer options to just the list of integers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-  enum?: number[];
-  /** Defines labels that correspond to the `enum` values. */
-  choices?: EnumChoice<number>[];
-};
-
-type NumberParameterDefinition = BaseParameterDefinition<number> & {
-  type: typeof SchemaTypes.number;
-  /** Absolute minimum acceptable value for the number */
-  minimum?: number;
-  /** Absolute maximum acceptable value for the number */
-  maximum?: number;
-  /** Constrain the available number options to just the list of numbers denoted in the `enum` property. Usage of `enum` also instructs any UI that collects a value for this parameter to render a dropdown select input rather than a free-form text input. */
-  enum?: number[];
-  /** Defines labels that correspond to the `enum` values. */
-  choices?: EnumChoice<number>[];
-};
-
-export type OAuth2ParameterDefinition = BaseParameterDefinition<string> & {
-  type: typeof SlackPrimitiveTypes.oauth2;
-  oauth2_provider_key: string;
-};
-
-type EnumChoice<T> = {
-  /** The `enum` value this {@link EnumChoice} corresponds to. */
-  value: T;
-  /** The label to display for this {@link EnumChoice}. */
-  title: string;
-  /** An optional description for this {@link EnumChoice}. Intended for potential future use in a possible app type schemas page. */
-  description?: string;
-};
-
-export type UntypedArrayParameterDefinition =
-  & BaseParameterDefinition<ArrayValue>
-  & {
-    type: typeof SchemaTypes.array;
-    /** Minimum number of items comprising the array */
-    minItems?: number;
-    /** Maximum number of items comprising the array */
-    maxItems?: number;
-  };
-export type TypedArrayParameterDefinition = UntypedArrayParameterDefinition & {
-  /** Defines the type of the items contained within the array parameter. */
-  items: TypedParameterDefinition;
-};
-
-type AllValues = AllPrimitiveValues | ObjectValue | ArrayValue;
-
-type AllPrimitiveValues = string | number | boolean;
-
-type ObjectValue = {
-  [key: string]: AllPrimitiveValues | AllPrimitiveValues[];
-};
-
-// TODO: Add object and create an union type when its available
-type ArrayValue = AllPrimitiveValues[];
+// If additionalProperties is set to true, allow access to any key.
+// Otherwise, only allow keys provided through use of properties
+export type ObjectParameterVariableType<
+  Def extends TypedObjectParameter,
+> =
+  & ObjectParameterPropertyTypes<Def["properties"]>
+  & (Def["additionalProperties"] extends false ? Record<never, never>
+    : {
+      // deno-lint-ignore no-explicit-any
+      [key: string]: any;
+    });

@@ -1,21 +1,31 @@
 import { SlackManifest } from "../manifest/mod.ts";
 import { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
+import { CustomTypeDefinition, ICustomType } from "./types.ts";
+import { isTypedArray, isTypedObject } from "../parameters/mod.ts";
 import {
-  CustomTypeDefinition,
-  DefineTypeFunction,
-  ICustomType,
-} from "./types.ts";
+  TypedObjectProperties,
+  TypedObjectRequiredProperties,
+} from "../parameters/definition_types.ts";
 
-export const DefineType: DefineTypeFunction = <
-  Def extends CustomTypeDefinition,
+// Helper that uses a type predicate for narrowing down to a Custom Type
+export const isCustomType = (type: string | ICustomType): type is ICustomType =>
+  type instanceof CustomType;
+
+export function DefineType<
+  Props extends TypedObjectProperties,
+  RequiredProps extends TypedObjectRequiredProperties<Props>,
+  Def extends CustomTypeDefinition<Props, RequiredProps>,
 >(
   definition: Def,
-) => {
+): CustomType<Props, RequiredProps, Def> {
   return new CustomType(definition);
-};
+}
 
-export class CustomType<Def extends CustomTypeDefinition>
-  implements ICustomType {
+export class CustomType<
+  Props extends TypedObjectProperties,
+  RequiredProps extends TypedObjectRequiredProperties<Props>,
+  Def extends CustomTypeDefinition<Props, RequiredProps>,
+> implements ICustomType {
   public id: string;
   public title: string | undefined;
   public description: string | undefined;
@@ -41,23 +51,21 @@ export class CustomType<Def extends CustomTypeDefinition>
   }
 
   registerParameterTypes(manifest: SlackManifest) {
-    if ("items" in this.definition) {
-      // Register the item if its a type
-      if (this.definition.items.type instanceof Object) {
+    if (isCustomType(this.definition.type)) {
+      manifest.registerType(this.definition.type);
+    } else if (isTypedArray(this.definition)) {
+      if (isCustomType(this.definition.items.type)) {
         manifest.registerType(this.definition.items.type);
       }
-    } else if ("properties" in this.definition) {
-      // Loop through the properties and register any types
+    } else if (isTypedObject(this.definition)) {
       Object.values(this.definition.properties)?.forEach((property) => {
-        if ("type" in property && property.type instanceof Object) {
+        if (isCustomType(property.type)) {
           manifest.registerType(property.type);
         }
       });
-    } else if (this.definition.type instanceof Object) {
-      // The referenced type is a Custom Type
-      manifest.registerType(this.definition.type);
     }
   }
+
   export(): ManifestCustomTypeSchema {
     // remove name from the definition we pass to the manifest
     const { name: _n, ...definition } = this.definition;

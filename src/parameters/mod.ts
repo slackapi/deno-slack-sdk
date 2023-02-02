@@ -1,66 +1,30 @@
 // import SchemaTypes from "../schema/schema_types.ts";
 import type {
-  TypedObjectParameterDefinition,
-  TypedParameterDefinition,
-  UntypedObjectParameterDefinition,
+  ObjectParameterVariableType,
+  ParameterVariableType,
+  SingleParameterVariable,
+  UntypedObjectParameterVariableType,
 } from "./types.ts";
+import type {
+  ParameterDefinition,
+  TypedArrayParameterDefinition,
+  TypedObjectParameter,
+  TypedObjectParameterDefinition,
+  TypedObjectProperties,
+  TypedObjectRequiredProperties,
+} from "./definition_types.ts";
 import { ParamReference } from "./param.ts";
 import { WithUntypedObjectProxy } from "./with-untyped-object-proxy.ts";
 import SchemaTypes from "../schema/schema_types.ts";
-import { ICustomType } from "../types/types.ts";
+import { isCustomType } from "../types/mod.ts";
 
-export type ParameterDefinition = TypedParameterDefinition;
-
-// Used for defining a set of input or output parameters
-export type ParameterSetDefinition = {
-  [key: string]: ParameterDefinition;
-};
-
-export type PossibleParameterKeys<
-  ParameterSetInternal extends ParameterSetDefinition,
-> = (keyof ParameterSetInternal)[];
-
-export type ParameterPropertiesDefinition<
-  Parameters extends ParameterSetDefinition,
-  Required extends PossibleParameterKeys<Parameters>,
-> = {
-  properties: Parameters;
-  required: Required;
-};
-
-export type ParameterVariableType<
-  Def extends ParameterDefinition,
-> = Def["type"] extends ICustomType // If the ParameterVariable is a Custom type, use it's definition instead
-  ? ParameterVariableType<Def["type"]["definition"]>
-  : Def extends TypedObjectParameterDefinition // If the ParameterVariable is of type object, allow access to the object's properties
-    ? ObjectParameterVariableType<Def>
-  : Def extends UntypedObjectParameterDefinition
-    ? UntypedObjectParameterVariableType
-  : SingleParameterVariable;
-
-// deno-lint-ignore ban-types
-type SingleParameterVariable = {};
-
-// deno-lint-ignore no-explicit-any
-type UntypedObjectParameterVariableType = any;
-
-type ObjectParameterPropertyTypes<Def extends TypedObjectParameterDefinition> =
-  {
-    [name in keyof Def["properties"]]: ParameterVariableType<
-      Def["properties"][name]
-    >;
-  };
-
-// If additionalProperties is set to true, allow access to any key.
-// Otherwise, only allow keys provided through use of properties
-type ObjectParameterVariableType<Def extends TypedObjectParameterDefinition> =
-  Def["additionalProperties"] extends false ? ObjectParameterPropertyTypes<Def>
-    : 
-      & ObjectParameterPropertyTypes<Def>
-      & {
-        // deno-lint-ignore no-explicit-any
-        [key: string]: any;
-      };
+// Helpers that use type predicate for narrowing down to a Typed Object or Array
+export const isTypedObject = (
+  def: ParameterDefinition,
+): def is TypedObjectParameter => ("properties" in def);
+export const isTypedArray = (
+  def: ParameterDefinition,
+): def is TypedArrayParameterDefinition => ("items" in def);
 
 export const ParameterVariable = <P extends ParameterDefinition>(
   namespace: string,
@@ -69,14 +33,14 @@ export const ParameterVariable = <P extends ParameterDefinition>(
 ): ParameterVariableType<P> => {
   let param: ParameterVariableType<P> | null = null;
 
-  if (definition.type instanceof Object) {
-    param = ParameterVariable(
+  if (isCustomType(definition.type)) {
+    return ParameterVariable(
       namespace,
       paramName,
       definition.type.definition,
     );
   } else if (definition.type === SchemaTypes.object) {
-    if ("properties" in definition) {
+    if (isTypedObject(definition)) {
       param = CreateTypedObjectParameterVariable(
         namespace,
         paramName,
@@ -91,12 +55,16 @@ export const ParameterVariable = <P extends ParameterDefinition>(
       paramName,
     ) as ParameterVariableType<P>;
   }
-
   return param as ParameterVariableType<P>;
 };
 
 const CreateTypedObjectParameterVariable = <
-  P extends TypedObjectParameterDefinition,
+  Props extends TypedObjectProperties,
+  RequiredProps extends TypedObjectRequiredProperties<Props>,
+  P extends TypedObjectParameterDefinition<
+    Props,
+    RequiredProps
+  >,
 >(
   namespace: string,
   paramName: string,

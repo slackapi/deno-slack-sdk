@@ -3,10 +3,10 @@ import { ManifestWorkflowSchema } from "../manifest/manifest_schema.ts";
 import { ISlackFunctionDefinition } from "../functions/types.ts";
 import {
   ParameterSetDefinition,
-  ParameterVariable,
   ParameterVariableType,
   PossibleParameterKeys,
-} from "../parameters/mod.ts";
+} from "../parameters/types.ts";
+import { ParameterVariable } from "../parameters/mod.ts";
 import {
   TypedWorkflowStepDefinition,
   UntypedWorkflowStepDefinition,

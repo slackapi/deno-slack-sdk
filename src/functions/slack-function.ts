@@ -1,7 +1,7 @@
 import {
   ParameterSetDefinition,
   PossibleParameterKeys,
-} from "../parameters/mod.ts";
+} from "../parameters/types.ts";
 import {
   EnrichedSlackFunctionHandler,
   RuntimeFunctionContext,

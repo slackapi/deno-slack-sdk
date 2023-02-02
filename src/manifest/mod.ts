@@ -5,7 +5,7 @@ import {
 } from "./types.ts";
 import { ICustomType } from "../types/types.ts";
 import { OAuth2Provider } from "../providers/oauth2/mod.ts";
-import { ParameterSetDefinition } from "../parameters/mod.ts";
+import { ParameterSetDefinition } from "../parameters/types.ts";
 import {
   ManifestAppHomeMessagesTabSchema,
   ManifestAppHomeSchema,
@@ -18,6 +18,7 @@ import {
   ManifestSchema,
   ManifestWorkflowsSchema,
 } from "./manifest_schema.ts";
+import { isCustomType } from "../types/mod.ts";
 
 export const Manifest = (
   definition: Omit<ISlackManifestRunOnSlack, "runOnSlack">,
@@ -159,7 +160,7 @@ export class SlackManifest {
   // Loop through a ParameterSetDefinition to register each individual type
   registerTypes(parameterSet: ParameterSetDefinition) {
     Object.values(parameterSet ?? {}).forEach((param) => {
-      if (param.type instanceof Object) {
+      if (isCustomType(param.type)) {
         this.registerType(param.type);
       }
     });

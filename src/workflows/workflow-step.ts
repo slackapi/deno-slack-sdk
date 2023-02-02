@@ -6,11 +6,13 @@ import {
 import { ISlackFunctionDefinition } from "../functions/types.ts";
 import {
   CreateUntypedObjectParameterVariable,
-  ParameterSetDefinition,
   ParameterVariable,
+} from "../parameters/mod.ts";
+import {
+  ParameterSetDefinition,
   ParameterVariableType,
   PossibleParameterKeys,
-} from "../parameters/mod.ts";
+} from "../parameters/types.ts";
 import { WorkflowStepInputs, WorkflowStepOutputs } from "./types.ts";
 
 const localFnPrefix = "#/functions/";

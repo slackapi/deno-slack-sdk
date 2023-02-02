@@ -1,7 +1,7 @@
 import { DefineEvent } from "./mod.ts";
 import { assertEquals } from "../dev_deps.ts";
 import { DefineType, Schema } from "../mod.ts";
-import { CustomType } from "../types/mod.ts";
+import { isCustomType } from "../types/mod.ts";
 
 Deno.test("DefineEvent accepts object types", () => {
   const TestEvent = DefineEvent({
@@ -28,7 +28,7 @@ Deno.test("DefineEvent accepts custom types", () => {
     type: TestType,
   });
 
-  assertEquals(TestEvent.definition.type instanceof CustomType, true);
+  assertEquals(isCustomType(TestEvent.definition.type), true);
 });
 
 Deno.test("DefineEvent is properly stringified", () => {

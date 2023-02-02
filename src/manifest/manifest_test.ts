@@ -32,6 +32,7 @@ Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack 
     icon: "icon.png",
     botScopes: ["channels:history", "chat:write", "commands"],
   };
+
   assert<IsExact<typeof definition, ISlackManifestRunOnSlack>>(true);
   assert<IsExact<typeof definition, ISlackManifestRemote>>(false);
 });
@@ -149,11 +150,15 @@ Deno.test("Manifest() automatically registers types used by function input and o
       title: "Function title",
       source_file: "functions/test_function.ts",
       input_parameters: {
-        properties: { aType: { type: CustomInputType } },
+        properties: {
+          aType: { type: CustomInputType },
+        },
         required: [],
       },
       output_parameters: {
-        properties: { aType: { type: CustomOutputType } },
+        properties: {
+          aType: { type: CustomOutputType },
+        },
         required: [],
       },
     },
@@ -426,7 +431,9 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
     name: objectTypeId,
     type: Schema.types.object,
     properties: {
-      aBoolean: { type: BooleanType },
+      aBoolean: {
+        type: BooleanType,
+      },
     },
   });
 
@@ -753,6 +760,7 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
         type: CustomStringType,
       },
     },
+    required: ["aString"],
   });
 
   const CustomArrayType = DefineType({

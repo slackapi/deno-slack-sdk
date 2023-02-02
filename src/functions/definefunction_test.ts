@@ -6,7 +6,7 @@ import { assertEquals, assertStrictEquals } from "../dev_deps.ts";
 
 const emptyParameterObject = Object.freeze({ required: [], properties: {} });
 
-Deno.test("Function sets appropriate defaults", () => {
+Deno.test("DefineFunction sets appropriate defaults", () => {
   const Func = DefineFunction({
     callback_id: "my_function",
     title: "My function",
@@ -23,7 +23,7 @@ Deno.test("Function sets appropriate defaults", () => {
   assertEquals(exportedFunc.output_parameters, emptyParameterObject);
 });
 
-Deno.test("Function with required params", () => {
+Deno.test("DefineFunction with required params", () => {
   const AllTypesFunction = DefineFunction({
     callback_id: "my_function",
     title: "All Types Function",
@@ -80,7 +80,7 @@ Deno.test("Function with required params", () => {
   );
 });
 
-Deno.test("Function without input and output parameters", () => {
+Deno.test("DefineFunction without input and output parameters", () => {
   const NoParamFunction = DefineFunction({
     callback_id: "no_params",
     title: "No Parameter Function",
@@ -94,7 +94,7 @@ Deno.test("Function without input and output parameters", () => {
   );
 });
 
-Deno.test("Function with input parameters but no output parameters", () => {
+Deno.test("DefineFunction with input parameters but no output parameters", () => {
   const inputParameters = {
     properties: {
       aString: { type: Schema.types.string },
@@ -120,7 +120,7 @@ Deno.test("Function with input parameters but no output parameters", () => {
   );
 });
 
-Deno.test("Function with output parameters but no input parameters", () => {
+Deno.test("DefineFunction with output parameters but no input parameters", () => {
   const outputParameters = {
     properties: {
       aString: { type: Schema.types.string },

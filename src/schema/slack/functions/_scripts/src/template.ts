@@ -1,4 +1,5 @@
 import { pascalCase } from "https://deno.land/x/case@v2.1.0/mod.ts";
+import { isCustomType } from "../../../../../types/mod.ts";
 import { ICustomType } from "../../../../../types/types.ts";
 import SchemaTypes from "../../../../schema_types.ts";
 import SlackSchemaTypes from "../../../schema_types.ts";
@@ -41,7 +42,7 @@ const schemaTypeMap = Object.entries(typeMap).reduce<AllowedTypeValueObject>(
   (acc, [schemaKey, schemaTypes]) => {
     for (const typeKey in schemaTypes) {
       const val = schemaTypes[typeKey];
-      if (val instanceof Object) {
+      if (isCustomType(val)) {
         acc[val.id] = `${schemaKey}.${typeKey}`;
       } else {
         acc[val] = `${schemaKey}.${typeKey}`;

@@ -2,16 +2,18 @@ import { SlackAPIClient } from "../deps.ts";
 import { Env } from "../types.ts";
 import { ManifestFunctionSchema } from "../manifest/manifest_schema.ts";
 import {
-  ParameterDefinition,
   ParameterPropertiesDefinition,
   ParameterSetDefinition,
   PossibleParameterKeys,
-} from "../parameters/mod.ts";
+} from "../parameters/types.ts";
 import {
   CustomTypeParameterDefinition,
+  ParameterDefinition,
   TypedArrayParameterDefinition,
   TypedObjectParameterDefinition,
-} from "../parameters/types.ts";
+  TypedObjectProperties,
+  TypedObjectRequiredProperties,
+} from "../parameters/definition_types.ts";
 import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
 import { SlackManifest } from "../manifest/mod.ts";
@@ -24,6 +26,12 @@ import {
   ViewClosedHandler,
   ViewSubmissionHandler,
 } from "./interactivity/types.ts";
+import { ICustomType } from "../types/types.ts";
+import {
+  IncreaseDepth,
+  MaxRecursionDepth,
+  RecursionDepthLevel,
+} from "../type_utils.ts";
 
 export type { BlockActionHandler } from "./interactivity/types.ts";
 
@@ -46,21 +54,6 @@ export type FunctionInvocationBody = {
   };
 };
 
-/** @description Defines accepted depth values */
-type RecursionDepthLevel = 0 | 1 | 2 | 3 | 4 | 5;
-
-/** @description Defines the max depth we want to recurse */
-type MaxRecursionDepth = 5;
-
-/** @description Increases the depth value one at a time */
-type IncreaseDepth<Depth extends RecursionDepthLevel = 0> = Depth extends 0 ? 1
-  : Depth extends 1 ? 2
-  : Depth extends 2 ? 3
-  : Depth extends 3 ? 4
-  : Depth extends 4 ? 5
-  : Depth extends 5 ? MaxRecursionDepth
-  : MaxRecursionDepth;
-
 /**
  * @description Maps a ParameterDefinition into a runtime type, i.e. "string" === string.
  */
@@ -70,29 +63,33 @@ type FunctionInputRuntimeType<
 > =
   // Recurse through Custom Types, stop when we hit our max depth
   CurrentDepth extends MaxRecursionDepth ? UnknownRuntimeType
-    : Param extends CustomTypeParameterDefinition ? FunctionInputRuntimeType<
-        Param["type"]["definition"],
-        IncreaseDepth<CurrentDepth>
-      >
-    : Param["type"] extends typeof SchemaTypes.string ? string // Not a Custom Type, so assign the runtime value
+    : Param["type"] extends ICustomType
+      ? Param extends CustomTypeParameterDefinition ? FunctionInputRuntimeType<
+          Param["type"]["definition"],
+          IncreaseDepth<CurrentDepth>
+        >
+      : UnknownRuntimeType
+    : Param["type"] extends
+      | typeof SchemaTypes.string
+      | typeof SlackSchemaTypes.user_id
+      | typeof SlackSchemaTypes.usergroup_id
+      | typeof SlackSchemaTypes.channel_id
+      | typeof SlackSchemaTypes.date ? string // Not a Custom Type, so assign the runtime value
     : Param["type"] extends
       | typeof SchemaTypes.integer
-      | typeof SchemaTypes.number ? number
+      | typeof SchemaTypes.number
+      | typeof SlackSchemaTypes.timestamp ? number
     : Param["type"] extends typeof SchemaTypes.boolean ? boolean
     : Param["type"] extends typeof SchemaTypes.array
       ? Param extends TypedArrayParameterDefinition
         ? TypedArrayFunctionInputRuntimeType<Param>
       : UnknownRuntimeType[]
     : Param["type"] extends typeof SchemaTypes.object
-      ? Param extends TypedObjectParameterDefinition
-        ? TypedObjectFunctionInputRuntimeType<Param>
+      ? Param extends TypedObjectParameterDefinition<
+        infer P,
+        infer RP
+      > ? TypedObjectFunctionInputRuntimeType<P, RP, Param>
       : UnknownRuntimeType
-    : Param["type"] extends
-      | typeof SlackSchemaTypes.user_id
-      | typeof SlackSchemaTypes.usergroup_id
-      | typeof SlackSchemaTypes.channel_id
-      | typeof SlackSchemaTypes.date ? string
-    : Param["type"] extends typeof SlackSchemaTypes.timestamp ? number
     : Param["type"] extends typeof SlackSchemaTypes.rich_text
       ? UnknownRuntimeType
     : UnknownRuntimeType;
@@ -101,21 +98,24 @@ type FunctionInputRuntimeType<
 type UnknownRuntimeType = any;
 
 type TypedObjectFunctionInputRuntimeType<
-  Param extends TypedObjectParameterDefinition,
-> = Param["additionalProperties"] extends false ? {
-    [k in keyof Param["properties"]]: FunctionInputRuntimeType<
-      Param["properties"][k]
+  Props extends TypedObjectProperties,
+  RequiredProps extends TypedObjectRequiredProperties<Props>,
+  Param extends TypedObjectParameterDefinition<Props, RequiredProps>,
+> =
+  & {
+    [prop in keyof Props]?: FunctionInputRuntimeType<
+      Props[prop]
     >;
   }
-  : 
-    & {
-      [k in keyof Param["properties"]]: FunctionInputRuntimeType<
-        Param["properties"][k]
+  & (RequiredProps extends Array<keyof Props> ? {
+      [prop in RequiredProps[number]]: FunctionInputRuntimeType<
+        Props[prop]
       >;
     }
-    & {
-      [key: string]: UnknownRuntimeType;
-    };
+    : Record<never, never>)
+  & (Param["additionalProperties"] extends false ? Record<never, never> : {
+    [key: string]: UnknownRuntimeType;
+  });
 
 type TypedArrayFunctionInputRuntimeType<
   Param extends TypedArrayParameterDefinition,

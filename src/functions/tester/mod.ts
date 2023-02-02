@@ -2,7 +2,7 @@ import { SlackAPI } from "../../deps.ts";
 import {
   ParameterSetDefinition,
   PossibleParameterKeys,
-} from "../../parameters/mod.ts";
+} from "../../parameters/types.ts";
 import { SlackFunctionDefinition } from "../mod.ts";
 import type { FunctionRuntimeParameters } from "../types.ts";
 import { CreateFunctionContext, SlackFunctionTesterFn } from "./types.ts";
@@ -42,6 +42,7 @@ export const SlackFunctionTester: SlackFunctionTesterFn = <
     const ts = new Date();
     const token = args.token || "slack-function-test-token";
 
+    // TODO: can we reuse some of our existing types for modeling payloads to ensure this structure doesnt become out of date?
     return {
       inputs: (args.inputs || {}) as FunctionRuntimeParameters<
         InputParameters,

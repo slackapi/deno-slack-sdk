@@ -1,9 +1,9 @@
-import { assertEquals } from "../dev_deps.ts";
-import { DefineWorkflow } from "./mod.ts";
-import { DefineFunction } from "../mod.ts";
-import SlackTypes from "../schema/slack/schema_types.ts";
+import { assertEquals } from "../../../src/dev_deps.ts";
+import { DefineWorkflow } from "../../../src/workflows/mod.ts";
+import { DefineFunction } from "../../../src/mod.ts";
+import SlackTypes from "../../../src/schema/slack/schema_types.ts";
 
-Deno.test("WorkflowStep export input values", () => {
+Deno.test("Multi-step Workflow should export correct double-brace-wrapped step input values", () => {
   const TestFunction = DefineFunction({
     callback_id: "no_params",
     title: "Test Function",
@@ -22,6 +22,7 @@ Deno.test("WorkflowStep export input values", () => {
             email: { type: "string" },
             name: { type: "string" },
           },
+          required: [],
         },
       },
       required: ["email"],
@@ -37,6 +38,7 @@ Deno.test("WorkflowStep export input values", () => {
             email: { type: "string" },
             name: { type: "string" },
           },
+          required: [],
         },
       },
       required: ["url"],
@@ -60,6 +62,7 @@ Deno.test("WorkflowStep export input values", () => {
             email: { type: "string" },
             name: { type: "string" },
           },
+          required: ["name"],
         },
       },
       required: ["email", "manager"],
@@ -119,7 +122,7 @@ Deno.test("WorkflowStep export input values", () => {
   );
 });
 
-Deno.test("Workflows properly treats interactivity and user context types", () => {
+Deno.test("Workflow addStep returns appropriate output types and properties for interactivity and user context types", () => {
   const TestFunction = DefineFunction({
     source_file: "./test.ts",
     callback_id: "test",
@@ -181,7 +184,7 @@ Deno.test("Workflows properly treats interactivity and user context types", () =
 // and pass the undefined values up to the validation API
 // -- which will then communicate back to the CLI the specific
 // validation errors it ran in to.
-Deno.test("Malformed workflow step inputs are set to undefined", () => {
+Deno.test("Malformed workflow step inputs should be undefined", () => {
   const TestFunction = DefineFunction({
     callback_id: "test_undefined",
     title: "Test Function",

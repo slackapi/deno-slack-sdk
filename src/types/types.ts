@@ -1,19 +1,25 @@
-import { TypedParameterDefinition } from "../parameters/types.ts";
+import {
+  ParameterDefinitionWithGenerics,
+  TypedObjectProperties,
+  TypedObjectRequiredProperties,
+} from "../parameters/definition_types.ts";
 import { SlackManifest } from "../manifest/mod.ts";
 import { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
-import { CustomType } from "./mod.ts";
 
-export type CustomTypeDefinition =
+export type CustomTypeDefinition<
+  Props extends TypedObjectProperties,
+  RequiredProps extends TypedObjectRequiredProperties<Props>,
+> =
   & { name: string }
-  & TypedParameterDefinition;
+  & ParameterDefinitionWithGenerics<Props, RequiredProps>;
 
-export type DefineTypeFunction = {
-  <Def extends CustomTypeDefinition>(definition: Def): CustomType<Def>;
-};
-
-export interface ICustomType {
+export interface ICustomType<
+  Props extends TypedObjectProperties = TypedObjectProperties,
+  RequiredProps extends TypedObjectRequiredProperties<Props> =
+    TypedObjectRequiredProperties<Props>,
+> {
   id: string;
-  definition: CustomTypeDefinition;
+  definition: CustomTypeDefinition<Props, RequiredProps>;
   description?: string;
   registerParameterTypes: (manifest: SlackManifest) => void;
   export(): ManifestCustomTypeSchema;

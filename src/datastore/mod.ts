@@ -5,6 +5,7 @@ import {
   SlackDatastoreAttributes,
   SlackDatastoreDefinition,
 } from "./types.ts";
+import { isCustomType } from "../types/mod.ts";
 
 /**
  * Define a datastore and primary key and attributes for use in a Slack application.
@@ -36,7 +37,7 @@ export class SlackDatastore<
 
   registerAttributeTypes(manifest: SlackManifest) {
     Object.values(this.definition.attributes ?? {})?.forEach((attribute) => {
-      if (attribute.type instanceof Object) {
+      if (isCustomType(attribute.type)) {
         manifest.registerType(attribute.type);
       }
     });

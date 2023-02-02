@@ -3,6 +3,7 @@ import { DefineType } from "../../../../types/mod.ts";
 
 const FormInput = DefineType({
   name: "slack#/types/form_input_object",
+  description: "Input fields to be shown on the form",
   type: SchemaTypes.object,
   properties: {
     required: {
@@ -18,6 +19,7 @@ const FormInput = DefineType({
       },
     },
   },
+  required: ["elements"],
 });
 
 export { FormInput };
