@@ -792,7 +792,7 @@ Deno.test("Custom Function using Slack's FormInput internal Custom Type input sh
     );
     assert<CanBe<typeof formInput.required, string[]>>(true);
 
-    assert<CanBeUndefined<typeof formInput.elements>>(
+    assert<CannotBeUndefined<typeof formInput.elements>>(
       true,
     );
     assert<CanBe<typeof formInput.elements, any[]>>(true);
