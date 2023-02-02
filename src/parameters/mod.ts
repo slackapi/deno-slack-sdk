@@ -37,25 +37,23 @@ export const ParameterVariable = <P extends ParameterDefinition>(
       paramName,
       definition.type.definition,
     );
-  }
-  switch (definition.type) {
-    case SchemaTypes.object:
-      if (isTypedObject(definition)) {
-        param = CreateTypedObjectParameterVariable(
-          namespace,
-          paramName,
-          definition,
-        ) as ParameterVariableType<P>;
-      } else {
-        param = CreateUntypedObjectParameterVariable(namespace, paramName);
-      }
-      break;
-    default:
-      param = CreateSingleParameterVariable(
+  } else if (definition.type === SchemaTypes.object) {
+    if (isTypedObject(definition)) {
+      param = CreateTypedObjectParameterVariable(
         namespace,
         paramName,
+        definition,
       ) as ParameterVariableType<P>;
+    } else {
+      param = CreateUntypedObjectParameterVariable(namespace, paramName);
+    }
+  } else {
+    param = CreateSingleParameterVariable(
+      namespace,
+      paramName,
+    ) as ParameterVariableType<P>;
   }
+
   // TODO: the following type assertion seems to ignore the case where param could be null
   return param as ParameterVariableType<P>;
 };
