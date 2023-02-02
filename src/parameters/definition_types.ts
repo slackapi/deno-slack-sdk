@@ -4,7 +4,7 @@ import { ICustomType } from "../types/types.ts";
 
 export type ParameterDefinition = TypedParameterDefinition;
 
-export type PrimitiveParameterDefinition =
+type PrimitiveParameterDefinition =
   | BooleanParameterDefinition
   | StringParameterDefinition
   | NumberParameterDefinition
@@ -13,7 +13,7 @@ export type PrimitiveParameterDefinition =
   // | UntypedArrayParameterDefinition
   | TypedArrayParameterDefinition;
 
-export type TypedParameterDefinition =
+type TypedParameterDefinition =
   | CustomTypeParameterDefinition
   | TypedObjectParameter
   | UntypedObjectParameterDefinition
