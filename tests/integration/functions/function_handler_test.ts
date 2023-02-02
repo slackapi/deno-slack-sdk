@@ -3,7 +3,7 @@ import {
 } from "../../../src/dev_deps.ts";
 import { CanBe, CanBeUndefined, CannotBeUndefined, } from "../../../src/test_utils.ts";
 import { DefineFunction, DefineType, Schema } from "../../../src/mod.ts";
-import { DefineParameter } from "../../../src/parameters/define_parameter.ts";
+import { DefineProperty } from "../../../src/parameters/define_parameter.ts";
 import {
   EnrichedSlackFunctionHandler,
 } from "../../../src/functions/types.ts";
@@ -332,14 +332,14 @@ Deno.test("Custom Function using untyped Objects should allow for referencing an
 /**
  * Testing Typed Object inputs/outputs
  */
-Deno.test("Custom Function with a required DefineParameter-wrapped typedobject input with a required string property and a required DefineParameter-wrapped typedobject output should provide correct typing in a function handler context and complain if required output not provided", () => {
+Deno.test("Custom Function with a required DefineProperty-wrapped typedobject input with a required string property and a required DefineProperty-wrapped typedobject output should provide correct typing in a function handler context and complain if required output not provided", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
     source_file: "test.ts",
     input_parameters: {
       properties: {
-        anObject: DefineParameter({
+        anObject: DefineProperty({
           type: Schema.types.object,
           properties: { in: { type: "string" } },
           required: ["in"],
@@ -349,7 +349,7 @@ Deno.test("Custom Function with a required DefineParameter-wrapped typedobject i
     },
     output_parameters: {
       properties: {
-        anObject: DefineParameter({
+        anObject: DefineProperty({
           type: Schema.types.object,
           properties: { out: { type: "string" } },
           required: ["out"],
@@ -390,14 +390,14 @@ Deno.test("Custom Function with a required DefineParameter-wrapped typedobject i
   assertEqualsTypedValues(result.outputs?.anObject.out, "test");
 });
 
-Deno.test("Custom Function with a required DefineParameter-wrapped typedobject input with an optional string property should provide correct typing in a function handler context", () => {
+Deno.test("Custom Function with a required DefineProperty-wrapped typedobject input with an optional string property should provide correct typing in a function handler context", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
     source_file: "test.ts",
     input_parameters: {
       properties: {
-        anObject: DefineParameter({
+        anObject: DefineProperty({
           type: Schema.types.object,
           properties: { in: { type: "string" } },
           required: [],
@@ -421,14 +421,14 @@ Deno.test("Custom Function with a required DefineParameter-wrapped typedobject i
   );
 });
 
-Deno.test("Custom Function with a required output DefineParameter-wrapped typedobject with mixed required/optional property requirements should complain if required object properties are not returned by function", () => {
+Deno.test("Custom Function with a required output DefineProperty-wrapped typedobject with mixed required/optional property requirements should complain if required object properties are not returned by function", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
     source_file: "test.ts",
     output_parameters: {
       properties: {
-        anObject: DefineParameter({
+        anObject: DefineProperty({
           type: Schema.types.object,
           properties: { req: { type: "string" }, opt: { type: "string" } },
           required: ["req"],
@@ -476,8 +476,8 @@ Deno.test("Custom Function with a required output DefineParameter-wrapped typedo
     };
 });
 
-Deno.test("Custom Function with an input of DefineParameter-wrapped Typed Object with additional properties allows referencing into additional properties in a function handler context", () => {
-  const obj = DefineParameter({
+Deno.test("Custom Function with an input of DefineProperty-wrapped Typed Object with additional properties allows referencing into additional properties in a function handler context", () => {
+  const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
       aString: { type: Schema.types.string },
@@ -543,8 +543,8 @@ Deno.test("Custom Function with an input of DefineParameter-wrapped Typed Object
   result.outputs.addlPropertiesObj.anothaOne;
 });
 
-Deno.test("Custom Function with an input of DefineParameter-wrapped Typed Object without additional properties prevents referencing into additional properties in a function handler context", () => {
-  const obj = DefineParameter({
+Deno.test("Custom Function with an input of DefineProperty-wrapped Typed Object without additional properties prevents referencing into additional properties in a function handler context", () => {
+  const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
       aString: { type: Schema.types.string },
@@ -609,8 +609,8 @@ Deno.test("Custom Function with an input of DefineParameter-wrapped Typed Object
 /**
  * Testing Custom Type inputs/outputs
  */
-Deno.test("Custom Function using a Custom Type input for a DefineParameter-wrapped typedobject with mixed required/optional properties should provide correct typedobject typing in a function handler context and should complain if typedobject output does not include required property", () => {
-  const myObject = DefineParameter({
+Deno.test("Custom Function using a Custom Type input for a DefineProperty-wrapped typedobject with mixed required/optional properties should provide correct typedobject typing in a function handler context and should complain if typedobject output does not include required property", () => {
+  const myObject = DefineProperty({
     type: Schema.types.object,
     properties: {
       required_property: { type: "string" },
@@ -810,8 +810,8 @@ Deno.test("Custom Function using Slack's FormInput internal Custom Type input sh
 /**
  * Testing Array inputs/outputs
  */
-Deno.test("Custom Function using an input of Typed Arrays of Custom Types of DefineParameter-wrapped typed objects should honor required and optional properties and allow for referencing additional properties", () => {
-  const obj = DefineParameter({
+Deno.test("Custom Function using an input of Typed Arrays of Custom Types of DefineProperty-wrapped typed objects should honor required and optional properties and allow for referencing additional properties", () => {
+  const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
       aString: {
@@ -889,8 +889,8 @@ Deno.test("Custom Function using an input of Typed Arrays of Custom Types of Def
   handler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("Custom Function using an input of Typed Arrays of Custom Types of DefineParameter-wrapped typed objects should honor additionalProperties=false", () => {
-  const obj = DefineParameter({
+Deno.test("Custom Function using an input of Typed Arrays of Custom Types of DefineProperty-wrapped typed objects should honor additionalProperties=false", () => {
+  const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
       aString: {
@@ -970,8 +970,8 @@ Deno.test("Custom Function using an input of Typed Arrays of Custom Types of Def
   handler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("Custom Function using an input of Typed Arrays of DefineParameter-wrapped typed objects should honor required and optional properties and allow for referencing additional properties", () => {
-  const obj = DefineParameter({
+Deno.test("Custom Function using an input of Typed Arrays of DefineProperty-wrapped typed objects should honor required and optional properties and allow for referencing additional properties", () => {
+  const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
       aString: {
@@ -1043,8 +1043,8 @@ Deno.test("Custom Function using an input of Typed Arrays of DefineParameter-wra
   handler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("Custom Function using an input of Typed Arrays of DefineParameter-wrapped typed objects should honor additionalProperties=false", () => {
-  const obj = DefineParameter({
+Deno.test("Custom Function using an input of Typed Arrays of DefineProperty-wrapped typed objects should honor additionalProperties=false", () => {
+  const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
       aString: {

@@ -8,7 +8,7 @@ import { Schema } from "../../../src/mod.ts";
 
 /**
  * Custom Function handler tests, exercising inputs of unwrapped typed object parameters
- * Unwrapped typed object parameters are object parameters that are not defined using the DefineParameter helper
+ * Unwrapped typed object parameters are object parameters that are not defined using the DefineProperty helper
  * TODO: some of these are commented out and failing as we attempt to address the issues
  * TODO: May want to split this file up down the road if it gets too big, possibly organize under further sub-dirs
  */
