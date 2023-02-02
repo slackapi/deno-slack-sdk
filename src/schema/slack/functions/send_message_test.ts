@@ -31,6 +31,7 @@ Deno.test("SendMessage generates valid FunctionManifests", () => {
         },
         metadata: {
           type: SchemaTypes.object,
+          required: ["event_type", "event_payload"],
           description:
             "Metadata you post to Slack is accessible to any app or user who is a member of that workspace",
           properties: {

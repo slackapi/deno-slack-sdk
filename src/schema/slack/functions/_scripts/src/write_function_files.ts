@@ -1,4 +1,5 @@
-import { SlackFunctionModTemplate, SlackFunctionTemplate } from "./template.ts";
+import SlackFunctionTemplate from "./template_function.ts";
+import SlackFunctionModTemplate from "./template_mod.ts";
 import { getSlackFunctions, greenText } from "./utils.ts";
 
 const slackFunctions = await getSlackFunctions();
