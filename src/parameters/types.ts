@@ -57,14 +57,13 @@ export type ObjectParameterPropertyTypes<
 // Otherwise, only allow keys provided through use of properties
 export type ObjectParameterVariableType<
   Def extends TypedObjectParameter,
-> = Def["additionalProperties"] extends false
-  ? ObjectParameterPropertyTypes<Def["properties"]>
-  : 
-    & ObjectParameterPropertyTypes<Def["properties"]>
-    & {
+> =
+  & ObjectParameterPropertyTypes<Def["properties"]>
+  & (Def["additionalProperties"] extends false ? Record<never, never>
+    : {
       // deno-lint-ignore no-explicit-any
       [key: string]: any;
-    };
+    });
 
 export type ParameterDefinition = TypedParameterDefinition;
 
