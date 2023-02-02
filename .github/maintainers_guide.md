@@ -20,6 +20,21 @@ You can also run a test coverage report with:
 
     deno task coverage
 
+Sometimes you may need to test out changes in this SDK in a sample app or project. In order to do this, commit your intended history to a remote branch and note the full commit SHA. `(e.g. fc0a0a1f0722e28fecb7782513d045522d7c0d6f)`
+
+Then in your sample app's `import_map.json` file, replace the `deno-slack-sdk` import url with: 
+
+```
+{
+  "imports": {
+    "deno-slack-sdk/": "https://raw.githubusercontent.com/slackapi/deno-slack-sdk/<commit-SHA-goes-here>/src/",
+    "deno-slack-api/": "https://deno.land/x/deno_slack_api@1.5.0/"
+  }
+}
+```
+
+You may need to reload your modules if they've been cached: https://deno.land/manual@v1.29.1/basics/modules/reloading_modules
+
 ### Releasing
 
 Releases for this library are automatically generated off of git tags. Before creating a new release, ensure that everything on the `main` branch since the last tag is in a releasable state! At a minimum, [run the tests](#testing).
