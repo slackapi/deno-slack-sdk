@@ -5,7 +5,7 @@ import {
   ParameterPropertiesDefinition,
   ParameterSetDefinition,
   PossibleParameterKeys,
-} from "../parameters/mod.ts";
+} from "../parameters/types.ts";
 import {
   CustomTypeParameterDefinition,
   ParameterDefinition,

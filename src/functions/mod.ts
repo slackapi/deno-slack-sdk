@@ -2,7 +2,7 @@ import { ManifestFunctionSchema } from "../manifest/manifest_schema.ts";
 import {
   ParameterSetDefinition,
   PossibleParameterKeys,
-} from "../parameters/mod.ts";
+} from "../parameters/types.ts";
 import { FunctionDefinitionArgs } from "./types.ts";
 import { SlackManifest } from "../manifest/mod.ts";
 

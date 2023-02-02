@@ -5,7 +5,7 @@ import {
 } from "./types.ts";
 import { ICustomType } from "../types/types.ts";
 import { OAuth2Provider } from "../providers/oauth2/mod.ts";
-import { ParameterSetDefinition } from "../parameters/mod.ts";
+import { ParameterSetDefinition } from "../parameters/types.ts";
 import {
   ManifestAppHomeMessagesTabSchema,
   ManifestAppHomeSchema,

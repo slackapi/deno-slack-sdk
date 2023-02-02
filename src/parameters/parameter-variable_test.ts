@@ -1,5 +1,6 @@
 import SchemaTypes from "../schema/schema_types.ts";
-import { ParameterVariable, SingleParameterVariable } from "./mod.ts";
+import { ParameterVariable } from "./mod.ts";
+import { SingleParameterVariable } from "./types.ts";
 import { assert, assertStrictEquals, IsAny, IsExact } from "../dev_deps.ts";
 import { CannotBeUndefined } from "../test_utils.ts";
 /**

@@ -1,7 +1,9 @@
 import { ISlackDatastore } from "../datastore/types.ts";
 import { ISlackFunctionDefinition } from "../functions/types.ts";
-import type { ParameterSetDefinition } from "../parameters/mod.ts";
-import type { ParameterDefinition } from "../parameters/types.ts";
+import type {
+  ParameterDefinition,
+  ParameterSetDefinition,
+} from "../parameters/types.ts";
 import { OAuth2ProviderTypeValues } from "../schema/providers/oauth2/types.ts";
 import type { ICustomType } from "../types/types.ts";
 import { ISlackWorkflow } from "../workflows/types.ts";
