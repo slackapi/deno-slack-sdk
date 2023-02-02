@@ -27,9 +27,12 @@ export default DefineFunction(
         },
         fields: {
           type: InternalSlackTypes.form_input_object,
+          description: "Input fields to be shown on the form",
         },
         interactivity: {
           type: SlackTypes.interactivity,
+          description:
+            "Context about the interactive event that led to opening of the form",
         },
       },
     },
@@ -42,6 +45,7 @@ export default DefineFunction(
         },
         interactivity: {
           type: SlackTypes.interactivity,
+          description: "Context about the form submit action interactive event",
         },
       },
     },

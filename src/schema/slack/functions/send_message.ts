@@ -37,7 +37,6 @@ export default DefineFunction(
               type: SchemaTypes.object,
             },
           },
-          required: [],
           additionalProperties: true,
         },
         interactive_blocks: {
@@ -63,6 +62,7 @@ export default DefineFunction(
         },
         interactivity: {
           type: SlackTypes.interactivity,
+          description: "Interactivity context",
         },
       },
     },

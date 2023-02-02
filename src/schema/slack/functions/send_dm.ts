@@ -48,6 +48,7 @@ export default DefineFunction(
         },
         interactivity: {
           type: SlackTypes.interactivity,
+          description: "Interactivity context",
         },
       },
     },
