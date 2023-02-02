@@ -308,7 +308,6 @@ Deno.test("Manifest() automatically registers types referenced by datastores", (
     properties: {
       aString: { type: StringType },
     },
-    required: ["aString"],
   });
 
   const Store = DefineDatastore({
@@ -367,7 +366,6 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
     properties: {
       aBoolean: { type: BooleanType },
     },
-    required: ["aBoolean"],
   });
 
   const ObjectEvent = DefineEvent({
@@ -377,7 +375,6 @@ Deno.test("Manifest() automatically registers types referenced by events", () =>
       aBoolean: { type: BooleanType },
       anArray: { type: ArrayType },
     },
-    required: ["aBoolean", "anArray"],
   });
 
   const ObjectTypeEvent = DefineEvent({
@@ -438,7 +435,6 @@ Deno.test("Manifest() automatically registers types referenced by other types", 
         type: BooleanType,
       },
     },
-    required: ["aBoolean"],
   });
 
   const ArrayType = DefineType({
