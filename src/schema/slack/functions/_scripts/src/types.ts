@@ -4,7 +4,7 @@ import {
 } from "../../../../../manifest/manifest_schema.ts";
 
 export type DefineFunctionInput = ManifestFunctionSchema & {
-  callback_id: string;
+  callbackId: string;
 };
 
 export type FunctionParameter = {

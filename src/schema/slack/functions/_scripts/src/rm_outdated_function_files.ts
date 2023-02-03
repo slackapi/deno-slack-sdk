@@ -1,15 +1,18 @@
 import {
-  getSlackFunctions,
+  getDefineFunctionInputs,
   isValidFunctionFile,
+  loadFunctionsJson,
   redText,
   yellowText,
 } from "./utils.ts";
 
-const slackFunctions = await getSlackFunctions();
+const slackFunctions = getDefineFunctionInputs(
+  await loadFunctionsJson(),
+);
 
 // We just need the CallbackIds here
 const slackFunctionCallbackIds = new Set(
-  slackFunctions.map((slackFunction) => slackFunction.callback_id),
+  slackFunctions.map((slackFunction) => slackFunction.callbackId),
 );
 
 const remove_file = async (filePath: string) => {
