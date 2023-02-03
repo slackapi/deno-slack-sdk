@@ -1,18 +1,82 @@
-export { assertEquals } from "https://deno.land/std@0.152.0/testing/asserts.ts";
 import SchemaTypes from "../../../../../schema_types.ts";
 import SlackSchemaTypes from "../../../../schema_types.ts";
 import { InternalSlackTypes } from "../../../../types/custom/mod.ts";
-import { getDefineFunctionInput, getManifestFunctionSchema } from "../utils.ts";
+import {
+  getDefineFunctionInput,
+  getDefineFunctionInputs,
+  getManifestFunctionSchema,
+  greenText,
+  isValidFunctionFile,
+  redText,
+  yellowText,
+} from "../utils.ts";
 import {
   ManifestFunctionSchema,
 } from "../../../../../../manifest/manifest_schema.ts";
-import { DefineFunctionInput, FunctionRecord } from "../types.ts";
-import { assertEquals } from "https://deno.land/std@0.152.0/testing/asserts.ts";
+import {
+  DefineFunctionInput,
+  FunctionRecord,
+  FunctionsPayload,
+} from "../types.ts";
+import {
+  assertEquals,
+  assertFalse,
+} from "https://deno.land/std@0.152.0/testing/asserts.ts";
 
 const DESCRIPTION = "Test the built-in function template";
 const TITLE = "test function";
 const CALLBACK_ID = "test_function";
 const SOURCE_FILE = "";
+
+Deno.test("isValidFunctionFile should be true for critical files", () => {
+  assertFalse(isValidFunctionFile("_scripts"));
+  assertFalse(isValidFunctionFile("mod.ts"));
+});
+
+Deno.test("colored text remain consistent", () => {
+  assertEquals("\x1b[92mtest\x1b[0m", greenText("test"));
+  assertEquals("\x1b[91mtest\x1b[0m", redText("test"));
+  assertEquals("\x1b[38;5;214mtest\x1b[0m", yellowText("test"));
+});
+
+Deno.test("getDefineFunctionInputs should return proper filtered list of DefineFunctionInput", () => {
+  const actual: DefineFunctionInput[] = [{
+    callbackId: CALLBACK_ID,
+    description: DESCRIPTION,
+    input_parameters: {
+      properties: {},
+      required: [],
+    },
+    output_parameters: {
+      properties: {},
+      required: [],
+    },
+    source_file: SOURCE_FILE,
+    title: TITLE,
+  }];
+  const functionRecords: FunctionsPayload = {
+    ok: true,
+    functions: [{
+      callback_id: CALLBACK_ID,
+      title: TITLE,
+      description: DESCRIPTION,
+      type: "builtin",
+      input_parameters: [],
+      output_parameters: [],
+    }, {
+      callback_id: CALLBACK_ID,
+      app_id: "hello",
+      title: TITLE,
+      description: DESCRIPTION,
+      type: "builtin",
+      input_parameters: [],
+      output_parameters: [],
+    }],
+  };
+  const expected = getDefineFunctionInputs(functionRecords);
+
+  assertEquals(actual, expected);
+});
 
 Deno.test("getManifestFunctionSchemaFields should return proper object", () => {
   const actual: ManifestFunctionSchema = {

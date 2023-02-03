@@ -4,11 +4,16 @@ import {
   getFunctionName,
   getSlackCallbackId,
   renderFunctionImport,
+  renderTypeImports,
 } from "../template_utils.ts";
 import {
   assertEquals,
   assertStringIncludes,
 } from "https://deno.land/std@0.152.0/testing/asserts.ts";
+import { DefineFunctionInput } from "../../types.ts";
+import SchemaTypes from "../../../../../../schema_types.ts";
+import SlackTypes from "../../../../../schema_types.ts";
+import { InternalSlackTypes } from "../../../../../types/custom/mod.ts";
 
 const DESCRIPTION = "Test the built-in function template";
 const TITLE = "test function";
@@ -45,4 +50,49 @@ Deno.test("getSlackCallbackId should generate the valid slack callback_id", () =
     title: TITLE,
   });
   assertStringIncludes(actual, expected);
+});
+
+Deno.test("renderTypeImports should render all imports provided", () => {
+  const dfi: DefineFunctionInput = {
+    callbackId: CALLBACK_ID,
+    description: DESCRIPTION,
+    input_parameters: {
+      properties: {
+        channel_id: {
+          description: "Search all channels",
+          type: SlackTypes.channel_id,
+        },
+        fields: {
+          type: InternalSlackTypes.form_input_object.id,
+          description: "Input fields to be shown on the form",
+        },
+      },
+      required: [
+        "channel_id",
+        "fields",
+      ],
+    },
+    output_parameters: {
+      properties: {
+        message_ts: {
+          description: "Message time stamp",
+          type: SchemaTypes.string,
+        },
+        user_ids: {
+          description: "User Ids",
+          type: SchemaTypes.array,
+          items: {
+            type: SchemaTypes.integer,
+          },
+        },
+      },
+      required: [],
+    },
+    source_file: SOURCE_FILE,
+    title: TITLE,
+  };
+  const actual = renderTypeImports(dfi);
+  assertStringIncludes(actual, "SchemaTypes");
+  assertStringIncludes(actual, "SlackTypes");
+  assertStringIncludes(actual, "InternalSlackTypes");
 });

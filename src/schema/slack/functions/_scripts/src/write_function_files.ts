@@ -15,7 +15,7 @@ const slackFunctions: DefineFunctionInput[] = getDefineFunctionInputs(
 // Sorting alphabetically cause only a monster would generate these in a random order
 slackFunctions.sort((a, b) => a.callbackId.localeCompare(b.callbackId));
 
-slackFunctions.forEach(async (dfi) => {
+slackFunctions.forEach(async (dfi: DefineFunctionInput) => {
   console.log(
     `Generating code for Slack Function: ${greenText(dfi.callbackId)}`,
   );

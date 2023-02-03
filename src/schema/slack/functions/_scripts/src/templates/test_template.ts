@@ -3,12 +3,10 @@ import {
   getFunctionName,
   getSlackCallbackId,
   renderFunctionImport,
+  renderTypeImports,
 } from "./template_utils.ts";
 import { DefineFunctionInput } from "../types.ts";
-import {
-  manifestFunctionFieldsToTypeScript,
-  renderTypeImports,
-} from "./template_function.ts";
+import { manifestFunctionFieldsToTypeScript } from "./template_function.ts";
 import {
   ManifestFunctionParameters,
   ManifestFunctionSchema,

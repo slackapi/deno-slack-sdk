@@ -30,9 +30,7 @@ export function isValidFunctionFile(fileName: string) {
 }
 
 export async function loadFunctionsJson(): Promise<FunctionsPayload> {
-  return await Deno.readTextFile(
-    FUNCTIONS_JSON_PATH,
-  ).then(JSON.parse);
+  return await Deno.readTextFile(FUNCTIONS_JSON_PATH).then(JSON.parse);
 }
 
 export function getDefineFunctionInputs(
@@ -107,9 +105,7 @@ export function getDefineFunctionInput(
   functionRecord: FunctionRecord,
 ): DefineFunctionInput {
   return {
+    callbackId: functionRecord.callback_id,
     ...getManifestFunctionSchema(functionRecord),
-    ...{
-      callbackId: functionRecord.callback_id,
-    },
   };
 }
