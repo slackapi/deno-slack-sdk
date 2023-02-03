@@ -2,8 +2,12 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-# Writes the Function files based on a functions.json file existing alongside this script
+# Writes the Function & test files based on a functions.json file existing alongside this script
 deno run --quiet --allow-read --allow-write ./src/write_function_files.ts
+
+# Remove function files not mentionned in the functions.json file
+deno run --quiet --allow-read --allow-write ./src/rm_outdated_function_files.ts
+
 echo "Formatting Slack function files..."
 deno fmt --quiet ../*.ts
 echo "Linting Slack function files..."
