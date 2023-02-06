@@ -8,6 +8,7 @@ import {
 import {
   DefineFunctionInput,
   FunctionParameter,
+  FunctionProperty,
   FunctionRecord,
   FunctionsPayload,
 } from "./types.ts";
@@ -30,7 +31,9 @@ export function isValidFunctionFile(fileName: string) {
 }
 
 export async function loadFunctionsJson(): Promise<FunctionsPayload> {
-  return await Deno.readTextFile(FUNCTIONS_JSON_PATH).then(JSON.parse);
+  return await Deno.readTextFile(
+    FUNCTIONS_JSON_PATH,
+  ).then(JSON.parse);
 }
 
 export function getDefineFunctionInputs(
@@ -49,19 +52,20 @@ export function getDefineFunctionInputs(
 }
 
 const getParameterDefinition = (
-  param: FunctionParameter,
+  param: FunctionProperty,
 ): ParameterDefinition => {
   // deno-lint-ignore no-explicit-any
   const paramDef: { [key: string]: any } = {
     type: param.type,
+    description: param.description,
   };
   if (param.description) {
     paramDef.description = param.description;
   }
-  if (param.items) {
+  if ("items" in param) {
     paramDef.items = param.items;
   }
-  if (param.properties) {
+  if ("properties" in param) {
     paramDef.properties = {};
     Object.entries(param.properties).forEach(([propertyKey, propertyValue]) => {
       paramDef.properties[propertyKey] = getParameterDefinition(propertyValue);
@@ -80,7 +84,7 @@ const getManifestFunctionParameters = (
       functionParameters.map((p) => [p.name!, getParameterDefinition(p)]),
     ),
     required: functionParameters.filter((p) => p.is_required).map(
-      (p) => p.name!,
+      (p) => p.name,
     ),
   };
 };

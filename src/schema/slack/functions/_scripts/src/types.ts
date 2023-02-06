@@ -1,4 +1,3 @@
-import { ICustomType } from "../../../../../types/types.ts";
 import {
   ManifestFunctionSchema,
 } from "../../../../../manifest/manifest_schema.ts";
@@ -7,20 +6,34 @@ export type DefineFunctionInput = ManifestFunctionSchema & {
   callbackId: string;
 };
 
-export type FunctionParameter = {
-  name?: string;
+type BaseFunctionProperty = {
+  type: string;
   description?: string;
-  type: string | ICustomType;
-  items?: {
-    type: string | ICustomType;
-  };
-  properties?: {
-    [key: string]: FunctionParameter;
-  };
-  additionalProperties?: boolean;
-  is_required?: boolean;
   title?: string;
-  required?: string[];
+};
+
+type ObjectFunctionProperty = BaseFunctionProperty & {
+  properties: {
+    [key: string]: FunctionProperty;
+  };
+  required: string[] | [];
+  additionalProperties: boolean;
+};
+
+type ArrayFunctionProperty = BaseFunctionProperty & {
+  items: {
+    type: string;
+  };
+};
+
+export type FunctionProperty =
+  | BaseFunctionProperty
+  | ObjectFunctionProperty
+  | ArrayFunctionProperty;
+
+export type FunctionParameter = FunctionProperty & {
+  name: string;
+  is_required?: boolean;
 };
 
 export type FunctionRecord = {

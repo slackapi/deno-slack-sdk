@@ -44,7 +44,7 @@ const propertyToTypeScript = (
   typescript.push(
     `type: ${schemaTypeMap[getParameterType(property.type)]}`,
   );
-  if ("description" in property) {
+  if (property.description) {
     typescript.push(`description: "${property.description}"`);
   }
   if ("properties" in property) {
