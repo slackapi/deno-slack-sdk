@@ -34,8 +34,7 @@ corresponding test, the tests must be removed manually.
    Generating code for Slack Function: send_ephemeral_message
    Generating code for Slack Function: send_message
    Generating code for Slack Function: update_channel_topic
-   Wrote 11 files
-   Updated functions module export
+   Wrote 26 files
    Generating unit test for Slack Function: add_pin
    Generating unit test for Slack Function: add_user_to_usergroup
    Generating unit test for Slack Function: archive_channel
@@ -47,6 +46,7 @@ corresponding test, the tests must be removed manually.
    Generating unit test for Slack Function: send_ephemeral_message
    Generating unit test for Slack Function: send_message
    Generating unit test for Slack Function: update_channel_topic
+   Updated functions module export
    Formatting Slack function files...
    Linting Slack function files...
    ```

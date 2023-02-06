@@ -42,4 +42,5 @@ for await (const file of Deno.readDir(`../`)) {
     } `,
   );
   await remove_file(`../${callback_id}.ts`);
+  await remove_file(`../${callback_id}_test.ts`);
 }
