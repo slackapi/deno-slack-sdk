@@ -140,7 +140,7 @@ Deno.test("Custom Function with only a number output defined must return a numbe
     };
   const { createContext } = SlackFunctionTester(TestFn);
   const result = validHandler(createContext({ inputs: {} }));
-  assertEqualsTypedValues(result.outputs?.out, 14);
+  assertEqualsTypedValues(result.outputs?.out, 14.2);
   // @ts-expect-error `out` output property must be an integer
   const _invalidHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> =
     () => {
