@@ -20,3 +20,4 @@ export { default as Schema } from "./schema/mod.ts";
 export { DefineDatastore } from "./datastore/mod.ts";
 export { SlackFunctionTester } from "./functions/tester/mod.ts";
 export { SlackAPI } from "./deps.ts";
+export { DefineProperty } from "./parameters/define_property.ts";
