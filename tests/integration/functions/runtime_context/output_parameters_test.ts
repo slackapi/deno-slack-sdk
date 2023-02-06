@@ -34,14 +34,15 @@ Deno.test("Custom Function with only a string output defined must return a strin
   const result = validHandler(createContext({ inputs: {} }));
   assertEqualsTypedValues(result.outputs?.out, "test");
   // @ts-expect-error `out` output property must be a string
-  const _invalidHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> =
-    () => {
-      return {
-        outputs: {
-          out: 1,
-        },
-      };
+  const _invalidHandler: EnrichedSlackFunctionHandler<
+    typeof TestFn.definition
+  > = () => {
+    return {
+      outputs: {
+        out: 1,
+      },
     };
+  };
 });
 
 Deno.test("Custom Function with only a boolean output defined must return a boolean output", () => {
@@ -70,14 +71,15 @@ Deno.test("Custom Function with only a boolean output defined must return a bool
   const result = validHandler(createContext({ inputs: {} }));
   assertEqualsTypedValues(result.outputs?.out, true);
   // @ts-expect-error `out` output property must be a boolean
-  const _invalidHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> =
-    () => {
-      return {
-        outputs: {
-          out: "haha",
-        },
-      };
+  const _invalidHandler: EnrichedSlackFunctionHandler<
+    typeof TestFn.definition
+  > = () => {
+    return {
+      outputs: {
+        out: "haha",
+      },
     };
+  };
 });
 
 Deno.test("Custom Function with only an integer output defined must return a number output", () => {
@@ -106,14 +108,15 @@ Deno.test("Custom Function with only an integer output defined must return a num
   const result = validHandler(createContext({ inputs: {} }));
   assertEqualsTypedValues(result.outputs?.out, 14);
   // @ts-expect-error `out` output property must be an integer
-  const _invalidHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> =
-    () => {
-      return {
-        outputs: {
-          out: "haha",
-        },
-      };
+  const _invalidHandler: EnrichedSlackFunctionHandler<
+    typeof TestFn.definition
+  > = () => {
+    return {
+      outputs: {
+        out: "haha",
+      },
     };
+  };
 });
 
 Deno.test("Custom Function with only a number output defined must return a number output", () => {
@@ -142,12 +145,13 @@ Deno.test("Custom Function with only a number output defined must return a numbe
   const result = validHandler(createContext({ inputs: {} }));
   assertEqualsTypedValues(result.outputs?.out, 14.2);
   // @ts-expect-error `out` output property must be an integer
-  const _invalidHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> =
-    () => {
-      return {
-        outputs: {
-          out: "haha",
-        },
-      };
+  const _invalidHandler: EnrichedSlackFunctionHandler<
+    typeof TestFn.definition
+  > = () => {
+    return {
+      outputs: {
+        out: "haha",
+      },
     };
+  };
 });

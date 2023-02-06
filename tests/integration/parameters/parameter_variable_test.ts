@@ -9,7 +9,7 @@ import {
   IsAny,
   IsExact,
 } from "../../../src/dev_deps.ts";
-import { CannotBeUndefined, } from "../../../src/test_utils.ts";
+import { CannotBeUndefined } from "../../../src/test_utils.ts";
 /**
  * Typed Object required/optional property definitions should never yield undefined ParameterVariable properties
  */
@@ -124,7 +124,6 @@ Deno.test("ParameterVariable using Custom Type with DefineProperty-wrapped typed
   assertStrictEquals(`${param}`, "{{myCustomType}}");
   assertStrictEquals(`${param.aString}`, "{{myCustomType.aString}}");
 });
-
 
 /**
  * Typed Object additionalProperties controls whether ParameterVariable allows access to additional properties

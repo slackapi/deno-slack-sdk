@@ -36,7 +36,7 @@ Deno.test("Custom Function with an optional string input provide the string/unde
   };
   const { createContext } = SlackFunctionTester(TestFn);
   const inputs = {};
-  const result = handler(createContext({ inputs }));
+  handler(createContext({ inputs }));
 });
 
 Deno.test("Custom Function with an optional boolean input provide the boolean/undefined input in a function handler context", () => {
@@ -66,7 +66,7 @@ Deno.test("Custom Function with an optional boolean input provide the boolean/un
   };
   const { createContext } = SlackFunctionTester(TestFn);
   const inputs = {};
-  const result = handler(createContext({ inputs }));
+  handler(createContext({ inputs }));
 });
 
 Deno.test("Custom Function with an optional integer input provide the number/undefined input in a function handler context", () => {
@@ -96,7 +96,7 @@ Deno.test("Custom Function with an optional integer input provide the number/und
   };
   const { createContext } = SlackFunctionTester(TestFn);
   const inputs = {};
-  const result = handler(createContext({ inputs }));
+  handler(createContext({ inputs }));
 });
 
 Deno.test("Custom Function with an optional number input provide the number/undefined input in a function handler context", () => {
@@ -126,5 +126,5 @@ Deno.test("Custom Function with an optional number input provide the number/unde
   };
   const { createContext } = SlackFunctionTester(TestFn);
   const inputs = {};
-  const result = handler(createContext({ inputs }));
+  handler(createContext({ inputs }));
 });

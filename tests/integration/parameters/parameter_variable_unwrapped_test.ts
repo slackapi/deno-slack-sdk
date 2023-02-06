@@ -1,11 +1,7 @@
 import { DefineType } from "../../../src/types/mod.ts";
 import SchemaTypes from "../../../src/schema/schema_types.ts";
 import { ParameterVariable } from "../../../src/parameters/mod.ts";
-import {
-  assert,
-  assertStrictEquals,
-  IsAny,
-} from "../../../src/dev_deps.ts";
+import { assert, assertStrictEquals, IsAny } from "../../../src/dev_deps.ts";
 import { CannotBeUndefined } from "../../../src/test_utils.ts";
 
 Deno.test("ParameterVariable with unwrapped typed object with an optional Custom Type property should yield an object with a definite value for its sub-properties", () => {
@@ -124,7 +120,7 @@ Deno.test("ParameterVariable using Custom Type with unwrapped typed object with 
 
 /**
  * TODO: below tests fail because unwrapped typed object yields a SingleParameterVariable, which is incorrect. Only happens when required properties are set.
- 
+
 Deno.test("ParameterVariable using Custom Type with unwrapped typed object with required property yields object with no undefined property", () => {
   const customType = DefineType({
     name: "customType",

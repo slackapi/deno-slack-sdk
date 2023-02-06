@@ -1,7 +1,9 @@
+import { assert, IsAny, IsExact } from "../../../../src/dev_deps.ts";
 import {
-  assert, IsAny, IsExact
-} from "../../../../src/dev_deps.ts";
-import { CanBe, CanBeUndefined, CannotBeUndefined, } from "../../../../src/test_utils.ts";
+  CanBe,
+  CanBeUndefined,
+  CannotBeUndefined,
+} from "../../../../src/test_utils.ts";
 import { DefineFunction, DefineType, Schema } from "../../../../src/mod.ts";
 import {
   EnrichedSlackFunctionHandler,
@@ -41,7 +43,7 @@ Deno.test("Custom Function using Slack's FormInput internal Custom Type input sh
     formInput: {
       required: [],
       elements: [],
-    }
+    },
   };
 
   const validHandler: EnrichedSlackFunctionHandler<
@@ -59,8 +61,9 @@ Deno.test("Custom Function using Slack's FormInput internal Custom Type input sh
     assert<CannotBeUndefined<typeof formInput.elements>>(
       true,
     );
+    // deno-lint-ignore no-explicit-any
     assert<CanBe<typeof formInput.elements, any[]>>(true);
-    
+
     return {
       outputs: inputs,
     };
@@ -68,7 +71,7 @@ Deno.test("Custom Function using Slack's FormInput internal Custom Type input sh
 
   const { createContext } = SlackFunctionTester(TestFunction);
 
-  const result = validHandler(createContext({ inputs: sharedInputs }));
+  validHandler(createContext({ inputs: sharedInputs }));
 });
 
 Deno.test("Custom Function using Slack's message-context Custom Type input should provide correct typedobject typing in a function handler context", () => {
@@ -97,8 +100,8 @@ Deno.test("Custom Function using Slack's message-context Custom Type input shoul
   const sharedInputs = {
     msgContext: {
       message_ts: "1234.567",
-      channel_id: "C12345"
-    }
+      channel_id: "C12345",
+    },
   };
 
   const validHandler: EnrichedSlackFunctionHandler<
@@ -123,7 +126,7 @@ Deno.test("Custom Function using Slack's message-context Custom Type input shoul
       true,
     );
     assert<IsExact<typeof msgContext.message_ts, string>>(true);
-    
+
     return {
       outputs: inputs,
     };
@@ -131,7 +134,7 @@ Deno.test("Custom Function using Slack's message-context Custom Type input shoul
 
   const { createContext } = SlackFunctionTester(TestFunction);
 
-  const result = validHandler(createContext({ inputs: sharedInputs }));
+  validHandler(createContext({ inputs: sharedInputs }));
 });
 
 Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with mixed required/optional properties should provide correct typedobject typing in a function handler context", () => {
@@ -229,20 +232,10 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
     },
   });
 
-  const sharedInputs = {
-    custom_type: {
-      required_property: "i am a necessity",
-    },
-  };
-
-  const { createContext } = SlackFunctionTester(TestFunction);
-
   // @ts-expect-error Type error if required property isn't returned
   const _invalidHandler: EnrichedSlackFunctionHandler<
     typeof TestFunction.definition
-  > = (
-    { inputs },
-  ) => {
+  > = () => {
     return {
       outputs: {
         custom_type: {
@@ -322,7 +315,7 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
       optional_property: { type: "string" },
     },
     required: ["required_property"],
-    additionalProperties: true
+    additionalProperties: true,
   });
 
   const TestFunction = DefineFunction({
@@ -383,7 +376,7 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
       optional_property: { type: "string" },
     },
     required: ["required_property"],
-    additionalProperties: false
+    additionalProperties: false,
   });
 
   const TestFunction = DefineFunction({

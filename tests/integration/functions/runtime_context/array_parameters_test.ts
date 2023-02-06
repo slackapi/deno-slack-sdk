@@ -1,7 +1,8 @@
+import { assert, assertEquals, IsAny } from "../../../../src/dev_deps.ts";
 import {
-  assert, assertEquals, IsAny
-} from "../../../../src/dev_deps.ts";
-import { CanBeUndefined, CannotBeUndefined } from "../../../../src/test_utils.ts";
+  CanBeUndefined,
+  CannotBeUndefined,
+} from "../../../../src/test_utils.ts";
 import { DefineFunction, DefineType, Schema } from "../../../../src/mod.ts";
 import { DefineProperty } from "../../../../src/parameters/define_property.ts";
 import {
@@ -388,7 +389,7 @@ Deno.test("Custom Function using untyped Arrays and typed arrays of strings", ()
 });
 /**
  * TODO: the next two particular tests lead to the array items being typed as `any`
- 
+
 Deno.test("Custom Function using Typed Arrays of Custom Types of unwrapped typed objects should honor required and optional properties", () => {
   const obj = {
     type: Schema.types.object,

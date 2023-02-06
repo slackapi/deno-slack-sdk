@@ -1,6 +1,4 @@
-import {
-  assert, assertExists, IsAny
-} from "../../../../src/dev_deps.ts";
+import { assert, assertExists, IsAny } from "../../../../src/dev_deps.ts";
 import { DefineFunction, Schema } from "../../../../src/mod.ts";
 import {
   EnrichedSlackFunctionHandler,

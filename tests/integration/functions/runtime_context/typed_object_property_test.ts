@@ -1,7 +1,15 @@
 import {
-  assert, assertEquals, assertExists, IsAny, IsExact
+  assert,
+  assertEquals,
+  assertExists,
+  IsAny,
+  IsExact,
 } from "../../../../src/dev_deps.ts";
-import { CanBe, CanBeUndefined, CannotBeUndefined, } from "../../../../src/test_utils.ts";
+import {
+  CanBe,
+  CanBeUndefined,
+  CannotBeUndefined,
+} from "../../../../src/test_utils.ts";
 import { DefineFunction, Schema } from "../../../../src/mod.ts";
 import { DefineProperty } from "../../../../src/parameters/define_property.ts";
 import {
@@ -118,7 +126,7 @@ Deno.test("Custom Function with a required output DefineProperty-wrapped typedob
       required: ["anObject"],
     },
   });
-  
+
   // Ensure no error raised if object required property provided
   const _reqHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> = (
     _arg,
