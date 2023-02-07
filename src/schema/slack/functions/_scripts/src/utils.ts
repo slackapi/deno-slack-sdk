@@ -1,5 +1,6 @@
 import {
   ParameterDefinition,
+  TypedObjectProperties,
 } from "../../../../../parameters/definition_types.ts";
 import {
   ManifestFunctionParameters,
@@ -12,6 +13,16 @@ import {
   FunctionRecord,
   FunctionsPayload,
 } from "./types.ts";
+
+type ParameterDefinitionProxy = {
+  type: string;
+  [key: string]:
+    | string
+    | boolean
+    | string[]
+    | { type: string }
+    | TypedObjectProperties;
+};
 
 const FUNCTIONS_JSON_PATH = "functions.json";
 const DIRECTORY_PATH_ALLOW_LIST = ["_scripts", "mod.ts"];
@@ -54,10 +65,8 @@ export function getDefineFunctionInputs(
 const getParameterDefinition = (
   param: FunctionProperty,
 ): ParameterDefinition => {
-  // deno-lint-ignore no-explicit-any
-  const paramDef: { [key: string]: any } = {
+  const paramDef: ParameterDefinitionProxy = {
     type: param.type,
-    description: param.description,
   };
   if (param.description) {
     paramDef.description = param.description;
@@ -66,12 +75,13 @@ const getParameterDefinition = (
     paramDef.items = param.items;
   }
   if ("properties" in param) {
-    paramDef.properties = {};
+    const properties: TypedObjectProperties = {};
     Object.entries(param.properties).forEach(([propertyKey, propertyValue]) => {
-      paramDef.properties[propertyKey] = getParameterDefinition(propertyValue);
+      properties[propertyKey] = getParameterDefinition(propertyValue);
     });
     paramDef.additionalProperties = param.additionalProperties;
     paramDef.required = param.required;
+    paramDef.properties = properties;
   }
   return paramDef as ParameterDefinition;
 };
