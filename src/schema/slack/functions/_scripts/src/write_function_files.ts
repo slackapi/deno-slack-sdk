@@ -1,34 +1,34 @@
 import SlackFunctionTemplate from "./templates/template_function.ts";
 import SlackTestFunctionTemplate from "./templates/test_template.ts";
 import SlackFunctionModTemplate from "./templates/template_mod.ts";
-import {
-  getDefineFunctionInputs,
-  greenText,
-  loadFunctionsJson,
-} from "./utils.ts";
-import { DefineFunctionInput } from "./types.ts";
+import { getSlackFunctions, greenText, loadFunctionsJson } from "./utils.ts";
+import { FunctionRecord } from "./types.ts";
 
-const slackFunctions: DefineFunctionInput[] = getDefineFunctionInputs(
+const slackFunctions: FunctionRecord[] = getSlackFunctions(
   await loadFunctionsJson(),
 );
 
 // Sorting alphabetically cause only a monster would generate these in a random order
-slackFunctions.sort((a, b) => a.callbackId.localeCompare(b.callbackId));
+slackFunctions.sort((a, b) => a.callback_id.localeCompare(b.callback_id));
 
-slackFunctions.forEach(async (dfi: DefineFunctionInput) => {
+slackFunctions.forEach(async (functionRecord: FunctionRecord) => {
   console.log(
-    `Generating code for Slack Function: ${greenText(dfi.callbackId)}`,
+    `Generating code for Slack Function: ${
+      greenText(functionRecord.callback_id)
+    }`,
   );
-  const templateString = SlackFunctionTemplate(dfi);
-  const filename = `../${dfi.callbackId}.ts`;
+  const templateString = SlackFunctionTemplate(functionRecord);
+  const filename = `../${functionRecord.callback_id}.ts`;
 
   await Deno.writeTextFile(filename, templateString);
 
   console.log(
-    `Generating unit test for Slack Function: ${greenText(dfi.callbackId)}`,
+    `Generating unit test for Slack Function: ${
+      greenText(functionRecord.callback_id)
+    }`,
   );
-  const templateTestString = SlackTestFunctionTemplate(dfi);
-  const testFilename = `../${dfi.callbackId}_test.ts`;
+  const templateTestString = SlackTestFunctionTemplate(functionRecord);
+  const testFilename = `../${functionRecord.callback_id}_test.ts`;
 
   await Deno.writeTextFile(testFilename, templateTestString);
 });

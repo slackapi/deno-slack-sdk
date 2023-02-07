@@ -13,8 +13,13 @@ export default DefineFunction({
       channel_id: {
         type: SlackTypes.channel_id,
         description: "Search all channels",
+        title: "Select a channel",
       },
-      user_id: { type: SlackTypes.user_id, description: "Search all people" },
+      user_id: {
+        type: SlackTypes.user_id,
+        description: "Search all people",
+        title: "Select a member",
+      },
     },
     required: ["channel_id", "user_id"],
   },
@@ -23,6 +28,7 @@ export default DefineFunction({
       user_id: {
         type: SlackTypes.user_id,
         description: "Person who was invited",
+        title: "Person who was invited",
       },
     },
     required: [],

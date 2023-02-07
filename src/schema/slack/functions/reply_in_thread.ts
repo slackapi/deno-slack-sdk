@@ -13,16 +13,23 @@ export default DefineFunction({
       message_context: {
         type: SlackTypes.message_context,
         description: "Select a message to reply to",
+        title: "Select a message to reply to",
       },
-      message: { type: SlackTypes.rich_text, description: "Add a reply" },
+      message: {
+        type: SlackTypes.rich_text,
+        description: "Add a reply",
+        title: "Add a reply",
+      },
       reply_broadcast: {
         type: SchemaTypes.boolean,
         description: "Also send to conversation",
+        title: "Also send to conversation",
       },
       metadata: {
         type: SchemaTypes.object,
         description:
           "Metadata you post to Slack is accessible to any app or user who is a member of that workspace",
+        title: "Message metadata",
         additionalProperties: true,
         required: ["event_type", "event_payload"],
         properties: {
@@ -38,8 +45,13 @@ export default DefineFunction({
       message_context: {
         type: SlackTypes.message_context,
         description: "Reference to the message sent",
+        title: "Reference to the message sent",
       },
-      message_link: { type: SchemaTypes.string, description: "Message link" },
+      message_link: {
+        type: SchemaTypes.string,
+        description: "Message link",
+        title: "Message link",
+      },
     },
     required: ["message_context", "message_link"],
   },

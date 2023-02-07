@@ -13,10 +13,12 @@ export default DefineFunction({
       channel_id: {
         type: SlackTypes.channel_id,
         description: "Search all channels",
+        title: "Select a channel",
       },
       message: {
         type: SchemaTypes.string,
         description: "Enter a message URL or message timestamp",
+        title: "Message URL or message timestamp",
       },
     },
     required: ["channel_id", "message"],

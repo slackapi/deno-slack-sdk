@@ -12,6 +12,7 @@ export default DefineFunction({
       minutes_to_delay: {
         type: SchemaTypes.integer,
         description: "Enter number of minutes",
+        title: "Delay for this many minutes",
       },
     },
     required: ["minutes_to_delay"],

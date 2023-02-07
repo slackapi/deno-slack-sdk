@@ -21,14 +21,23 @@ Deno.test("UpdateChannelTopic generates valid FunctionManifest", () => {
         channel_id: {
           type: SlackTypes.channel_id,
           description: "Search all channels",
+          title: "Select a channel",
         },
-        topic: { type: SchemaTypes.string, description: "Enter a topic" },
+        topic: {
+          type: SchemaTypes.string,
+          description: "Enter a topic",
+          title: "Add a topic",
+        },
       },
       required: ["channel_id", "topic"],
     },
     output_parameters: {
       properties: {
-        topic: { type: SchemaTypes.string, description: "Channel topic" },
+        topic: {
+          type: SchemaTypes.string,
+          description: "Channel topic",
+          title: "Channel topic",
+        },
       },
       required: ["topic"],
     },

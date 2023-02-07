@@ -12,13 +12,18 @@ export default DefineFunction({
       channel_id: {
         type: SlackTypes.channel_id,
         description: "Search all channels",
+        title: "Select a channel",
       },
     },
     required: ["channel_id"],
   },
   output_parameters: {
     properties: {
-      channel_id: { type: SlackTypes.channel_id, description: "Channel name" },
+      channel_id: {
+        type: SlackTypes.channel_id,
+        description: "Channel name",
+        title: "Channel name",
+      },
     },
     required: ["channel_id"],
   },

@@ -1,11 +1,3 @@
-import {
-  ManifestFunctionSchema,
-} from "../../../../../manifest/manifest_schema.ts";
-
-export type DefineFunctionInput = ManifestFunctionSchema & {
-  callbackId: string;
-};
-
 type BaseFunctionProperty = {
   type: string;
   description?: string;
@@ -13,23 +5,23 @@ type BaseFunctionProperty = {
 };
 
 type ObjectFunctionProperty = BaseFunctionProperty & {
-  properties: {
-    [key: string]: FunctionProperty;
-  };
-  required: string[] | [];
+  properties: FunctionProperties;
+  required: string[];
   additionalProperties: boolean;
 };
 
 type ArrayFunctionProperty = BaseFunctionProperty & {
-  items: {
-    type: string;
-  };
+  items: FunctionProperty;
 };
 
 export type FunctionProperty =
   | BaseFunctionProperty
   | ObjectFunctionProperty
   | ArrayFunctionProperty;
+
+export type FunctionProperties = {
+  [key: string]: FunctionProperty;
+};
 
 export type FunctionParameter = FunctionProperty & {
   name: string;

@@ -19,6 +19,7 @@ Deno.test("ArchiveChannel generates valid FunctionManifest", () => {
         channel_id: {
           type: SlackTypes.channel_id,
           description: "Search all channels",
+          title: "Select a channel",
         },
       },
       required: ["channel_id"],
@@ -28,6 +29,7 @@ Deno.test("ArchiveChannel generates valid FunctionManifest", () => {
         channel_id: {
           type: SlackTypes.channel_id,
           description: "Channel name",
+          title: "Channel name",
         },
       },
       required: ["channel_id"],

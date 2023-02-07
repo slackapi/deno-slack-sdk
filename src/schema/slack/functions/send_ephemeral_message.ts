@@ -13,13 +13,23 @@ export default DefineFunction({
       channel_id: {
         type: SlackTypes.channel_id,
         description: "Search all channels",
+        title: "Select a channel",
       },
-      user_id: { type: SlackTypes.user_id, description: "Search all people" },
-      message: { type: SlackTypes.rich_text, description: "Add a message" },
+      user_id: {
+        type: SlackTypes.user_id,
+        description: "Search all people",
+        title: "Select a member of the channel",
+      },
+      message: {
+        type: SlackTypes.rich_text,
+        description: "Add a message",
+        title: "Add a message",
+      },
       thread_ts: {
         type: SchemaTypes.string,
         description:
           "Provide another message's ts value to make this message a reply",
+        title: "Another message's timestamp value",
       },
     },
     required: ["channel_id", "user_id", "message"],
@@ -29,6 +39,7 @@ export default DefineFunction({
       message_ts: {
         type: SlackTypes.message_ts,
         description: "Message time stamp",
+        title: "Message time stamp",
       },
     },
     required: ["message_ts"],

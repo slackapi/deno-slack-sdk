@@ -15,33 +15,46 @@ Deno.test("OpenForm generates valid FunctionManifest", () => {
     description: "Opens a form for the user",
     input_parameters: {
       properties: {
-        title: { type: SchemaTypes.string, description: "Title of the form" },
+        title: {
+          type: SchemaTypes.string,
+          description: "Title of the form",
+          title: "title",
+        },
         description: {
           type: SchemaTypes.string,
           description: "Description of the form",
+          title: "description",
         },
         submit_label: {
           type: SchemaTypes.string,
           description: "Submit Label of the form",
+          title: "submit_label",
         },
         fields: {
           type: InternalSlackTypes.form_input_object,
           description: "Input fields to be shown on the form",
+          title: "fields",
         },
         interactivity: {
           type: SlackTypes.interactivity,
           description:
             "Context about the interactive event that led to opening of the form",
+          title: "interactivity",
         },
       },
       required: ["title", "fields", "interactivity"],
     },
     output_parameters: {
       properties: {
-        fields: { type: SchemaTypes.object, description: "fields" },
+        fields: {
+          type: SchemaTypes.object,
+          description: "fields",
+          title: "fields",
+        },
         interactivity: {
           type: SlackTypes.interactivity,
           description: "Context about the form submit action interactive event",
+          title: "interactivity",
         },
       },
       required: ["fields", "interactivity"],

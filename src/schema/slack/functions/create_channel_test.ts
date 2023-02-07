@@ -20,10 +20,12 @@ Deno.test("CreateChannel generates valid FunctionManifest", () => {
         channel_name: {
           type: SchemaTypes.string,
           description: "Enter a channel name",
+          title: "Channel name",
         },
         is_private: {
           type: SchemaTypes.boolean,
           description: "Make this channel private",
+          title: "Make channel private",
         },
       },
       required: ["channel_name"],
@@ -33,6 +35,7 @@ Deno.test("CreateChannel generates valid FunctionManifest", () => {
         channel_id: {
           type: SlackTypes.channel_id,
           description: "Channel name",
+          title: "Channel name",
         },
       },
       required: ["channel_id"],

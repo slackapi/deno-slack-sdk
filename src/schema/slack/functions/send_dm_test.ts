@@ -14,16 +14,26 @@ Deno.test("SendDm generates valid FunctionManifest", () => {
     description: "Send a direct message to someone",
     input_parameters: {
       properties: {
-        user_id: { type: SlackTypes.user_id, description: "Search all people" },
-        message: { type: SlackTypes.rich_text, description: "Add a message" },
+        user_id: {
+          type: SlackTypes.user_id,
+          description: "Search all people",
+          title: "Select a member",
+        },
+        message: {
+          type: SlackTypes.rich_text,
+          description: "Add a message",
+          title: "Add a message",
+        },
         thread_ts: {
           type: SlackTypes.message_ts,
           description:
             "Provide another message's timestamp value to make this message a reply",
+          title: "Another message's timestamp value",
         },
         interactive_blocks: {
           type: SlackTypes.blocks,
           description: "Button(s) to send with the message",
+          title: "Button(s) to send with the message",
         },
       },
       required: ["user_id", "message"],
@@ -33,19 +43,27 @@ Deno.test("SendDm generates valid FunctionManifest", () => {
         message_ts: {
           type: SlackTypes.message_ts,
           description: "Message time stamp",
+          title: "Message time stamp",
         },
-        message_link: { type: SchemaTypes.string, description: "Message link" },
+        message_link: {
+          type: SchemaTypes.string,
+          description: "Message link",
+          title: "Message link",
+        },
         action: {
           type: SchemaTypes.object,
           description: "Button interactivity data",
+          title: "Button interactivity data",
         },
         interactivity: {
           type: SlackTypes.interactivity,
           description: "Interactivity context",
+          title: "interactivity",
         },
         message_context: {
           type: SlackTypes.message_context,
           description: "Reference to the message sent",
+          title: "Reference to the message sent",
         },
       },
       required: ["message_ts", "message_link", "message_context"],

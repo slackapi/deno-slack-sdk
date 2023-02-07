@@ -20,10 +20,12 @@ Deno.test("CreateUsergroup generates valid FunctionManifest", () => {
         usergroup_handle: {
           type: SchemaTypes.string,
           description: "Ex: accounts-team",
+          title: "Handle",
         },
         usergroup_name: {
           type: SchemaTypes.string,
           description: "Ex. Accounts Team",
+          title: "Display name",
         },
       },
       required: ["usergroup_handle", "usergroup_name"],
@@ -33,6 +35,7 @@ Deno.test("CreateUsergroup generates valid FunctionManifest", () => {
         usergroup_id: {
           type: SlackTypes.usergroup_id,
           description: "User group",
+          title: "User group",
         },
       },
       required: ["usergroup_id"],

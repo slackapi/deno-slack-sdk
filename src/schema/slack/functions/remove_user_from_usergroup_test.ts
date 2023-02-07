@@ -19,8 +19,13 @@ Deno.test("RemoveUserFromUsergroup generates valid FunctionManifest", () => {
         usergroup_id: {
           type: SlackTypes.usergroup_id,
           description: "Search all user groups",
+          title: "Select a user group",
         },
-        user_id: { type: SlackTypes.user_id, description: "Search all people" },
+        user_id: {
+          type: SlackTypes.user_id,
+          description: "Search all people",
+          title: "Select a member",
+        },
       },
       required: ["usergroup_id", "user_id"],
     },
@@ -29,6 +34,7 @@ Deno.test("RemoveUserFromUsergroup generates valid FunctionManifest", () => {
         usergroup_id: {
           type: SlackTypes.usergroup_id,
           description: "User group",
+          title: "User group",
         },
       },
       required: [],

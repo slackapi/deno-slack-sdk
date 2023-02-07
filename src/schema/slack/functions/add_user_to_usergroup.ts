@@ -12,8 +12,13 @@ export default DefineFunction({
       usergroup_id: {
         type: SlackTypes.usergroup_id,
         description: "Search all user groups",
+        title: "Select a user group",
       },
-      user_id: { type: SlackTypes.user_id, description: "Search all people" },
+      user_id: {
+        type: SlackTypes.user_id,
+        description: "Search all people",
+        title: "Select a member",
+      },
     },
     required: ["usergroup_id", "user_id"],
   },
@@ -22,6 +27,7 @@ export default DefineFunction({
       usergroup_id: {
         type: SlackTypes.usergroup_id,
         description: "User group",
+        title: "User group",
       },
     },
     required: ["usergroup_id"],
