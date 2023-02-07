@@ -10,7 +10,7 @@ await build({
   outDir: "./npm",
   // ensures that the emitted package is compatible with node v14 later
   compilerOptions: {
-    target: "ES2020"
+    target: "ES2020",
   },
   shims: {
     // see JS docs for overview and more options
@@ -24,8 +24,8 @@ await build({
       },
       globalNames: [{
         name: "fetch",
-        exportName: "default"
-      }]
+        exportName: "default",
+      }],
     }],
   },
   package: {
@@ -46,8 +46,8 @@ await build({
     // seems to only be able to successfully compile as far back ES2020
     engines: {
       "node": ">=14.20.1",
-      "npm": ">=6.14.15"
-    }
+      "npm": ">=6.14.15",
+    },
   },
 });
 
