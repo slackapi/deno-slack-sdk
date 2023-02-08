@@ -4,6 +4,7 @@ export {
   assertMatch,
   assertRejects,
   assertStrictEquals,
+  assertStringIncludes,
 } from "https://deno.land/std@0.152.0/testing/asserts.ts";
 export * as mock from "https://deno.land/std@0.152.0/testing/mock.ts";
 

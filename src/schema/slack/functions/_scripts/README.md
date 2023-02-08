@@ -23,29 +23,22 @@ corresponding test, the tests must be removed manually.
 3. This will output something like the following:
 
    ```txt
-   Generating code for Slack Function: add_pin
-   Generating code for Slack Function: add_user_to_usergroup
-   Generating code for Slack Function: archive_channel
-   Generating code for Slack Function: create_channel
-   Generating code for Slack Function: create_usergroup
-   Generating code for Slack Function: delay
-   Generating code for Slack Function: invite_user_to_channel
-   Generating code for Slack Function: rename_channel
-   Generating code for Slack Function: send_ephemeral_message
-   Generating code for Slack Function: send_message
-   Generating code for Slack Function: update_channel_topic
-   Wrote 26 files
-   Generating unit test for Slack Function: add_pin
-   Generating unit test for Slack Function: add_user_to_usergroup
-   Generating unit test for Slack Function: archive_channel
-   Generating unit test for Slack Function: create_channel
-   Generating unit test for Slack Function: create_usergroup
-   Generating unit test for Slack Function: delay
-   Generating unit test for Slack Function: invite_user_to_channel
-   Generating unit test for Slack Function: rename_channel
-   Generating unit test for Slack Function: send_ephemeral_message
-   Generating unit test for Slack Function: send_message
-   Generating unit test for Slack Function: update_channel_topic
+   Cleaning folder directory
+   Generating code & tests for Slack Function: add_pin
+   Generating code & tests for Slack Function: add_user_to_usergroup
+   Generating code & tests for Slack Function: archive_channel
+   Generating code & tests for Slack Function: create_channel
+   Generating code & tests for Slack Function: create_usergroup
+   Generating code & tests for Slack Function: delay
+   Generating code & tests for Slack Function: invite_user_to_channel
+   Generating code & tests for Slack Function: open_form
+   Generating code & tests for Slack Function: remove_user_from_usergroup
+   Generating code & tests for Slack Function: reply_in_thread
+   Generating code & tests for Slack Function: send_dm
+   Generating code & tests for Slack Function: send_ephemeral_message
+   Generating code & tests for Slack Function: send_message
+   Generating code & tests for Slack Function: update_channel_topic
+   Generated 14 built-in functions with their unit tests
    Updated functions module export
    Formatting Slack function files...
    Linting Slack function files...

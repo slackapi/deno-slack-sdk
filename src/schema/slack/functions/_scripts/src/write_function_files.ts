@@ -1,39 +1,35 @@
 import SlackFunctionTemplate from "./templates/template_function.ts";
 import SlackTestFunctionTemplate from "./templates/test_template.ts";
 import SlackFunctionModTemplate from "./templates/template_mod.ts";
-import { getSlackFunctions, greenText, loadFunctionsJson } from "./utils.ts";
+import { getSlackFunctions, greenText } from "./utils.ts";
 import { FunctionRecord } from "./types.ts";
 
-const slackFunctions: FunctionRecord[] = getSlackFunctions(
-  await loadFunctionsJson(),
-);
+const slackFunctions: FunctionRecord[] = await getSlackFunctions();
 
 // Sorting alphabetically cause only a monster would generate these in a random order
 slackFunctions.sort((a, b) => a.callback_id.localeCompare(b.callback_id));
 
-slackFunctions.forEach(async (functionRecord: FunctionRecord) => {
-  console.log(
-    `Generating code for Slack Function: ${
-      greenText(functionRecord.callback_id)
-    }`,
-  );
-  const templateString = SlackFunctionTemplate(functionRecord);
-  const filename = `../${functionRecord.callback_id}.ts`;
+await Promise.all(
+  slackFunctions.map(async (functionRecord: FunctionRecord) => {
+    console.log(
+      `Generating code & tests for Slack Function: ${
+        greenText(functionRecord.callback_id)
+      }`,
+    );
+    const filename = `../${functionRecord.callback_id}.ts`;
+    const testFilename = `../${functionRecord.callback_id}_test.ts`;
 
-  await Deno.writeTextFile(filename, templateString);
+    const templateString = SlackFunctionTemplate(functionRecord);
+    const templateTestString = SlackTestFunctionTemplate(functionRecord);
 
-  console.log(
-    `Generating unit test for Slack Function: ${
-      greenText(functionRecord.callback_id)
-    }`,
-  );
-  const templateTestString = SlackTestFunctionTemplate(functionRecord);
-  const testFilename = `../${functionRecord.callback_id}_test.ts`;
+    await Deno.writeTextFile(filename, templateString);
+    await Deno.writeTextFile(testFilename, templateTestString);
+  }),
+);
 
-  await Deno.writeTextFile(testFilename, templateTestString);
-});
-
-console.log(`Wrote ${slackFunctions.length * 2} files`);
+console.log(
+  `Generated ${slackFunctions.length} built-in functions with their unit tests`,
+);
 
 const modString = SlackFunctionModTemplate(slackFunctions);
 
