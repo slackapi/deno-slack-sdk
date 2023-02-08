@@ -19,9 +19,7 @@ export const SlackFunctionModTemplate = (
   typescript.push(
     `const SlackFunctions = {${
       functionRecords.map((dfi) => `${getFunctionName(dfi.callback_id)}`)
-        .join(
-          ",",
-        )
+        .join(",")
     }} as const;`,
   );
   typescript.push("");

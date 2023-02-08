@@ -29,7 +29,6 @@ export function getParameterType(type: AllowedTypeValue): string {
   return isCustomType(type) ? type.id : type;
 }
 
-/** @description returns a list of all fn parameters */
 const getParameterList = (
   functionRecord: FunctionRecord,
 ): FunctionParameter[] => [
@@ -37,7 +36,6 @@ const getParameterList = (
   ...functionRecord.output_parameters,
 ];
 
-/** @description Whether or not a fn uses parameters from a defined type object */
 const hasParamsFromTypeObject = (
   functionRecord: FunctionRecord,
   typeObject: AllowedTypeValueObject,
