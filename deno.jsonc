@@ -1,8 +1,17 @@
 {
+  "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "fmt": {
     "files": {
       "include": ["src", "tests"],
       "exclude": ["src/schema/slack/functions/_scripts/functions.json", "**/*.md"]
+    },
+    "options": {
+      "semiColons": true,
+      "indentWidth": 2,
+      "lineWidth": 80,
+      "proseWrap": "always",
+      "singleQuote": false,
+      "useTabs": false
     }
   },
   "lint": {
@@ -11,11 +20,15 @@
       "exclude": ["src/schema/slack/functions/_scripts/functions.json", "**/*.md"]
     }
   },
+  "test": {
+    "files": {
+      "include": ["src", "tests"]
+    }
+  },
   "tasks": {
-    // TODO: the bundle command should be `deno bundle src/mod.ts > /dev/null` (less noisy), but redirects are not currently supported in task commands
-    "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test src tests",
-    "coverage": "deno test --coverage=.coverage src tests && deno coverage --exclude=fixtures --exclude=test .coverage",
-    "coverage-lcov": "deno test --coverage=.coverage src tests && deno coverage --exclude=fixtures --exclude=test .coverage --lcov --output=lcov.info"
+    "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test",
+    "coverage": "deno test --coverage=.coverage && deno coverage --exclude=fixtures --exclude=test .coverage",
+    "coverage-lcov": "deno test --coverage=.coverage && deno coverage --exclude=fixtures --exclude=test .coverage --lcov --output=lcov.info"
   },
   "lock": false
 }
