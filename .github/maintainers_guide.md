@@ -11,7 +11,7 @@ All you need to work on this project is a recent version of [Deno](https://deno.
 <details>
   <summary>Note</summary>
 
-* You can set up shell completion by fallowing the [Shell Completion](https://deno.land/manual/getting_started/setup_your_environment#shell-completions) guidelines.
+* You can set up shell completion by following the [Shell Completion](https://deno.land/manual/getting_started/setup_your_environment#shell-completions) guidelines.
 
 </details>
 
