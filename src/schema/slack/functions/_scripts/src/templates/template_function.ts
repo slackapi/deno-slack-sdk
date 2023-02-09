@@ -50,11 +50,15 @@ const propertyToTypeScript = (
     typescript.push(`items: ${propertyToTypeScript(property.items)}`);
   }
   if ("properties" in property) {
-    typescript.push(`additionalProperties: ${property.additionalProperties}`);
-    typescript.push(`required: ${JSON.stringify(property.required)}`);
     typescript.push(
       `properties: ${propertiesToTypeScript(property.properties)}`,
     );
+    if (property.additionalProperties) {
+      typescript.push(`additionalProperties: ${property.additionalProperties}`);
+    }
+    if (property.required) {
+      typescript.push(`required: ${JSON.stringify(property.required)}`);
+    }
   }
   return typescript.join(",\n");
 };

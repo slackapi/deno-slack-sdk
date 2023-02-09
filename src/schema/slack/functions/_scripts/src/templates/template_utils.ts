@@ -1,4 +1,4 @@
-import { pascalCase } from "../deps.ts";
+import { pascalCase } from "../../../../../../dev_deps.ts";
 import { FunctionParameter, FunctionRecord } from "../types.ts";
 import SchemaTypes from "../../../../../schema_types.ts";
 import SlackTypes from "../../../../schema_types.ts";

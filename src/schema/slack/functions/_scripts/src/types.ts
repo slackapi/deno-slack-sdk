@@ -6,8 +6,8 @@ type BaseFunctionProperty = {
 
 type ObjectFunctionProperty = BaseFunctionProperty & {
   properties: FunctionProperties;
-  required: string[];
-  additionalProperties: boolean;
+  required?: string[];
+  additionalProperties?: boolean;
 };
 
 type ArrayFunctionProperty = BaseFunctionProperty & {

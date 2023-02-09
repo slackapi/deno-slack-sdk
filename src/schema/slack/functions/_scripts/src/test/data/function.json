@@ -30,9 +30,9 @@
         },
         {
           "type": "object",
-          "name": "metadata",
-          "title": "Message metadata",
-          "description": "Metadata you post to Slack is accessible to any app or user who is a member of that workspace",
+          "name": "object",
+          "title": "Object",
+          "description": "Object type",
           "required": ["event_type", "event_payload"],
           "additionalProperties": true,
           "properties": {
@@ -42,6 +42,15 @@
             "event_payload": {
               "type": "object"
             }
+          }
+        },
+        {
+          "type": "array",
+          "name": "test_array",
+          "title": "test array",
+          "description": "test an array",
+          "items": {
+            "type": "string"
           }
         },
         {
@@ -64,7 +73,8 @@
           "name": "interactivity",
           "title": "interactivity",
           "description": "Interactivity context",
-          "is_hidden": true
+          "is_hidden": true,
+          "hello big": true
         },
         {
           "type": "slack#/types/message_context",
