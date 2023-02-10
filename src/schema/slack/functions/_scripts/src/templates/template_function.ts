@@ -53,14 +53,14 @@ const propertyToTypeScript = (
     typescript.push(
       `properties: ${propertiesToTypeScript(property.properties)}`,
     );
-    if (property.additionalProperties) {
-      typescript.push(`additionalProperties: ${property.additionalProperties}`);
-    }
-    if (property.required) {
-      typescript.push(`required: ${JSON.stringify(property.required)}`);
-    }
   }
-  return typescript.join(",\n");
+  if ("additionalProperties" in property && property.additionalProperties) {
+    typescript.push(`additionalProperties: ${property.additionalProperties}`);
+  }
+  if ("required" in property && property.required) {
+    typescript.push(`required: ${JSON.stringify(property.required)}`);
+  }
+  return `{${typescript.join(",\n")}}`;
 };
 
 const propertiesToTypeScript = (
@@ -69,7 +69,7 @@ const propertiesToTypeScript = (
   const typescript: string[] = [];
   Object.entries(properties).forEach(([propertyKey, property]) => {
     typescript.push(
-      `${propertyKey}: {${propertyToTypeScript(property)}}`,
+      `${propertyKey}: ${propertyToTypeScript(property)}`,
     );
   });
   return `{${typescript.join(",\n")}}`;
@@ -82,7 +82,7 @@ const manifestParametersToTypeScript = (
   typescript.push(
     `properties: {${
       functionParameters.map((parameter) =>
-        `${parameter.name}: {${propertyToTypeScript(parameter)}}`
+        `${parameter.name}: ${propertyToTypeScript(parameter)}`
       ).join(",\n")
     }}`,
   );
