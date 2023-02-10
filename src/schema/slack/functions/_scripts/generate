@@ -4,7 +4,9 @@ cd "$(dirname "$0")"
 
 # Clean parent directory of all files ending in .ts
 echo "Cleaning folder directory"
-ls -1 -d $PWD/../* | grep "\.ts" | xargs rm
+ls -1 -d $PWD/../* | { grep "\.ts" || :; } | while read -r filename ; do
+    rm "$filename"
+done
 
 # Writes the Function & test files based on a functions.json file existing alongside this script
 deno run --quiet --allow-read --allow-write ./src/write_function_files.ts

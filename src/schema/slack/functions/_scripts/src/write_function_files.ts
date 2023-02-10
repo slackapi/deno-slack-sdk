@@ -1,8 +1,10 @@
 import SlackFunctionTemplate from "./templates/template_function.ts";
 import SlackTestFunctionTemplate from "./templates/test_template.ts";
 import SlackFunctionModTemplate from "./templates/template_mod.ts";
-import { getSlackFunctions, greenText } from "./utils.ts";
+import { getSlackFunctions, greenText, redText } from "./utils.ts";
 import { FunctionRecord } from "./types.ts";
+
+const VALID_FILENAME_REGEX = /^[0-9a-zA-Z_\-]+$/;
 
 const slackFunctions: FunctionRecord[] = await getSlackFunctions();
 
@@ -16,6 +18,16 @@ await Promise.all(
         greenText(functionRecord.callback_id)
       }`,
     );
+    if (!VALID_FILENAME_REGEX.test(functionRecord.callback_id)) {
+      console.log(
+        `${
+          redText(
+            "Unable to generate files",
+          )
+        }, invalid characters in callback_id: "${functionRecord.callback_id}"`,
+      );
+      return;
+    }
     const filename = `../${functionRecord.callback_id}.ts`;
     const testFilename = `../${functionRecord.callback_id}_test.ts`;
 
