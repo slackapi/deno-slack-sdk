@@ -25,7 +25,7 @@ export function getSlackCallbackId(
   return `slack#/functions/${functionRecord.callback_id}`;
 }
 
-export function getParameterType(type: AllowedTypeValue): string {
+export function typeAsString(type: AllowedTypeValue): string {
   return isCustomType(type) ? type.id : type;
 }
 
@@ -42,8 +42,8 @@ const hasParamsFromTypeObject = (
 ): boolean =>
   getParameterList(functionRecord).some((param) =>
     Object.values(typeObject)
-      .map((val) => getParameterType(val))
-      .includes(param.type)
+      .map((val) => typeAsString(val))
+      .includes(typeAsString(param.type))
   );
 
 export function renderTypeImports(functionRecord: FunctionRecord) {

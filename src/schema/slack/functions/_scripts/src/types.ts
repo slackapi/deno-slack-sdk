@@ -1,29 +1,6 @@
-type BaseFunctionProperty = {
-  type: string;
-  description?: string;
-  title?: string;
-};
+import { ParameterDefinition } from "../../../../../parameters/definition_types.ts";
 
-export type ObjectFunctionProperty = BaseFunctionProperty & {
-  properties: FunctionProperties;
-  required?: string[];
-  additionalProperties?: boolean;
-};
-
-export type ArrayFunctionProperty = BaseFunctionProperty & {
-  items: FunctionProperty;
-};
-
-export type FunctionProperty =
-  | BaseFunctionProperty
-  | ObjectFunctionProperty
-  | ArrayFunctionProperty;
-
-export type FunctionProperties = {
-  [key: string]: FunctionProperty;
-};
-
-export type FunctionParameter = FunctionProperty & {
+export type FunctionParameter = ParameterDefinition & {
   name: string;
   is_required?: boolean;
 };

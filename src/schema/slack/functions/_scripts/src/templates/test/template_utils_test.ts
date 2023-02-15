@@ -6,6 +6,7 @@ import {
   renderTypeImports,
 } from "../template_utils.ts";
 import {
+  assert,
   assertEquals,
   assertStringIncludes,
 } from "../../../../../../../dev_deps.ts";
@@ -13,6 +14,12 @@ import { FunctionRecord } from "../../types.ts";
 import SchemaTypes from "../../../../../../schema_types.ts";
 import SlackTypes from "../../../../../schema_types.ts";
 import { InternalSlackTypes } from "../../../../../types/custom/mod.ts";
+import { CanBeUndefined } from "../../../../../../../test_utils.ts";
+import {
+  isTypedArray,
+  isTypedObject,
+} from "../../../../../../../parameters/mod.ts";
+import { ParameterDefinition } from "../../../../../../../parameters/definition_types.ts";
 
 const DESCRIPTION = "Test the built-in function template";
 const TITLE = "test function";
@@ -90,4 +97,43 @@ Deno.test("renderTypeImports should render all imports provided", () => {
   assertStringIncludes(actual, "SchemaTypes");
   assertStringIncludes(actual, "SlackTypes");
   assertStringIncludes(actual, "InternalSlackTypes");
+});
+
+Deno.test("isTypedObject distinguishes TypedObject from ParameterDefinition", () => {
+  const property: ParameterDefinition = {
+    type: "object",
+    description: "test description",
+    title: "ObjectFunctionProperty",
+    properties: {
+      myString: {
+        type: "string",
+        description: "test description",
+      },
+    },
+    required: [],
+    additionalProperties: true,
+  };
+  assertEquals(true, isTypedObject(property));
+  if (isTypedObject(property)) {
+    assert<CanBeUndefined<typeof property.description>>(true);
+    assert<CanBeUndefined<typeof property.title>>(true);
+    assert<CanBeUndefined<typeof property.required>>(true);
+    assert<CanBeUndefined<typeof property.additionalProperties>>(true);
+  }
+});
+
+Deno.test("isTypedArray distinguishes isTypedArray from ParameterDefinition", () => {
+  const property: ParameterDefinition = {
+    type: "array",
+    description: "test description",
+    title: "ArrayFunctionProperty",
+    items: {
+      type: "string",
+    },
+  };
+  assertEquals(true, isTypedArray(property));
+  if (isTypedArray(property)) {
+    assert<CanBeUndefined<typeof property.description>>(true);
+    assert<CanBeUndefined<typeof property.title>>(true);
+  }
 });
