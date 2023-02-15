@@ -4,13 +4,13 @@ type BaseFunctionProperty = {
   title?: string;
 };
 
-type ObjectFunctionProperty = BaseFunctionProperty & {
+export type ObjectFunctionProperty = BaseFunctionProperty & {
   properties: FunctionProperties;
   required?: string[];
   additionalProperties?: boolean;
 };
 
-type ArrayFunctionProperty = BaseFunctionProperty & {
+export type ArrayFunctionProperty = BaseFunctionProperty & {
   items: FunctionProperty;
 };
 
