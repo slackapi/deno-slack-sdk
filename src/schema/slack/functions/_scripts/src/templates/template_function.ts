@@ -53,12 +53,10 @@ const propertyToTypeScript = (
     typescript.push(
       `properties: ${propertiesToTypeScript(property.properties)}`,
     );
-  }
-  if ("additionalProperties" in property && property.additionalProperties) {
-    typescript.push(`additionalProperties: ${property.additionalProperties}`);
-  }
-  if ("required" in property && property.required) {
-    typescript.push(`required: ${JSON.stringify(property.required)}`);
+    typescript.push(
+      `additionalProperties: ${property.additionalProperties ?? true}`,
+    );
+    typescript.push(`required: ${JSON.stringify(property.required ?? [])}`);
   }
   return `{${typescript.join(",\n")}}`;
 };
