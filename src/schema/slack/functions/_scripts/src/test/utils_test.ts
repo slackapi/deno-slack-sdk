@@ -6,8 +6,9 @@ import {
   redText,
   yellowText,
 } from "../utils.ts";
-import { assertEquals } from "../../../../../../dev_deps.ts";
+import { assert, assertEquals } from "../../../../../../dev_deps.ts";
 import { FunctionProperty } from "../types.ts";
+import { CanBeUndefined } from "../../../../../../test_utils.ts";
 
 Deno.test("colored text remain consistent", () => {
   assertEquals("\x1b[92mtest\x1b[0m", greenText("test"));
@@ -25,8 +26,6 @@ Deno.test("Non builtin functions should be filtered", async () => {
 Deno.test("isObjectFunctionProperty distinguishes ObjectFunctionProperty from FunctionProperty", () => {
   const property: FunctionProperty = {
     type: "object",
-    description: "test description",
-    title: "ObjectFunctionProperty",
     properties: {
       myString: {
         type: "string",
@@ -38,6 +37,10 @@ Deno.test("isObjectFunctionProperty distinguishes ObjectFunctionProperty from Fu
     additionalProperties: true,
   };
   assertEquals(true, isObjectFunctionProperty(property));
+  if (isObjectFunctionProperty(property)) {
+    assert<CanBeUndefined<typeof property.additionalProperties>>(true);
+    assert<CanBeUndefined<typeof property.required>>(true);
+  }
 });
 
 Deno.test("isArrayFunctionProperty distinguishes ArrayFunctionProperty from FunctionProperty", () => {
@@ -50,4 +53,8 @@ Deno.test("isArrayFunctionProperty distinguishes ArrayFunctionProperty from Func
     },
   };
   assertEquals(true, isArrayFunctionProperty(property));
+  if (isArrayFunctionProperty(property)) {
+    assert<CanBeUndefined<typeof property.description>>(true);
+    assert<CanBeUndefined<typeof property.title>>(true);
+  }
 });
