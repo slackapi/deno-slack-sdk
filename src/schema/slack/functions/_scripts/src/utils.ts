@@ -1,4 +1,10 @@
-import { FunctionRecord, FunctionsPayload } from "./types.ts";
+import {
+  ArrayFunctionProperty,
+  FunctionProperty,
+  FunctionRecord,
+  FunctionsPayload,
+  ObjectFunctionProperty,
+} from "./types.ts";
 
 const FUNCTIONS_JSON_PATH = "functions.json";
 
@@ -19,4 +25,16 @@ export async function getSlackFunctions(
   ).then(JSON.parse);
 
   return functionsPayload.functions.filter((fn) => fn.type == "builtin");
+}
+
+export function isObjectFunctionProperty(
+  property: FunctionProperty,
+): property is ObjectFunctionProperty {
+  return "properties" in property;
+}
+
+export function isArrayFunctionProperty(
+  property: FunctionProperty,
+): property is ArrayFunctionProperty {
+  return "items" in property;
 }
