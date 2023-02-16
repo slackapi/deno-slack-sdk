@@ -6,9 +6,12 @@ import {
   redText,
   yellowText,
 } from "../utils.ts";
-import { assert, assertEquals } from "../../../../../../dev_deps.ts";
-import { FunctionProperty } from "../types.ts";
-import { CanBeUndefined } from "../../../../../../test_utils.ts";
+import { assert, assertEquals, IsExact } from "../../../../../../dev_deps.ts";
+import {
+  ArrayFunctionProperty,
+  FunctionProperty,
+  ObjectFunctionProperty,
+} from "../types.ts";
 
 Deno.test("colored text remain consistent", () => {
   assertEquals("\x1b[92mtest\x1b[0m", greenText("test"));
@@ -36,11 +39,8 @@ Deno.test("isObjectFunctionProperty distinguishes ObjectFunctionProperty from Fu
     required: [],
     additionalProperties: true,
   };
+  assert<IsExact<ObjectFunctionProperty, typeof property>>(true);
   assertEquals(true, isObjectFunctionProperty(property));
-  if (isObjectFunctionProperty(property)) {
-    assert<CanBeUndefined<typeof property.additionalProperties>>(true);
-    assert<CanBeUndefined<typeof property.required>>(true);
-  }
 });
 
 Deno.test("isArrayFunctionProperty distinguishes ArrayFunctionProperty from FunctionProperty", () => {
@@ -52,9 +52,6 @@ Deno.test("isArrayFunctionProperty distinguishes ArrayFunctionProperty from Func
       type: "string",
     },
   };
+  assert<IsExact<ArrayFunctionProperty, typeof property>>(true);
   assertEquals(true, isArrayFunctionProperty(property));
-  if (isArrayFunctionProperty(property)) {
-    assert<CanBeUndefined<typeof property.description>>(true);
-    assert<CanBeUndefined<typeof property.title>>(true);
-  }
 });
