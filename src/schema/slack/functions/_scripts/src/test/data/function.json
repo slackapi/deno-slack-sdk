@@ -1,0 +1,125 @@
+{
+  "ok": true,
+  "functions": [
+    {
+      "id": "Fn0102",
+      "callback_id": "send_message",
+      "title": "Send a message to channel",
+      "description": "Send a message to channel",
+      "type": "builtin",
+      "input_parameters": [
+        {
+          "type": "slack#/types/channel_id",
+          "name": "channel_id",
+          "title": "Select a channel",
+          "is_required": true,
+          "description": "Search all channels"
+        },
+        {
+          "type": "slack#/types/rich_text",
+          "name": "message",
+          "title": "Add a message",
+          "is_required": true,
+          "description": "Add a message"
+        },
+        {
+          "type": "slack#/types/message_ts",
+          "name": "thread_ts",
+          "title": "Another message's timestamp value",
+          "description": "Provide another message's ts value to make this message a reply"
+        },
+        {
+          "type": "object",
+          "name": "object",
+          "title": "Object",
+          "description": "Object type",
+          "required": ["event_type", "event_payload"],
+          "additionalProperties": true,
+          "properties": {
+            "event_type": {
+              "type": "string"
+            },
+            "event_payload": {
+              "type": "object"
+            }
+          }
+        },
+        {
+          "type": "array",
+          "name": "test_array",
+          "title": "test array",
+          "description": "test an array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "type": "slack#/types/blocks",
+          "name": "interactive_blocks",
+          "title": "Button(s) to send with the message",
+          "description": "Button(s) to send with the message"
+        }
+      ],
+      "output_parameters": [
+        {
+          "type": "slack#/types/message_ts",
+          "name": "message_ts",
+          "title": "Message time stamp",
+          "is_required": true,
+          "description": "Message time stamp"
+        },
+        {
+          "type": "slack#/types/interactivity",
+          "name": "interactivity",
+          "title": "interactivity",
+          "description": "Interactivity context",
+          "is_hidden": true,
+          "hello big": true
+        },
+        {
+          "type": "slack#/types/message_context",
+          "name": "message_context",
+          "title": "Reference to the message sent",
+          "description": "Reference to the message sent",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "id": "Fn03R943D2UW",
+      "callback_id": "create_out_of_office_event",
+      "title": "Create an out-of-office event",
+      "description": "Create an all day out-of-office event in Google Calendar",
+      "type": "app",
+      "input_parameters": [
+        {
+          "type": "slack#/types/user_context",
+          "name": "user",
+          "description": "Id of slack user connected to calendar",
+          "title": "Id of slack user connected to calendar",
+          "is_required": true
+        },
+        {
+          "type": "slack#/types/date",
+          "name": "end_date",
+          "description": "End date of the event ( inclusive. yyyy-mm-dd )",
+          "title": "End date",
+          "is_required": true
+        }
+      ],
+      "output_parameters": [
+        {
+          "type": "string",
+          "name": "event_id",
+          "description": "Event id returned by Google calendar app",
+          "title": "Event id returned by Google calendar app",
+          "is_required": false
+        }
+      ],
+      "app_id": "ADZ494LHY",
+      "date_created": 1659034796,
+      "date_updated": 1670840200,
+      "date_deleted": 0
+    }
+  ]
+}
