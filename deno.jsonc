@@ -26,9 +26,9 @@
     }
   },
   "tasks": {
-    "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test",
-    "coverage": "deno test --coverage=.coverage && deno coverage --exclude=fixtures --exclude=test .coverage",
-    "coverage-lcov": "deno test --coverage=.coverage && deno coverage --exclude=fixtures --exclude=test .coverage --lcov --output=lcov.info"
+    "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test --allow-read",
+    "coverage": "deno test --allow-read --coverage=.coverage && deno coverage --exclude=fixtures --exclude=test .coverage",
+    "coverage-lcov": "deno test --allow-read --coverage=.coverage && deno coverage --exclude=fixtures --exclude=test .coverage --lcov --output=lcov.info"
   },
   "lock": false
 }
