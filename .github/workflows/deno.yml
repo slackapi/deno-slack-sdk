@@ -23,9 +23,9 @@ jobs:
         run: deno task test
 
       - name: Generate CodeCov-friendly coverage report
-        run: deno task coverage --lcov --output=codecov.lcov
+        run: deno task coverage
 
       - name: Upload coverage to CodeCov
         uses: codecov/codecov-action@v3.1.0
         with:
-          file: ./codecov.lcov
+          file: ./lcov.info
