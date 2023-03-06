@@ -286,7 +286,7 @@ export class SlackManifest {
     }
 
     // External Auth providers
-    if (def.externalAuthProviders) {
+    if (def.externalAuthProviders?.length) {
       manifest.external_auth_providers = def.externalAuthProviders?.reduce(
         (acc, provider) => {
           if (provider instanceof OAuth2Provider) {
