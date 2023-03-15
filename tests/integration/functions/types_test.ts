@@ -37,9 +37,14 @@ Deno.test("Defined Functions should be able to provide the custom input object a
     },
   });
   type inputs = FunctionType<typeof testFunctionDefinition>;
+  type property = PropertyType<typeof testProperty>;
 
-  const test = (obj: inputs) => {
-    obj.inputs.test_property?.name;
+  const test = (obj: inputs): property => {
+    const hello: property = {
+      name: "william",
+      id: "1h2jkia",
+    };
+    return hello;
   };
   // TODO not sure what im asserting for here
 });

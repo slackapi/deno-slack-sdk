@@ -1,8 +1,10 @@
+import { FunctionRuntimeParameters } from "../functions/types.ts";
 import {
   IncreaseDepth,
   MaxRecursionDepth,
   RecursionDepthLevel,
 } from "../type_utils.ts";
+import { DefineProperty } from "./define_property.ts";
 import {
   CustomTypeParameterDefinition,
   ParameterDefinition,
@@ -68,3 +70,8 @@ export type ObjectParameterVariableType<
       // deno-lint-ignore no-explicit-any
       [key: string]: any;
     });
+
+export type PropertyType<Property extends ReturnType<typeof DefineProperty>> =
+  Property extends ParameterPropertiesDefinition<infer P, infer R>
+    ? FunctionRuntimeParameters<P, R>
+    : never;

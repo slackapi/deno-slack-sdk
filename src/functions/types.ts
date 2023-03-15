@@ -407,8 +407,3 @@ export type FunctionType<
     outputs: FunctionRuntimeParameters<O, RO>;
   }
   : never;
-
-export type PropertyType<Property extends ReturnType<typeof DefineProperty>> =
-  Property extends ParameterPropertiesDefinition<infer P, infer R>
-    ? FunctionRuntimeParameters<P, R>
-    : never;
