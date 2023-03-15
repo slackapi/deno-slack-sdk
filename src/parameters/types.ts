@@ -1,4 +1,4 @@
-import { FunctionRuntimeParameters } from "../functions/types.ts";
+import { FunctionInputRuntimeType } from "../functions/types.ts";
 import {
   IncreaseDepth,
   MaxRecursionDepth,
@@ -72,6 +72,4 @@ export type ObjectParameterVariableType<
     });
 
 export type PropertyType<Property extends ReturnType<typeof DefineProperty>> =
-  Property extends ParameterPropertiesDefinition<infer P, infer R>
-    ? FunctionRuntimeParameters<P, R>
-    : never;
+  FunctionInputRuntimeType<Property>;

@@ -59,7 +59,7 @@ export type FunctionInvocationBody = {
 /**
  * @description Maps a ParameterDefinition into a runtime type, i.e. "string" === string.
  */
-type FunctionInputRuntimeType<
+export type FunctionInputRuntimeType<
   Param extends ParameterDefinition,
   CurrentDepth extends RecursionDepthLevel = 0,
 > =

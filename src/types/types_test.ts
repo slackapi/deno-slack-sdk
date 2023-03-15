@@ -1,6 +1,7 @@
 import { DefineType } from "./mod.ts";
 import { assertEquals } from "../dev_deps.ts";
 import { CustomType } from "./types.ts";
+import { DefineProperty } from "../mod.ts";
 
 Deno.test("DefineType test against id using the name parameter", () => {
   const Type = DefineType({
@@ -49,6 +50,7 @@ Deno.test("CustomType applied to DefineType object should provide a proper type"
     description: "Description",
     name: "Name",
     type: "object",
+    required: [],
     properties: {
       id: {
         type: "string",
@@ -57,23 +59,22 @@ Deno.test("CustomType applied to DefineType object should provide a proper type"
       name: {
         type: "string",
       },
-      field: {
+      field: DefineProperty({
         type: "object",
         properties: {
           name2: {
-            type:"string"
-          }
+            type: "string",
+          },
         },
-        required: []
-      },
+        required: [],
+      }),
     },
-    required: []
   });
 
   type mytype = CustomType<typeof Type>;
 
   const test = (thing: mytype) => {
-    thing.field.;
+    thing.field;
   };
 });
 

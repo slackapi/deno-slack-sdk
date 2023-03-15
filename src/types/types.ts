@@ -13,7 +13,10 @@ import { SlackManifest } from "../manifest/mod.ts";
 import { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
 import { DefineType } from "./mod.ts";
 import { ParameterPropertiesDefinition } from "../parameters/types.ts";
-import { FunctionRuntimeParameters } from "../functions/types.ts";
+import {
+  FunctionInputRuntimeType,
+  FunctionRuntimeParameters,
+} from "../functions/types.ts";
 
 export type CustomTypeDefinition<
   Props extends TypedObjectProperties,
@@ -83,7 +86,10 @@ type TypedParameterDefinitionType<T extends TypedParameterDefinition> =
 
 // export type CustomType<T extends ReturnType<typeof DefineType>> =
 //   TypedParameterDefinitionType<T["definition"]>;
+// export type CustomType<T extends ReturnType<typeof DefineType>> =
+//   T["definition"] extends ParameterPropertiesDefinition<infer P, infer R>
+//     ? FunctionRuntimeParameters<P, R>
+//     : PickProperties<T["definition"]>;
+
 export type CustomType<T extends ReturnType<typeof DefineType>> =
-  T["definition"] extends ParameterPropertiesDefinition<infer P, infer R>
-    ? FunctionRuntimeParameters<P, R>
-    : PickProperties<T["definition"]>;
+  FunctionInputRuntimeType<T["definition"]>;
