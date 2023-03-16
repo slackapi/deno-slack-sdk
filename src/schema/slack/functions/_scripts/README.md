@@ -81,7 +81,7 @@ following form:
  * 
  * @remarks Any additional information about this specific function, as needed.
  * @scopes `required:scopes`, `listed:here`
- * @see {@link https://api.slack.com/future/functions#function-name Function name} documentation
+ * @see The {@link https://api.slack.com/future/functions#function-name Function name} documentation.
  */
 ```
 
