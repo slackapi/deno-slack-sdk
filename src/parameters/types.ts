@@ -71,5 +71,7 @@ export type ObjectParameterVariableType<
       [key: string]: any;
     });
 
-export type PropertyType<Property extends ReturnType<typeof DefineProperty>> =
-  FunctionInputRuntimeType<Property>;
+export type DefinePropertyReturnType = ReturnType<typeof DefineProperty>;
+export type PropertyRuntimeType<
+  Property extends DefinePropertyReturnType,
+> = FunctionInputRuntimeType<Property>;

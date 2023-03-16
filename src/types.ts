@@ -1,3 +1,13 @@
+import {
+  DefineFunctionReturnType,
+  FunctionRuntimeType,
+} from "./functions/types.ts";
+import {
+  DefinePropertyReturnType,
+  PropertyRuntimeType,
+} from "./parameters/types.ts";
+import { CustomTypeRuntimeType, DefineTypeReturnType } from "./types/types.ts";
+
 export type {
   /**
    * @deprecated Use SlackFunction() to define handlers instead
@@ -9,6 +19,20 @@ export type {
    */
   RuntimeSlackFunctionHandler as SlackFunctionHandler,
 } from "./functions/types.ts";
+
+// ----------------------------------------------------------------------------
+// Types surfacing
+// ----------------------------------------------------------------------------
+
+export type RuntimeType<
+  T extends
+    | DefineFunctionReturnType
+    | DefineTypeReturnType
+    | DefinePropertyReturnType,
+> = T extends DefineFunctionReturnType ? FunctionRuntimeType<T>
+  : T extends DefineTypeReturnType ? CustomTypeRuntimeType<T>
+  : T extends DefinePropertyReturnType ? PropertyRuntimeType<T>
+  : never;
 
 // ----------------------------------------------------------------------------
 // Invocation

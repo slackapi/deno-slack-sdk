@@ -33,7 +33,6 @@ import {
   RecursionDepthLevel,
 } from "../type_utils.ts";
 import { DefineFunction } from "./mod.ts";
-import { DefineProperty } from "../mod.ts";
 
 export type { BlockActionHandler } from "./interactivity/types.ts";
 
@@ -399,8 +398,10 @@ export type RuntimeUnhandledEventContext<
     body: any;
   };
 
-export type FunctionType<
-  Function extends ReturnType<typeof DefineFunction>,
+export type DefineFunctionReturnType = ReturnType<typeof DefineFunction>;
+
+export type FunctionRuntimeType<
+  Function extends DefineFunctionReturnType,
 > = Function["definition"] extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     inputs: FunctionRuntimeParameters<I, RI>;
