@@ -19,7 +19,7 @@ await Promise.all(
       }`,
     );
     if (!VALID_FILENAME_REGEX.test(functionRecord.callback_id)) {
-      console.log(
+      console.error(
         `${redText("FAILURE:")} Invalid characters in callback_id: ${
           redText(functionRecord.callback_id)
         }`,
