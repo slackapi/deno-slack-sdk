@@ -78,10 +78,6 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
     typeof testFunctionDefinition
   >;
 
-  const test = (thing: Actual) => {
-    thing.
-  } 
-
   const expected = {
     inputs: {
       bool: true,
