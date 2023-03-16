@@ -3,9 +3,12 @@
 This script will generate the necessary function TypeScript files along with
 their tests in the `schema/slack/functions` directory, i.e.
 `schema/slack/functions/send_message.ts` and
-`schema/slack/functions/send_message_test.ts`. It will also update the
-`schema/slack/functions/mod.ts` file to import/export all of the defined
-functions. It will also remove outdated function TypeScript files but not their
+`schema/slack/functions/send_message_test.ts`.
+
+It will also update the `schema/slack/functions/mod.ts` file to import/export
+all of the defined functions with their associated docstrings.
+
+It will also remove outdated function TypeScript files but not their
 corresponding test, the tests must be removed manually.
 
 ## Instructions
@@ -48,3 +51,38 @@ If it completes without any linter errors, you should be good to go, with new,
 formatted and linted TypeScript files for all of the Slack Functions included in
 your `functions.json` payload. If there are any unexpected linting issues, you
 may need to go into those files and manually resolve any problems.
+
+## Updating Docstrings
+
+Docstring templates are located in the `_scripts/src/templates/tsdoc` directory
+and are included in the `schema/slack/functions/mod.ts` file upon generation.
+
+A warning will be raised during generation if there is not a matching file for
+a given function `callback_id` in the `tsdoc` directory. File names must match
+a `${callback_id}_doc.ts` convention, e.g. `archive_channel_doc.ts`.
+
+Template files should **only** include a docstring comment, preferably in the
+following form:
+
+```typescript
+/**
+ * General description of the built-in function.
+ * @params param1 - Description of an input parameter.
+ * @params param2 - (Optional) A description of an optional parameter.
+ * @returns output1 - Explanations of outputted values.
+ * @example
+ * const callbackIdStep = ExampleWorkflow.addStep(
+ *   Schema.slack.functions.CallbackID,
+ *   {
+ *     param1: "example",
+ *     param2: "placeholder",
+ *   },
+ * );
+ * 
+ * @remarks Any additional information about this specific function, as needed.
+ * @scopes `required:scopes`, `listed:here`
+ * @see {@link https://api.slack.com/future/functions#function-name Function name} documentation
+ */
+```
+
+TSDoc [reference for example tags can be found here](https://tsdoc.org/pages/tags/example/).
