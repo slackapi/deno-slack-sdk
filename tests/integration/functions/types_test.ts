@@ -1,73 +1,109 @@
-import { assert, IsExact } from "../../../src/dev_deps.ts";
+import { assert } from "../../../src/dev_deps.ts";
 import { FunctionType } from "../../../src/functions/types.ts";
 import { DefineFunction, DefineProperty, Schema } from "../../../src/mod.ts";
 import { PropertyType } from "../../../src/parameters/types.ts";
 import { CanBe } from "../../../src/test_utils.ts";
 
-Deno.test("Defined Functions should be able to provide the custom input object as a type", () => {
-  const testProperty = DefineProperty({
-    title: "test_property",
-    type: Schema.types.object,
-    properties: {
-      id: {
-        type: Schema.types.string,
-        minLength: 3,
-      },
-      name: {
-        type: Schema.types.string,
-      },
-    },
-    required: ["name"],
-  });
-
+Deno.test("FunctionType should abe able to provide a usable type of a DefineFunction return object", () => {
   const testFunctionDefinition = DefineFunction({
     callback_id: "test_function",
     title: "Test function",
     source_file: "functions/test_function.ts",
     input_parameters: {
       properties: {
-        test_property: testProperty,
-        message: {
+        bool: {
+          type: Schema.types.boolean,
+        },
+        int: {
+          type: Schema.types.integer,
+        },
+        num: {
+          type: Schema.types.number,
+        },
+        string: {
           type: Schema.types.string,
-          description: "Message to the recipient",
+        },
+        arr: {
+          type: Schema.types.array,
+          items: {
+            type: Schema.types.boolean,
+          },
+        },
+        obj: {
+          type: Schema.types.object,
+          properties: {
+            bool: {
+              type: Schema.types.boolean,
+            },
+          },
+          required: ["bool"],
         },
       },
-      required: ["message"],
+      required: ["bool", "int", "num", "string", "arr", "obj"],
     },
     output_parameters: {
-      properties: {},
-      required: [],
+      properties: {
+        bool: {
+          type: Schema.types.boolean,
+        },
+        int: {
+          type: Schema.types.integer,
+        },
+        num: {
+          type: Schema.types.number,
+        },
+        string: {
+          type: Schema.types.string,
+        },
+        arr: {
+          type: Schema.types.array,
+          items: {
+            type: Schema.types.boolean,
+          },
+        },
+        obj: {
+          type: Schema.types.object,
+          properties: {
+            bool: {
+              type: Schema.types.boolean,
+            },
+          },
+          required: ["bool"],
+        },
+      },
+      required: ["bool", "int", "num", "string", "arr", "obj"],
     },
   });
-  type inputs = FunctionType<typeof testFunctionDefinition>;
-  type property = PropertyType<typeof testProperty>;
 
-  const test = (obj: inputs): property => {
-    const hello: property = {
-      name: "william",
-      id: "1h2jkia",
-    };
-    return hello;
+  type testFunctionDefinitionType = FunctionType<typeof testFunctionDefinition>;
+
+  const expected = {
+    inputs: {
+      bool: true,
+      int: 0,
+      num: 0.1,
+      string: "",
+      arr: [true],
+      obj: {
+        bool: true,
+      },
+    },
+    outputs: {
+      bool: true,
+      int: 0,
+      num: 0.1,
+      string: "",
+      arr: [true],
+      obj: {
+        bool: true,
+      },
+    },
   };
-  // TODO not sure what im asserting for here
+
+  assert<CanBe<typeof expected, testFunctionDefinitionType>>(true);
 });
 
-Deno.test("Defined Functions should be able to provide the custom output object as a type", () => {
-  const testProperty = DefineProperty({
-    title: "test_property",
-    type: Schema.types.object,
-    properties: {
-      id: {
-        type: Schema.types.string,
-        minLength: 3,
-      },
-      name: {
-        type: Schema.types.string,
-      },
-    },
-    required: ["name"],
-  });
-
+Deno.test("FunctionType should be able to provide a usable type of an empty DefineFunction return object", () => {
   const testFunctionDefinition = DefineFunction({
     callback_id: "test_function",
     title: "Test function",
@@ -77,26 +113,22 @@ Deno.test("Defined Functions should be able to provide the custom output object 
       required: [],
     },
     output_parameters: {
-      properties: {
-        test_property: testProperty,
-        message: {
-          type: Schema.types.string,
-          description: "Message to the recipient",
-        },
-      },
-      required: ["message"],
+      properties: {},
+      required: [],
     },
   });
 
-  type outputs = FunctionType<typeof testFunctionDefinition>;
+  type testFunctionDefinitionType = FunctionType<typeof testFunctionDefinition>;
 
-  const test = (obj: outputs) => {
-    obj.outputs.test_property?.name;
+  const expected = {
+    inputs: {},
+    outputs: {},
   };
-  // TODO not sure what im asserting for here
+
+  assert<CanBe<typeof expected, testFunctionDefinitionType>>(true);
 });
 
-Deno.test("DefinedProperty should be able to provide the defined object as usable type", () => {
+Deno.test("PropertyType should provide a usable type from an 'object' DefineProperty", () => {
   const testProperty = DefineProperty({
     title: "test_property",
     type: Schema.types.object,
@@ -135,19 +167,19 @@ Deno.test("DefinedProperty should be able to provide the defined object as usabl
                         type: Schema.types.boolean,
                       },
                     },
-                    required: [],
+                    required: ["bool"],
                   }),
                 },
-                required: [],
+                required: ["obj"],
               }),
             },
-            required: [],
+            required: ["obj"],
           }),
         },
-        required: [],
+        required: ["obj"],
       }),
     },
-    required: ["bool", "int", "num"],
+    required: ["bool", "int", "num", "string", "arr", "obj"],
   });
 
   type TestPropertyType = PropertyType<typeof testProperty>;
@@ -156,7 +188,7 @@ Deno.test("DefinedProperty should be able to provide the defined object as usabl
     bool: true,
     int: 0,
     num: 0.1,
-    strings: "",
+    string: "",
     arr: [true],
     obj: {
       obj: {
@@ -168,6 +200,21 @@ Deno.test("DefinedProperty should be able to provide the defined object as usabl
       },
     },
   };
+
+  assert<CanBe<typeof expected, TestPropertyType>>(true);
+});
+
+Deno.test("PropertyType should provide a usable type from an empty 'object' DefineProperty", () => {
+  const testProperty = DefineProperty({
+    title: "test_property",
+    type: Schema.types.object,
+    properties: {},
+    required: [],
+  });
+
+  type TestPropertyType = PropertyType<typeof testProperty>;
+
+  const expected = {};
 
   assert<CanBe<typeof expected, TestPropertyType>>(true);
 });
