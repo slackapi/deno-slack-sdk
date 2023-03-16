@@ -57,9 +57,9 @@ may need to go into those files and manually resolve any problems.
 Docstring templates are located in the `_scripts/src/templates/tsdoc` directory
 and are included in the `schema/slack/functions/mod.ts` file upon generation.
 
-A warning will be raised during generation if there is not a matching file for
-a given function `callback_id` in the `tsdoc` directory. File names must match
-a `${callback_id}_doc.ts` convention, e.g. `archive_channel_doc.ts`.
+A warning will be raised during generation if there is not a matching file for a
+given function `callback_id` in the `tsdoc` directory. File names must match a
+`${callback_id}_doc.ts` convention, e.g. `archive_channel_doc.ts`.
 
 Template files should **only** include a docstring comment, preferably in the
 following form:
@@ -78,11 +78,12 @@ following form:
  *     param2: "placeholder",
  *   },
  * );
- * 
+ *
  * @remarks Any additional information about this specific function, as needed.
  * @scopes `required:scopes`, `listed:here`
  * @see The {@link https://api.slack.com/future/functions#function-name Function name} documentation.
  */
 ```
 
-TSDoc [reference for example tags can be found here](https://tsdoc.org/pages/tags/example/).
+TSDoc
+[reference for example tags can be found here](https://tsdoc.org/pages/tags/example/).
