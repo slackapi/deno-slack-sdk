@@ -1,12 +1,13 @@
 import { DefineType } from "./mod.ts";
 import { assertEquals } from "../dev_deps.ts";
+import { Schema } from "../mod.ts";
 
 Deno.test("DefineType test against id using the name parameter", () => {
   const Type = DefineType({
     title: "Title",
     description: "Description",
     name: "Name",
-    type: "string",
+    type: Schema.types.string,
   });
 
   assertEquals(Type.id, "Name");
@@ -17,7 +18,7 @@ Deno.test("DefineType test toString using the name parameter", () => {
     title: "Title",
     description: "Description",
     name: "Name",
-    type: "object",
+    type: Schema.types.string,
   });
 
   const typeJson = Type.toJSON();
@@ -30,7 +31,7 @@ Deno.test("DefineType test export using the name parameter", () => {
     title: "Title",
     description: "Description",
     name: "Name",
-    type: "string",
+    type: Schema.types.string,
   });
 
   const exportType = Type.export();

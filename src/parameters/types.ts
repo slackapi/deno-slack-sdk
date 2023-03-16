@@ -72,6 +72,7 @@ export type ObjectParameterVariableType<
     });
 
 export type DefinePropertyReturnType = ReturnType<typeof DefineProperty>;
+
 export type PropertyRuntimeType<
   Property extends DefinePropertyReturnType,
 > = FunctionInputRuntimeType<Property>;
