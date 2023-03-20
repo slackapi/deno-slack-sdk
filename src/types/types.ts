@@ -5,8 +5,6 @@ import {
 } from "../parameters/definition_types.ts";
 import { SlackManifest } from "../manifest/mod.ts";
 import { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
-import { DefineType } from "./mod.ts";
-import { FunctionInputRuntimeType } from "../functions/types.ts";
 
 export type CustomTypeDefinition<
   Props extends TypedObjectProperties,
@@ -26,8 +24,3 @@ export interface ICustomType<
   registerParameterTypes: (manifest: SlackManifest) => void;
   export(): ManifestCustomTypeSchema;
 }
-
-export type DefineTypeReturnType = ReturnType<typeof DefineType>;
-
-export type CustomTypeRuntimeType<T extends DefineTypeReturnType> =
-  FunctionInputRuntimeType<T["definition"]>;

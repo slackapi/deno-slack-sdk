@@ -1,10 +1,8 @@
-import { FunctionInputRuntimeType } from "../functions/types.ts";
 import {
   IncreaseDepth,
   MaxRecursionDepth,
   RecursionDepthLevel,
 } from "../type_utils.ts";
-import { DefineProperty } from "./define_property.ts";
 import {
   CustomTypeParameterDefinition,
   ParameterDefinition,
@@ -70,9 +68,3 @@ export type ObjectParameterVariableType<
       // deno-lint-ignore no-explicit-any
       [key: string]: any;
     });
-
-export type DefinePropertyReturnType = ReturnType<typeof DefineProperty>;
-
-export type PropertyRuntimeType<
-  Property extends DefinePropertyReturnType,
-> = FunctionInputRuntimeType<Property>;
