@@ -74,23 +74,16 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
     },
   });
 
-  type Actual = FunctionRuntimeType<
-    typeof testFunctionDefinition
-  >;
+  type Actual = FunctionRuntimeType<typeof testFunctionDefinition>;
 
-  const expected = {
-    inputs: {
-      bool: true,
-      int: 0,
-      num: 0.1,
-      string: "",
-      arr: [true],
-      obj: {
-        bool: true,
-      },
-    },
+
+  const expected: Actual = {
     outputs: {
-      bool: true,
+      
+    }
+    args: {
+      inputs: {
+        bool: true,
       int: 0,
       num: 0.1,
       string: "",
@@ -98,7 +91,16 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
       obj: {
         bool: true,
       },
-    },
+      },
+      enterprise_id: "",
+      env: {},
+      team_id: "",
+      token: "",
+      client: {},
+      event: {},
+
+    }
+    }
   };
 
   assert<CanBe<typeof expected, Actual>>(true);
@@ -121,9 +123,15 @@ Deno.test("FunctionRuntimeType should be able to provide a usable type of an emp
 
   type Actual = FunctionRuntimeType<typeof testFunctionDefinition>;
 
-  const expected = {
+  type test = ReturnType<typeof testFunctionDefinition>;
+
+  const expected: Actual = {
     inputs: {},
     outputs: {},
+    enterprise_id: "",
+    env: {},
+    team_id: "",
+    token: "",
   };
 
   assert<CanBe<typeof expected, Actual>>(true);

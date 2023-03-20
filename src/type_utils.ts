@@ -13,3 +13,6 @@ export type IncreaseDepth<Depth extends RecursionDepthLevel = 0> = Depth extends
   : Depth extends 4 ? 5
   : Depth extends 5 ? MaxRecursionDepth
   : MaxRecursionDepth;
+
+// deno-lint-ignore no-explicit-any
+export type UnknownRuntimeType = any;

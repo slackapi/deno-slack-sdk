@@ -400,11 +400,40 @@ export type RuntimeUnhandledEventContext<
 
 export type DefineFunctionReturnType = ReturnType<typeof DefineFunction>;
 
+type FunctionRuntime<
+  InputParameters extends FunctionParameters,
+  OutputParameters extends FunctionParameters,
+> = BaseRuntimeFunctionContext<InputParameters> & {
+  /**
+   * @description The outputs to the function as defined by your function definition. If no outputs are specified, an empty object is provided at runtime.
+   */
+  outputs: OutputParameters;
+};
+
+// export type FunctionRuntimeType<
+//   Function extends DefineFunctionReturnType,
+// > = Function["definition"] extends
+//   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+//     Args: { inputs: FunctionRuntimeParameters<I, RI> };
+//     outputs: FunctionRuntimeParameters<O, RO>;
+//   }
+//   : never;
+
+// type SyncAsync<FunctionReturn extends BaseRuntimeSlackFunctionHandler<infer I, infer O>> = FunctionReturn extends AsyncFunctionHandler<I, O, any>
+
+// type FunctionRuntimeOutputs<FunctionReturnType extends >
+
 export type FunctionRuntimeType<
   Function extends DefineFunctionReturnType,
-> = Function["definition"] extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
-    inputs: FunctionRuntimeParameters<I, RI>;
-    outputs: FunctionRuntimeParameters<O, RO>;
-  }
-  : never;
+> = {
+  args: Parameters<
+    EnrichedSlackFunctionHandler<Function["definition"]>
+  >[number];
+  outputs:
+    ReturnType<EnrichedSlackFunctionHandler<Function["definition"]>> extends // deno-lint-ignore no-explicit-any
+    FunctionHandlerReturnArgs<any> ? any
+      : ReturnType<EnrichedSlackFunctionHandler<Function["definition"]>> extends
+        // deno-lint-ignore no-explicit-any
+        Promise<FunctionHandlerReturnArgs<any>> ? any
+      : never;
+};

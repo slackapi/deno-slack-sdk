@@ -1,11 +1,17 @@
 import {
   DefineFunctionReturnType,
+  FunctionInputRuntimeType,
   FunctionRuntimeType,
 } from "./functions/types.ts";
+import {
+  CustomTypeParameterDefinition,
+  TypedObjectParameterDefinition,
+} from "./parameters/definition_types.ts";
 import {
   DefinePropertyReturnType,
   PropertyRuntimeType,
 } from "./parameters/types.ts";
+import { CustomType } from "./types/mod.ts";
 import { CustomTypeRuntimeType, DefineTypeReturnType } from "./types/types.ts";
 
 export type {
@@ -24,14 +30,21 @@ export type {
 // Runtime Types
 // ----------------------------------------------------------------------------
 
+// deno-lint-ignore no-explicit-any
+type AnyCustomType = CustomType<any, any, any>;
+
+type AnyTypedObjectParameterDefinition = TypedObjectParameterDefinition<
+  // deno-lint-ignore no-explicit-any
+  any,
+  // deno-lint-ignore no-explicit-any
+  any
+>;
 export type RuntimeType<
   T extends
-    | DefineFunctionReturnType
-    | DefineTypeReturnType
-    | DefinePropertyReturnType,
-> = T extends DefineFunctionReturnType ? FunctionRuntimeType<T>
-  : T extends DefineTypeReturnType ? CustomTypeRuntimeType<T>
-  : T extends DefinePropertyReturnType ? PropertyRuntimeType<T>
+    | AnyCustomType
+    | AnyTypedObjectParameterDefinition,
+> = T extends AnyCustomType ? FunctionInputRuntimeType<T["definition"]>
+  : T extends AnyTypedObjectParameterDefinition ? FunctionInputRuntimeType<T>
   : never;
 
 // ----------------------------------------------------------------------------
