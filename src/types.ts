@@ -1,18 +1,8 @@
+import { FunctionInputRuntimeType } from "./functions/types.ts";
 import {
-  DefineFunctionReturnType,
-  FunctionInputRuntimeType,
-  FunctionRuntimeType,
-} from "./functions/types.ts";
-import {
-  CustomTypeParameterDefinition,
   TypedObjectParameterDefinition,
 } from "./parameters/definition_types.ts";
-import {
-  DefinePropertyReturnType,
-  PropertyRuntimeType,
-} from "./parameters/types.ts";
 import { CustomType } from "./types/mod.ts";
-import { CustomTypeRuntimeType, DefineTypeReturnType } from "./types/types.ts";
 
 export type {
   /**
@@ -39,6 +29,10 @@ type AnyTypedObjectParameterDefinition = TypedObjectParameterDefinition<
   // deno-lint-ignore no-explicit-any
   any
 >;
+
+/**
+ * @description Used to surface runtime Typescript types from Defined Types and Properties
+ */
 export type RuntimeType<
   T extends
     | AnyCustomType

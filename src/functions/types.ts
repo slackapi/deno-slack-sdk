@@ -398,42 +398,29 @@ export type RuntimeUnhandledEventContext<
     body: any;
   };
 
-export type DefineFunctionReturnType = ReturnType<typeof DefineFunction>;
+type DefineFunctionReturnType = ReturnType<typeof DefineFunction>;
 
-type FunctionRuntime<
-  InputParameters extends FunctionParameters,
-  OutputParameters extends FunctionParameters,
-> = BaseRuntimeFunctionContext<InputParameters> & {
-  /**
-   * @description The outputs to the function as defined by your function definition. If no outputs are specified, an empty object is provided at runtime.
-   */
-  outputs: OutputParameters;
-};
+type FunctionRuntimeOutputs<
+  FunctionReturnType extends
+    | FunctionHandlerReturnArgs<UnknownRuntimeType>
+    | Promise<FunctionHandlerReturnArgs<UnknownRuntimeType>>,
+> = FunctionReturnType extends FunctionHandlerReturnArgs<UnknownRuntimeType>
+  ? FunctionReturnType["outputs"]
+  : FunctionReturnType extends
+    Promise<FunctionHandlerReturnArgs<UnknownRuntimeType>>
+    ? Awaited<FunctionReturnType>["outputs"]
+  : never;
 
-// export type FunctionRuntimeType<
-//   Function extends DefineFunctionReturnType,
-// > = Function["definition"] extends
-//   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
-//     Args: { inputs: FunctionRuntimeParameters<I, RI> };
-//     outputs: FunctionRuntimeParameters<O, RO>;
-//   }
-//   : never;
-
-// type SyncAsync<FunctionReturn extends BaseRuntimeSlackFunctionHandler<infer I, infer O>> = FunctionReturn extends AsyncFunctionHandler<I, O, any>
-
-// type FunctionRuntimeOutputs<FunctionReturnType extends >
-
+/**
+ * @description Used to surface function runtime typescript types from defined functions
+ */
 export type FunctionRuntimeType<
   Function extends DefineFunctionReturnType,
 > = {
   args: Parameters<
     EnrichedSlackFunctionHandler<Function["definition"]>
   >[number];
-  outputs:
-    ReturnType<EnrichedSlackFunctionHandler<Function["definition"]>> extends // deno-lint-ignore no-explicit-any
-    FunctionHandlerReturnArgs<any> ? any
-      : ReturnType<EnrichedSlackFunctionHandler<Function["definition"]>> extends
-        // deno-lint-ignore no-explicit-any
-        Promise<FunctionHandlerReturnArgs<any>> ? any
-      : never;
+  outputs: FunctionRuntimeOutputs<
+    ReturnType<EnrichedSlackFunctionHandler<Function["definition"]>>
+  >;
 };
