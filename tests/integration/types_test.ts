@@ -16,35 +16,6 @@ Deno.test("RuntimeType should provide a usable type from DefineType returned obj
   assert<CanBe<boolean, Actual>>(true);
 });
 
-// Deno.test("RuntimeType should provide a usable type from DefineFunction returned object", () => {
-//   const testFunctionDefinition = DefineFunction({
-//     callback_id: "test_function",
-//     title: "Test function",
-//     source_file: "functions/test_function.ts",
-//     input_parameters: {
-//       properties: {},
-//       required: [],
-//     },
-//     output_parameters: {
-//       properties: {},
-//       required: [],
-//     },
-//   });
-
-//   type Actual = RuntimeType<typeof testFunctionDefinition>;
-
-//   const expected: Actual = {
-//     inputs: {},
-//     outputs: {},
-//     enterprise_id: "",
-//     env: {},
-//     team_id: "",
-//     token: "",
-//   };
-
-//   assert<CanBe<typeof expected, Actual>>(true);
-// });
-
 Deno.test("RuntimeType should provide a usable type from DefineProperty returned object", () => {
   const testProperty = DefineProperty({
     title: "test_property",
