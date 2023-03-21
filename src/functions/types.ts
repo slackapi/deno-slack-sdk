@@ -400,27 +400,29 @@ export type RuntimeUnhandledEventContext<
 
 type DefineFunctionReturnType = ReturnType<typeof DefineFunction>;
 
-type FunctionRuntimeOutputs<
+type FunctionRuntimeReturnArgs<
   FunctionReturnType extends
     | FunctionHandlerReturnArgs<UnknownRuntimeType>
     | Promise<FunctionHandlerReturnArgs<UnknownRuntimeType>>,
 > = FunctionReturnType extends FunctionHandlerReturnArgs<UnknownRuntimeType>
-  ? FunctionReturnType["outputs"]
+  ? FunctionReturnType
   : FunctionReturnType extends
     Promise<FunctionHandlerReturnArgs<UnknownRuntimeType>>
-    ? Awaited<FunctionReturnType>["outputs"]
+    ? Awaited<FunctionReturnType>
   : never;
+
+type BaseFunctionRuntimeType<
+  EnrichedFunction extends EnrichedSlackFunctionHandler<UnknownRuntimeType>,
+> = {
+  args: Parameters<EnrichedFunction>[number];
+  outputs: FunctionRuntimeReturnArgs<ReturnType<EnrichedFunction>>["outputs"];
+};
 
 /**
  * @description Used to surface function runtime typescript types from defined functions
  */
 export type FunctionRuntimeType<
   Function extends DefineFunctionReturnType,
-> = {
-  args: Parameters<
-    EnrichedSlackFunctionHandler<Function["definition"]>
-  >[number];
-  outputs: FunctionRuntimeOutputs<
-    ReturnType<EnrichedSlackFunctionHandler<Function["definition"]>>
-  >;
-};
+> = BaseFunctionRuntimeType<
+  EnrichedSlackFunctionHandler<Function["definition"]>
+>;
