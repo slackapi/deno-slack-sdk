@@ -1,10 +1,13 @@
-import { assert } from "../../../src/dev_deps.ts";
-import { FunctionRuntimeType } from "../../../src/functions/types.ts";
-import { DefineFunction, Schema, SlackAPI } from "../../../src/mod.ts";
-import { CanBe } from "../../../src/test_utils.ts";
+import { assert, IsExact } from "../../../src/dev_deps.ts";
+import {
+  EnrichedSlackFunctionHandler,
+  FunctionRuntimeType,
+} from "../../../src/functions/types.ts";
+import { DefineFunction, DefineProperty, Schema } from "../../../src/mod.ts";
+import { SlackFunctionTester } from "../../../src/functions/tester/mod.ts";
 
 Deno.test("FunctionRuntimeType should abe able to provide a usable type of a DefineFunction return object", () => {
-  const testFunctionDefinition = DefineFunction({
+  const TestFn = DefineFunction({
     callback_id: "test_function",
     title: "Test function",
     source_file: "functions/test_function.ts",
@@ -28,7 +31,7 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
             type: Schema.types.boolean,
           },
         },
-        obj: {
+        obj: DefineProperty({
           type: Schema.types.object,
           properties: {
             bool: {
@@ -36,7 +39,7 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
             },
           },
           required: ["bool"],
-        },
+        }),
       },
       required: ["bool", "int", "num", "string", "arr", "obj"],
     },
@@ -60,7 +63,7 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
             type: Schema.types.boolean,
           },
         },
-        obj: {
+        obj: DefineProperty({
           type: Schema.types.object,
           properties: {
             bool: {
@@ -68,59 +71,47 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
             },
           },
           required: ["bool"],
-        },
+        }),
       },
       required: ["bool", "int", "num", "string", "arr", "obj"],
     },
   });
 
-  type Actual = FunctionRuntimeType<typeof testFunctionDefinition>;
+  type Actual = FunctionRuntimeType<typeof TestFn>;
 
-  const expected: Actual = {
-    outputs: {
+  const expectedParams = {
+    bool: true,
+    int: 0,
+    num: 0.1,
+    string: "",
+    arr: [true],
+    obj: {
       bool: true,
-      int: 0,
-      num: 0.1,
-      string: "",
-      arr: [true],
-      obj: {
-        bool: true,
-      },
-    },
-    args: {
-      inputs: {
-        bool: true,
-        int: 0,
-        num: 0.1,
-        string: "",
-        arr: [true],
-        obj: {
-          bool: true,
-        },
-      },
-      enterprise_id: "",
-      env: {},
-      team_id: "",
-      token: "",
-      client: SlackAPI("", {}),
-      event: {
-        event_ts: "",
-        function: {
-          id: "",
-          callback_id: "",
-          title: "",
-        },
-        function_execution_id: "",
-        type: "function_executed",
-      },
     },
   };
 
-  assert<CanBe<typeof expected, Actual>>(true);
+  const validHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> =
+    () => {
+      return {
+        outputs: expectedParams,
+      };
+    };
+  const { createContext } = SlackFunctionTester(TestFn);
+  const expectedContext = createContext({
+    inputs: expectedParams,
+  });
+  const expectedResult = validHandler(expectedContext);
+
+  type Expected = {
+    outputs: typeof expectedResult.outputs;
+    args: typeof expectedContext;
+  };
+
+  assert<IsExact<Actual, Expected>>(true);
 });
 
 Deno.test("FunctionRuntimeType should be able to provide a usable type of an empty DefineFunction return object", () => {
-  const testFunctionDefinition = DefineFunction({
+  const TestFn = DefineFunction({
     callback_id: "test_function",
     title: "Test function",
     source_file: "functions/test_function.ts",
@@ -134,29 +125,75 @@ Deno.test("FunctionRuntimeType should be able to provide a usable type of an emp
     },
   });
 
-  type Actual = FunctionRuntimeType<typeof testFunctionDefinition>;
+  type Actual = FunctionRuntimeType<typeof TestFn>;
 
-  const expected: Actual = {
-    outputs: {},
-    args: {
-      inputs: {},
-      enterprise_id: "",
-      env: {},
-      team_id: "",
-      token: "",
-      client: SlackAPI("", {}),
-      event: {
-        event_ts: "",
-        function: {
-          id: "",
-          callback_id: "",
-          title: "",
-        },
-        function_execution_id: "",
-        type: "function_executed",
-      },
-    },
+  const expectedParams = {};
+
+  const validHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> =
+    () => {
+      return {
+        outputs: expectedParams,
+      };
+    };
+  const { createContext } = SlackFunctionTester(TestFn);
+  const expectedContext = createContext({
+    inputs: expectedParams,
+  });
+  const expectedResult = validHandler(expectedContext);
+
+  type Expected = {
+    outputs: typeof expectedResult.outputs;
+    args: typeof expectedContext;
   };
 
-  assert<CanBe<typeof expected, Actual>>(true);
+  assert<IsExact<Actual, Expected>>(true);
+});
+
+Deno.test("FunctionRuntimeType should be able to provide a usable type from an Async Function", () => {
+  const TestFn = DefineFunction({
+    callback_id: "test_function",
+    title: "Test function",
+    source_file: "functions/test_function.ts",
+    input_parameters: {
+      properties: {
+        bool: {
+          type: Schema.types.boolean,
+        },
+      },
+      required: ["bool"],
+    },
+    output_parameters: {
+      properties: {
+        bool: {
+          type: Schema.types.boolean,
+        },
+      },
+      required: ["bool"],
+    },
+  });
+
+  type Actual = FunctionRuntimeType<typeof TestFn>;
+
+  const expectedParams = {
+    bool: true,
+  };
+
+  const validHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> =
+    async () => {
+      return await {
+        outputs: expectedParams,
+      };
+    };
+  const { createContext } = SlackFunctionTester(TestFn);
+  const expectedContext = createContext({
+    inputs: expectedParams,
+  });
+  const expectedResult = validHandler(expectedContext);
+
+  type Expected = {
+    outputs: Awaited<typeof expectedResult>["outputs"];
+    args: typeof expectedContext;
+  };
+
+  assert<IsExact<Actual, Expected>>(true);
 });
