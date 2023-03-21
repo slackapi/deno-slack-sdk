@@ -1,4 +1,4 @@
-import { assert } from "../../src/dev_deps.ts";
+import { assert, IsExact } from "../../src/dev_deps.ts";
 import { DefineProperty, DefineType, Schema } from "../../src/mod.ts";
 import { CanBe } from "../../src/test_utils.ts";
 import { RuntimeType } from "../../src/types.ts";
@@ -13,7 +13,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType returned obj
 
   type Actual = RuntimeType<typeof customType>;
 
-  assert<CanBe<boolean, Actual>>(true);
+  assert<IsExact<Actual, boolean>>(true);
 });
 
 Deno.test("RuntimeType should provide a usable type from DefineProperty returned object", () => {
@@ -26,9 +26,10 @@ Deno.test("RuntimeType should provide a usable type from DefineProperty returned
 
   type Actual = RuntimeType<typeof testProperty>;
 
-  const expected = {};
+  // deno-lint-ignore no-explicit-any
+  type Expected = Record<string, any>; // empty object
 
-  assert<CanBe<typeof expected, Actual>>(true);
+  assert<IsExact<Actual, Expected>>(true);
 });
 
 Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'object'", () => {
@@ -73,7 +74,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
                         type: Schema.types.boolean,
                       },
                     },
-                    required: ["obj"],
+                    required: ["bool"],
                   }),
                 },
                 required: ["obj"],
@@ -90,24 +91,24 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
 
   type Actual = RuntimeType<typeof customType>;
 
-  const expected = {
-    bool: true,
-    int: 0,
-    num: 0.1,
-    string: "",
-    arr: [true],
+  type Expected = {
+    bool: boolean;
+    int: number;
+    num: number;
+    string: string;
+    arr: boolean[];
     obj: {
       obj: {
         obj: {
           obj: {
-            bool: true,
-          },
-        },
-      },
-    },
+            bool: boolean;
+          };
+        };
+      };
+    };
   };
 
-  assert<CanBe<typeof expected, Actual>>(true);
+  assert<CanBe<Actual, Expected>>(true);
 });
 
 Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'object' and empty", () => {
@@ -122,9 +123,10 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
 
   type Actual = RuntimeType<typeof customType>;
 
-  const expected = {};
+  // deno-lint-ignore no-explicit-any
+  type Expected = Record<string, any>;
 
-  assert<CanBe<typeof expected, Actual>>(true);
+  assert<IsExact<Actual, Expected>>(true);
 });
 
 Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'string'", () => {
@@ -137,7 +139,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
 
   type Actual = RuntimeType<typeof customType>;
 
-  assert<CanBe<string, Actual>>(true);
+  assert<IsExact<Actual, string>>(true);
 });
 
 Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'array'", () => {
@@ -153,7 +155,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
 
   type Actual = RuntimeType<typeof customType>;
 
-  assert<CanBe<boolean[], Actual>>(true);
+  assert<IsExact<Actual, boolean[]>>(true);
 });
 
 Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'channel_id'", () => {
@@ -166,7 +168,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
 
   type Actual = RuntimeType<typeof customType>;
 
-  assert<CanBe<string, Actual>>(true);
+  assert<IsExact<Actual, string>>(true);
 });
 
 Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'message_context'", () => {
@@ -179,13 +181,13 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
 
   type Actual = RuntimeType<typeof customType>;
 
-  const expected: Actual = {
-    message_ts: "",
-    user_id: "",
-    channel_id: "",
+  type Expected = {
+    message_ts: string;
+    user_id?: string | undefined;
+    channel_id?: string | undefined;
   };
 
-  assert<CanBe<typeof expected, Actual>>(true);
+  assert<CanBe<Actual, Expected>>(true);
 });
 
 Deno.test("RuntimeType should provide any from DefineType nesting DefineType", () => {
@@ -208,7 +210,7 @@ Deno.test("RuntimeType should provide any from DefineType nesting DefineType", (
   type Actual = RuntimeType<typeof customType>;
 
   // deno-lint-ignore no-explicit-any
-  assert<CanBe<any, Actual>>(true);
+  assert<IsExact<Actual, any>>(true);
 });
 
 Deno.test("RuntimeType should provide a usable type from an 'object' DefineProperty", () => {
@@ -267,24 +269,24 @@ Deno.test("RuntimeType should provide a usable type from an 'object' DefinePrope
 
   type Actual = RuntimeType<typeof testProperty>;
 
-  const expected = {
-    bool: true,
-    int: 0,
-    num: 0.1,
-    string: "",
-    arr: [true],
+  type Expected = {
+    bool: boolean;
+    int: number;
+    num: number;
+    string: string;
+    arr: boolean[];
     obj: {
       obj: {
         obj: {
           obj: {
-            bool: true,
-          },
-        },
-      },
-    },
+            bool: boolean;
+          };
+        };
+      };
+    };
   };
 
-  assert<CanBe<typeof expected, Actual>>(true);
+  assert<CanBe<Expected, Actual>>(true);
 });
 
 Deno.test("RuntimeType should provide a usable type from an empty 'object' DefineProperty", () => {
@@ -297,7 +299,7 @@ Deno.test("RuntimeType should provide a usable type from an empty 'object' Defin
 
   type Actual = RuntimeType<typeof testProperty>;
 
-  const expected = {};
+  type Expected = Record<string | number | symbol, never>; // empty object
 
-  assert<CanBe<typeof expected, Actual>>(true);
+  assert<CanBe<Expected, Actual>>(true);
 });
