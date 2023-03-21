@@ -403,17 +403,24 @@ export type RuntimeUnhandledEventContext<
  */
 type FunctionRuntimeReturnArgs<
   FunctionReturnType extends
-    | FunctionHandlerReturnArgs<UnknownRuntimeType>
-    | Promise<FunctionHandlerReturnArgs<UnknownRuntimeType>>,
-> = FunctionReturnType extends FunctionHandlerReturnArgs<UnknownRuntimeType>
+    | FunctionHandlerReturnArgs<FunctionParameters>
+    | Promise<FunctionHandlerReturnArgs<FunctionParameters>>,
+> = FunctionReturnType extends FunctionHandlerReturnArgs<FunctionParameters>
   ? FunctionReturnType
   : FunctionReturnType extends
-    Promise<FunctionHandlerReturnArgs<UnknownRuntimeType>>
+    Promise<FunctionHandlerReturnArgs<FunctionParameters>>
     ? Awaited<FunctionReturnType>
   : never;
 
 type BaseFunctionRuntimeType<
-  EnrichedFunction extends EnrichedSlackFunctionHandler<UnknownRuntimeType>,
+  EnrichedFunction extends EnrichedSlackFunctionHandler<
+    FunctionDefinitionArgs<
+      ParameterSetDefinition,
+      ParameterSetDefinition,
+      PossibleParameterKeys<ParameterSetDefinition>,
+      PossibleParameterKeys<ParameterSetDefinition>
+    >
+  >,
 > = {
   args: Parameters<EnrichedFunction>[number];
   outputs: FunctionRuntimeReturnArgs<ReturnType<EnrichedFunction>>["outputs"];
