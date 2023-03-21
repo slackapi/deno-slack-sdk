@@ -398,8 +398,9 @@ export type RuntimeUnhandledEventContext<
     body: any;
   };
 
-type DefineFunctionReturnType = ReturnType<typeof DefineFunction>;
-
+/**
+ * @description Used to extract returned args from Async and Sync function handlers
+ */
 type FunctionRuntimeReturnArgs<
   FunctionReturnType extends
     | FunctionHandlerReturnArgs<UnknownRuntimeType>
@@ -422,7 +423,7 @@ type BaseFunctionRuntimeType<
  * @description Used to surface function runtime typescript types from defined functions
  */
 export type FunctionRuntimeType<
-  Function extends DefineFunctionReturnType,
+  Function extends ReturnType<typeof DefineFunction>,
 > = BaseFunctionRuntimeType<
   EnrichedSlackFunctionHandler<Function["definition"]>
 >;
