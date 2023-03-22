@@ -1,5 +1,5 @@
 import { FunctionInputRuntimeType } from "./functions/types.ts";
-import { TypedObjectParameter } from "./parameters/definition_types.ts";
+import { ParameterDefinition } from "./parameters/definition_types.ts";
 import { ICustomType } from "./types/types.ts";
 
 export type {
@@ -24,9 +24,9 @@ export type {
 export type RuntimeType<
   T extends
     | ICustomType
-    | TypedObjectParameter,
+    | ParameterDefinition,
 > = T extends ICustomType ? FunctionInputRuntimeType<T["definition"]>
-  : T extends TypedObjectParameter ? FunctionInputRuntimeType<T>
+  : T extends ParameterDefinition ? FunctionInputRuntimeType<T>
   : never;
 
 // ----------------------------------------------------------------------------
