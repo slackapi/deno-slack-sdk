@@ -95,7 +95,6 @@ Deno.test("ExtractFunctionRuntimeTypes should abe able to provide a usable type 
       args,
     ) => {
       assert<IsExact<Actual["args"], typeof args>>(true);
-      console.log("hello there");
       return {
         outputs: expectedParams,
       };
