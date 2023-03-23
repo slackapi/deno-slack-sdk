@@ -1,12 +1,12 @@
 import { assert, IsExact } from "../../../src/dev_deps.ts";
 import {
   EnrichedSlackFunctionHandler,
-  FunctionRuntimeType,
+  ExtractFunctionRuntimeTypes,
 } from "../../../src/functions/types.ts";
 import { DefineFunction, DefineProperty, Schema } from "../../../src/mod.ts";
 import { SlackFunctionTester } from "../../../src/functions/tester/mod.ts";
 
-Deno.test("FunctionRuntimeType should abe able to provide a usable type of a DefineFunction return object", () => {
+Deno.test("ExtractFunctionRuntimeTypes should abe able to provide a usable type of a DefineFunction return object", () => {
   const TestFn = DefineFunction({
     callback_id: "test_function",
     title: "Test function",
@@ -77,7 +77,7 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
     },
   });
 
-  type Actual = FunctionRuntimeType<typeof TestFn>;
+  type Actual = ExtractFunctionRuntimeTypes<typeof TestFn>;
 
   const expectedParams = {
     bool: true,
@@ -100,7 +100,7 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
         outputs: expectedParams,
       };
     };
-  type ExpectedOutputs = ReturnType<typeof assertHandler>["outputs"];
+  type ExpectedOutputs = Required<ReturnType<typeof assertHandler>>["outputs"];
 
   const { createContext } = SlackFunctionTester(TestFn);
   const expectedContext = createContext({
@@ -111,7 +111,7 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
   assert<IsExact<Actual["outputs"], ExpectedOutputs>>(true);
 });
 
-Deno.test("FunctionRuntimeType should be able to provide a usable type of an empty DefineFunction return object", () => {
+Deno.test("ExtractFunctionRuntimeTypes should be able to provide a usable type of an empty DefineFunction return object", () => {
   const TestFn = DefineFunction({
     callback_id: "test_function",
     title: "Test function",
@@ -126,7 +126,7 @@ Deno.test("FunctionRuntimeType should be able to provide a usable type of an emp
     },
   });
 
-  type Actual = FunctionRuntimeType<typeof TestFn>;
+  type Actual = ExtractFunctionRuntimeTypes<typeof TestFn>;
 
   const expectedParams = {};
 
@@ -139,7 +139,7 @@ Deno.test("FunctionRuntimeType should be able to provide a usable type of an emp
         outputs: expectedParams,
       };
     };
-  type ExpectedOutputs = ReturnType<typeof assertHandler>["outputs"];
+  type ExpectedOutputs = Required<ReturnType<typeof assertHandler>>["outputs"];
 
   const { createContext } = SlackFunctionTester(TestFn);
   const expectedContext = createContext({
@@ -150,7 +150,7 @@ Deno.test("FunctionRuntimeType should be able to provide a usable type of an emp
   assert<IsExact<Actual["outputs"], ExpectedOutputs>>(true);
 });
 
-Deno.test("FunctionRuntimeType should be able to provide a usable type from an Async Function", async () => {
+Deno.test("ExtractFunctionRuntimeTypes should be able to provide a usable type from an Async Function", async () => {
   const TestFn = DefineFunction({
     callback_id: "test_function",
     title: "Test function",
@@ -173,7 +173,7 @@ Deno.test("FunctionRuntimeType should be able to provide a usable type from an A
     },
   });
 
-  type Actual = FunctionRuntimeType<typeof TestFn>;
+  type Actual = ExtractFunctionRuntimeTypes<typeof TestFn>;
 
   const expectedParams = {
     bool: true,
@@ -188,7 +188,9 @@ Deno.test("FunctionRuntimeType should be able to provide a usable type from an A
         outputs: expectedParams,
       };
     };
-  type ExpectedOutputs = Awaited<ReturnType<typeof assertHandler>>["outputs"];
+  type ExpectedOutputs = Required<
+    Awaited<ReturnType<typeof assertHandler>>
+  >["outputs"];
 
   const { createContext } = SlackFunctionTester(TestFn);
   const expectedContext = createContext({

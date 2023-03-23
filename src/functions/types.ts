@@ -401,15 +401,14 @@ export type RuntimeUnhandledEventContext<
 /**
  * @description Used to extract returned args from Async and Sync function handlers
  */
-type FunctionRuntimeReturnArgs<
-  FunctionReturnType extends
+type ExtractFunctionHandlerReturnArgs<
+  ReturnArgs extends
     | FunctionHandlerReturnArgs<FunctionParameters>
     | Promise<FunctionHandlerReturnArgs<FunctionParameters>>,
-> = FunctionReturnType extends FunctionHandlerReturnArgs<FunctionParameters>
-  ? FunctionReturnType
-  : FunctionReturnType extends
-    Promise<FunctionHandlerReturnArgs<FunctionParameters>>
-    ? Awaited<FunctionReturnType>
+> = ReturnArgs extends FunctionHandlerReturnArgs<FunctionParameters>
+  ? ReturnArgs
+  : ReturnArgs extends Promise<FunctionHandlerReturnArgs<FunctionParameters>>
+    ? Awaited<ReturnArgs>
   : never;
 
 type BaseFunctionRuntimeType<
@@ -423,13 +422,16 @@ type BaseFunctionRuntimeType<
   >,
 > = {
   args: Parameters<EnrichedFunction>[number];
-  outputs: FunctionRuntimeReturnArgs<ReturnType<EnrichedFunction>>["outputs"];
+  outputs: Extract<
+    ExtractFunctionHandlerReturnArgs<ReturnType<EnrichedFunction>>,
+    SuccessfulFunctionReturnArgs<FunctionParameters>
+  >["outputs"];
 };
 
 /**
  * @description Used to surface function runtime typescript types from defined functions
  */
-export type FunctionRuntimeType<
+export type ExtractFunctionRuntimeTypes<
   Function extends ReturnType<typeof DefineFunction>,
 > = BaseFunctionRuntimeType<
   EnrichedSlackFunctionHandler<Function["definition"]>

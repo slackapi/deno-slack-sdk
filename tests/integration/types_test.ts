@@ -1,9 +1,9 @@
 import { assert, IsExact } from "../../src/dev_deps.ts";
 import { DefineProperty, DefineType, Schema } from "../../src/mod.ts";
 import { CanBe } from "../../src/test_utils.ts";
-import { RuntimeType } from "../../src/types.ts";
+import { ExtractRuntimeType } from "../../src/types.ts";
 
-Deno.test("RuntimeType should provide a usable type from DefineType returned object", () => {
+Deno.test("ExtractRuntimeType should provide a usable type from DefineType returned object", () => {
   const customType = DefineType({
     title: "Title",
     description: "Description",
@@ -11,12 +11,12 @@ Deno.test("RuntimeType should provide a usable type from DefineType returned obj
     type: Schema.types.boolean,
   });
 
-  type Actual = RuntimeType<typeof customType>;
+  type Actual = ExtractRuntimeType<typeof customType>;
 
   assert<IsExact<Actual, boolean>>(true);
 });
 
-Deno.test("RuntimeType should provide a usable type from DefineProperty returned object", () => {
+Deno.test("ExtractRuntimeType should provide a usable type from DefineProperty returned object", () => {
   const testProperty = DefineProperty({
     title: "test_property",
     type: Schema.types.object,
@@ -24,7 +24,7 @@ Deno.test("RuntimeType should provide a usable type from DefineProperty returned
     required: [],
   });
 
-  type Actual = RuntimeType<typeof testProperty>;
+  type Actual = ExtractRuntimeType<typeof testProperty>;
 
   // deno-lint-ignore no-explicit-any
   type Expected = Record<string, any>; // empty object
@@ -32,7 +32,7 @@ Deno.test("RuntimeType should provide a usable type from DefineProperty returned
   assert<IsExact<Actual, Expected>>(true);
 });
 
-Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'object'", () => {
+Deno.test("ExtractRuntimeType should provide a usable type from DefineType return object with type: 'object'", () => {
   const customType = DefineType({
     title: "Title",
     description: "Description",
@@ -89,7 +89,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
     required: ["bool", "int", "num", "string", "arr", "obj"],
   });
 
-  type Actual = RuntimeType<typeof customType>;
+  type Actual = ExtractRuntimeType<typeof customType>;
 
   type Expected = {
     bool: boolean;
@@ -111,7 +111,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
   assert<CanBe<Actual, Expected>>(true);
 });
 
-Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'object' and empty", () => {
+Deno.test("ExtractRuntimeType should provide a usable type from DefineType return object with type: 'object' and empty", () => {
   const customType = DefineType({
     title: "Title",
     description: "Description",
@@ -121,7 +121,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
     required: [],
   });
 
-  type Actual = RuntimeType<typeof customType>;
+  type Actual = ExtractRuntimeType<typeof customType>;
 
   // deno-lint-ignore no-explicit-any
   type Expected = Record<string, any>;
@@ -129,7 +129,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
   assert<IsExact<Actual, Expected>>(true);
 });
 
-Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'string'", () => {
+Deno.test("ExtractRuntimeType should provide a usable type from DefineType return object with type: 'string'", () => {
   const customType = DefineType({
     title: "Title",
     description: "Description",
@@ -137,12 +137,12 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
     type: Schema.types.string,
   });
 
-  type Actual = RuntimeType<typeof customType>;
+  type Actual = ExtractRuntimeType<typeof customType>;
 
   assert<IsExact<Actual, string>>(true);
 });
 
-Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'array'", () => {
+Deno.test("ExtractRuntimeType should provide a usable type from DefineType return object with type: 'array'", () => {
   const customType = DefineType({
     title: "Title",
     description: "Description",
@@ -153,12 +153,12 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
     },
   });
 
-  type Actual = RuntimeType<typeof customType>;
+  type Actual = ExtractRuntimeType<typeof customType>;
 
   assert<IsExact<Actual, boolean[]>>(true);
 });
 
-Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'channel_id'", () => {
+Deno.test("ExtractRuntimeType should provide a usable type from DefineType return object with type: 'channel_id'", () => {
   const customType = DefineType({
     title: "Title",
     description: "Description",
@@ -166,12 +166,12 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
     type: Schema.slack.types.channel_id,
   });
 
-  type Actual = RuntimeType<typeof customType>;
+  type Actual = ExtractRuntimeType<typeof customType>;
 
   assert<IsExact<Actual, string>>(true);
 });
 
-Deno.test("RuntimeType should provide a usable type from DefineType return object with type: 'message_context'", () => {
+Deno.test("ExtractRuntimeType should provide a usable type from DefineType return object with type: 'message_context'", () => {
   const customType = DefineType({
     title: "Title",
     description: "Description",
@@ -179,7 +179,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
     type: Schema.slack.types.message_context,
   });
 
-  type Actual = RuntimeType<typeof customType>;
+  type Actual = ExtractRuntimeType<typeof customType>;
 
   type Expected = {
     message_ts: string;
@@ -190,7 +190,7 @@ Deno.test("RuntimeType should provide a usable type from DefineType return objec
   assert<CanBe<Actual, Expected>>(true);
 });
 
-Deno.test("RuntimeType should provide any from DefineType nesting DefineType", () => {
+Deno.test("ExtractRuntimeType should provide any from DefineType nesting DefineType", () => {
   const customType = DefineType({
     title: "Title",
     description: "Description",
@@ -207,13 +207,13 @@ Deno.test("RuntimeType should provide any from DefineType nesting DefineType", (
     required: ["obj"],
   });
 
-  type Actual = RuntimeType<typeof customType>;
+  type Actual = ExtractRuntimeType<typeof customType>;
 
   // deno-lint-ignore no-explicit-any
   assert<IsExact<Actual, any>>(true);
 });
 
-Deno.test("RuntimeType should provide a usable type from an 'object' DefineProperty", () => {
+Deno.test("ExtractRuntimeType should provide a usable type from an 'object' DefineProperty", () => {
   const testProperty = DefineProperty({
     title: "test_property",
     type: Schema.types.object,
@@ -267,7 +267,7 @@ Deno.test("RuntimeType should provide a usable type from an 'object' DefinePrope
     required: ["bool", "int", "num", "string", "arr", "obj"],
   });
 
-  type Actual = RuntimeType<typeof testProperty>;
+  type Actual = ExtractRuntimeType<typeof testProperty>;
 
   type Expected = {
     bool: boolean;
@@ -289,7 +289,7 @@ Deno.test("RuntimeType should provide a usable type from an 'object' DefinePrope
   assert<CanBe<Expected, Actual>>(true);
 });
 
-Deno.test("RuntimeType should provide a usable type from an empty 'object' DefineProperty", () => {
+Deno.test("ExtractRuntimeType should provide a usable type from an empty 'object' DefineProperty", () => {
   const testProperty = DefineProperty({
     title: "test_property",
     type: Schema.types.object,
@@ -297,7 +297,7 @@ Deno.test("RuntimeType should provide a usable type from an empty 'object' Defin
     required: [],
   });
 
-  type Actual = RuntimeType<typeof testProperty>;
+  type Actual = ExtractRuntimeType<typeof testProperty>;
 
   type Expected = Record<string | number | symbol, never>; // empty object
 
