@@ -27,7 +27,8 @@
   },
   "tasks": {
     "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test --allow-read",
-    "coverage": "deno test --allow-read --coverage=.coverage && deno coverage --exclude=fixtures --exclude=test --lcov --output=lcov.info .coverage && deno run --allow-read https://deno.land/x/code_coverage@0.2.0/cli.ts"
+    "coverage": "deno test --allow-read --coverage=.coverage && deno coverage --exclude=fixtures --exclude=test --lcov --output=lcov.info .coverage && deno run --allow-read https://deno.land/x/code_coverage@0.2.0/cli.ts",
+    "debug": "deno fmt --check && deno lint && deno test --inspect-wait --allow-read"
   },
   "lock": false
 }
