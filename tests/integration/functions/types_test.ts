@@ -4,7 +4,6 @@ import {
   FunctionRuntimeType,
 } from "../../../src/functions/types.ts";
 import { DefineFunction, DefineProperty, Schema } from "../../../src/mod.ts";
-import { SlackFunctionTester } from "../../../src/functions/tester/mod.ts";
 
 Deno.test("FunctionRuntimeType should abe able to provide a usable type of a DefineFunction return object", () => {
   const TestFn = DefineFunction({
@@ -93,23 +92,15 @@ Deno.test("FunctionRuntimeType should abe able to provide a usable type of a Def
   const validHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> = (
     args,
   ) => {
-    assert<IsExact<typeof args, Actual["args"]>>(true);
+    type ExpectedArgs = typeof args;
+    assert<IsExact<Actual["args"], ExpectedArgs>>(true);
     return {
       outputs: expectedParams,
     };
   };
-  const { createContext } = SlackFunctionTester(TestFn);
-  const expectedContext = createContext({
-    inputs: expectedParams,
-  });
-  const expectedResult = validHandler(expectedContext);
+  type ExpectedOutputs = ReturnType<typeof validHandler>["outputs"];
 
-  type Expected = {
-    outputs: typeof expectedResult.outputs;
-    args: typeof expectedContext;
-  };
-
-  assert<IsExact<Actual, Expected>>(true);
+  assert<IsExact<Actual["outputs"], ExpectedOutputs>>(true);
 });
 
 Deno.test("FunctionRuntimeType should be able to provide a usable type of an empty DefineFunction return object", () => {
@@ -134,23 +125,15 @@ Deno.test("FunctionRuntimeType should be able to provide a usable type of an emp
   const validHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> = (
     args,
   ) => {
-    assert<IsExact<typeof args, Actual["args"]>>(true);
+    type ExpectedArgs = typeof args;
+    assert<IsExact<Actual["args"], ExpectedArgs>>(true);
     return {
       outputs: expectedParams,
     };
   };
-  const { createContext } = SlackFunctionTester(TestFn);
-  const expectedContext = createContext({
-    inputs: expectedParams,
-  });
-  const expectedResult = validHandler(expectedContext);
+  type ExpectedOutputs = ReturnType<typeof validHandler>["outputs"];
 
-  type Expected = {
-    outputs: typeof expectedResult.outputs;
-    args: typeof expectedContext;
-  };
-
-  assert<IsExact<Actual, Expected>>(true);
+  assert<IsExact<Actual["outputs"], ExpectedOutputs>>(true);
 });
 
 Deno.test("FunctionRuntimeType should be able to provide a usable type from an Async Function", () => {
@@ -183,22 +166,16 @@ Deno.test("FunctionRuntimeType should be able to provide a usable type from an A
   };
 
   const validHandler: EnrichedSlackFunctionHandler<typeof TestFn.definition> =
-    async (args) => {
-      assert<IsExact<typeof args, Actual["args"]>>(true);
+    async (
+      args,
+    ) => {
+      type ExpectedArgs = typeof args;
+      assert<IsExact<Actual["args"], ExpectedArgs>>(true);
       return await {
         outputs: expectedParams,
       };
     };
-  const { createContext } = SlackFunctionTester(TestFn);
-  const expectedContext = createContext({
-    inputs: expectedParams,
-  });
-  const expectedResult = validHandler(expectedContext);
+  type ExpectedOutputs = Awaited<ReturnType<typeof validHandler>>["outputs"];
 
-  type Expected = {
-    outputs: Awaited<typeof expectedResult>["outputs"];
-    args: typeof expectedContext;
-  };
-
-  assert<IsExact<Actual, Expected>>(true);
+  assert<IsExact<Actual["outputs"], ExpectedOutputs>>(true);
 });
