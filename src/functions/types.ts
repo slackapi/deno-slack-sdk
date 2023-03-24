@@ -401,7 +401,7 @@ export type RuntimeUnhandledEventContext<
 /**
  * @description Used to extract returned args from Async and Sync function handlers
  */
-type ExtractFunctionHandlerReturnArgs<
+type ResolveFunctionHandlerReturnArg<
   ReturnArgs extends
     | FunctionHandlerReturnArgs<FunctionParameters>
     | Promise<FunctionHandlerReturnArgs<FunctionParameters>>,
@@ -423,7 +423,7 @@ type BaseFunctionRuntimeType<
 > = {
   args: Parameters<EnrichedFunction>[number];
   outputs: Extract<
-    ExtractFunctionHandlerReturnArgs<ReturnType<EnrichedFunction>>,
+    ResolveFunctionHandlerReturnArg<ReturnType<EnrichedFunction>>,
     SuccessfulFunctionReturnArgs<FunctionParameters>
   >["outputs"];
 };
