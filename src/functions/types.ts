@@ -431,7 +431,7 @@ type BaseFunctionRuntimeType<
 /**
  * @description Used to surface function runtime typescript types from defined functions
  */
-export type ExtractFunctionRuntimeTypes<
+export type ToRuntimeFunctionType<
   Function extends ReturnType<typeof DefineFunction>,
 > = BaseFunctionRuntimeType<
   EnrichedSlackFunctionHandler<Function["definition"]>

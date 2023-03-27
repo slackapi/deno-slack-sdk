@@ -18,12 +18,12 @@ export type {
 // Runtime Types
 // ----------------------------------------------------------------------------
 
-export type { ExtractFunctionRuntimeTypes } from "./functions/types.ts";
+export type { ToRuntimeFunctionType } from "./functions/types.ts";
 
 /**
  * @description Used to surface runtime Typescript types from Defined Types and Properties
  */
-export type ExtractRuntimeType<
+export type ToRuntimePropertyType<
   T extends
     | ICustomType
     | ParameterDefinition,

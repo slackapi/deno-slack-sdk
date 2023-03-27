@@ -1,12 +1,12 @@
 import { assert, IsExact } from "../../../src/dev_deps.ts";
 import {
   EnrichedSlackFunctionHandler,
-  ExtractFunctionRuntimeTypes,
+  ToRuntimeFunctionType,
 } from "../../../src/functions/types.ts";
 import { DefineFunction, DefineProperty, Schema } from "../../../src/mod.ts";
 import { SlackFunctionTester } from "../../../src/functions/tester/mod.ts";
 
-Deno.test("ExtractFunctionRuntimeTypes should abe able to provide a usable type of a DefineFunction return object", () => {
+Deno.test("ToRuntimeFunctionType should abe able to provide a usable type of a DefineFunction return object", () => {
   const TestFn = DefineFunction({
     callback_id: "test_function",
     title: "Test function",
@@ -77,7 +77,7 @@ Deno.test("ExtractFunctionRuntimeTypes should abe able to provide a usable type 
     },
   });
 
-  type Actual = ExtractFunctionRuntimeTypes<typeof TestFn>;
+  type Actual = ToRuntimeFunctionType<typeof TestFn>;
 
   const expectedParams = {
     bool: true,
@@ -110,7 +110,7 @@ Deno.test("ExtractFunctionRuntimeTypes should abe able to provide a usable type 
   assert<IsExact<Actual["outputs"], ExpectedOutputs>>(true);
 });
 
-Deno.test("ExtractFunctionRuntimeTypes should be able to provide a usable type of an empty DefineFunction return object", () => {
+Deno.test("ToRuntimeFunctionType should be able to provide a usable type of an empty DefineFunction return object", () => {
   const TestFn = DefineFunction({
     callback_id: "test_function",
     title: "Test function",
@@ -125,7 +125,7 @@ Deno.test("ExtractFunctionRuntimeTypes should be able to provide a usable type o
     },
   });
 
-  type Actual = ExtractFunctionRuntimeTypes<typeof TestFn>;
+  type Actual = ToRuntimeFunctionType<typeof TestFn>;
 
   const expectedParams = {};
 
@@ -149,7 +149,7 @@ Deno.test("ExtractFunctionRuntimeTypes should be able to provide a usable type o
   assert<IsExact<Actual["outputs"], ExpectedOutputs>>(true);
 });
 
-Deno.test("ExtractFunctionRuntimeTypes should be able to provide a usable type from an Async Function", async () => {
+Deno.test("ToRuntimeFunctionType should be able to provide a usable type from an Async Function", async () => {
   const TestFn = DefineFunction({
     callback_id: "test_function",
     title: "Test function",
@@ -172,7 +172,7 @@ Deno.test("ExtractFunctionRuntimeTypes should be able to provide a usable type f
     },
   });
 
-  type Actual = ExtractFunctionRuntimeTypes<typeof TestFn>;
+  type Actual = ToRuntimeFunctionType<typeof TestFn>;
 
   const expectedParams = {
     bool: true,
