@@ -55,16 +55,14 @@ export type WorkflowStepOutputs<
 > = WorkflowParameterReferences<Params, RequiredParams>;
 
 type WorkflowParameterReferences<
-  Parameters extends ParameterSetDefinition,
-  Required extends PossibleParameterKeys<Parameters>,
+  Params extends ParameterSetDefinition,
+  Required extends PossibleParameterKeys<Params>,
 > =
   & {
-    [name in Required[number]]: ParameterVariableType<
-      Parameters[name]
-    >;
+    [name in Required[number]]: ParameterVariableType<Params[name]>;
   }
   & {
-    [name in keyof Parameters]?: ParameterVariableType<Parameters[name]>;
+    [name in keyof Params]?: ParameterVariableType<Params[name]>;
   };
 
 // Workflow Step inputs are different than workflow inputs/outputs or workflow step outputs.

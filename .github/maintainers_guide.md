@@ -17,9 +17,9 @@ All you need to work on this project is a recent version of [Deno](https://deno.
 
 ## Tasks
 
-### Testing
+### Testing with Deno
 
-Test can be run directly with Deno:
+In-code tests can be run directly with Deno:
 
   ```zsh
   deno task test
@@ -31,7 +31,30 @@ You can also run a test coverage report with:
   deno task coverage
   ```
 
-Sometimes you may need to test out changes in this SDK in a sample app or project. In order to do this, commit your intended history to a remote branch and note the full commit SHA. `(e.g. fc0a0a1f0722e28fecb7782513d045522d7c0d6f)`
+### Testing with a sample app
+
+Sometimes you may need to test out changes in this SDK with a sample app or project.
+
+A modified SDK version can be used by updating the `deno-slack-sdk` import url in the app's `import_map.json` file.
+
+> After making changes to your imports, you may need to [reload your modules](https://deno.land/manual@v1.29.1/basics/modules/reloading_modules) in case they've been cached.
+
+#### Using local changes
+
+To use your own code as the SDK, change the import url to the `src/` directory of your local `deno-slack-sdk` repo:
+
+```json
+{
+  "imports": {
+    "deno-slack-sdk/": "../../tools/deno-slack-sdk/src/",
+    "deno-slack-api/": "https://deno.land/x/deno_slack_api@1.5.0/"
+  }
+}
+```
+
+#### With remote changes
+
+To test with changes on a remote repo, commit your intended history to a remote branch and note the full commit SHA. (e.g. `fc0a0a1f0722e28fecb7782513d045522d7c0d6f`).
 
 Then in your sample app's `import_map.json` file, replace the `deno-slack-sdk` import url with:
 
@@ -43,8 +66,6 @@ Then in your sample app's `import_map.json` file, replace the `deno-slack-sdk` i
   }
 }
 ```
-
-You may need to reload your modules if they've been cached: https://deno.land/manual@v1.29.1/basics/modules/reloading_modules
 
 ### Lint and format
 
