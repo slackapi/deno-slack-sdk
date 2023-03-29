@@ -1,14 +1,4 @@
-export type {
-  /**
-   * @deprecated Use SlackFunction() to define handlers instead
-   */
-  BaseRuntimeSlackFunctionHandler as BaseSlackFunctionHandler,
-  BlockActionHandler,
-  /**
-   * @deprecated Use SlackFunction() to define handlers instead
-   */
-  RuntimeSlackFunctionHandler as SlackFunctionHandler,
-} from "./functions/types.ts";
+export type { BlockActionHandler } from "./functions/types.ts";
 
 // ----------------------------------------------------------------------------
 // Invocation
