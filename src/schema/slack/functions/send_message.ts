@@ -10,6 +10,7 @@ export default DefineFunction({
   description: "Send a message to channel",
   input_parameters: {
     properties: {
+      // `thread_ts` was removed manually, make sure we don't add it back in the next built-in PR
       channel_id: {
         type: SlackTypes.channel_id,
         description: "Search all channels",
@@ -42,6 +43,7 @@ export default DefineFunction({
   },
   output_parameters: {
     properties: {
+      // `message_ts` was removed manually, make sure we don't add it back in the next built-in PR
       message_link: {
         type: SchemaTypes.string,
         description: "Message link",
