@@ -80,10 +80,6 @@ export type ViewSubmissionBody =
   & BaseViewBody
   & {
     /**
-     * @deprecated Will be removed in a future release. See {@link https://api.slack.com/future/changelog} for more details.
-     */
-    response_urls: string[];
-    /**
      * @description Used to open a modal by passing it to e.g. `view.open` or `view.push` APIs. Represents a particular user interaction with an interactive component. Short-lived token (expires fast!) that may only be used once.
      */
     trigger_id: string;
