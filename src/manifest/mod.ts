@@ -180,20 +180,30 @@ export class SlackManifest {
     this.definition.types.push(customType);
   }
 
+  /**
+   * Verifies scopes defined in the app passes baseline validation.
+   * @returns {string[]} The user-defined manifest scopes from `definition.botScopes`
+   */
   private ensureBotScopes(): string[] {
-    const includedScopes = this.definition.botScopes || [];
-
-    // Add datastore scopes if necessary
+    // Warn about missing datastore scopes if app includes datastores
     if (Object.keys(this.definition.datastores ?? {}).length > 0) {
+      const missingScopes: string[] = [];
       const datastoreScopes = ["datastore:read", "datastore:write"];
       datastoreScopes.forEach((scope) => {
-        if (!includedScopes.includes(scope)) {
-          includedScopes.push(scope);
+        if (!this.definition.botScopes.includes(scope)) {
+          missingScopes.push(scope);
         }
       });
+      if (missingScopes.length > 0) {
+        console.warn(
+          `Warning! Application manifest includes at least one datastore, but does not specify the following datastore-related scopes in its 'botScopes': ${
+            missingScopes.join(", ")
+          }`,
+        );
+      }
     }
 
-    return includedScopes;
+    return this.definition.botScopes;
   }
 
   // Maps the top level runOnSlack boolean property to corresponding underlying ManifestSchema function_runtime property required by Slack API.

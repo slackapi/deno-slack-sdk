@@ -10,6 +10,10 @@ A recent version of `deno`.
 
 Check out the [`./docs`](./docs) directory!
 
+## Versioning
+
+Releases for this repository follows the [SemVer](https://semver.org/) versioning scheme. The SDK's contract is determined by the top-level exports from the `src/mod.ts` and `src/types.ts` files. Exports not included in these files are deemed internal and any modifications will not be treated as breaking changes. As such, internal exports should be treated as unstable and used at your own risk.
+
 ## Running Tests
 
 If you make changes to this repo, or just want to make sure things are working as desired, you can run:
