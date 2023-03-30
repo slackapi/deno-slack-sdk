@@ -132,3 +132,34 @@ Deno.test("renderTypeImports should render imports required for object type", ()
   assertStringIncludes(actual, "SchemaTypes");
   assertStringIncludes(actual, "SlackTypes");
 });
+
+Deno.test("renderTypeImports should render imports required for a complex object type", () => {
+  const dfi: FunctionRecord = {
+    callback_id: CALLBACK_ID,
+    title: TITLE,
+    description: DESCRIPTION,
+    type: "builtin",
+    input_parameters: [],
+    output_parameters: [
+      {
+        type: SchemaTypes.array,
+        items: {
+          type: SchemaTypes.object,
+          properties: {
+            my_slack_type: {
+              type: InternalSlackTypes.form_input_object.id,
+            },
+            my_primitive_type: {
+              type: SlackTypes.channel_id,
+            },
+          },
+        },
+        name: "user_ids",
+      },
+    ],
+  };
+  const actual = renderTypeImports(dfi);
+  assertStringIncludes(actual, "InternalSlackTypes");
+  assertStringIncludes(actual, "SchemaTypes");
+  assertStringIncludes(actual, "SlackTypes");
+});
