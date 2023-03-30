@@ -46,7 +46,7 @@ Deno.test("getSlackCallbackId should generate the valid slack callback_id", () =
   assertStringIncludes(actual, expected);
 });
 
-Deno.test("renderTypeImports should render all imports provided", () => {
+Deno.test("renderTypeImports should render all imports provided with param of array type", () => {
   const dfi: FunctionRecord = {
     callback_id: CALLBACK_ID,
     title: TITLE,
@@ -75,13 +75,29 @@ Deno.test("renderTypeImports should render all imports provided", () => {
         title: "Message time stamp",
         description: "Message time stamp",
       },
+    ],
+  };
+  const actual = renderTypeImports(dfi);
+  assertStringIncludes(actual, "SchemaTypes");
+  assertStringIncludes(actual, "SlackTypes");
+  assertStringIncludes(actual, "InternalSlackTypes");
+});
+
+Deno.test("renderTypeImports should render imports required for array type", () => {
+  const dfi: FunctionRecord = {
+    callback_id: CALLBACK_ID,
+    title: TITLE,
+    description: DESCRIPTION,
+    type: "builtin",
+    input_parameters: [],
+    output_parameters: [
       {
         type: SchemaTypes.array,
         name: "user_ids",
         title: "User Ids",
         description: "User Ids",
         items: {
-          type: "integer",
+          type: SlackTypes.channel_id,
         },
       },
     ],
@@ -89,5 +105,30 @@ Deno.test("renderTypeImports should render all imports provided", () => {
   const actual = renderTypeImports(dfi);
   assertStringIncludes(actual, "SchemaTypes");
   assertStringIncludes(actual, "SlackTypes");
-  assertStringIncludes(actual, "InternalSlackTypes");
+});
+
+Deno.test("renderTypeImports should render imports required for object type", () => {
+  const dfi: FunctionRecord = {
+    callback_id: CALLBACK_ID,
+    title: TITLE,
+    description: DESCRIPTION,
+    type: "builtin",
+    input_parameters: [],
+    output_parameters: [
+      {
+        type: SchemaTypes.object,
+        name: "user_ids",
+        title: "User Ids",
+        description: "User Ids",
+        properties: {
+          my_param: {
+            type: SlackTypes.channel_id,
+          },
+        },
+      },
+    ],
+  };
+  const actual = renderTypeImports(dfi);
+  assertStringIncludes(actual, "SchemaTypes");
+  assertStringIncludes(actual, "SlackTypes");
 });
