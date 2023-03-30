@@ -17,7 +17,9 @@ import {
   assert,
   assertEquals,
   assertStrictEquals,
+  assertStringIncludes,
   IsExact,
+  mock,
 } from "../dev_deps.ts";
 
 Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
@@ -812,7 +814,7 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
   });
 });
 
-Deno.test("SlackManifest.export() ensures datastore scopes if they are not present", () => {
+Deno.test("SlackManifest.export() warns of missing datastore scopes if they are not present and app includes a datastore", () => {
   const Store = DefineDatastore({
     name: "test store",
     attributes: {
@@ -834,13 +836,18 @@ Deno.test("SlackManifest.export() ensures datastore scopes if they are not prese
   };
 
   const Manifest = new SlackManifest(definition);
-  const exportedManifest = Manifest.export();
-  const botScopes = exportedManifest.oauth_config.scopes.bot;
-  assertStrictEquals(botScopes?.includes("datastore:read"), true);
-  assertStrictEquals(botScopes?.includes("datastore:write"), true);
+  const warnStub = mock.stub(console, "warn");
+  Manifest.export();
+  assertStringIncludes(
+    warnStub.calls[0].args[0],
+    "does not specify the following datastore-related scopes",
+  );
+  assertStringIncludes(warnStub.calls[0].args[0], "datastore:read");
+  assertStringIncludes(warnStub.calls[0].args[0], "datastore:write");
+  warnStub.restore();
 });
 
-Deno.test("SlackManifest.export() will not duplicate datastore scopes if they're already present", () => {
+Deno.test("SlackManifest.export() does not warn of missing datastore scopes if they're already present and app includes at least one datastore", () => {
   const Store = DefineDatastore({
     name: "test store",
     attributes: {
@@ -861,6 +868,7 @@ Deno.test("SlackManifest.export() will not duplicate datastore scopes if they're
   };
 
   const Manifest = new SlackManifest(definition);
+  const warnStub = mock.stub(console, "warn");
   const exportedManifest = Manifest.export();
   const botScopes = exportedManifest.oauth_config.scopes.bot;
   assertStrictEquals(
@@ -871,6 +879,8 @@ Deno.test("SlackManifest.export() will not duplicate datastore scopes if they're
     botScopes?.filter((scope: string) => scope === "datastore:write").length,
     1,
   );
+  mock.assertSpyCalls(warnStub, 0);
+  warnStub.restore();
 });
 
 Deno.test("SlackManifest.export() defaults to enabling the read only messages tab", () => {
