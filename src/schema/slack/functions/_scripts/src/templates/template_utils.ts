@@ -41,6 +41,7 @@ const hasParamsFromTypeObject = (
   typeObject: AllowedTypeValueObject,
 ): boolean =>
   getParameterList(functionRecord).some((param) =>
+    // TODO: This needs to account for objects, arrays, and custom types
     Object.values(typeObject)
       .map((val) => getParameterType(val))
       .includes(param.type)
