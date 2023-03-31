@@ -46,7 +46,7 @@ Deno.test("getSlackCallbackId should generate the valid slack callback_id", () =
   assertStringIncludes(actual, expected);
 });
 
-Deno.test("renderTypeImports should render all imports provided with param of array type", () => {
+Deno.test("renderTypeImports should render all imports provided with slack and primitive types", () => {
   const dfi: FunctionRecord = {
     callback_id: CALLBACK_ID,
     title: TITLE,
@@ -133,7 +133,7 @@ Deno.test("renderTypeImports should render imports required for object type", ()
   assertStringIncludes(actual, "SlackTypes");
 });
 
-Deno.test("renderTypeImports should render imports required for a complex object type", () => {
+Deno.test("renderTypeImports should render imports required for a nested complex object type", () => {
   const dfi: FunctionRecord = {
     callback_id: CALLBACK_ID,
     title: TITLE,
@@ -162,4 +162,38 @@ Deno.test("renderTypeImports should render imports required for a complex object
   assertStringIncludes(actual, "InternalSlackTypes");
   assertStringIncludes(actual, "SchemaTypes");
   assertStringIncludes(actual, "SlackTypes");
+});
+
+Deno.test("renderTypeImports should render imports required for primitive & complex types", () => {
+  const dfi: FunctionRecord = {
+    callback_id: CALLBACK_ID,
+    title: TITLE,
+    description: DESCRIPTION,
+    type: "builtin",
+    input_parameters: [],
+    output_parameters: [
+      {
+        type: SchemaTypes.array,
+        items: {
+          type: SchemaTypes.string,
+        },
+        name: "user_ids",
+      },
+      {
+        type: SchemaTypes.object,
+        name: "my_object",
+        properties: {
+          my_param: {
+            type: SchemaTypes.string,
+          },
+        },
+      },
+      {
+        type: SchemaTypes.string,
+        name: "my_primitive",
+      },
+    ],
+  };
+  const actual = renderTypeImports(dfi);
+  assertStringIncludes(actual, "SchemaTypes");
 });
