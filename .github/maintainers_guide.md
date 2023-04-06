@@ -102,7 +102,7 @@ To create a new release:
 4. Name the release title after the version tag.
 5. Make any adjustments to generated release notes to make sure they are accessible and approachable and that an end-user with little context about this project could still understand.
 6. Publish the release by clicking the "Publish release" button!
-7. After a few minutes, the corresponding version will be available on https://deno.land/x/deno_slack_sdk.
+7. After a few minutes, the corresponding version will be available on <https://deno.land/x/deno_slack_sdk>.
 
 ## Workflow
 
@@ -134,7 +134,6 @@ Labels are used to run issues through an organized workflow. Here are the basic 
 *  `good first contribution`: An issue that has a well-defined relatively-small scope, with clear expectations. It helps when the testing approach is also known.
 *  `duplicate`: An issue that is functionally the same as another issue. Apply this only if you've linked the other issue by number.
 
-
 **Triage** is the process of taking new issues that aren't yet "seen" and marking them with a basic
 level of information with labels. An issue should have **one** of the following labels applied:
 `bug`, `enhancement`, `question`, `needs feedback`, `docs`, `tests`, or `discussion`.
@@ -143,6 +142,30 @@ Issues are closed when a resolution has been reached. If for any reason a closed
 relevant once again, reopening is great and better than creating a duplicate issue.
 -->
 
+## Dependency Graph
+<!-- https://mermaid.js.org/syntax/flowchart.html -->
+<!-- Link in mermaid are not supported on github https://github.com/mermaid-js/mermaid/issues/3077 -->
+```mermaid
+flowchart TD
+    samples --> deno-slack-sdk
+    samples --> deno-slack-api
+    samples -- start hook --> deno-slack-runtime
+    samples --> deno-slack-hooks
+    deno-slack-hooks -. start hook .-> deno-slack-runtime
+    deno-slack-sdk --> deno-slack-api
+    deno-slack-hooks --> deno-slack-protocols
+    deno-slack-runtime --> deno-slack-protocols
+```
+
+| Links |
+| :----: |
+|[samples](https://github.com/slack-samples/deno-hello-world)|
+|[deno-slack-sdk](https://github.com/slackapi/deno-slack-sdk)|
+|[deno-slack-api](https://github.com/slackapi/deno-slack-api)|
+|[deno-slack-runtime](https://github.com/slackapi/deno-slack-runtime)|
+|[deno-slack-hooks](https://github.com/slackapi/deno-slack-hooks)|
+|[deno-slack-protocols](https://github.com/slackapi/deno-slack-protocols)|
+  
 ## Everything else
 
 When in doubt, find the other maintainers and ask.
