@@ -155,13 +155,13 @@ flowchart TD
     deno-slack-sdk --> deno-slack-api
     deno-slack-hooks --> deno-slack-protocols
     deno-slack-runtime --> deno-slack-protocols
-    
-    click samples "https://github.com/slack-samples/deno-hello-world"
-    click deno-slack-sdk "https://github.com/slackapi/deno-slack-sdk"
-    click deno-slack-api "https://github.com/slackapi/deno-slack-api"
-    click deno-slack-runtime "https://github.com/slackapi/deno-slack-runtime"
-    click deno-slack-hooks "https://github.com/slackapi/deno-slack-hooks"
-    click deno-slack-protocols "https://github.com/slackapi/deno-slack-protocols"
+
+    click samples href "https://github.com/slack-samples/deno-hello-world" _blank
+    click deno-slack-sdk href "https://github.com/slackapi/deno-slack-sdk" _blank
+    click deno-slack-api href "https://github.com/slackapi/deno-slack-api" _blank
+    click deno-slack-runtime href "https://github.com/slackapi/deno-slack-runtime" _blank
+    click deno-slack-hooks href "https://github.com/slackapi/deno-slack-hooks" _blank
+    click deno-slack-protocols href "https://github.com/slackapi/deno-slack-protocols" _blank
 ```
 
 ## Everything else
