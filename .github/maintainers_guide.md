@@ -147,14 +147,21 @@ relevant once again, reopening is great and better than creating a duplicate iss
 <!-- https://mermaid.js.org/syntax/flowchart.html -->
 ```mermaid
 flowchart TD
-    A[<a href='https://github.com/slack-samples/deno-hello-world'>samples</a>] --> B[<a href='https://github.com/slackapi/deno-slack-sdk'>deno-slack-sdk</a>]
-    A --> C[<a href='https://github.com/slackapi/deno-slack-api'>deno-slack-api</a>]
-    A -- start hook --> E[<a href='https://github.com/slackapi/deno-slack-runtime'>deno-slack-runtime</a>]
-    A --> D[<a href='https://github.com/slackapi/deno-slack-hooks'>deno-slack-hooks</a>]
-    D -. start hook .-> E
-    B --> C
-    D --> F[<a href='https://github.com/slackapi/deno-slack-protocols'>deno-slack-protocols</a>]
-    E --> F
+    samples --> deno-slack-sdk
+    samples --> deno-slack-api
+    samples -- start hook --> deno-slack-runtime
+    samples --> deno-slack-hooks
+    deno-slack-hooks -. start hook .-> deno-slack-runtime
+    deno-slack-sdk --> deno-slack-api
+    deno-slack-hooks --> deno-slack-protocols
+    deno-slack-runtime --> deno-slack-protocols
+    
+    click samples "https://github.com/slack-samples/deno-hello-world"
+    click deno-slack-sdk "https://github.com/slackapi/deno-slack-sdk"
+    click deno-slack-api "https://github.com/slackapi/deno-slack-api"
+    click deno-slack-runtime "https://github.com/slackapi/deno-slack-runtime"
+    click deno-slack-hooks "https://github.com/slackapi/deno-slack-hooks"
+    click deno-slack-protocols "https://github.com/slackapi/deno-slack-protocols"
 ```
 
 ## Everything else
