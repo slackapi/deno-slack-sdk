@@ -104,6 +104,20 @@ To create a new release:
 6. Publish the release by clicking the "Publish release" button!
 7. After a few minutes, the corresponding version will be available on https://deno.land/x/deno_slack_sdk.
 
+#### Dependency Graph
+
+```mermaid
+flowchart TD
+    A[<a href='https://github.com/slack-samples/deno-hello-world'>samples</a>] --> B[<a href='https://github.com/slackapi/deno-slack-sdk'>deno-slack-sdk</a>]
+    A --> C[<a href='https://github.com/slackapi/deno-slack-api'>deno-slack-api</a>]
+    A -- start hook --> E[<a href='https://github.com/slackapi/deno-slack-runtime'>deno-slack-runtime</a>]
+    A --> D[<a href='https://github.com/slackapi/deno-slack-hooks'>deno-slack-hooks</a>]
+    D -. start hook .-> E
+    B --> C
+    D --> F[<a href='https://github.com/slackapi/deno-slack-protocols'>deno-slack-protocols</a>]
+    E --> F
+```
+
 ## Workflow
 
 ### Versioning and Tags
