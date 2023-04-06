@@ -25,6 +25,7 @@ export default DefineFunction({
         description: "Add a message",
         title: "Add a message",
       },
+      // thread_ts will be removed, maybe, in a future change. ask @shapirone if in doubt
       thread_ts: {
         type: SchemaTypes.string,
         description:
@@ -36,6 +37,7 @@ export default DefineFunction({
   },
   output_parameters: {
     properties: {
+      // message_ts will be renamed message_timestamp.. soon. ask @shapirone for more info
       message_ts: {
         type: SlackTypes.message_ts,
         description: "Message time stamp",
