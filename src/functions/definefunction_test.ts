@@ -151,9 +151,9 @@ Deno.test("DefineFunction using an OAuth2 property requests a provider key", () 
    */
 
   const OAuth2Function = DefineFunction({
-    callback_id: "output_params_only",
-    title: "No Parameter Function",
-    source_file: "functions/output_params_only.ts",
+    callback_id: "oauth",
+    title: "OAuth Function",
+    source_file: "functions/oauth.ts",
     input_parameters: {
       properties: {
         googleAccessTokenId: {
@@ -164,6 +164,24 @@ Deno.test("DefineFunction using an OAuth2 property requests a provider key", () 
       required: [],
     },
   });
+
+  /**
+   * TODO: Support the following test for static error
+    // ts-expect-error `oauth2_provider_key` must be set
+    const _IncompleteOAuth2Function = DefineFunction({
+      callback_id: "oauth",
+      title: "OAuth Function",
+      source_file: "functions/oauth.ts",
+      input_parameters: {
+        properties: {
+          googleAccessTokenId: {
+            type: Schema.slack.types.oauth2,
+          },
+        },
+        required: [],
+      },
+    });
+   */
 
   assertEquals(
     {
