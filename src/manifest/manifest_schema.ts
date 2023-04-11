@@ -159,7 +159,7 @@ export type ManifestAppHomeMessagesTabSchema = {
   messages_tab_read_only_enabled: false;
 };
 
-// Features: Shortcuts
+// Features: shortcuts
 export type ManifestShortcutSchema = {
   name: string;
   type: "message" | "global";
