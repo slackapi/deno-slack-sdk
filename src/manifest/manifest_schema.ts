@@ -183,7 +183,7 @@ export type ManifestSlashCommandSchema = {
 };
 
 // Features: Workflow Step (To be deprecated)
-// Not to be confused with 2.0 ManifestWorkflowStepSchema
+// Not to be confused with next generation ManifestWorkflowStepSchema
 export type ManifestWorkflowStepLegacy = {
   name: string;
   callback_id: string;
