@@ -65,7 +65,7 @@ const step1 = workflow.addStep("#/functions/my_workflow", {
 
 The big difference here is you won't get some of the automatic typing of `inputs` and `outputs` for that step, but you can still reference them as long as you follow the definition of that function.
 
-### Auto-Registration of Workflow dependencies
+### Auto-Registration of workflow dependencies
 
 When a workflow is registered on your `Manifest()` any `functions` it uses as steps, or custom `types` used as `input_parameters` to the workflow or functions it references are automatically registered in your manifest. This can save you from having to register each function and type that a workflow might use, and just register the workflow.
 

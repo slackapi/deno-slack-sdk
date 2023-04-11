@@ -15,11 +15,11 @@ then you may want to skip ahead to the [API Reference](#api-reference).
 
 - [View Handlers](#view-handlers)
   - [Requirements](#requirements)
-  - [Opening a View](#opening-a-view)
-    - [Opening a View from a custom function](#opening-a-view-from-a-custom-function)
-    - [Opening a View from a Block Action Handler](#opening-a-view-from-a-block-action-handler)
-  - [Adding View Handlers](#adding-view-handlers)
-  - [API Reference](#api-reference)
+  - [Opening a view](#opening-a-view)
+    - [Opening a view from a custom function](#opening-a-view-from-a-custom-function)
+    - [Opening a view from a block action handler](#opening-a-view-from-a-block-action-handler)
+  - [Adding view handlers](#adding-view-handlers)
+  - [API reference](#api-reference)
     - [`addViewSubmissionHandler(constraint, handler)`](#addviewsubmissionhandlerconstraint-handler)
       - [`addViewClosedHandler(constraint, handler)`](#addviewclosedhandlerconstraint-handler)
 
@@ -70,7 +70,7 @@ export const DiaryFunction = DefineFunction({
 });
 ```
 
-### Opening a View
+### Opening a view
 
 [Opening a view via the `views.open` API][views-open] and
 [pushing a new view onto the view stack via the `views.push` API][views-push]
@@ -90,7 +90,7 @@ We will explore implementing our contrived example above by opening a view from
 a function. In a section further below, we will also cover
 [opening a view from a Block Action Handler](#opening-a-view-from-a-block-action-handler).
 
-#### Opening a View from a custom function
+#### Opening a view from a custom function
 
 As mentioned in the previous section, we need to have a `trigger_id` handy in
 order to open a view. This is why we defined an `interactivity` input in our
@@ -158,7 +158,7 @@ export default SlackFunction(DiaryFunction, async ({ inputs, client }) => {
 };
 ```
 
-#### Opening a View from a Block Action Handler
+#### Opening a view from a block action handler
 
 If [Block Kit Action Handlers][action-handlers] is a foreign concept to you, we
 recommend first checking out [its documentation][action-handlers] before venturing
@@ -190,7 +190,7 @@ export default SlackFunction(DiaryFunction, async ({ inputs, client }) => {
   });
 ```
 
-### Adding View Handlers
+### Adding view handlers
 
 The [Deno Slack SDK][sdk] - which comes bundled in your generated Run-on-Slack
 application - provides a means for defining handlers to execute every time a user
@@ -256,7 +256,7 @@ export default SlackFunction(DiaryFunction, async ({ inputs, client }) => {
 });
 ```
 
-### API Reference
+### API reference
 
 #### `addViewSubmissionHandler(constraint, handler)`
 

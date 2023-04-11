@@ -1,4 +1,4 @@
-## Block Kit Suggestion Handlers
+## Block Kit suggestion handlers
 
 Your application's [functions][functions] can do a wide variety of interesting
 things: post messages, create channels, or anything available to developers via
@@ -18,13 +18,13 @@ The same approach discussed in our [Block Kit Action Handlers][action-handlers]
 document can be used to  register an action handler to respond to drop-down menu
 selections.
 
-- [Block Kit Suggestion Handlers](#block-kit-suggestion-handlers)
+- [Block Kit suggestion handlers](#block-kit-suggestion-handlers)
   - [Requirements](#requirements)
-  - [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
+  - [Posting a message with block kit elements](#posting-a-message-with-block-kit-elements)
   - [Adding Block Suggestion Handlers](#adding-block-suggestion-handlers)
   - [API Reference](#api-reference)
-      - [`addBlockSuggestionHandler(constraint, handler)`](#addblocksuggestionhandlerconstraint-handler)
-        - [`BlockActionConstraintField`](#blockactionconstraintfield)
+    - [`addBlockSuggestionHandler(constraint, handler)`](#addblocksuggestionhandlerconstraint-handler)
+      - [`BlockActionConstraintField`](#blockactionconstraintfield)
         - [`BlockActionConstraintObject`](#blockactionconstraintobject)
 
 ### Requirements
@@ -85,7 +85,7 @@ export const QuoteFunction = DefineFunction({
 });
 ```
 
-### Posting a Message with Block Kit Elements
+### Posting a message with block kit elements
 
 First, we need a message that has some [interactive components][interactivity]
 from [Block Kit][block-kit] included! We can modify one of our app's [functions][functions]
@@ -170,7 +170,7 @@ export default SlackFunction(QuoteFunction, async ({ inputs, client }) => {
 
 ### API Reference
 
-##### `addBlockSuggestionHandler(constraint, handler)`
+#### `addBlockSuggestionHandler(constraint, handler)`
 
 ```typescript
 SlackFunction({ ... }).addBlockSuggestionHandler({ block_id: "mah-buttons", action_id: "approve_request"}, async (ctx) => { ... });
@@ -193,7 +193,7 @@ value for `constraint`, then this will be matched against the incoming action's
 object used to match against actions. It contains nested `block_id` and `action_id`
 properties - both optional - that are used to match against the incoming suggestion.
 
-###### `BlockActionConstraintField`
+##### `BlockActionConstraintField`
 
 ```typescript
 type BlockActionConstraintField = string | string[] | RegExp;

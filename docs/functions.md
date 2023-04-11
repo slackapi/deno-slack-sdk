@@ -140,7 +140,7 @@ The object returned by your function that supports the following properties:
 - `completed`: a boolean indicating whether or not the function is completed.
   This defaults to `true`.
 
-### Adding custom functions to the Manifest
+### Adding custom functions to the manifest
 
 Once you have defined a function, don't forget to include it in your
 [`Manifest`][manifest] definition!

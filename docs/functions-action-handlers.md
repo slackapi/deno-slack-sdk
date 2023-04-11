@@ -1,4 +1,4 @@
-## Block Kit Action Handlers
+## Block kit action handlers
 
 Your application's [functions][functions] can do a wide variety of interesting
 things: post messages, create channels, or anything available to developers via
@@ -12,13 +12,13 @@ with these [interactive components][interactivity].
 If you're already familiar with the main concepts underpinning Block Kit Action Handlers,
 then you may want to skip ahead to the [`addBlockActionsHandler()` method API Reference](#api-reference).
 
-- [Block Kit Action Handlers](#block-kit-action-handlers)
+- [Block kit action handlers](#block-kit-action-handlers)
   - [Requirements](#requirements)
-  - [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
-  - [Adding Block Action Handlers](#adding-block-action-handlers)
-  - [API Reference](#api-reference)
-      - [`addBlockActionsHandler(constraint, handler)`](#addblockactionshandlerconstraint-handler)
-        - [`BlockActionConstraintField`](#blockactionconstraintfield)
+  - [Posting a message with block kit elements](#posting-a-message-with-block-kit-elements)
+  - [Adding block action handlers](#adding-block-action-handlers)
+  - [API reference](#api-reference)
+    - [`addBlockActionsHandler(constraint, handler)`](#addblockactionshandlerconstraint-handler)
+      - [`BlockActionConstraintField`](#blockactionconstraintfield)
         - [`BlockActionConstraintObject`](#blockactionconstraintobject)
 
 ### Requirements
@@ -81,7 +81,7 @@ export const ApprovalFunction = DefineFunction({
 });
 ```
 
-### Posting a Message with Block Kit Elements
+### Posting a message with block kit elements
 
 First, we need a message that has some [interactive components][interactivity]
 from [Block Kit][block-kit] included! We can modify one of our app's [functions][functions]
@@ -136,7 +136,7 @@ action handler are the `action_id` and `block_id` properties defined in the `blo
 payload. Using these IDs, we will be able to differentiate between the different
 button components that users interacted with in this message.
 
-### Adding Block Action Handlers
+### Adding block action handlers
 
 The [Deno Slack SDK][sdk] - which comes bundled in your generated Run-on-Slack
 application - provides a means for defining a handler to execute every time a user
@@ -196,9 +196,9 @@ export default SlackFunction(ApprovalFunction, async ({ inputs, client }) => {
 Now when you run your app and trigger your function, you have the basics in place
 to provide interactivity between your application and users in Slack!
 
-### API Reference
+### API reference
 
-##### `addBlockActionsHandler(constraint, handler)`
+#### `addBlockActionsHandler(constraint, handler)`
 
 ```typescript
 SlackFunction({ ... }).addBlockActionsHandler({ block_id: "mah-buttons", action_id: "approve_request"}, async (ctx) => { ... });
@@ -221,7 +221,7 @@ value for `constraint`, then this will be matched against the incoming action's
 object used to match against actions. It contains nested `block_id` and `action_id`
 properties - both optional - that are used to match against the incoming action.
 
-###### `BlockActionConstraintField`
+##### `BlockActionConstraintField`
 
 ```typescript
 type BlockActionConstraintField = string | string[] | RegExp;
