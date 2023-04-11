@@ -36,7 +36,7 @@ export type ManifestMetadataSchema = {
 };
 
 // ---------------------------------------------------------------------------
-// Manifest: Settings
+// Manifest: settings
 // ---------------------------------------------------------------------------
 export type ManifestSettingsSchema = {
   allowed_ip_address_ranges?: [string, ...string[]];
@@ -50,7 +50,7 @@ export type ManifestSettingsSchema = {
   function_runtime?: ManifestFunctionRuntime;
 };
 
-// Settings: Event Subscriptions
+// Settings: event subscriptions
 export type ManifestEventSubscriptionsSchema = {
   request_url?: string;
   user_events?: string[];
@@ -67,12 +67,12 @@ export type ManifestEventSubscriptionsSchema = {
   ];
 };
 
-// Settings: Incoming Webhooks
+// Settings: incoming webhooks
 export type ManifestIncomingWebhooks = {
   incoming_webhooks_enabled?: boolean;
 };
 
-// Settings Interactivity
+// Settings interactivity
 export type ManifestInteractivitySchema = {
   is_enabled: boolean;
   request_url?: string;
@@ -88,7 +88,7 @@ export type ManifestSiwsLinksSchema = {
 export type ManifestFunctionRuntime = "slack" | "remote" | "local";
 
 // ---------------------------------------------------------------------------
-// Manifest: App Directory
+// Manifest: app directory
 // ---------------------------------------------------------------------------
 export type ManifestAppDirectorySchema = {
   app_directory_categories?: string[];
@@ -103,7 +103,7 @@ export type ManifestAppDirectorySchema = {
 };
 
 // ---------------------------------------------------------------------------
-// Manifest: Display Information
+// Manifest: display information
 // ---------------------------------------------------------------------------
 export type ManifestDisplayInformationSchema = {
   name: string;
@@ -113,7 +113,7 @@ export type ManifestDisplayInformationSchema = {
 };
 
 // ---------------------------------------------------------------------------
-// Manifest: Oauth Config
+// Manifest: OAuth config
 // ---------------------------------------------------------------------------
 export type ManifestOauthConfigSchema = {
   scopes: {
@@ -125,7 +125,7 @@ export type ManifestOauthConfigSchema = {
 };
 
 // ---------------------------------------------------------------------------
-// Manifest: Features
+// Manifest: features
 // ---------------------------------------------------------------------------
 export interface ManifestFeaturesSchema {
   bot_user?: ManifestBotUserSchema;
@@ -136,13 +136,13 @@ export interface ManifestFeaturesSchema {
   workflow_steps?: ManifestWorkflowStepsSchemaLegacy;
 }
 
-// Features: Bot User
+// Features: bot user
 export type ManifestBotUserSchema = {
   display_name: string;
   always_online?: boolean;
 };
 
-// Features: App Home
+// Features: app home
 export type ManifestAppHomeSchema = ManifestAppHomeMessagesTabSchema & {
   home_tab_enabled?: boolean;
 };
@@ -169,7 +169,7 @@ export type ManifestShortcutSchema = {
 
 export type ManifestShortcutsSchema = PopulatedArray<ManifestShortcutSchema>;
 
-// Features: Slash commands
+// Features: slash commands
 export type ManifestSlashCommandsSchema = PopulatedArray<
   ManifestSlashCommandSchema
 >;
@@ -182,7 +182,7 @@ export type ManifestSlashCommandSchema = {
   should_escape?: boolean;
 };
 
-// Features: Workflow step (To be deprecated)
+// Features: legacy workflow step (To be deprecated)
 // Not to be confused with next generation ManifestWorkflowStepSchema
 export type ManifestWorkflowStepLegacy = {
   name: string;
@@ -193,7 +193,7 @@ export type ManifestWorkflowStepsSchemaLegacy = PopulatedArray<
   ManifestWorkflowStepLegacy
 >;
 
-// Features: Unfurl Domains
+// Features: unfurl domains
 export type ManifestUnfurlDomainsSchema = [string, ...string[]];
 
 // ---------------------------------------------------------------------------
@@ -225,7 +225,7 @@ export type RequiredParameters = {
 };
 
 // ---------------------------------------------------------------------------
-// Manifest: Workflows
+// Manifest: workflows
 // Not to be confused with ManifestWorkflowStepsSchemaLegacy
 // ---------------------------------------------------------------------------
 export type ManifestWorkflow = ISlackWorkflow;
@@ -246,7 +246,7 @@ export type ManifestWorkflowStepSchema = {
 };
 
 // ---------------------------------------------------------------------------
-// Manifest: Custom Events
+// Manifest: custom events
 // ---------------------------------------------------------------------------
 
 export type ManifestCustomEventSchema = ParameterDefinition;
@@ -255,7 +255,7 @@ export type ManifestCustomEventsSchema = {
   [key: string]: ManifestCustomEventSchema;
 };
 // ---------------------------------------------------------------------------
-// Manifest: Custom Types
+// Manifest: custom types
 // ---------------------------------------------------------------------------
 
 export type ManifestCustomTypeSchema = ParameterDefinition;
@@ -264,7 +264,7 @@ export type ManifestCustomTypesSchema = {
 };
 
 // ---------------------------------------------------------------------------
-// Manifest: Datastores
+// Manifest: datastores
 // ---------------------------------------------------------------------------
 export type ManifestDatastore = ISlackDatastore;
 export type ManifestDatastoreSchema = {
@@ -285,7 +285,7 @@ export type ManifestDataStoresSchema = {
 };
 
 // -------------------------------------------------------------------------
-// Manifest: OAuth2 Provider
+// Manifest: OAuth2 provider
 // -------------------------------------------------------------------------
 export type ManifestOAuth2Schema = {
   [key: string]: ManifestOAuth2ProviderSchema;

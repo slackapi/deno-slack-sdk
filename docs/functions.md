@@ -11,7 +11,7 @@ to get more information about how each of them work:
 
 - [Block Kit Action Handlers][action-handlers]: Handle events from interactive [Block Kit][block-kit]
   components that you can use in messages like
-  Buttons, Menus and Date/Time Pickers](https://api.slack.com/block-kit/interactivity)
+  [Buttons, Menus and Date/Time Pickers](https://api.slack.com/block-kit/interactivity)
 - [View Handlers][view-handlers]: Handle events triggered from [Modals][modals],
   which are composed of [Views][views].
 - [Block Kit Suggestion Handlers][suggest-handlers]: Handle events from

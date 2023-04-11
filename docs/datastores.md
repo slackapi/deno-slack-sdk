@@ -54,7 +54,7 @@ Note: Registering a Datastore will automatically add `datastore:read` and
 ### Using a Datastore in your custom function code
 
 Now that you have a Datastore all set up, you can use it in your
-[`custom functions`][functions]! Import the
+[`functions`][functions]! Import the
 [deno-slack-api](https://github.com/slackapi/deno-slack-api) library,
 instantiate your client, and make an API call to one of the Datastore endpoints!
 
