@@ -182,7 +182,7 @@ export type ManifestSlashCommandSchema = {
   should_escape?: boolean;
 };
 
-// Features: Workflow Step (To be deprecated)
+// Features: Workflow step (To be deprecated)
 // Not to be confused with next generation ManifestWorkflowStepSchema
 export type ManifestWorkflowStepLegacy = {
   name: string;
