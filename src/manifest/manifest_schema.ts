@@ -169,7 +169,7 @@ export type ManifestShortcutSchema = {
 
 export type ManifestShortcutsSchema = PopulatedArray<ManifestShortcutSchema>;
 
-// Features: Slash Commands
+// Features: Slash commands
 export type ManifestSlashCommandsSchema = PopulatedArray<
   ManifestSlashCommandSchema
 >;
