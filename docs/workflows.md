@@ -44,7 +44,7 @@ const step1 = workflow.addStep(DinoFunction, {
 });
 ```
 
-Great, we've got a single step workflow that takes a string, and turns it into a dinosaur name via our `DinoFunction`. It would be nice to see what that looks like, so lets add another step that sends that value as a message somewhere. For this, we can use one of Slack functions. Notice how we can also use our reference to `step1` to access an output called `dinoname` that the `DinoFunction` produces.
+Great, we've got a single step workflow that takes a string, and turns it into a dinosaur name via our `DinoFunction`. It would be nice to see what that looks like, so lets add another step that sends that value as a message somewhere. For this, we can use one of Slack's functions. Notice how we can also use our reference to `step1` to access an output called `dinoname` that the `DinoFunction` produces.
 
 ```ts
 const step1 = workflow.addStep(...);
