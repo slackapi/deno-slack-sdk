@@ -143,3 +143,35 @@ Deno.test("DefineFunction with output parameters but no input parameters", () =>
     NoInputParamFunction.definition.output_parameters,
   );
 });
+
+Deno.test("DefineFunction using an OAuth2 property requests a provider key", () => {
+  /**
+   * The `oauth2_provider_key` is not currently required because `type` supports any string
+   * But eventually we'd like to support static errors for OAuth2 properties without the provider key
+   */
+
+  const OAuth2Function = DefineFunction({
+    callback_id: "output_params_only",
+    title: "No Parameter Function",
+    source_file: "functions/output_params_only.ts",
+    input_parameters: {
+      properties: {
+        googleAccessTokenId: {
+          type: Schema.slack.types.oauth2,
+          oauth2_provider_key: "test",
+        },
+      },
+      required: [],
+    },
+  });
+
+  assertEquals(
+    {
+      googleAccessTokenId: {
+        oauth2_provider_key: "test",
+        type: Schema.slack.types.oauth2,
+      },
+    },
+    OAuth2Function.export().input_parameters.properties,
+  );
+});
