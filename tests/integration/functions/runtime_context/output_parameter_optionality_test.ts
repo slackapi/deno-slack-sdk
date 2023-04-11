@@ -7,9 +7,9 @@ import {
 import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";
 
 /**
- * Custom Function handler tests exercising optionality of outputs for primitive types
+ * Custom function handler tests exercising optionality of outputs for primitive types
  */
-Deno.test("Custom Function with an optional string output returns an output that can be either undefined or a string", () => {
+Deno.test("Custom function with an optional string output returns an output that can be either undefined or a string", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -39,7 +39,7 @@ Deno.test("Custom Function with an optional string output returns an output that
   assert<CanBe<typeof output, string>>(true);
 });
 
-Deno.test("Custom Function with an optional boolean output returns an output that can be either undefined or a boolean", () => {
+Deno.test("Custom function with an optional boolean output returns an output that can be either undefined or a boolean", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -69,7 +69,7 @@ Deno.test("Custom Function with an optional boolean output returns an output tha
   assert<CanBe<typeof output, boolean>>(true);
 });
 
-Deno.test("Custom Function with an optional integer output returns an output that can be either undefined or a number", () => {
+Deno.test("Custom function with an optional integer output returns an output that can be either undefined or a number", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -99,7 +99,7 @@ Deno.test("Custom Function with an optional integer output returns an output tha
   assert<CanBe<typeof output, number>>(true);
 });
 
-Deno.test("Custom Function with an optional number output returns an output that can be either undefined or a number", () => {
+Deno.test("Custom function with an optional number output returns an output that can be either undefined or a number", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",

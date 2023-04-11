@@ -5,10 +5,10 @@ import {
 } from "../../parameters/types.ts";
 import { SlackFunctionDefinition } from "../mod.ts";
 import type { FunctionRuntimeParameters } from "../types.ts";
-import { CreateFunctionContext, SlackFunctionTesterFn } from "./types.ts";
+import { CreateFunctionContext, CustomFunctionTesterFn } from "./types.ts";
 export const DEFAULT_FUNCTION_TESTER_TITLE = "Function Test Title";
 
-export const SlackFunctionTester: SlackFunctionTesterFn = <
+export const SlackFunctionTester: CustomFunctionTesterFn = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,

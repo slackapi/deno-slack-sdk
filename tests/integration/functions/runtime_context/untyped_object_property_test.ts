@@ -6,9 +6,9 @@ import {
 import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";
 
 /**
- * Custom Function handler tests, exercising Untyped Object inputs/outputs
+ * Custom function handler tests, exercising Untyped Object inputs/outputs
  */
-Deno.test("Custom Function using untyped Objects should allow for referencing any property in a function handler context", () => {
+Deno.test("Custom function using untyped Objects should allow for referencing any property in a function handler context", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",

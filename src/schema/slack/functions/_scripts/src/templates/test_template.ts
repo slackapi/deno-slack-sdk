@@ -132,7 +132,7 @@ export function SlackTestFunctionTemplate(
   );
   typescript.push("");
   typescript.push(
-    `Deno.test("${functionName} can be used as a built-in function in a workflow step", ${
+    `Deno.test("${functionName} can be used as a Slack function in a workflow step", ${
       renderWorkflowStepTest(functionRecord)
     });`,
   );

@@ -19,9 +19,9 @@ import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";
 import { assertEqualsTypedValues } from "../../../../src/test_utils.ts";
 
 /**
- * Custom Function handler tests, exercising Typed Object inputs/outputs
+ * Custom function handler tests, exercising Typed Object inputs/outputs
  */
-Deno.test("Custom Function with a required DefineProperty-wrapped typedobject input with a required string property and a required DefineProperty-wrapped typedobject output should provide correct typing in a function handler context and complain if required output not provided", () => {
+Deno.test("Custom function with a required DefineProperty-wrapped typedobject input with a required string property and a required DefineProperty-wrapped typedobject output should provide correct typing in a function handler context and complain if required output not provided", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -79,7 +79,7 @@ Deno.test("Custom Function with a required DefineProperty-wrapped typedobject in
   assertEqualsTypedValues(result.outputs?.anObject.out, "test");
 });
 
-Deno.test("Custom Function with a required DefineProperty-wrapped typedobject input with an optional string property should provide correct typing in a function handler context", () => {
+Deno.test("Custom function with a required DefineProperty-wrapped typedobject input with an optional string property should provide correct typing in a function handler context", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -110,7 +110,7 @@ Deno.test("Custom Function with a required DefineProperty-wrapped typedobject in
   );
 });
 
-Deno.test("Custom Function with a required output DefineProperty-wrapped typedobject with mixed required/optional property requirements should complain if required object properties are not returned by function", () => {
+Deno.test("Custom function with a required output DefineProperty-wrapped typedobject with mixed required/optional property requirements should complain if required object properties are not returned by function", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -165,7 +165,7 @@ Deno.test("Custom Function with a required output DefineProperty-wrapped typedob
     };
 });
 
-Deno.test("Custom Function with an input of DefineProperty-wrapped Typed Object with additional properties allows referencing into additional properties in a function handler context", () => {
+Deno.test("Custom function with an input of DefineProperty-wrapped Typed Object with additional properties allows referencing into additional properties in a function handler context", () => {
   const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
@@ -232,7 +232,7 @@ Deno.test("Custom Function with an input of DefineProperty-wrapped Typed Object 
   result.outputs.addlPropertiesObj.anothaOne;
 });
 
-Deno.test("Custom Function with an input of DefineProperty-wrapped Typed Object without additional properties prevents referencing into additional properties in a function handler context", () => {
+Deno.test("Custom function with an input of DefineProperty-wrapped Typed Object without additional properties prevents referencing into additional properties in a function handler context", () => {
   const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
@@ -295,7 +295,7 @@ Deno.test("Custom Function with an input of DefineProperty-wrapped Typed Object 
   assertEquals(result.outputs?.noAddlPropertiesObj.anythingElse, undefined);
 });
 
-Deno.test("Custom Function using an unwrapped Typed Object input with additionalProperties=undefined should allow referencing additional properties in a function handler context", () => {
+Deno.test("Custom function using an unwrapped Typed Object input with additionalProperties=undefined should allow referencing additional properties in a function handler context", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
@@ -359,7 +359,7 @@ Deno.test("Custom Function using an unwrapped Typed Object input with additional
   assertEquals(result.outputs?.addlPropertiesObj.anythingElse, undefined);
 });
 
-Deno.test("Custom Function using an unwrapped Typed Object input with additionalProperties=false should prevent referencing additional properties in a function handler context", () => {
+Deno.test("Custom function using an unwrapped Typed Object input with additionalProperties=false should prevent referencing additional properties in a function handler context", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",

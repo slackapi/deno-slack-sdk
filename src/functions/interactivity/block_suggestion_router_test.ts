@@ -52,7 +52,7 @@ type SlackSuggestionHandlerTesterResponse<
 };
 
 type SlackSuggestionHandlerTesterFn = {
-  // Accept a Slack Function
+  // Accept a custom function
   <
     InputParameters extends ParameterSetDefinition,
     OutputParameters extends ParameterSetDefinition,

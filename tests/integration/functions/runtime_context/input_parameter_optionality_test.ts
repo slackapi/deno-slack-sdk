@@ -7,9 +7,9 @@ import {
 import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";
 
 /**
- * Custom Function handler tests exercising optionality of inputs for primitive types
+ * Custom function handler tests exercising optionality of inputs for primitive types
  */
-Deno.test("Custom Function with an optional string input provide the string/undefined input in a function handler context", () => {
+Deno.test("Custom function with an optional string input provide the string/undefined input in a function handler context", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -39,7 +39,7 @@ Deno.test("Custom Function with an optional string input provide the string/unde
   handler(createContext({ inputs }));
 });
 
-Deno.test("Custom Function with an optional boolean input provide the boolean/undefined input in a function handler context", () => {
+Deno.test("Custom function with an optional boolean input provide the boolean/undefined input in a function handler context", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -69,7 +69,7 @@ Deno.test("Custom Function with an optional boolean input provide the boolean/un
   handler(createContext({ inputs }));
 });
 
-Deno.test("Custom Function with an optional integer input provide the number/undefined input in a function handler context", () => {
+Deno.test("Custom function with an optional integer input provide the number/undefined input in a function handler context", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -99,7 +99,7 @@ Deno.test("Custom Function with an optional integer input provide the number/und
   handler(createContext({ inputs }));
 });
 
-Deno.test("Custom Function with an optional number input provide the number/undefined input in a function handler context", () => {
+Deno.test("Custom function with an optional number input provide the number/undefined input in a function handler context", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",

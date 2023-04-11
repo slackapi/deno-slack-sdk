@@ -12,17 +12,20 @@ with these [interactive components][interactivity].
 If you're already familiar with the main concepts underpinning Block Kit Action Handlers,
 then you may want to skip ahead to the [`addBlockActionsHandler()` method API Reference](#api-reference).
 
-1. [Requirements](#requirements)
-2. [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
-3. [Adding Block Action Handlers](#adding-block-action-handlers)
-4. [API Reference](#api-reference)
-    - [`addBlockActionsHandler()`](#addblockactionshandlerconstraint-handler)
+- [Block Kit Action Handlers](#block-kit-action-handlers)
+  - [Requirements](#requirements)
+  - [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
+  - [Adding Block Action Handlers](#adding-block-action-handlers)
+  - [API Reference](#api-reference)
+      - [`addBlockActionsHandler(constraint, handler)`](#addblockactionshandlerconstraint-handler)
+        - [`BlockActionConstraintField`](#blockactionconstraintfield)
+        - [`BlockActionConstraintObject`](#blockactionconstraintobject)
 
 ### Requirements
 
-Your app needs to have an existing [Function][functions] defined, implemented and working
+Your app needs to have an existing [function][functions] defined, implemented and working
 before you can add interactivity handlers like Block Kit Action Handlers to them.
-Make sure you have followed our [Functions documentation][functions] and have a
+Make sure you have followed our [functions documentation][functions] and have a
 function in your app ready that we can expand with a Block Kit Action Handler.
 
 As part of exploring how Block Kit Action Handlers work, we'll walk through an
@@ -32,7 +35,7 @@ our app will handle these button interactions - these Block Kit Actions - and
 update the original message with either an "Approved!" or "Denied!" text.
 
 For the purposes of walking through this approval flow example, let us assume the
-following [Function][functions] definition (that we will store in a file called `definition.ts` under the `functions/approval/` subdirectory inside your app):
+following [function][functions] definition (that we will store in a file called `definition.ts` under the `functions/approval/` subdirectory inside your app):
 
 ```typescript
 import { DefineFunction, Schema } from "deno-slack-sdk/mod.ts";
@@ -81,7 +84,7 @@ export const ApprovalFunction = DefineFunction({
 ### Posting a Message with Block Kit Elements
 
 First, we need a message that has some [interactive components][interactivity]
-from [Block Kit][block-kit] included! We can modify one of our app's [Functions][functions]
+from [Block Kit][block-kit] included! We can modify one of our app's [functions][functions]
 to post a message that includes some interactive components. Here's an example function
 (which we will assume exists in a `mod.ts` file under the `functions/approval/`
 subdirectory in your app) that posts a message with two buttons: an approval button,

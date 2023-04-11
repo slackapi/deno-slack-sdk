@@ -14,7 +14,7 @@ slackFunctions.sort((a, b) => a.callback_id.localeCompare(b.callback_id));
 await Promise.all(
   slackFunctions.map(async (functionRecord: FunctionRecord) => {
     console.log(
-      `Generating code & tests for Slack Function: ${
+      `Generating code & tests for Slack function: ${
         greenText(functionRecord.callback_id)
       }`,
     );

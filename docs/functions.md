@@ -1,4 +1,4 @@
-## Functions
+## Custom functions
 
 Functions are the core of your Slack app: they accept one or more input
 parameters, execute some logic and return one or more output parameters.
@@ -17,7 +17,7 @@ to get more information about how each of them work:
 - [Block Kit Suggestion Handlers][suggest-handlers]: Handle events from
   [external-data-sourced Block Kit select menus](https://api.slack.com/reference/block-kit/block-elements#external_select)
 
-### Defining a Function
+### Defining a custom function
 
 Functions can be defined with the top level `DefineFunction` export. Below is an
 example function that turns a `name` input parameter into a dinosaur name:
@@ -47,7 +47,7 @@ export const DinoFunction = DefineFunction({
 
 Let's go over each of the arguments that must be provided to `DefineFunction`.
 
-#### Function Definition
+#### Function definition
 
 The passed argument is the `definition` of the function, an object with a few
 properties that help to describe and define the function in more detail. In
@@ -79,7 +79,7 @@ particular, the required properties of the object are:
   further describes the `type` and `description` of individual output
   parameters.
 
-### Adding runtime logic to your Function
+### Adding runtime logic to your custom function
 
 Now that you have defined your function's input and output parameters, it's time
 to define the body of your function.
@@ -112,7 +112,7 @@ Key points:
   [function "context"](#function-handler-context).
 - The function [returns an object](#function-return-object).
 
-##### Function Handler Context
+#### Custom function handler context
 
 The single argument to your function is an object composed of several properties
 that may be useful to leverage during your function's execution:
@@ -120,7 +120,7 @@ that may be useful to leverage during your function's execution:
 - `env`: represents environment variables available to your function's execution
   context.
 - `inputs`: an object containing the input parameters you defined as part of
-  your Function Definition. In the example above, the `name` input parameter is
+  your function definition. In the example above, the `name` input parameter is
   available on the `inputs` property of our function handler context.
 - `client`: An API client ready for use in your function. An instance of the `deno-slack-api` library.
 - `token`: your application's access token.
@@ -128,7 +128,7 @@ that may be useful to leverage during your function's execution:
 - `enterprise_id`: the encoded enterprise ID, i.e. E12345. If the Slack workspace the function executes in is not a part of an enterprise grid, then this value will be the empty string (`""`).
 - `event`: an object containing the full incoming event details.
 
-##### Function Return Object
+##### Custom function return object
 
 The object returned by your function that supports the following properties:
 
@@ -140,7 +140,7 @@ The object returned by your function that supports the following properties:
 - `completed`: a boolean indicating whether or not the function is completed.
   This defaults to `true`.
 
-### Adding Functions to the Manifest
+### Adding custom functions to the Manifest
 
 Once you have defined a function, don't forget to include it in your
 [`Manifest`][manifest] definition!
@@ -150,7 +150,7 @@ import { ReverseString } from "./functions/reverse_definition.ts";
 
 Manifest({
   name: "heuristic-tortoise",
-  description: "A demo showing how to use Slack functions",
+  description: "A demo showing how to use custom functions",
   icon: "assets/icon.png",
   botScopes: ["commands", "chat:write", "chat:write.public"],
   functions: [ReverseString], // <-- don't forget this!

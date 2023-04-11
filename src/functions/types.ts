@@ -161,7 +161,7 @@ type SyncFunctionHandler<
 };
 
 /**
- * @description Slack Function handler from a function definition
+ * @description Custom function handler from a function definition
  */
 export type RuntimeSlackFunctionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
@@ -172,7 +172,7 @@ export type RuntimeSlackFunctionHandler<Definition> = Definition extends
   : never;
 
 /**
- * @description Slack Function handler from input and output types directly
+ * @description Custom function handler from input and output types directly
  */
 export type BaseRuntimeSlackFunctionHandler<
   InputParameters extends FunctionParameters,
@@ -190,7 +190,7 @@ export type BaseRuntimeSlackFunctionHandler<
   >;
 
 /**
- * @description Slack Function handler from a function definition
+ * @description Custom function handler from a function definition
  */
 export type EnrichedSlackFunctionHandler<Definition> = Definition extends
   FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
@@ -201,7 +201,7 @@ export type EnrichedSlackFunctionHandler<Definition> = Definition extends
   : never;
 
 /**
- * @description Slack Function handler from input and output types directly
+ * @description Custom function handler from input and output types directly
  */
 type BaseEnrichedSlackFunctionHandler<
   InputParameters extends FunctionParameters,
@@ -276,7 +276,7 @@ export type BaseRuntimeFunctionContext<
   enterprise_id: string;
 };
 
-// SDK Function handlers receive these additional properties on the function context object
+// SDK function handlers receive these additional properties on the function context object
 export type FunctionContextEnrichment = {
   client: SlackAPIClient;
 };

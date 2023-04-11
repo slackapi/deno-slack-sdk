@@ -14,7 +14,7 @@ import SchemaTypes from "../../../../../../schema_types.ts";
 import SlackTypes from "../../../../../schema_types.ts";
 import { InternalSlackTypes } from "../../../../../types/custom/mod.ts";
 
-const DESCRIPTION = "Test the built-in function template";
+const DESCRIPTION = "Test the Slack function template";
 const TITLE = "test function";
 const CALLBACK_ID = "test_function";
 

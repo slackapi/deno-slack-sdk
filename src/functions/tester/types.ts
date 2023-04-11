@@ -9,7 +9,7 @@ import type {
   FunctionRuntimeParameters,
 } from "../types.ts";
 
-export type SlackFunctionTesterArgs<
+export type CustomFunctionTesterArgs<
   InputParameters extends FunctionParameters,
 > =
   & Partial<
@@ -24,7 +24,7 @@ export type CreateFunctionContext<
   RequiredInput extends PossibleParameterKeys<InputParameters>,
 > = {
   (
-    args: SlackFunctionTesterArgs<
+    args: CustomFunctionTesterArgs<
       FunctionRuntimeParameters<InputParameters, RequiredInput> | undefined
     >,
   ): FunctionContext<
@@ -39,9 +39,9 @@ export type SlackFunctionTesterResponse<
   createContext: CreateFunctionContext<InputParameters, RequiredInput>;
 };
 
-// Slack Function Tester is overloaded to accept either a string or a SlackFunction
-export type SlackFunctionTesterFn = {
-  // Accept a Slack Function
+// Custom function tester is overloaded to accept either a string or a SlackFunction
+export type CustomFunctionTesterFn = {
+  // Accept a custom function
   <
     InputParameters extends ParameterSetDefinition,
     OutputParameters extends ParameterSetDefinition,
@@ -63,7 +63,7 @@ export type SlackFunctionTesterFn = {
   (funcOrCallbackId: string): {
     createContext: {
       <I extends FunctionParameters>(
-        args: SlackFunctionTesterArgs<I>,
+        args: CustomFunctionTesterArgs<I>,
       ): FunctionContext<I>;
     };
   };

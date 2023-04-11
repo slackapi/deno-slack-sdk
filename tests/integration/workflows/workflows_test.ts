@@ -6,7 +6,7 @@ import SlackTypes from "../../../src/schema/slack/schema_types.ts";
 Deno.test("Multi-step Workflow should export correct double-brace-wrapped step input values", () => {
   const TestFunction = DefineFunction({
     callback_id: "no_params",
-    title: "Test Function",
+    title: "Test function",
     source_file: "",
     input_parameters: {
       properties: {
@@ -187,7 +187,7 @@ Deno.test("Workflow addStep returns appropriate output types and properties for 
 Deno.test("Malformed workflow step inputs should be undefined", () => {
   const TestFunction = DefineFunction({
     callback_id: "test_undefined",
-    title: "Test Function",
+    title: "Test function",
     source_file: "",
     input_parameters: {
       properties: {

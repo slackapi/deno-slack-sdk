@@ -84,7 +84,7 @@ export type ManifestSiwsLinksSchema = {
   initiate_uri?: string;
 };
 
-// Settings: Function Runtime
+// Settings: function runtime
 export type ManifestFunctionRuntime = "slack" | "remote" | "local";
 
 // ---------------------------------------------------------------------------
@@ -197,7 +197,7 @@ export type ManifestWorkflowStepsSchemaLegacy = PopulatedArray<
 export type ManifestUnfurlDomainsSchema = [string, ...string[]];
 
 // ---------------------------------------------------------------------------
-// Manifest: Functions
+// Manifest: functions
 // ---------------------------------------------------------------------------
 
 // This is typed liberally at this level but more specifically down further

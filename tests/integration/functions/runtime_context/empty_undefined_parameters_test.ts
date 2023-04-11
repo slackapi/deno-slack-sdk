@@ -6,9 +6,9 @@ import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";
 import { assertEqualsTypedValues } from "../../../../src/test_utils.ts";
 
 /**
- * Custom Function handler tests exercising empty/undefined/ inputs/outputs
+ * Custom function handler tests exercising empty/undefined/ inputs/outputs
  */
-Deno.test("Custom Function with no inputs or outputs", () => {
+Deno.test("Custom function with no inputs or outputs", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -25,7 +25,7 @@ Deno.test("Custom Function with no inputs or outputs", () => {
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("Custom Function with undefined inputs and outputs", () => {
+Deno.test("Custom function with undefined inputs and outputs", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -44,7 +44,7 @@ Deno.test("Custom Function with undefined inputs and outputs", () => {
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("Custom Function with empty inputs and outputs", () => {
+Deno.test("Custom function with empty inputs and outputs", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
