@@ -38,7 +38,7 @@ corresponding test, the tests must be removed manually.
    Generating code & tests for Slack function: send_ephemeral_message
    Generating code & tests for Slack function: send_message
    Generating code & tests for Slack function: update_channel_topic
-   Generated 14 built-in functions with their unit tests
+   Generated 14 Slack functions with their unit tests
    Updated functions module export
    Formatting Slack function files...
    Linting Slack function files...

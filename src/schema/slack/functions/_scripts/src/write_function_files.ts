@@ -38,7 +38,7 @@ await Promise.all(
 );
 
 console.log(
-  `Generated ${slackFunctions.length} built-in functions with their unit tests`,
+  `Generated ${slackFunctions.length} Slack functions with their unit tests`,
 );
 
 const modString = SlackFunctionModTemplate(slackFunctions);
