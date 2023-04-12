@@ -43,7 +43,7 @@ Manifest({
 There are two places where you can reference your events:
 
 1. Posting a message to Slack
-2. Creating a Message Metadata Trigger
+2. Creating a message metadata trigger
 
 #### Posting a message to Slack
 
@@ -92,7 +92,7 @@ await client.chat.postMessage({
 Now that the app has a defined schema for the event, a trigger can be created to watch for any message posted with the expected metadata. When the schema is met, the trigger will execute a workflow
 
 ```ts
-// A Trigger Definition file for the CLI
+// A trigger Definition file for the CLI
 import { IncidentEvent } from "./manifest.ts"
 
 const trigger: Trigger = {
