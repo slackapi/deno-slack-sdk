@@ -39,9 +39,7 @@ export type SlackFunctionTesterResponse<
   createContext: CreateFunctionContext<InputParameters, RequiredInput>;
 };
 
-// Custom function tester is overloaded to accept either a string or a SlackFunction
 export type SlackFunctionTesterType = {
-  // Accept a custom function
   <
     InputParameters extends ParameterSetDefinition,
     OutputParameters extends ParameterSetDefinition,

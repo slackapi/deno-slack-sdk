@@ -94,8 +94,7 @@ type SlackViewClosedHandlerTesterResponse<
   >;
 };
 
-type SlackViewSubmissionHandlerTesterFn = {
-  // Accept a custom function
+type SlackViewSubmissionHandlerTesterType = {
   <
     InputParameters extends ParameterSetDefinition,
     OutputParameters extends ParameterSetDefinition,
@@ -114,8 +113,7 @@ type SlackViewSubmissionHandlerTesterFn = {
   >;
 };
 
-type SlackViewClosedHandlerTesterFn = {
-  // Accept a custom function
+type SlackViewClosedHandlerTesterType = {
   <
     InputParameters extends ParameterSetDefinition,
     OutputParameters extends ParameterSetDefinition,
@@ -147,7 +145,7 @@ const DEFAULT_VIEW: View = {
   app_id: "A123456",
 };
 
-const SlackViewSubmissionHandlerTester: SlackViewSubmissionHandlerTesterFn = <
+const SlackViewSubmissionHandlerTester: SlackViewSubmissionHandlerTesterType = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
@@ -219,7 +217,7 @@ const SlackViewSubmissionHandlerTester: SlackViewSubmissionHandlerTesterFn = <
   return { createContext };
 };
 
-const SlackViewClosedHandlerTester: SlackViewClosedHandlerTesterFn = <
+const SlackViewClosedHandlerTester: SlackViewClosedHandlerTesterType = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
