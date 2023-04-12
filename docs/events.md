@@ -1,6 +1,6 @@
 ## Events
 
-Custom Events provide a way for Apps to validate [message metadata](https://api.slack.com/metadata) against a pre-defined schema.
+Custom events provide a way for Apps to validate [message metadata](https://api.slack.com/metadata) against a pre-defined schema.
 
 ### Defining an event
 
@@ -28,8 +28,8 @@ const IncidentEvent = DefineEvent({
 To register the newly defined event, add it to the array assigned to the `events`
 parameter while defining the [`Manifest`][manifest].
 
-Note: All custom Events **must** be registered to the [Manifest][manifest] in
-order for them to be used. There is no automated registration for Events.
+Note: All custom events **must** be registered to the [Manifest][manifest] in
+order for them to be used. There is no automated registration for events.
 
 ```ts
 Manifest({
