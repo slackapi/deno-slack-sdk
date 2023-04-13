@@ -51,10 +51,10 @@ export default Manifest({
 Note: Registering a Datastore will automatically add `datastore:read` and
 `datastore:write` to the App's defined `botScopes`.
 
-### Using a Datastore in your Function code
+### Using a Datastore in your custom function code
 
 Now that you have a Datastore all set up, you can use it in your
-[`Functions`][functions]! Import the
+[`functions`][functions]! Import the
 [deno-slack-api](https://github.com/slackapi/deno-slack-api) library,
 instantiate your client, and make an API call to one of the Datastore endpoints!
 

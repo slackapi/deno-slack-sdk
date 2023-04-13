@@ -44,7 +44,7 @@ const step1 = workflow.addStep(DinoFunction, {
 });
 ```
 
-Great, we've got a single step workflow that takes a string, and turns it into a dinosaur name via our `DinoFunction`. It would be nice to see what that looks like, so lets add another step that sends that value as a message somewhere. For this, we can use one of Slack's built-in functions. Notice how we can also use our reference to `step1` to access an output called `dinoname` that the `DinoFunction` produces.
+Great, we've got a single step workflow that takes a string, and turns it into a dinosaur name via our `DinoFunction`. It would be nice to see what that looks like, so lets add another step that sends that value as a message somewhere. For this, we can use one of Slack's functions. Notice how we can also use our reference to `step1` to access an output called `dinoname` that the `DinoFunction` produces.
 
 ```ts
 const step1 = workflow.addStep(...);
@@ -65,7 +65,7 @@ const step1 = workflow.addStep("#/functions/my_workflow", {
 
 The big difference here is you won't get some of the automatic typing of `inputs` and `outputs` for that step, but you can still reference them as long as you follow the definition of that function.
 
-### Auto-Registration of Workflow dependencies
+### Auto-Registration of workflow dependencies
 
 When a workflow is registered on your `Manifest()` any `functions` it uses as steps, or custom `types` used as `input_parameters` to the workflow or functions it references are automatically registered in your manifest. This can save you from having to register each function and type that a workflow might use, and just register the workflow.
 

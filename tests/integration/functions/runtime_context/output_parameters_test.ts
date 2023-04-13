@@ -6,9 +6,9 @@ import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";
 import { assertEqualsTypedValues } from "../../../../src/test_utils.ts";
 
 /**
- * Custom Function handler tests exercising outputs of various primitive types
+ * Custom function handler tests exercising outputs of various primitive types
  */
-Deno.test("Custom Function with only a string output defined must return a string output", () => {
+Deno.test("Custom function with only a string output defined must return a string output", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -45,7 +45,7 @@ Deno.test("Custom Function with only a string output defined must return a strin
   };
 });
 
-Deno.test("Custom Function with only a boolean output defined must return a boolean output", () => {
+Deno.test("Custom function with only a boolean output defined must return a boolean output", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -82,7 +82,7 @@ Deno.test("Custom Function with only a boolean output defined must return a bool
   };
 });
 
-Deno.test("Custom Function with only an integer output defined must return a number output", () => {
+Deno.test("Custom function with only an integer output defined must return a number output", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -119,7 +119,7 @@ Deno.test("Custom Function with only an integer output defined must return a num
   };
 });
 
-Deno.test("Custom Function with only a number output defined must return a number output", () => {
+Deno.test("Custom function with only a number output defined must return a number output", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",

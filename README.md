@@ -1,6 +1,6 @@
 # Deno Slack SDK
 
-This is the SDK for the Deno Runtime of Run on Slack Functions.
+This is the SDK for the Deno Runtime of Slack custom functions.
 
 ## Requirements
 

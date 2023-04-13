@@ -12,9 +12,9 @@ import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";
 import { assertEqualsTypedValues } from "../../../../src/test_utils.ts";
 
 /**
- * Custom Function handler tests, exercising Array inputs/outputs
+ * Custom function handler tests, exercising Array inputs/outputs
  */
-Deno.test("Custom Function using an input of Typed Arrays of Custom Types of DefineProperty-wrapped typed objects should honor required and optional properties and allow for referencing additional properties", () => {
+Deno.test("Custom function using an input of Typed Arrays of Custom Types of DefineProperty-wrapped typed objects should honor required and optional properties and allow for referencing additional properties", () => {
   const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
@@ -93,7 +93,7 @@ Deno.test("Custom Function using an input of Typed Arrays of Custom Types of Def
   handler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("Custom Function using an input of Typed Arrays of Custom Types of DefineProperty-wrapped typed objects should honor additionalProperties=false", () => {
+Deno.test("Custom function using an input of Typed Arrays of Custom Types of DefineProperty-wrapped typed objects should honor additionalProperties=false", () => {
   const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
@@ -174,7 +174,7 @@ Deno.test("Custom Function using an input of Typed Arrays of Custom Types of Def
   handler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("Custom Function using an input of Typed Arrays of DefineProperty-wrapped typed objects should honor required and optional properties and allow for referencing additional properties", () => {
+Deno.test("Custom function using an input of Typed Arrays of DefineProperty-wrapped typed objects should honor required and optional properties and allow for referencing additional properties", () => {
   const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
@@ -247,7 +247,7 @@ Deno.test("Custom Function using an input of Typed Arrays of DefineProperty-wrap
   handler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("Custom Function using an input of Typed Arrays of DefineProperty-wrapped typed objects should honor additionalProperties=false", () => {
+Deno.test("Custom function using an input of Typed Arrays of DefineProperty-wrapped typed objects should honor additionalProperties=false", () => {
   const obj = DefineProperty({
     type: Schema.types.object,
     properties: {
@@ -322,7 +322,7 @@ Deno.test("Custom Function using an input of Typed Arrays of DefineProperty-wrap
   handler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("Custom Function using untyped Arrays and typed arrays of strings", () => {
+Deno.test("Custom function using untyped Arrays and typed arrays of strings", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
@@ -390,7 +390,7 @@ Deno.test("Custom Function using untyped Arrays and typed arrays of strings", ()
 /**
  * TODO: the next two particular tests lead to the array items being typed as `any`
 
-Deno.test("Custom Function using Typed Arrays of Custom Types of unwrapped typed objects should honor required and optional properties", () => {
+Deno.test("Custom function using Typed Arrays of Custom Types of unwrapped typed objects should honor required and optional properties", () => {
   const obj = {
     type: Schema.types.object,
     properties: {
@@ -466,7 +466,7 @@ Deno.test("Custom Function using Typed Arrays of Custom Types of unwrapped typed
   const { createContext } = SlackFunctionTester(TestFunction);
   handler(createContext({ inputs: sharedInputs }));
 });
-Deno.test("Custom Function using Typed Arrays of unwrapped typed objects should honor required and optional properties", () => {
+Deno.test("Custom function using Typed Arrays of unwrapped typed objects should honor required and optional properties", () => {
   const obj = {
     type: Schema.types.object,
     properties: {

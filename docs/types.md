@@ -2,7 +2,7 @@
 
 Custom Types provide a way to introduce reusable, sharable types to Apps.
 
-### Defining a Type
+### Defining a type
 
 Types can be defined with the top level `DefineType` export. Below is an example
 of setting up a custom Type used for incident management.
@@ -35,7 +35,7 @@ const IncidentType = DefineType({
 });
 ```
 
-### Registering a Type with the App
+### Registering a type with the App
 
 To register the newly defined type, add it to the array assigned to the `types`
 parameter while defining the [`Manifest`][manifest].
@@ -52,7 +52,7 @@ Manifest({
 });
 ```
 
-### Referencing Types
+### Referencing types
 
 To use a type as a [function][functions] parameter, set the parameter's `type`
 property to the Type it should reference.

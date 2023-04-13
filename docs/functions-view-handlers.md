@@ -13,23 +13,24 @@ respond to the [view submission and closed events][view-events] they can trigger
 If you're already familiar with the main concepts underpinning View Handlers,
 then you may want to skip ahead to the [API Reference](#api-reference).
 
-1. [Requirements](#requirements)
-2. [Opening a View](#opening-a-view)
-    - [Opening a View from a Function](#opening-a-view-from-a-function)
-    - [Opening a View from a Block Action Handler](#opening-a-view-from-a-block-action-handler)
-3. [Adding View Handlers](#adding-view-handlers)
-4. [API Reference](#api-reference)
-    - [`addViewSubmissionHandler()`](#addviewsubmissionhandlerconstraint-handler)
-    - [`addViewClosedHandler()`](#addviewclosedhandlerconstraint-handler)
+- [View Handlers](#view-handlers)
+  - [Requirements](#requirements)
+  - [Opening a view](#opening-a-view)
+    - [Opening a view from a custom function](#opening-a-view-from-a-custom-function)
+    - [Opening a view from a block action handler](#opening-a-view-from-a-block-action-handler)
+  - [Adding view handlers](#adding-view-handlers)
+  - [API reference](#api-reference)
+    - [`addViewSubmissionHandler(constraint, handler)`](#addviewsubmissionhandlerconstraint-handler)
+      - [`addViewClosedHandler(constraint, handler)`](#addviewclosedhandlerconstraint-handler)
 
 ### Requirements
 
 This functionality requires at least version 0.2.0 of the [`deno-slack-sdk`][sdk].
 
-Your app needs to have an existing [Function][functions] defined, implemented and working
+Your app needs to have an existing [function][functions] defined, implemented and working
 before you can add interactivity handlers like View Handlers or
 [Block Kit Action Handlers][action-handlers] to them.
-Make sure you have followed our [Functions documentation][functions] and have a
+Make sure you have followed our [functions documentation][functions] and have a
 function in your app ready that we can expand with a View Handler.
 
 As part of exploring how View Handlers work, we'll walk through a simple diary
@@ -40,7 +41,7 @@ send the user a DM with their inputted content. If the view is closed, the appli
 will send the user a DM encouraging them not to give up on their diarying habit.
 
 For the purposes of walking through this approval flow example, let us assume the
-following [Function][functions] definition (that we will store in a file called
+following [function][functions] definition (that we will store in a file called
 `definition.ts` under the `functions/diary/` subdirectory inside your app):
 
 ```typescript
@@ -69,7 +70,7 @@ export const DiaryFunction = DefineFunction({
 });
 ```
 
-### Opening a View
+### Opening a view
 
 [Opening a view via the `views.open` API][views-open] and
 [pushing a new view onto the view stack via the `views.push` API][views-push]
@@ -80,16 +81,16 @@ your application can't create a modal and open a view. FYI `trigger_id`s are als
 known as `interactivity_pointer`s.
 
 As such, there are two ways to open a view from inside a Run-On-Slack application:
-doing so [from a Function directly](#opening-a-view-from-a-function) vs. doing
+doing so [from a function directly](#opening-a-view-from-a-function) vs. doing
 so [from a Block Action Handler](#opening-a-view-from-a-block-action-handler).
 The sections covering each approach below discuss how to retrieve the `trigger_id`
 in each scenario.
 
 We will explore implementing our contrived example above by opening a view from
-a Function. In a section further below, we will also cover
+a function. In a section further below, we will also cover
 [opening a view from a Block Action Handler](#opening-a-view-from-a-block-action-handler).
 
-#### Opening a View from a Function
+#### Opening a view from a custom function
 
 As mentioned in the previous section, we need to have a `trigger_id` handy in
 order to open a view. This is why we defined an `interactivity` input in our
@@ -157,18 +158,18 @@ export default SlackFunction(DiaryFunction, async ({ inputs, client }) => {
 };
 ```
 
-#### Opening a View from a Block Action Handler
+#### Opening a view from a block action handler
 
 If [Block Kit Action Handlers][action-handlers] is a foreign concept to you, we
 recommend first checking out [its documentation][action-handlers] before venturing
 deeper into this section.
 
-Similarly to opening a view from a Function, doing so from a
+Similarly to opening a view from a function, doing so from a
 [Block Action Handler][action-handlers] is straightforward though slightly
 different. It is important to remember that `trigger_id`s represent a unique
 user interaction with a particular interactive component within Slack's UI.
 As such, when responding to a Block Kit Action interactive component, we don't
-want to use your Function's `inputs` to retrieve the `interactivity_pointer`,
+want to use your function's `inputs` to retrieve the `interactivity_pointer`,
 as we did in the previous section, but rather, we want to retrieve a `trigger_id`
 that is unique to the Block Kit interactive component.
 
@@ -189,7 +190,7 @@ export default SlackFunction(DiaryFunction, async ({ inputs, client }) => {
   });
 ```
 
-### Adding View Handlers
+### Adding view handlers
 
 The [Deno Slack SDK][sdk] - which comes bundled in your generated Run-on-Slack
 application - provides a means for defining handlers to execute every time a user
@@ -255,9 +256,9 @@ export default SlackFunction(DiaryFunction, async ({ inputs, client }) => {
 });
 ```
 
-### API Reference
+### API reference
 
-##### `addViewSubmissionHandler(constraint, handler)`
+#### `addViewSubmissionHandler(constraint, handler)`
 
 ```typescript
 SlackFunction({ ... }).addViewSubmissionHandler("my_view_callback_id", async (ctx) => { ... });

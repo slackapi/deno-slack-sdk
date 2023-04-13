@@ -31,7 +31,7 @@ Deno.test("SlackFunctionTester.createContext using a string for callback_id", ()
   assertEquals(ctxWithoutInputs.event.function.callback_id, callbackId);
 });
 
-Deno.test("SlackFunctionTester.createContext using Function definitions", () => {
+Deno.test("SlackFunctionTester.createContext using function definitions", () => {
   const callbackId = "my_callback_id";
   const TestFunction = DefineFunction({
     callback_id: callbackId,

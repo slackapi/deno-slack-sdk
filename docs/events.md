@@ -1,8 +1,8 @@
 ## Events
 
-Custom Events provide a way for Apps to validate [message metadata](https://api.slack.com/metadata) against a pre-defined schema.
+Custom events provide a way for Apps to validate [message metadata](https://api.slack.com/metadata) against a pre-defined schema.
 
-### Defining a Event
+### Defining an event
 
 Events can be defined with the top level `DefineEvent` export. Events must be set up as an `object` type or a [`custom Type`][types] of an `object` type. Below is an example of setting up a custom Event that can be used during an incident.
 
@@ -23,13 +23,13 @@ const IncidentEvent = DefineEvent({
 });
 ```
 
-### Registering an Event with the App
+### Registering an event with the app
 
 To register the newly defined event, add it to the array assigned to the `events`
 parameter while defining the [`Manifest`][manifest].
 
-Note: All custom Events **must** be registered to the [Manifest][manifest] in
-order for them to be used. There is no automated registration for Events.
+Note: All custom events **must** be registered to the [Manifest][manifest] in
+order for them to be used. There is no automated registration for events.
 
 ```ts
 Manifest({
@@ -38,13 +38,15 @@ Manifest({
 });
 ```
 
-### Referencing Events
+### Referencing events
 
 There are two places where you can reference your events:
+
 1. Posting a message to Slack
-2. Creating a Message Metadata Trigger
+2. Creating a message metadata trigger
 
 #### Posting a message to Slack
+
 Event validation happens against the App's manifest when an App posts a message to Slack using the [`metadata` parameter](https://api.slack.com/methods/chat.postMessage#arg_metadata). If the `event_type` matches the `name` of a custom Event specified in the App's manifest, it will validate that all required parameters are provided. If it doesn't meet the validation standards, a warning will be returned in the response and the message will still be posted, but the metadata will be dropped from the message.
 
 ```ts
@@ -85,12 +87,12 @@ await client.chat.postMessage({
 });
 ```
 
-#### Creating a Message Metadata Trigger
+#### Creating a message metadata trigger
 
 Now that the app has a defined schema for the event, a trigger can be created to watch for any message posted with the expected metadata. When the schema is met, the trigger will execute a workflow
 
 ```ts
-// A Trigger Definition file for the CLI
+// A trigger Definition file for the CLI
 import { IncidentEvent } from "./manifest.ts"
 
 const trigger: Trigger = {

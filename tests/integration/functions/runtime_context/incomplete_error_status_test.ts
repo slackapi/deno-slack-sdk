@@ -6,10 +6,10 @@ import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";
 import { assertEqualsTypedValues } from "../../../../src/test_utils.ts";
 
 /**
- * Custom Function handler tests exercising error or incomplete function return values
+ * Custom function handler tests exercising error or incomplete function return values
  */
 
-Deno.test("Custom Function that returns completed=false", () => {
+Deno.test("Custom function that returns completed=false", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -34,7 +34,7 @@ Deno.test("Custom Function that returns completed=false", () => {
   assertEqualsTypedValues(result.completed, false);
 });
 
-Deno.test("Custom Function that returns error", () => {
+Deno.test("Custom function that returns error", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",

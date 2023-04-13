@@ -7,9 +7,9 @@ import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";
 import { assertEqualsTypedValues } from "../../../../src/test_utils.ts";
 
 /**
- * Custom Function handler tests exercising inputs of various primitive types
+ * Custom function handler tests exercising inputs of various primitive types
  */
-Deno.test("Custom Function with a string input should provide a string input in the function handler context", () => {
+Deno.test("Custom function with a string input should provide a string input in the function handler context", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -37,7 +37,7 @@ Deno.test("Custom Function with a string input should provide a string input in 
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("Custom Function with a boolean input should provide a boolean input in the function handler context", () => {
+Deno.test("Custom function with a boolean input should provide a boolean input in the function handler context", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -65,7 +65,7 @@ Deno.test("Custom Function with a boolean input should provide a boolean input i
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("Custom Function with an integer input should provide a number input in the function handler context", () => {
+Deno.test("Custom function with an integer input should provide a number input in the function handler context", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",
@@ -93,7 +93,7 @@ Deno.test("Custom Function with an integer input should provide a number input i
   assertEqualsTypedValues(result.outputs, {});
 });
 
-Deno.test("Custom Function with a number input should provide a number input in the function handler context", () => {
+Deno.test("Custom function with a number input should provide a number input in the function handler context", () => {
   const TestFn = DefineFunction({
     callback_id: "test",
     title: "test fn",

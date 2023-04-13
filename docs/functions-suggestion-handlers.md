@@ -1,4 +1,4 @@
-## Block Kit Suggestion Handlers
+## Block Kit suggestion handlers
 
 Your application's [functions][functions] can do a wide variety of interesting
 things: post messages, create channels, or anything available to developers via
@@ -18,17 +18,20 @@ The same approach discussed in our [Block Kit Action Handlers][action-handlers]
 document can be used to  register an action handler to respond to drop-down menu
 selections.
 
-1. [Requirements](#requirements)
-2. [Posting a Message with Block Kit Elements](#posting-a-message-with-block-kit-elements)
-3. [Adding Block Action Handlers](#adding-block-action-handlers)
-4. [API Reference](#api-reference)
-    - [`addBlockSuggestionHandler()`](#addblocksuggestionhandlerconstraint-handler)
+- [Block Kit suggestion handlers](#block-kit-suggestion-handlers)
+  - [Requirements](#requirements)
+  - [Posting a message with block kit elements](#posting-a-message-with-block-kit-elements)
+  - [Adding Block Suggestion Handlers](#adding-block-suggestion-handlers)
+  - [API Reference](#api-reference)
+    - [`addBlockSuggestionHandler(constraint, handler)`](#addblocksuggestionhandlerconstraint-handler)
+      - [`BlockActionConstraintField`](#blockactionconstraintfield)
+        - [`BlockActionConstraintObject`](#blockactionconstraintobject)
 
 ### Requirements
 
-Your app needs to have an existing [Function][functions] defined, implemented and working
+Your app needs to have an existing [function][functions] defined, implemented and working
 before you can add interactivity handlers like Block Kit Suggestion Handlers to them.
-Make sure you have followed our [Functions documentation][functions] and have a
+Make sure you have followed our [functions documentation][functions] and have a
 function in your app ready that we can expand with interactivity. Familiarity with
 the [Block Kit Actions Handlers][action-handlers] would be a huge plus as the
 handling Block Kit Actions and handling Block Kit Suggestions is practically identical.
@@ -43,7 +46,7 @@ respond to the select menu interactions, we won't cover handling the button clic
 or posting the selection in this document).
 
 For the purposes of walking through this example, let us assume the following
-[Function][functions] definition (that we will store in a file called `definition.ts`
+[function][functions] definition (that we will store in a file called `definition.ts`
 under the `functions/quote/` subdirectory inside your app):
 
 ```typescript
@@ -82,10 +85,10 @@ export const QuoteFunction = DefineFunction({
 });
 ```
 
-### Posting a Message with Block Kit Elements
+### Posting a message with block kit elements
 
 First, we need a message that has some [interactive components][interactivity]
-from [Block Kit][block-kit] included! We can modify one of our app's [Functions][functions]
+from [Block Kit][block-kit] included! We can modify one of our app's [functions][functions]
 to post a message that includes some interactive components - including our external
 select drop down menu. Here's an example function (which we will assume exists in
 a `mod.ts` file under the `functions/quote/` subdirectory in your app) that posts
@@ -167,7 +170,7 @@ export default SlackFunction(QuoteFunction, async ({ inputs, client }) => {
 
 ### API Reference
 
-##### `addBlockSuggestionHandler(constraint, handler)`
+#### `addBlockSuggestionHandler(constraint, handler)`
 
 ```typescript
 SlackFunction({ ... }).addBlockSuggestionHandler({ block_id: "mah-buttons", action_id: "approve_request"}, async (ctx) => { ... });
@@ -190,7 +193,7 @@ value for `constraint`, then this will be matched against the incoming action's
 object used to match against actions. It contains nested `block_id` and `action_id`
 properties - both optional - that are used to match against the incoming suggestion.
 
-###### `BlockActionConstraintField`
+##### `BlockActionConstraintField`
 
 ```typescript
 type BlockActionConstraintField = string | string[] | RegExp;

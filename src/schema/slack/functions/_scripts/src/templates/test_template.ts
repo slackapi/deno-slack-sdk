@@ -39,7 +39,7 @@ const renderFunctionManifestTest = (
 
 const workflowToTypeScript = (functionName: string) => {
   const typescript: string[] = [];
-  typescript.push(`callback_id: "test_${functionName}_built_in"`);
+  typescript.push(`callback_id: "test_${functionName}_slack_function"`);
   typescript.push(`title: "Test ${functionName}"`);
   typescript.push(
     `description: "This is a generated test to test ${functionName}"`,
@@ -132,7 +132,7 @@ export function SlackTestFunctionTemplate(
   );
   typescript.push("");
   typescript.push(
-    `Deno.test("${functionName} can be used as a built-in function in a workflow step", ${
+    `Deno.test("${functionName} can be used as a Slack function in a workflow step", ${
       renderWorkflowStepTest(functionRecord)
     });`,
   );
@@ -145,7 +145,7 @@ export function SlackTestFunctionTemplate(
     `import { assertEquals, assertExists } from "../../../dev_deps.ts";`;
   typescript.push("");
   typescript.push(
-    `Deno.test("All outputs of built-in function ${functionName} should exist", ${
+    `Deno.test("All outputs of Slack function ${functionName} should exist", ${
       renderOutputExistenceTest(functionRecord)
     });`,
   );

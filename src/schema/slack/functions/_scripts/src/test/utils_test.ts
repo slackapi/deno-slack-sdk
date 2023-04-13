@@ -19,7 +19,7 @@ Deno.test("colored text remain consistent", () => {
   assertEquals("\x1b[38;5;214mtest\x1b[0m", yellowText("test"));
 });
 
-Deno.test("Non builtin functions should be filtered", async () => {
+Deno.test("Non Slack functions should be filtered", async () => {
   const actual = await getSlackFunctions(
     "src/schema/slack/functions/_scripts/src/test/data/function.json",
   );

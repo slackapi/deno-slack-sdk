@@ -4,7 +4,7 @@ A Manifest defines your entire Slack application, from its core properties like
 its name and description to its behavioural aspects like what
 [functions][functions] it contains.
 
-### Defining a Manifest
+### Defining a manifest
 
 A Manifest can be defined with the top level `Manifest` export. Below is an
 example, taken from the template application:

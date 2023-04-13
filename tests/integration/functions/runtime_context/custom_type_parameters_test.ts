@@ -13,10 +13,10 @@ import { assertEqualsTypedValues } from "../../../../src/test_utils.ts";
 import { InternalSlackTypes } from "../../../../src/schema/slack/types/custom/mod.ts";
 
 /**
- * Custom Function handler tests, exercising Custom Type inputs/outputs, including built-in/internal Slack custom types
+ * Custom function handler tests, exercising Custom Type inputs/outputs, including Slack/internal custom Slack types
  */
 
-Deno.test("Custom Function using Slack's FormInput internal Custom Type input should provide correct typedobject typing in a function handler context", () => {
+Deno.test("Custom function using Slack's FormInput internal Custom Type input should provide correct typedobject typing in a function handler context", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
@@ -74,7 +74,7 @@ Deno.test("Custom Function using Slack's FormInput internal Custom Type input sh
   validHandler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("Custom Function using Slack's message-context Custom Type input should provide correct typedobject typing in a function handler context", () => {
+Deno.test("Custom function using Slack's message-context Custom Type input should provide correct typedobject typing in a function handler context", () => {
   const TestFunction = DefineFunction({
     callback_id: "my_callback_id",
     source_file: "test",
@@ -137,7 +137,7 @@ Deno.test("Custom Function using Slack's message-context Custom Type input shoul
   validHandler(createContext({ inputs: sharedInputs }));
 });
 
-Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with mixed required/optional properties should provide correct typedobject typing in a function handler context", () => {
+Deno.test("Custom function using a Custom Type input for an unwrapped typedobject with mixed required/optional properties should provide correct typedobject typing in a function handler context", () => {
   const myType = DefineType({
     name: "custom",
     type: Schema.types.object,
@@ -199,7 +199,7 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
   assertEqualsTypedValues(sharedInputs, result.outputs);
 });
 
-Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with mixed required/optional properties should complain if required output not provided", () => {
+Deno.test("Custom function using a Custom Type input for an unwrapped typedobject with mixed required/optional properties should complain if required output not provided", () => {
   const myType = DefineType({
     name: "custom",
     type: Schema.types.object,
@@ -246,7 +246,7 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
   };
 });
 
-Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with additionalProperties=undefined should allow for referencing additional properties", () => {
+Deno.test("Custom function using a Custom Type input for an unwrapped typedobject with additionalProperties=undefined should allow for referencing additional properties", () => {
   const myType = DefineType({
     name: "custom",
     type: Schema.types.object,
@@ -306,7 +306,7 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
   assertEqualsTypedValues(sharedInputs, result.outputs);
 });
 
-Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with additionalProperties=true should allow for referencing additional properties", () => {
+Deno.test("Custom function using a Custom Type input for an unwrapped typedobject with additionalProperties=true should allow for referencing additional properties", () => {
   const myType = DefineType({
     name: "custom",
     type: Schema.types.object,
@@ -367,7 +367,7 @@ Deno.test("Custom Function using a Custom Type input for an unwrapped typedobjec
   assertEqualsTypedValues(sharedInputs, result.outputs);
 });
 
-Deno.test("Custom Function using a Custom Type input for an unwrapped typedobject with additionalProperties=false should prevent referencing additional properties", () => {
+Deno.test("Custom function using a Custom Type input for an unwrapped typedobject with additionalProperties=false should prevent referencing additional properties", () => {
   const myType = DefineType({
     name: "custom",
     type: Schema.types.object,
