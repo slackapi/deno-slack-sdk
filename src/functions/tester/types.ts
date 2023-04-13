@@ -39,6 +39,7 @@ export type SlackFunctionTesterResponse<
   createContext: CreateFunctionContext<InputParameters, RequiredInput>;
 };
 
+// This type is overloaded to accept either a string or a SlackFunction
 export type SlackFunctionTesterSignature = {
   <
     InputParameters extends ParameterSetDefinition,
