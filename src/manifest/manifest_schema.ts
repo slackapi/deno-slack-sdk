@@ -197,7 +197,7 @@ export type ManifestWorkflowStepsSchemaLegacy = PopulatedArray<
 export type ManifestUnfurlDomainsSchema = [string, ...string[]];
 
 // ---------------------------------------------------------------------------
-// Manifest: functions
+// Manifest: custom functions
 // ---------------------------------------------------------------------------
 
 // This is typed liberally at this level but more specifically down further
