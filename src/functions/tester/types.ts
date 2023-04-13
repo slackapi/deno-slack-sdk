@@ -39,7 +39,7 @@ export type SlackFunctionTesterResponse<
   createContext: CreateFunctionContext<InputParameters, RequiredInput>;
 };
 
-export type SlackFunctionTesterType = {
+export type SlackFunctionTesterSignature = {
   <
     InputParameters extends ParameterSetDefinition,
     OutputParameters extends ParameterSetDefinition,

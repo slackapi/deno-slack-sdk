@@ -94,7 +94,7 @@ type SlackViewClosedHandlerTesterResponse<
   >;
 };
 
-type SlackViewSubmissionHandlerTesterType = {
+type SlackViewSubmissionHandlerTesterSignature = {
   <
     InputParameters extends ParameterSetDefinition,
     OutputParameters extends ParameterSetDefinition,
@@ -113,7 +113,7 @@ type SlackViewSubmissionHandlerTesterType = {
   >;
 };
 
-type SlackViewClosedHandlerTesterType = {
+type SlackViewClosedHandlerTesterSignature = {
   <
     InputParameters extends ParameterSetDefinition,
     OutputParameters extends ParameterSetDefinition,
@@ -145,79 +145,80 @@ const DEFAULT_VIEW: View = {
   app_id: "A123456",
 };
 
-const SlackViewSubmissionHandlerTester: SlackViewSubmissionHandlerTesterType = <
-  InputParameters extends ParameterSetDefinition,
-  OutputParameters extends ParameterSetDefinition,
-  RequiredInput extends PossibleParameterKeys<InputParameters>,
-  RequiredOutput extends PossibleParameterKeys<OutputParameters>,
->(
-  _func: SlackFunctionDefinition<
-    InputParameters,
-    OutputParameters,
-    RequiredInput,
-    RequiredOutput
-  >,
-) => {
-  const createContext: CreateViewSubmissionHandlerContext<
-    InputParameters,
-    RequiredInput
-  > = (
-    args,
+const SlackViewSubmissionHandlerTester:
+  SlackViewSubmissionHandlerTesterSignature = <
+    InputParameters extends ParameterSetDefinition,
+    OutputParameters extends ParameterSetDefinition,
+    RequiredInput extends PossibleParameterKeys<InputParameters>,
+    RequiredOutput extends PossibleParameterKeys<OutputParameters>,
+  >(
+    _func: SlackFunctionDefinition<
+      InputParameters,
+      OutputParameters,
+      RequiredInput,
+      RequiredOutput
+    >,
   ) => {
-    const inputs = (args.inputs || {}) as FunctionRuntimeParameters<
+    const createContext: CreateViewSubmissionHandlerContext<
       InputParameters,
       RequiredInput
-    >;
-    const DEFAULT_BODY = {
-      type: "view_submission" as const,
-      view: DEFAULT_VIEW,
-      function_data: {
-        execution_id: "123",
-        function: { callback_id: "456" },
-        inputs,
-      },
-      interactivity: {
-        interactor: {
-          secret: "shhhh",
-          id: "123",
+    > = (
+      args,
+    ) => {
+      const inputs = (args.inputs || {}) as FunctionRuntimeParameters<
+        InputParameters,
+        RequiredInput
+      >;
+      const DEFAULT_BODY = {
+        type: "view_submission" as const,
+        view: DEFAULT_VIEW,
+        function_data: {
+          execution_id: "123",
+          function: { callback_id: "456" },
+          inputs,
         },
-        interactivity_pointer: "123.asdf",
-      },
-      user: {
-        id: "123",
-        name: "asdf",
-        team_id: DEFAULT_VIEW.team_id,
-      },
-      team: {
-        id: DEFAULT_VIEW.team_id,
-        domain: "asdf",
-      },
-      enterprise: null,
-      is_enterprise_install: false,
-      api_app_id: DEFAULT_VIEW.app_id,
-      app_id: DEFAULT_VIEW.app_id,
-      token: "123",
-      response_urls: [],
-      trigger_id: "12345",
-    };
-    const token = args.token || "slack-function-test-token";
+        interactivity: {
+          interactor: {
+            secret: "shhhh",
+            id: "123",
+          },
+          interactivity_pointer: "123.asdf",
+        },
+        user: {
+          id: "123",
+          name: "asdf",
+          team_id: DEFAULT_VIEW.team_id,
+        },
+        team: {
+          id: DEFAULT_VIEW.team_id,
+          domain: "asdf",
+        },
+        enterprise: null,
+        is_enterprise_install: false,
+        api_app_id: DEFAULT_VIEW.app_id,
+        app_id: DEFAULT_VIEW.app_id,
+        token: "123",
+        response_urls: [],
+        trigger_id: "12345",
+      };
+      const token = args.token || "slack-function-test-token";
 
-    return {
-      inputs,
-      env: args.env || {},
-      token,
-      client: SlackAPI(token),
-      view: args.view || DEFAULT_VIEW,
-      body: args.body || DEFAULT_BODY,
-      team_id: DEFAULT_VIEW.team_id,
-      enterprise_id: "",
+      return {
+        inputs,
+        env: args.env || {},
+        token,
+        client: SlackAPI(token),
+        view: args.view || DEFAULT_VIEW,
+        body: args.body || DEFAULT_BODY,
+        team_id: DEFAULT_VIEW.team_id,
+        enterprise_id: "",
+      };
     };
+
+    return { createContext };
   };
 
-  return { createContext };
-};
-
-const SlackViewClosedHandlerTester: SlackViewClosedHandlerTesterType = <
+const SlackViewClosedHandlerTester: SlackViewClosedHandlerTesterSignature = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,

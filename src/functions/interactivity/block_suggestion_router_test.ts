@@ -51,7 +51,7 @@ type SlackSuggestionHandlerTesterResponse<
   createContext: CreateSuggestionHandlerContext<InputParameters, RequiredInput>;
 };
 
-type SlackSuggestionHandlerTesterType = {
+type SlackSuggestionHandlerTesterSignature = {
   <
     InputParameters extends ParameterSetDefinition,
     OutputParameters extends ParameterSetDefinition,
@@ -103,7 +103,7 @@ const generateSuggestion = (inputs: any) => ({
   api_app_id: "123",
 });
 
-const SlackSuggestionHandlerTester: SlackSuggestionHandlerTesterType = <
+const SlackSuggestionHandlerTester: SlackSuggestionHandlerTesterSignature = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,

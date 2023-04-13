@@ -50,7 +50,7 @@ type SlackActionHandlerTesterResponse<
   createContext: CreateActionHandlerContext<InputParameters, RequiredInput>;
 };
 
-type SlackActionHandlerTesterType = {
+type SlackActionHandlerTesterSignature = {
   <
     InputParameters extends ParameterSetDefinition,
     OutputParameters extends ParameterSetDefinition,
@@ -78,7 +78,7 @@ const DEFAULT_ACTION: BlockAction = {
   text: { type: "plain_text", text: "duncare", emoji: false },
   style: "danger",
 };
-const SlackActionHandlerTester: SlackActionHandlerTesterType = <
+const SlackActionHandlerTester: SlackActionHandlerTesterSignature = <
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
