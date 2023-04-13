@@ -13,7 +13,7 @@ import { assertEqualsTypedValues } from "../../../../src/test_utils.ts";
 import { InternalSlackTypes } from "../../../../src/schema/slack/types/custom/mod.ts";
 
 /**
- * Custom function handler tests, exercising Custom Type inputs/outputs, including Slack/internal custom types
+ * Custom function handler tests, exercising Custom Type inputs/outputs, including Slack/internal custom Slack types
  */
 
 Deno.test("Custom function using Slack's FormInput internal Custom Type input should provide correct typedobject typing in a function handler context", () => {
