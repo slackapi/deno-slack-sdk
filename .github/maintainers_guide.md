@@ -84,6 +84,32 @@ Currently we apply all recommended rules.
 
 The list of format options is defined in the `deno.jsonc` file. They closely resemble the default values.
 
+### Update latest SDK dependencies
+
+Check if the Deno related [slack samples](slack-samples) reference the latest versions of their dependencies.
+
+This usually involves updating multiple repositories ([dependency graph](#dependency-graph)), so take a deep breath, relax, and take your time as you run through the following steps, working backwards from the template dependencies up to the [slack samples](slack-samples) themselves:
+
+* There are two **main developer-facing Deno SDK dependencies** that samples rely on:
+  [deno-slack-sdk][deno-slack-sdk] and [deno-slack-api][deno-slack-api]. Do either of these repos require new releases? Check:
+  * [deno-slack-api][deno-slack-api]: Did any commits land in this repository since its last released tag? If so, a new [deno-slack-api][deno-slack-api] release is required. Follow [the deno-slack-api releasing steps](https://github.com/slackapi/deno-slack-api/blob/main/.github/maintainers_guide.md#releasing).
+  * If a new release for [deno-slack-api][deno-slack-api] is required, after releasing new version of [deno-slack-api][deno-slack-api], a dependency change is required for [deno-slack-sdk][deno-slack-sdk]:
+    * [deno-slack-sdk's `src/deps.ts`](https://github.com/slackapi/deno-slack-sdk/blob/main/src/deps.ts) needs
+      an update to point to this latest [deno-slack-api][deno-slack-api] version. See example PR [here](https://github.com/slackapi/deno-slack-sdk/pull/118).
+  * [deno-slack-sdk][deno-slack-sdk]: Did any commits land in this repository since its last released tag? If so, a new [deno-slack-sdk][deno-slack-sdk] release is required. Follow [the deno-slack-sdk releasing steps](#releasing).
+
+* There are also **two additional Deno SDK dependencies the Slack CLI relies on** we should ensure are up to date. These are listed in the templates' `slack.json` file. Typically, this file references the latest released version of [deno-slack-hooks](https://github.com/slackapi/deno-slack-hooks). However, [deno-slack-hooks](https://github.com/slackapi/deno-slack-hooks) itself relies on one other project: [deno-slack-runtime][deno-slack-hooks]. As such, this exercise involves ensuring the latest commits in these two dependent repositories are up-to-date and released.
+  Let's start from the end of the chain and work our way backwards:
+  * Let's begin with [deno-slack-runtime][deno-slack-hooks]:
+    * Did any new commits land in this repo since its last tag? If so, a new release is required. See [the deno-slack-runtime releasing steps](https://github.com/slackapi/deno-slack-runtime/blob/main/.github/maintainers_guide.md#releasing).
+    * Does [deno-slack-hooks' `src/libraries.ts`](https://github.com/slackapi/deno-slack-hooks/blob/main/src/libraries.ts)
+      `VERSIONS` map reference the latest release of [deno-slack-runtime][deno-slack-hooks]?
+      If not, then [deno-slack-hooks' `src/libraries.ts`](https://github.com/slackapi/deno-slack-hooks/blob/main/src/libraries.ts) needs an update to point to this latest release (_Note: We will update [deno-slack-hooks](https://github.com/slackapi/deno-slack-hooks) all at once in a few steps_).
+  * Half-way there! Now let's look at [deno-slack-hooks](https://github.com/slackapi/deno-slack-hooks):
+    * Does [deno-slack-hooks' `src/libraries.ts`](https://github.com/slackapi/deno-slack-hooks/blob/main/src/libraries.ts)
+      `VERSIONS` map reference the latest release of [deno-slack-runtime][deno-slack-hooks]? If not, update those and commit to `main`!
+    * Did any new commits land in this repo since its last tag? If so, a new release is required. See the [deno-slack-hooks releasing steps](https://github.com/slackapi/deno-slack-hooks/blob/main/.github/maintainers_guide.md#releasing) for details on how to do this.
+
 ### Releasing
 
 Releases for this library are automatically generated off of git tags. Before creating a new release, ensure that everything on the `main` branch since the last tag is in a releasable state! At a minimum, [run the tests](#testing).
@@ -159,15 +185,21 @@ flowchart TD
 
 | Links |
 | :----: |
-|[samples](https://github.com/slack-samples/deno-hello-world)|
-|[deno-slack-sdk](https://github.com/slackapi/deno-slack-sdk)|
-|[deno-slack-api](https://github.com/slackapi/deno-slack-api)|
-|[deno-slack-runtime](https://github.com/slackapi/deno-slack-runtime)|
-|[deno-slack-hooks](https://github.com/slackapi/deno-slack-hooks)|
-|[deno-slack-protocols](https://github.com/slackapi/deno-slack-protocols)|
+|[samples][slack-samples]|
+|[deno-slack-sdk][deno-slack-sdk]|
+|[deno-slack-api][deno-slack-api]|
+|[deno-slack-runtime][deno-slack-runtime]|
+|[deno-slack-hooks][deno-slack-hooks]|
+|[deno-slack-protocols][deno-slack-protocols]|
   
 ## Everything else
 
 When in doubt, find the other maintainers and ask.
 
 [semver]: http://semver.org/
+[slack-samples]: https://github.com/slack-samples?q=&type=public&language=typescript&sort=
+[deno-slack-sdk]: https://github.com/slackapi/deno-slack-sdk
+[deno-slack-api]: https://github.com/slackapi/deno-slack-api
+[deno-slack-runtime]: https://github.com/slackapi/deno-slack-runtime
+[deno-slack-hooks]: https://github.com/slackapi/deno-slack-hooks
+[deno-slack-protocols]: https://github.com/slackapi/deno-slack-protocols
