@@ -86,9 +86,7 @@ The list of format options is defined in the `deno.jsonc` file. They closely res
 
 ### Update latest SDK dependencies
 
-Check if the Deno related [slack samples](slack-samples) reference the latest versions of their dependencies.
-
-This usually involves updating multiple repositories ([dependency graph](#dependency-graph)), so take a deep breath, relax, and take your time as you run through the following steps, working backwards from the template dependencies up to the [slack samples](slack-samples) themselves:
+The [dependency graph](#dependency-graph) is a useful tool to understand the dependencies.
 
 * There are two **main developer-facing Deno SDK dependencies** that samples rely on:
   [deno-slack-sdk][deno-slack-sdk] and [deno-slack-api][deno-slack-api]. Do either of these repos require new releases? Check:
