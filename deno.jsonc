@@ -3,7 +3,7 @@
   "fmt": {
     "files": {
       "include": ["src", "tests", "docs", "README.md"],
-      "exclude": ["src/schema/slack/functions/_scripts/functions.json", "**/*.md"]
+      "exclude": ["src/schema/slack/functions/_scripts/functions.json"]
     },
     "options": {
       "semiColons": true,
