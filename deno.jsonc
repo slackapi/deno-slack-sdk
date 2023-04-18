@@ -2,7 +2,7 @@
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "fmt": {
     "files": {
-      "include": ["src", "tests"],
+      "include": ["src", "tests", "docs"],
       "exclude": ["src/schema/slack/functions/_scripts/functions.json", "**/*.md"]
     },
     "options": {

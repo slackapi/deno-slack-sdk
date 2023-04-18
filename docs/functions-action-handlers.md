@@ -2,15 +2,17 @@
 
 Your application's [functions][functions] can do a wide variety of interesting
 things: post messages, create channels, or anything available to developers via
-the [Slack API][api]. One of the more compelling features available to app developers
-is the ability to use [Block Kit][block-kit] to add richness and depth to messages
-in Slack. Even better, [Block Kit][block-kit] supports a variety of [interactive components][interactivity]!
-This document explores the APIs available to app developers building Run-On-Slack applications
-to leverage these [interactive components][interactivity] and how applications can respond to user interactions
-with these [interactive components][interactivity].
+the [Slack API][api]. One of the more compelling features available to app
+developers is the ability to use [Block Kit][block-kit] to add richness and
+depth to messages in Slack. Even better, [Block Kit][block-kit] supports a
+variety of [interactive components][interactivity]! This document explores the
+APIs available to app developers building Run-On-Slack applications to leverage
+these [interactive components][interactivity] and how applications can respond
+to user interactions with these [interactive components][interactivity].
 
-If you're already familiar with the main concepts underpinning Block Kit Action Handlers,
-then you may want to skip ahead to the [`addBlockActionsHandler()` method API Reference](#api-reference).
+If you're already familiar with the main concepts underpinning Block Kit Action
+Handlers, then you may want to skip ahead to the
+[`addBlockActionsHandler()` method API Reference](#api-reference).
 
 - [Block kit action handlers](#block-kit-action-handlers)
   - [Requirements](#requirements)
@@ -23,10 +25,11 @@ then you may want to skip ahead to the [`addBlockActionsHandler()` method API Re
 
 ### Requirements
 
-Your app needs to have an existing [function][functions] defined, implemented and working
-before you can add interactivity handlers like Block Kit Action Handlers to them.
-Make sure you have followed our [functions documentation][functions] and have a
-function in your app ready that we can expand with a Block Kit Action Handler.
+Your app needs to have an existing [function][functions] defined, implemented
+and working before you can add interactivity handlers like Block Kit Action
+Handlers to them. Make sure you have followed our
+[functions documentation][functions] and have a function in your app ready that
+we can expand with a Block Kit Action Handler.
 
 As part of exploring how Block Kit Action Handlers work, we'll walk through an
 approval flow example. A user would trigger our app's function, which would post
@@ -34,8 +37,10 @@ a message with two buttons: Approve and Deny. Once someone clicks either button,
 our app will handle these button interactions - these Block Kit Actions - and
 update the original message with either an "Approved!" or "Denied!" text.
 
-For the purposes of walking through this approval flow example, let us assume the
-following [function][functions] definition (that we will store in a file called `definition.ts` under the `functions/approval/` subdirectory inside your app):
+For the purposes of walking through this approval flow example, let us assume
+the following [function][functions] definition (that we will store in a file
+called `definition.ts` under the `functions/approval/` subdirectory inside your
+app):
 
 ```typescript
 import { DefineFunction, Schema } from "deno-slack-sdk/mod.ts";
@@ -84,11 +89,11 @@ export const ApprovalFunction = DefineFunction({
 ### Posting a message with block kit elements
 
 First, we need a message that has some [interactive components][interactivity]
-from [Block Kit][block-kit] included! We can modify one of our app's [functions][functions]
-to post a message that includes some interactive components. Here's an example function
-(which we will assume exists in a `mod.ts` file under the `functions/approval/`
-subdirectory in your app) that posts a message with two buttons: an approval button,
-and a deny button:
+from [Block Kit][block-kit] included! We can modify one of our app's
+[functions][functions] to post a message that includes some interactive
+components. Here's an example function (which we will assume exists in a
+`mod.ts` file under the `functions/approval/` subdirectory in your app) that
+posts a message with two buttons: an approval button, and a deny button:
 
 ```typescript
 import { SlackFunction } from "deno-slack-sdk/mod.ts";
@@ -96,7 +101,7 @@ import { SlackFunction } from "deno-slack-sdk/mod.ts";
 import { ApprovalFunction } from "./definition.ts";
 
 export default SlackFunction(ApprovalFunction, async ({ inputs, client }) => {
-  console.log('Incoming approval!');
+  console.log("Incoming approval!");
 
   await client.chat.postMessage({
     channel: inputs.approval_channel_id,
@@ -111,8 +116,7 @@ export default SlackFunction(ApprovalFunction, async ({ inputs, client }) => {
         },
         action_id: "approve_request",
         style: "primary",
-      },
-      {
+      }, {
         type: "button",
         text: {
           type: "plain_text",
@@ -132,30 +136,30 @@ export default SlackFunction(ApprovalFunction, async ({ inputs, client }) => {
 ```
 
 The key bit of information we need to remember before moving on to adding an
-action handler are the `action_id` and `block_id` properties defined in the `blocks`
-payload. Using these IDs, we will be able to differentiate between the different
-button components that users interacted with in this message.
+action handler are the `action_id` and `block_id` properties defined in the
+`blocks` payload. Using these IDs, we will be able to differentiate between the
+different button components that users interacted with in this message.
 
 ### Adding block action handlers
 
 The [Deno Slack SDK][sdk] - which comes bundled in your generated Run-on-Slack
-application - provides a means for defining a handler to execute every time a user
-interacts with an interactive Block Kit element created by your function.
+application - provides a means for defining a handler to execute every time a
+user interacts with an interactive Block Kit element created by your function.
 
 Continuing with our above example, we can now define a handler that will listen
 for actions on one of the interactive components we attached to the message our
 main function posted: either the approve button being clicked or the deny button
-being clicked. The code to add a Block Kit action handler is "chained" off of your
-top-level function, and would look like this:
+being clicked. The code to add a Block Kit action handler is "chained" off of
+your top-level function, and would look like this:
 
 ```typescript
 export default SlackFunction(ApprovalFunction, async ({ inputs, client }) => {
   // ... the rest of your ApprovalFunction logic here ...
 }).addBlockActionsHandler(
-  ['approve_request', 'deny_request'], // The first argument to addBlockActionsHandler can accept an array of action_id strings, among many other formats!
+  ["approve_request", "deny_request"], // The first argument to addBlockActionsHandler can accept an array of action_id strings, among many other formats!
   // Check the API reference at the end of this document for the full list of supported options
   async ({ action, body, client }) => { // The second argument is the handler function itself
-    console.log('Incoming action handler invocation', action);
+    console.log("Incoming action handler invocation", action);
 
     const outputs = {
       reviewer: body.user.id,
@@ -189,12 +193,12 @@ export default SlackFunction(ApprovalFunction, async ({ inputs, client }) => {
       function_execution_id: body.function_data.execution_id,
       outputs,
     });
-  }
+  },
 );
 ```
 
-Now when you run your app and trigger your function, you have the basics in place
-to provide interactivity between your application and users in Slack!
+Now when you run your app and trigger your function, you have the basics in
+place to provide interactivity between your application and users in Slack!
 
 ### API reference
 
@@ -205,21 +209,23 @@ SlackFunction({ ... }).addBlockActionsHandler({ block_id: "mah-buttons", action_
 ```
 
 `addHandler` registers a block action handler based on a `constraint` argument.
-If any incoming actions match the `constraint`, then the specified `handler` will
-be invoked with the action. This allows for authoring focussed, single-purpose
-action handlers and provides a concise but flexible API for registering handlers
-to specific actions.
+If any incoming actions match the `constraint`, then the specified `handler`
+will be invoked with the action. This allows for authoring focussed,
+single-purpose action handlers and provides a concise but flexible API for
+registering handlers to specific actions.
 
 `constraint` is of type [`BlockActionConstraint`][constraint], which itself can
-be either a [`BlockActionConstraintField`](#blockactionconstraintfield) or a [`BlockActionConstraintObject`](#blockactionconstraintobject).
+be either a [`BlockActionConstraintField`](#blockactionconstraintfield) or a
+[`BlockActionConstraintObject`](#blockactionconstraintobject).
 
 If a [`BlockActionConstraintField`](#blockactionconstraintfield) is used as the
 value for `constraint`, then this will be matched against the incoming action's
 `action_id` property.
 
 [`BlockActionConstraintObject`](#blockactionconstraintobject) is a more complex
-object used to match against actions. It contains nested `block_id` and `action_id`
-properties - both optional - that are used to match against the incoming action.
+object used to match against actions. It contains nested `block_id` and
+`action_id` properties - both optional - that are used to match against the
+incoming action.
 
 ##### `BlockActionConstraintField`
 
@@ -228,7 +234,8 @@ type BlockActionConstraintField = string | string[] | RegExp;
 ```
 
 - when provided as a `string`, it must match the field exactly.
-- when provided as an array of `string`s, it must match one of the array values exactly.
+- when provided as an array of `string`s, it must match one of the array values
+  exactly.
 - when provided as a `RegExp`, the regular expression must match.
 
 ###### `BlockActionConstraintObject`
@@ -240,12 +247,14 @@ type BlockActionConstraintObject = {
 };
 ```
 
-This object can contain two properties, both optional: `action_id` and/or `block_id`.
-The type of each property is [`BlockActionConstraintField`](#blockactionconstraintfield).
+This object can contain two properties, both optional: `action_id` and/or
+`block_id`. The type of each property is
+[`BlockActionConstraintField`](#blockactionconstraintfield).
 
-If both `action_id` and `block_id` properties exist on the `constraint`, then both
-`action_id` and `block_id` properties _must match_ any incoming action. If only
-one of these properties is provided, then only the provided property must match.
+If both `action_id` and `block_id` properties exist on the `constraint`, then
+both `action_id` and `block_id` properties _must match_ any incoming action. If
+only one of these properties is provided, then only the provided property must
+match.
 
 [functions]: ./functions.md
 [api]: https://api.slack.com/methods

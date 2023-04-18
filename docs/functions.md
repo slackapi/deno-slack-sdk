@@ -3,14 +3,15 @@
 Functions are the core of your Slack app: they accept one or more input
 parameters, execute some logic and return one or more output parameters.
 
-Functions can optionally define different kinds of Interactivity Handlers. If your
-function creates messages or opens views, then it may need to define one or more
-interactivity handlers to respond to user interactions with these interactive components.
-Run-on-Slack applications support the following interactivity handlers, follow the links
-to get more information about how each of them work:
+Functions can optionally define different kinds of Interactivity Handlers. If
+your function creates messages or opens views, then it may need to define one or
+more interactivity handlers to respond to user interactions with these
+interactive components. Run-on-Slack applications support the following
+interactivity handlers, follow the links to get more information about how each
+of them work:
 
-- [Block Kit Action Handlers][action-handlers]: Handle events from interactive [Block Kit][block-kit]
-  components that you can use in messages like
+- [Block Kit Action Handlers][action-handlers]: Handle events from interactive
+  [Block Kit][block-kit] components that you can use in messages like
   [Buttons, Menus and Date/Time Pickers](https://api.slack.com/block-kit/interactivity)
 - [View Handlers][view-handlers]: Handle events triggered from [Modals][modals],
   which are composed of [Views][views].
@@ -84,9 +85,9 @@ particular, the required properties of the object are:
 Now that you have defined your function's input and output parameters, it's time
 to define the body of your function.
 
-First, create a new file at the location set on the `source_file` parameter of your
-function definition. Next, let's add code for your function! You will want to
-`export default` an instance of `SlackFunction`, like so:
+First, create a new file at the location set on the `source_file` parameter of
+your function definition. Next, let's add code for your function! You will want
+to `export default` an instance of `SlackFunction`, like so:
 
 ```typescript
 import { SlackFunction } from "deno-slack-sdk/mod.ts";
@@ -95,7 +96,6 @@ export default SlackFunction(
   // Pass along the function definition you created earlier using `DefineFunction`
   DinoFunction,
   ({ inputs }) => { // Provide any context properties, like `inputs`, `env`, or `token`
-
     // Implement your function
     const { name } = inputs;
     const dinoname = `${name}asaurus`;
@@ -122,10 +122,13 @@ that may be useful to leverage during your function's execution:
 - `inputs`: an object containing the input parameters you defined as part of
   your function definition. In the example above, the `name` input parameter is
   available on the `inputs` property of our function handler context.
-- `client`: An API client ready for use in your function. An instance of the `deno-slack-api` library.
+- `client`: An API client ready for use in your function. An instance of the
+  `deno-slack-api` library.
 - `token`: your application's access token.
 - `team_id`: the encoded team (a.k.a. Slack workspace) ID, i.e. T12345.
-- `enterprise_id`: the encoded enterprise ID, i.e. E12345. If the Slack workspace the function executes in is not a part of an enterprise grid, then this value will be the empty string (`""`).
+- `enterprise_id`: the encoded enterprise ID, i.e. E12345. If the Slack
+  workspace the function executes in is not a part of an enterprise grid, then
+  this value will be the empty string (`""`).
 - `event`: an object containing the full incoming event details.
 
 ##### Custom function return object
