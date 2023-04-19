@@ -42,8 +42,8 @@ parameter while defining the [`Manifest`][manifest].
 
 Note: All Custom Types **must** be registered to the [Manifest][manifest] in
 order for them to be used, but any types referenced by existing
-[`functions`][functions], [`workflows`][workflows], [`datastores`][datastores], or other types will be
-registered automatically.
+[`functions`][functions], [`workflows`][workflows], [`datastores`][datastores],
+or other types will be registered automatically.
 
 ```ts
 Manifest({
