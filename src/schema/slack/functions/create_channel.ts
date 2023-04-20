@@ -15,8 +15,12 @@ export default DefineFunction({
         description: "Enter a channel name",
         title: "Channel name",
       },
-      // ignore any additions of a `user_ids` parameter for now as there is debate on the naming.
-      // we hope to settle on `manager_ids` in an upcoming release.
+      manager_ids: {
+        type: SchemaTypes.array,
+        description: "Search all people",
+        title: "Select Channel Manager(s)",
+        items: { type: SlackTypes.user_id },
+      },
       is_private: {
         type: SchemaTypes.boolean,
         description: "Make this channel private",
@@ -32,9 +36,13 @@ export default DefineFunction({
         description: "Channel name",
         title: "Channel name",
       },
-      // ignore any additions of a `user_ids` parameter for now as there is debate on the naming.
-      // we hope to settle on `manager_ids` in an upcoming release.
+      manager_ids: {
+        type: SchemaTypes.array,
+        description: "Person(s) who were made channel manager",
+        title: "Person(s) who were made channel manager",
+        items: { type: SlackTypes.user_id },
+      },
     },
-    required: ["channel_id"],
+    required: ["channel_id", "manager_ids"],
   },
 });
