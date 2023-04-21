@@ -43,6 +43,6 @@ export default DefineFunction({
         items: { type: SlackTypes.user_id },
       },
     },
-    required: ["channel_id", "manager_ids"],
+    required: ["channel_id"],
   },
 });

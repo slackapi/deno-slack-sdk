@@ -50,7 +50,7 @@ Deno.test("CreateChannel generates valid FunctionManifest", () => {
           items: { type: SlackTypes.user_id },
         },
       },
-      required: ["channel_id", "manager_ids"],
+      required: ["channel_id"],
     },
   };
   const actual = CreateChannel.export();
