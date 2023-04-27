@@ -1,0 +1,45 @@
+# This workflow runs a `deno check` for npm against sample apps
+name: Deno check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  samples:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sample:
+          - slack-samples/deno-issue-submission
+          - slack-samples/deno-starter-template
+          - slack-samples/deno-blank-template
+          - slack-samples/deno-message-translator
+          - slack-samples/deno-request-time-off
+          - slack-samples/deno-simple-survey
+
+    steps:
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Checkout the sdk
+        uses: actions/checkout@v3
+        with:
+          path: ./deno-slack-sdk
+      - name: Checkout the ${{ matrix.sample }} sample
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ matrix.sample }}
+          path: ./sample
+
+      - name: Replace https://deno.land/x/deno_slack_sdk@x.x.x/ with ../deno-slack-sdk/src/ in import_map.json
+        working-directory: ./sample
+        run: sed -r -i 's/https:\/\/deno\.land\/x\/deno_slack_sdk@[0-9]+\.[0-9]+\.[0-9]+\//\.\.\/deno-slack-sdk\/src\//' import_map.json
+
+      - name: Deno check **/*.ts
+        working-directory: ./sample
+        run: find . -type f -regex ".*\.ts" | xargs deno check -r --all
