@@ -145,6 +145,7 @@ interface NumberParameterDefinition extends BaseParameterDefinition<number> {
 interface OAuth2ParameterDefinition extends BaseParameterDefinition<string> {
   type: typeof SlackPrimitiveTypes.oauth2;
   oauth2_provider_key: string;
+  require_end_user_auth: boolean;
 }
 
 type EnumChoice<T> = {

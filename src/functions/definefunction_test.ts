@@ -193,3 +193,32 @@ Deno.test("DefineFunction using an OAuth2 property requests a provider key", () 
     OAuth2Function.export().input_parameters.properties,
   );
 });
+
+Deno.test("DefineFunction using an OAuth2 property allows require_end_user_auth", () => {
+  const OAuth2Function = DefineFunction({
+    callback_id: "oauth",
+    title: "OAuth Function",
+    source_file: "functions/oauth.ts",
+    input_parameters: {
+      properties: {
+        googleAccessTokenId: {
+          type: Schema.slack.types.oauth2,
+          oauth2_provider_key: "test",
+          require_end_user_auth: true,
+        },
+      },
+      required: [],
+    },
+  });
+
+  assertEquals(
+    {
+      googleAccessTokenId: {
+        oauth2_provider_key: "test",
+        type: Schema.slack.types.oauth2,
+        require_end_user_auth: true,
+      },
+    },
+    OAuth2Function.export().input_parameters.properties,
+  );
+});
