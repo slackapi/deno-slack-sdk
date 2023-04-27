@@ -10,23 +10,14 @@ await build({
   outDir: "./npm",
   // ensures that the emitted package is compatible with node v14 later
   compilerOptions: {
+    lib: ["es2022.error"], // fix ErrorOptions not exported
     target: "ES2020",
   },
   shims: {
     // see JS docs for overview and more options
     deno: true,
-    // custom shims
-    custom: [{
-      package: {
-        name: "node-fetch",
-        // Please see: https://www.npmjs.com/package/node-fetch-commonjs
-        version: "2.6.7",
-      },
-      globalNames: [{
-        name: "fetch",
-        exportName: "default",
-      }],
-    }],
+    // Shim fetch, File, FormData, Headers, Request, and Response 
+    undici: true,
   },
   package: {
     // package.json properties
