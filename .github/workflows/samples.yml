@@ -1,4 +1,4 @@
-# This workflow runs a `deno check` for npm against sample apps
+# This workflow runs a `deno check` against slack sample apps
 name: Deno check
 
 on:
