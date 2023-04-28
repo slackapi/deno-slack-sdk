@@ -28,4 +28,4 @@ jobs:
           deno-version: v1.x
 
       - name: Run build_npm.ts
-        run: deno run -A build_npm.ts
+        run: deno run -A scripts/build_npm.ts

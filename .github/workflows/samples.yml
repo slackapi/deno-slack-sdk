@@ -36,10 +36,13 @@ jobs:
           repository: ${{ matrix.sample }}
           path: ./sample
 
-      - name: Replace https://deno.land/x/deno_slack_sdk@x.x.x/ with ../deno-slack-sdk/src/ in import_map.json
-        working-directory: ./sample
-        run: sed -r -i 's/https:\/\/deno\.land\/x\/deno_slack_sdk@[0-9]+\.[0-9]+\.[0-9]+\//\.\.\/deno-slack-sdk\/src\//' import_map.json
-
+      - name: Set imports.deno-slack-sdk/ to ../deno-slack-sdk/src/ in import_map.json
+        run: > 
+          deno run
+          --allow-read --allow-write 
+          deno-slack-sdk/scripts/import_map/update.ts 
+          --import-map "./sample/import_map.json"
+          --sdk "../deno-slack-sdk/src/"
       - name: Deno check **/*.ts
         working-directory: ./sample
         run: find . -type f -regex ".*\.ts" | xargs deno check -r --all
