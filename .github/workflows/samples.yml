@@ -1,5 +1,5 @@
 # This workflow runs a `deno check` against slack sample apps
-name: Deno check
+name: Samples Integration Type-checking
 
 on:
   push:
