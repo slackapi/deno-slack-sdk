@@ -16,7 +16,7 @@ await build({
   shims: {
     // see JS docs for overview and more options
     deno: true,
-    // Shim fetch, File, FormData, Headers, Request, and Response 
+    // Shim fetch, File, FormData, Headers, Request, and Response
     undici: true,
   },
   package: {

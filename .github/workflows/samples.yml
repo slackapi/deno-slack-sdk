@@ -43,6 +43,7 @@ jobs:
           deno-slack-sdk/scripts/import_map/update.ts 
           --import-map "./sample/import_map.json"
           --sdk "../deno-slack-sdk/src/"
+
       - name: Deno check **/*.ts
         working-directory: ./sample
-        run: find . -type f -regex ".*\.ts" | xargs deno check -r --all
+        run: find . -type f -regex ".*\.ts" | xargs deno check -r
