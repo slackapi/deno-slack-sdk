@@ -1,10 +1,10 @@
-import { parse } from "https://deno.land/std/flags/mod.ts";
+import { parse } from "https://deno.land/std@0.185.0/flags/mod.ts";
 
 const flags = parse(Deno.args, {
   string: ["import-map", "sdk"],
   default: {
     "import-map": `${Deno.cwd()}/import_map.json`,
-    "sdk": "../deno-slack-api/src/",
+    "sdk": "../deno-slack-sdk/src/",
   },
 });
 
