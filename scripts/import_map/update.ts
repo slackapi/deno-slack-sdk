@@ -1,4 +1,4 @@
-import { parse } from "https://deno.land/std@0.185.0/flags/mod.ts";
+import { parse } from "../dev_deps.ts";
 
 const flags = parse(Deno.args, {
   string: ["import-map", "sdk"],
@@ -10,4 +10,5 @@ const flags = parse(Deno.args, {
 
 const importMap = JSON.parse(await Deno.readTextFile(flags["import-map"]));
 importMap["imports"]["deno-slack-sdk/"] = flags.sdk;
+
 await Deno.writeTextFile(flags["import-map"], JSON.stringify(importMap));
