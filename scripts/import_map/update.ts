@@ -1,4 +1,4 @@
-import { parse } from "../dev_deps.ts";
+import { parse } from "https://deno.land/std@0.185.0/flags/mod.ts";
 
 const flags = parse(Deno.args, {
   string: ["import-map", "sdk"],
