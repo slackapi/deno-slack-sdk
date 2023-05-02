@@ -146,7 +146,7 @@ interface OAuth2ParameterDefinition extends BaseParameterDefinition<string> {
   type: typeof SlackPrimitiveTypes.oauth2;
   /** Specifies the oauth2 provider this input is associated to */
   oauth2_provider_key: string;
-  /** Dictates whether only the auth of the user running the workflow should be used */
+  /** Dictates whether only the auth of the user running the workflow should be used. Defaults to `false`. */
   require_end_user_auth?: boolean;
 }
 
