@@ -147,7 +147,7 @@ interface OAuth2ParameterDefinition extends BaseParameterDefinition<string> {
   /** Specifies the oauth2 provider this input is associated to */
   oauth2_provider_key: string;
   /** Dictates whether only the auth of the user running the workflow should be used */
-  require_end_user_auth: boolean;
+  require_end_user_auth?: boolean;
 }
 
 type EnumChoice<T> = {
