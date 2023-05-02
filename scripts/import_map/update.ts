@@ -8,7 +8,12 @@ const flags = parse(Deno.args, {
   },
 });
 
-const importMap = JSON.parse(await Deno.readTextFile(flags["import-map"]));
+const importMapJsonIn = await Deno.readTextFile(flags["import-map"]);
+console.log("`import_map.json` in content:", importMapJsonIn);
+
+const importMap = JSON.parse(importMapJsonIn);
 importMap["imports"]["deno-slack-sdk/"] = flags.sdk;
 
-await Deno.writeTextFile(flags["import-map"], JSON.stringify(importMap));
+const importMapJsonOut = JSON.stringify(importMap);
+console.log("`import_map.json` out content:", importMapJsonOut);
+await Deno.writeTextFile(flags["import-map"], importMapJsonOut);
