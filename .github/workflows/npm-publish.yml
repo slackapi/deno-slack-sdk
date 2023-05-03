@@ -34,7 +34,7 @@ jobs:
         run: echo ::set-output name=TAG::${GITHUB_REF#refs/*/}
         
       - name: Run build_npm.ts
-        run: deno run -A build_npm.ts ${{steps.get_tag_name.outputs.TAG}}
+        run: deno run -A scripts/build_npm.ts ${{steps.get_tag_name.outputs.TAG}}
         
       - name: Publish to NPM    
         run: cd npm && npm publish --access=public
