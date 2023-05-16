@@ -1,10 +1,10 @@
 import { assertEquals, assertStrictEquals } from "../dev_deps.ts";
-import { ConnectorDefinition } from "./mod.ts";
+import { ConnectorFunctionDefinition } from "./mod.ts";
 
 const emptyParameterObject = Object.freeze({ required: [], properties: {} });
 
 Deno.test("ConnectorDefinition sets appropriate defaults", () => {
-  const Func = new ConnectorDefinition({
+  const Func = new ConnectorFunctionDefinition({
     callback_id: "my_connector",
     title: "My Connector",
   });
