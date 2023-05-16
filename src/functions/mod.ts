@@ -107,7 +107,7 @@ export class SlackFunctionDefinition<
   }
 }
 
-export class ConnectorDefinition<
+export class ConnectorFunctionDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
