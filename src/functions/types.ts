@@ -322,13 +322,13 @@ export type SlackFunctionDefinitionArgs<
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > =
-  & { source_file: string }
   & FunctionDefinitionArgs<
     InputParameters,
     OutputParameters,
     RequiredInputs,
     RequiredOutputs
-  >;
+  >
+  & { source_file: string };
 
 export type FunctionDefinitionArgs<
   InputParameters extends ParameterSetDefinition,
