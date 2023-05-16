@@ -1,9 +1,15 @@
-import { ManifestFunctionSchema } from "../manifest/manifest_schema.ts";
+import {
+  ManifestFunctionSchema,
+  ManifestFunctionType,
+} from "../manifest/manifest_schema.ts";
 import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../parameters/types.ts";
-import { FunctionDefinitionArgs } from "./types.ts";
+import {
+  FunctionDefinitionArgs,
+  SlackFunctionDefinitionArgs,
+} from "./types.ts";
 import { SlackManifest } from "../manifest/mod.ts";
 
 /**
@@ -17,7 +23,7 @@ export const DefineFunction = <
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 >(
-  definition: FunctionDefinitionArgs<
+  definition: SlackFunctionDefinitionArgs<
     InputParameters,
     OutputParameters,
     RequiredInput,
@@ -27,13 +33,14 @@ export const DefineFunction = <
   return new SlackFunctionDefinition(definition);
 };
 
-export class SlackFunctionDefinition<
+export abstract class BaseFunctionDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 > {
   public id: string;
+  abstract type: ManifestFunctionType;
 
   constructor(
     public definition: FunctionDefinitionArgs<
@@ -54,11 +61,73 @@ export class SlackFunctionDefinition<
     manifest.registerTypes(outputParams?.properties ?? {});
   }
 
+  abstract export(): ManifestFunctionSchema;
+}
+
+export class SlackFunctionDefinition<
+  InputParameters extends ParameterSetDefinition,
+  OutputParameters extends ParameterSetDefinition,
+  RequiredInput extends PossibleParameterKeys<InputParameters>,
+  RequiredOutput extends PossibleParameterKeys<OutputParameters>,
+> extends BaseFunctionDefinition<
+  InputParameters,
+  OutputParameters,
+  RequiredInput,
+  RequiredOutput
+> {
+  type: ManifestFunctionType = "app";
+  constructor(
+    public definition: SlackFunctionDefinitionArgs<
+      InputParameters,
+      OutputParameters,
+      RequiredInput,
+      RequiredOutput
+    >,
+  ) {
+    super(definition);
+  }
+
   export(): ManifestFunctionSchema {
     return {
       title: this.definition.title,
       description: this.definition.description,
       source_file: this.definition.source_file,
+      input_parameters: this.definition.input_parameters ??
+        { properties: {}, required: [] },
+      output_parameters: this.definition.output_parameters ??
+        { properties: {}, required: [] },
+    };
+  }
+}
+
+export class ConnectorDefinition<
+  InputParameters extends ParameterSetDefinition,
+  OutputParameters extends ParameterSetDefinition,
+  RequiredInput extends PossibleParameterKeys<InputParameters>,
+  RequiredOutput extends PossibleParameterKeys<OutputParameters>,
+> extends BaseFunctionDefinition<
+  InputParameters,
+  OutputParameters,
+  RequiredInput,
+  RequiredOutput
+> {
+  type: ManifestFunctionType = "API";
+  constructor(
+    public definition: FunctionDefinitionArgs<
+      InputParameters,
+      OutputParameters,
+      RequiredInput,
+      RequiredOutput
+    >,
+  ) {
+    super(definition);
+  }
+
+  export(): ManifestFunctionSchema {
+    return {
+      title: this.definition.title,
+      description: this.definition.description,
+      type: this.type,
       input_parameters: this.definition.input_parameters ??
         { properties: {}, required: [] },
       output_parameters: this.definition.output_parameters ??

@@ -316,6 +316,20 @@ export interface ISlackFunctionDefinition<
   registerParameterTypes: (manifest: SlackManifest) => void;
 }
 
+export type SlackFunctionDefinitionArgs<
+  InputParameters extends ParameterSetDefinition,
+  OutputParameters extends ParameterSetDefinition,
+  RequiredInputs extends PossibleParameterKeys<InputParameters>,
+  RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
+> =
+  & { source_file: string }
+  & FunctionDefinitionArgs<
+    InputParameters,
+    OutputParameters,
+    RequiredInputs,
+    RequiredOutputs
+  >;
+
 export type FunctionDefinitionArgs<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
@@ -325,7 +339,6 @@ export type FunctionDefinitionArgs<
   callback_id: string;
   /** A title for your function. */
   title: string;
-  source_file: string;
   /** An optional description for your function. */
   description?: string;
   /** An optional map of input parameter names containing information about their type, title, description, required and (additional) properties. */
