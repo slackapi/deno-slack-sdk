@@ -207,7 +207,7 @@ export type ManifestFunction = ISlackFunctionDefinition<any, any, any, any>;
 
 export type ManifestFunctionsSchema = { [key: string]: ManifestFunctionSchema };
 
-export type ManifestFunctionType = "API" | "builtin" | "app" | undefined;
+export type ManifestFunctionType = "API" | "app" | undefined;
 
 export type ManifestFunctionSchema = {
   type?: ManifestFunctionType;
