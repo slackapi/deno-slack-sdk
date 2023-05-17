@@ -7,7 +7,7 @@ import { SlackFunctionDefinitionArgs } from "./types.ts";
 import {
   ConnectorFunctionDefinition,
   SlackFunctionDefinition,
-} from "./function_definition.ts";
+} from "./definitions/mod.ts";
 
 /**
  * Define a function and its input and output parameters for use in a Slack application.

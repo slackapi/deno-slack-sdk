@@ -14,7 +14,7 @@ import type {
 } from "./types.ts";
 import type { View } from "./view_types.ts";
 import type {
-  FunctionDefinitionArgs,
+  BaseFunctionDefinitionArgs,
   FunctionParameters,
   FunctionRuntimeParameters,
 } from "../types.ts";
@@ -325,7 +325,7 @@ Deno.test("ViewRouter viewSubmission", async (t) => {
         assertExists<
           ViewSubmissionInvocationBody<
             typeof func.definition extends
-              FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
+              BaseFunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
               ? FunctionRuntimeParameters<I, RI>
               : never
           >
@@ -444,7 +444,7 @@ Deno.test("ViewRouter viewClosed", async (t) => {
         assertExists<
           ViewClosedInvocationBody<
             typeof func.definition extends
-              FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
+              BaseFunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
               ? FunctionRuntimeParameters<I, RI>
               : never
           >
