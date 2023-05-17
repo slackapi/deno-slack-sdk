@@ -7,14 +7,14 @@ import {
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
 import { SlackFunctionDefinitionArgs } from "../types.ts";
-import { BaseFunctionDefinition } from "./base_function.ts";
+import { FunctionDefinition } from "./base_function.ts";
 
 export class SlackFunctionDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
-> extends BaseFunctionDefinition<
+> extends FunctionDefinition<
   InputParameters,
   OutputParameters,
   RequiredInput,

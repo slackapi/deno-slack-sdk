@@ -6,15 +6,15 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import { BaseFunctionDefinitionArgs } from "../types.ts";
-import { BaseFunctionDefinition } from "./base_function.ts";
+import { FunctionDefinitionArgs } from "../types.ts";
+import { FunctionDefinition } from "./base_function.ts";
 
 export class ConnectorFunctionDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
-> extends BaseFunctionDefinition<
+> extends FunctionDefinition<
   InputParameters,
   OutputParameters,
   RequiredInput,
@@ -22,7 +22,7 @@ export class ConnectorFunctionDefinition<
 > {
   type: ManifestFunctionType = "API";
   constructor(
-    public definition: BaseFunctionDefinitionArgs<
+    public definition: FunctionDefinitionArgs<
       InputParameters,
       OutputParameters,
       RequiredInput,

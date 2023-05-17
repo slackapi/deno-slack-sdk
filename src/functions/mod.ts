@@ -3,7 +3,7 @@ import {
   PossibleParameterKeys,
 } from "../parameters/types.ts";
 import {
-  BaseFunctionDefinitionArgs,
+  FunctionDefinitionArgs,
   SlackFunctionDefinitionArgs,
 } from "./types.ts";
 
@@ -35,7 +35,7 @@ export const DefineFunction = <
 
 /**
  * Define a connector and its input and output parameters for use in a Slack application.
- * @param {BaseFunctionDefinitionArgs<InputParameters, OutputParameters, RequiredInput, RequiredOutput>} definition Defines information about your function (title, description) as well as formalizes the input and output parameters of a connector
+ * @param {FunctionDefinitionArgs<InputParameters, OutputParameters, RequiredInput, RequiredOutput>} definition Defines information about your function (title, description) as well as formalizes the input and output parameters of a connector
  * @returns {ConnectorFunctionDefinition}
  */
 export const DefineConnector = <
@@ -44,7 +44,7 @@ export const DefineConnector = <
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
 >(
-  definition: BaseFunctionDefinitionArgs<
+  definition: FunctionDefinitionArgs<
     InputParameters,
     OutputParameters,
     RequiredInput,

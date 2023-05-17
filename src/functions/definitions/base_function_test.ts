@@ -1,6 +1,6 @@
 import { assertEquals } from "../../dev_deps.ts";
 import Schema from "../../schema/mod.ts";
-import { BaseFunctionDefinition } from "./base_function.ts";
+import { FunctionDefinition } from "./base_function.ts";
 
 import {
   ManifestFunctionSchema,
@@ -10,14 +10,14 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import { BaseFunctionDefinitionArgs } from "../types.ts";
+import { FunctionDefinitionArgs } from "../types.ts";
 
 export class TestBaseFunctionDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutput extends PossibleParameterKeys<OutputParameters>,
-> extends BaseFunctionDefinition<
+> extends FunctionDefinition<
   InputParameters,
   OutputParameters,
   RequiredInput,
@@ -25,7 +25,7 @@ export class TestBaseFunctionDefinition<
 > {
   type: ManifestFunctionType;
   constructor(
-    public definition: BaseFunctionDefinitionArgs<
+    public definition: FunctionDefinitionArgs<
       InputParameters,
       OutputParameters,
       RequiredInput,

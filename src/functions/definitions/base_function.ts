@@ -6,13 +6,10 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import {
-  BaseFunctionDefinitionArgs,
-  ISlackFunctionDefinition,
-} from "../types.ts";
+import { FunctionDefinitionArgs, ISlackFunctionDefinition } from "../types.ts";
 import { SlackManifest } from "../../manifest/mod.ts";
 
-export abstract class BaseFunctionDefinition<
+export abstract class FunctionDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,
@@ -28,7 +25,7 @@ export abstract class BaseFunctionDefinition<
   abstract type: ManifestFunctionType;
 
   constructor(
-    public definition: BaseFunctionDefinitionArgs<
+    public definition: FunctionDefinitionArgs<
       InputParameters,
       OutputParameters,
       RequiredInput,

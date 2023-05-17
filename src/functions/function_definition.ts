@@ -7,7 +7,7 @@ import {
   PossibleParameterKeys,
 } from "../parameters/types.ts";
 import {
-  BaseFunctionDefinitionArgs,
+  FunctionDefinitionArgs,
   ISlackFunctionDefinition,
   SlackFunctionDefinitionArgs,
 } from "./types.ts";
@@ -29,7 +29,7 @@ abstract class BaseFunctionDefinition<
   abstract type: ManifestFunctionType;
 
   constructor(
-    public definition: BaseFunctionDefinitionArgs<
+    public definition: FunctionDefinitionArgs<
       InputParameters,
       OutputParameters,
       RequiredInput,
@@ -99,7 +99,7 @@ export class ConnectorFunctionDefinition<
 > {
   type: ManifestFunctionType = "API";
   constructor(
-    public definition: BaseFunctionDefinitionArgs<
+    public definition: FunctionDefinitionArgs<
       InputParameters,
       OutputParameters,
       RequiredInput,

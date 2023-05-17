@@ -5,10 +5,7 @@ import {
 import { SlackFunctionDefinition } from "../mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { enrichContext } from "../enrich-context.ts";
-import {
-  BaseFunctionDefinitionArgs,
-  FunctionRuntimeParameters,
-} from "../types.ts";
+import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
 import type {
   BlockActionConstraint,
   BlockSuggestionHandler,
@@ -86,7 +83,7 @@ export class SuggestionRouter<
   addHandler(
     actionConstraint: BlockActionConstraint,
     handler: BlockSuggestionHandler<
-      BaseFunctionDefinitionArgs<
+      FunctionDefinitionArgs<
         InputParameters,
         OutputParameters,
         RequiredInput,
@@ -138,7 +135,7 @@ export class SuggestionRouter<
     action: BlockAction, // TODO: this type name is a bit misleading; BlockAction just has both action_id and block_id props on it, so it applies to both block_suggestion and block_action payloads
   ):
     | BlockSuggestionHandler<
-      BaseFunctionDefinitionArgs<
+      FunctionDefinitionArgs<
         InputParameters,
         OutputParameters,
         RequiredInput,

@@ -5,10 +5,7 @@ import {
 import { SlackFunctionDefinition } from "../mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { enrichContext } from "../enrich-context.ts";
-import {
-  BaseFunctionDefinitionArgs,
-  FunctionRuntimeParameters,
-} from "../types.ts";
+import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
 import type {
   ActionContext,
   BlockActionConstraint,
@@ -86,7 +83,7 @@ export class ActionsRouter<
   addHandler(
     actionConstraint: BlockActionConstraint,
     handler: BlockActionHandler<
-      BaseFunctionDefinitionArgs<
+      FunctionDefinitionArgs<
         InputParameters,
         OutputParameters,
         RequiredInput,
@@ -138,7 +135,7 @@ export class ActionsRouter<
     action: BlockAction,
   ):
     | BlockActionHandler<
-      BaseFunctionDefinitionArgs<
+      FunctionDefinitionArgs<
         InputParameters,
         OutputParameters,
         RequiredInput,
