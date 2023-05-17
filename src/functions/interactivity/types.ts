@@ -1,7 +1,7 @@
 import {
+  BaseFunctionDefinitionArgs,
   BaseRuntimeFunctionContext,
   FunctionContextEnrichment,
-  FunctionDefinitionArgs,
   FunctionParameters,
   FunctionRuntimeParameters,
 } from "../types.ts";
@@ -16,7 +16,7 @@ import {
 } from "./view_types.ts";
 
 export type BlockActionHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+  BaseFunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (
       context: ActionContext<FunctionRuntimeParameters<I, RI>>,
       // deno-lint-ignore no-explicit-any
@@ -25,7 +25,7 @@ export type BlockActionHandler<Definition> = Definition extends
   : never;
 
 export type BlockSuggestionHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+  BaseFunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (
       context: SuggestionContext<FunctionRuntimeParameters<I, RI>>,
     ): Promise<BlockSuggestionHandlerResponse> | BlockSuggestionHandlerResponse;
@@ -79,7 +79,7 @@ type PlainTextObject = {
 };
 
 export type ViewSubmissionHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+  BaseFunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (
       context: ViewSubmissionContext<FunctionRuntimeParameters<I, RI>>,
       // deno-lint-ignore no-explicit-any
@@ -88,7 +88,7 @@ export type ViewSubmissionHandler<Definition> = Definition extends
   : never;
 
 export type ViewClosedHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+  BaseFunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (
       context: ViewClosedContext<FunctionRuntimeParameters<I, RI>>,
       // deno-lint-ignore no-explicit-any
@@ -97,7 +97,7 @@ export type ViewClosedHandler<Definition> = Definition extends
   : never;
 
 export type UnhandledEventHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
+  BaseFunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? {
     (
       context: UnhandledEventContext<FunctionRuntimeParameters<I, RI>>,
       // deno-lint-ignore no-explicit-any

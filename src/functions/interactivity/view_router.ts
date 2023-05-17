@@ -5,7 +5,10 @@ import {
 import { SlackFunctionDefinition } from "../mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { enrichContext } from "../enrich-context.ts";
-import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
+import {
+  BaseFunctionDefinitionArgs,
+  FunctionRuntimeParameters,
+} from "../types.ts";
 import {
   matchBasicConstraintField,
   normalizeConstraintToArray,
@@ -81,7 +84,7 @@ class ViewRouter<
   addClosedHandler(
     viewConstraint: BasicConstraintField,
     handler: ViewClosedHandler<
-      FunctionDefinitionArgs<
+      BaseFunctionDefinitionArgs<
         InputParameters,
         OutputParameters,
         RequiredInput,
@@ -111,7 +114,7 @@ class ViewRouter<
   addSubmissionHandler(
     viewConstraint: BasicConstraintField,
     handler: ViewSubmissionHandler<
-      FunctionDefinitionArgs<
+      BaseFunctionDefinitionArgs<
         InputParameters,
         OutputParameters,
         RequiredInput,
@@ -181,7 +184,7 @@ class ViewRouter<
   ): any {
     let routes;
     let _handler: typeof type extends "view_closed" ? ViewClosedHandler<
-        FunctionDefinitionArgs<
+        BaseFunctionDefinitionArgs<
           InputParameters,
           OutputParameters,
           RequiredInput,
@@ -189,7 +192,7 @@ class ViewRouter<
         >
       >
       : ViewSubmissionHandler<
-        FunctionDefinitionArgs<
+        BaseFunctionDefinitionArgs<
           InputParameters,
           OutputParameters,
           RequiredInput,

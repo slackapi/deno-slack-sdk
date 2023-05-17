@@ -164,7 +164,7 @@ type SyncFunctionHandler<
  * @description Custom function handler from a function definition
  */
 export type RuntimeSlackFunctionHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
+  BaseFunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
   ? BaseRuntimeSlackFunctionHandler<
     FunctionRuntimeParameters<I, RI>,
     FunctionRuntimeParameters<O, RO>
@@ -193,7 +193,7 @@ export type BaseRuntimeSlackFunctionHandler<
  * @description Custom function handler from a function definition
  */
 export type EnrichedSlackFunctionHandler<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
+  BaseFunctionDefinitionArgs<infer I, infer O, infer RI, infer RO>
   ? (BaseEnrichedSlackFunctionHandler<
     FunctionRuntimeParameters<I, RI>,
     FunctionRuntimeParameters<O, RO>
@@ -306,7 +306,7 @@ export interface ISlackFunctionDefinition<
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > {
   id: string;
-  definition: FunctionDefinitionArgs<
+  definition: BaseFunctionDefinitionArgs<
     InputParameters,
     OutputParameters,
     RequiredInput,
@@ -322,7 +322,7 @@ export type SlackFunctionDefinitionArgs<
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > =
-  & FunctionDefinitionArgs<
+  & BaseFunctionDefinitionArgs<
     InputParameters,
     OutputParameters,
     RequiredInputs,
@@ -330,7 +330,7 @@ export type SlackFunctionDefinitionArgs<
   >
   & { source_file: string };
 
-export type FunctionDefinitionArgs<
+export type BaseFunctionDefinitionArgs<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
@@ -354,7 +354,7 @@ export type FunctionDefinitionArgs<
 };
 
 export type SlackFunctionType<Definition> = Definition extends
-  FunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? (
+  BaseFunctionDefinitionArgs<infer I, infer O, infer RI, infer RO> ? (
     & EnrichedSlackFunctionHandler<Definition>
     & {
       /**
@@ -365,7 +365,7 @@ export type SlackFunctionType<Definition> = Definition extends
       addBlockActionsHandler(
         actionConstraint: BlockActionConstraint,
         handler: BlockActionHandler<
-          FunctionDefinitionArgs<I, O, RI, RO>
+          BaseFunctionDefinitionArgs<I, O, RI, RO>
         >,
       ): SlackFunctionType<Definition>;
       /**
@@ -376,24 +376,24 @@ export type SlackFunctionType<Definition> = Definition extends
       addBlockSuggestionHandler(
         actionConstraint: BlockActionConstraint,
         handler: BlockSuggestionHandler<
-          FunctionDefinitionArgs<I, O, RI, RO>
+          BaseFunctionDefinitionArgs<I, O, RI, RO>
         >,
       ): SlackFunctionType<Definition>;
       addViewClosedHandler(
         viewConstraint: BasicConstraintField,
         handler: ViewClosedHandler<
-          FunctionDefinitionArgs<I, O, RI, RO>
+          BaseFunctionDefinitionArgs<I, O, RI, RO>
         >,
       ): SlackFunctionType<Definition>;
       addViewSubmissionHandler(
         viewConstraint: BasicConstraintField,
         handler: ViewSubmissionHandler<
-          FunctionDefinitionArgs<I, O, RI, RO>
+          BaseFunctionDefinitionArgs<I, O, RI, RO>
         >,
       ): SlackFunctionType<Definition>;
       addUnhandledEventHandler(
         handler: UnhandledEventHandler<
-          FunctionDefinitionArgs<I, O, RI, RO>
+          BaseFunctionDefinitionArgs<I, O, RI, RO>
         >,
       ): SlackFunctionType<Definition>;
     }
