@@ -15,7 +15,7 @@ import type {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import type { SlackFunctionDefinition } from "../mod.ts";
+import type { SlackFunctionDefinition } from "../definitions/mod.ts";
 import { DefineFunction, Schema } from "../../mod.ts";
 
 // Helper test types

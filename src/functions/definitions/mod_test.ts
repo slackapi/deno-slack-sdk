@@ -1,11 +1,8 @@
-import {
-  ConnectorFunctionDefinition,
-  DefineConnector,
-  DefineFunction,
-  SlackFunctionDefinition,
-} from "./mod.ts";
-import { assertInstanceOf } from "../dev_deps.ts";
-import { PossibleParameterKeys } from "../parameters/types.ts";
+import { SlackFunctionDefinition } from "./slack_function.ts";
+import { ConnectorFunctionDefinition } from "./connector_function.ts";
+import { DefineConnector, DefineFunction } from "./mod.ts";
+import { assertInstanceOf } from "../../dev_deps.ts";
+import { PossibleParameterKeys } from "../../parameters/types.ts";
 
 type emptyParameterType = Record<string, never>;
 

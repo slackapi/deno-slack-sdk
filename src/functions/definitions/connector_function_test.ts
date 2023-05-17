@@ -1,5 +1,5 @@
 import { assertEquals, assertStrictEquals } from "../../dev_deps.ts";
-import { Schema } from "../../mod.ts";
+import Schema from "../../schema/mod.ts";
 import { ConnectorFunctionDefinition } from "./connector_function.ts";
 
 const emptyParameter = Object.freeze({ required: [], properties: {} });

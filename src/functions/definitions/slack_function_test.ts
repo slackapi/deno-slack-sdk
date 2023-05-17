@@ -1,6 +1,6 @@
-import { SlackFunctionDefinition } from "./mod.ts";
+import { SlackFunctionDefinition } from "./slack_function.ts";
 import { assertEquals, assertStrictEquals } from "../../dev_deps.ts";
-import { Schema } from "../../mod.ts";
+import Schema from "../../schema/mod.ts";
 
 const emptyParameter = Object.freeze({ required: [], properties: {} });
 

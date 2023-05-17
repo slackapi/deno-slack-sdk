@@ -2,7 +2,7 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import { SlackFunctionDefinition } from "../mod.ts";
+import { SlackFunctionDefinition } from "../definitions/mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { enrichContext } from "../enrich-context.ts";
 import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
