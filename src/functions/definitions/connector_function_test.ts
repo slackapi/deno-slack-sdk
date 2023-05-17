@@ -1,31 +1,28 @@
-import { SlackFunctionDefinition } from "./mod.ts";
 import { assertEquals, assertStrictEquals } from "../../dev_deps.ts";
 import { Schema } from "../../mod.ts";
+import { ConnectorFunctionDefinition } from "./connector_function.ts";
 
 const emptyParameter = Object.freeze({ required: [], properties: {} });
 
-Deno.test("SlackFunctionDefinition sets appropriate defaults", () => {
-  const Func = new SlackFunctionDefinition({
-    callback_id: "my_function",
-    title: "My function",
-    source_file: "functions/dino.ts",
+Deno.test("ConnectorFunctionDefinition sets appropriate defaults", () => {
+  const Func = new ConnectorFunctionDefinition({
+    callback_id: "my_connector",
+    title: "My Connector",
   });
 
   assertEquals(Func.id, Func.definition.callback_id);
-  assertEquals(Func.definition.title, "My function");
-  assertEquals(Func.definition.source_file, "functions/dino.ts");
+  assertEquals(Func.definition.title, "My Connector");
 
   const exportedFunc = Func.export();
-  assertStrictEquals(exportedFunc.source_file, "functions/dino.ts");
+  assertStrictEquals(exportedFunc.type, "API");
   assertEquals(exportedFunc.input_parameters, emptyParameter);
   assertEquals(exportedFunc.output_parameters, emptyParameter);
 });
 
-Deno.test("SlackFunctionDefinition without input and output parameters", () => {
-  const NoParamFunction = new SlackFunctionDefinition({
+Deno.test("ConnectorFunctionDefinition without input and output parameters", () => {
+  const NoParamFunction = new ConnectorFunctionDefinition({
     callback_id: "no_params",
     title: "No Parameter Function",
-    source_file: "functions/no_params.ts",
   });
 
   assertEquals(emptyParameter, NoParamFunction.export().input_parameters);
@@ -35,17 +32,16 @@ Deno.test("SlackFunctionDefinition without input and output parameters", () => {
   );
 });
 
-Deno.test("SlackFunctionDefinition with input parameters but no output parameters", () => {
+Deno.test("ConnectorFunctionDefinition with input parameters but no output parameters", () => {
   const inputParameters = {
     properties: {
       aString: { type: Schema.types.string },
     },
     required: [],
   };
-  const NoOutputParamFunction = new SlackFunctionDefinition({
+  const NoOutputParamFunction = new ConnectorFunctionDefinition({
     callback_id: "input_params_only",
     title: "No Parameter Function",
-    source_file: "functions/input_params_only.ts",
     input_parameters: inputParameters,
   });
   NoOutputParamFunction.export();
@@ -60,17 +56,16 @@ Deno.test("SlackFunctionDefinition with input parameters but no output parameter
   );
 });
 
-Deno.test("SlackFunctionDefinition with output parameters but no input parameters", () => {
+Deno.test("ConnectorFunctionDefinition with output parameters but no input parameters", () => {
   const outputParameters = {
     properties: {
       aString: { type: Schema.types.string },
     },
     required: [],
   };
-  const NoInputParamFunction = new SlackFunctionDefinition({
+  const NoInputParamFunction = new ConnectorFunctionDefinition({
     callback_id: "output_params_only",
     title: "No Parameter Function",
-    source_file: "functions/output_params_only.ts",
     output_parameters: outputParameters,
   });
 

@@ -1,6 +1,5 @@
-import { DefineFunction } from "./mod.ts";
-import Schema from "../schema/mod.ts";
-import { assertEquals, assertStrictEquals } from "../dev_deps.ts";
+import { assertEquals, assertStrictEquals } from "../../../src/dev_deps.ts";
+import { DefineFunction, Schema } from "../../../src/mod.ts";
 
 // TODO: Re-add tests to validate function execution when we've determined how to execute functions locally
 
@@ -166,22 +165,22 @@ Deno.test("DefineFunction using an OAuth2 property requests a provider key", () 
   });
 
   /**
-   * TODO: Support the following test for static error
-    // ts-expect-error `oauth2_provider_key` must be set
-    const _IncompleteOAuth2Function = DefineFunction({
-      callback_id: "oauth",
-      title: "OAuth Function",
-      source_file: "functions/oauth.ts",
-      input_parameters: {
-        properties: {
-          googleAccessTokenId: {
-            type: Schema.slack.types.oauth2,
-          },
-        },
-        required: [],
-      },
-    });
-   */
+	 * TODO: Support the following test for static error
+	  // ts-expect-error `oauth2_provider_key` must be set
+	  const _IncompleteOAuth2Function = DefineFunction({
+		callback_id: "oauth",
+		title: "OAuth Function",
+		source_file: "functions/oauth.ts",
+		input_parameters: {
+		  properties: {
+			googleAccessTokenId: {
+			  type: Schema.slack.types.oauth2,
+			},
+		  },
+		  required: [],
+		},
+	  });
+	 */
 
   assertEquals(
     {
