@@ -95,6 +95,7 @@ To create a new release:
 
      * After you input the new version, click the "Create a new tag: x.x.x on publish" button. This won't create your tag immediately.
      * Auto-generate the release notes by clicking the "Auto-generate release notes" button. This will pull in changes that will be included in your release.
+     * Edit the resulting notes to ensure they have decent messaging that are understandable by non-contributors, but each commit should still have it's own line.
      * Flip to the preview mode and review the pull request labels of the changes included in this release (i.e. `semver:minor` `semver:patch`, `semver:major`). Tip: Your release version should be based on the tag of the largest change, so if this release includes a `semver:minor`, the release version in your tag should be upgraded to reflect a minor.
      * Ensure that this version adheres to [semantic versioning][semver]. See [Versioning](#versioning-and-tags) for correct version format. Version tags should match the following pattern: `1.0.1` (no `v` preceding the number).
 

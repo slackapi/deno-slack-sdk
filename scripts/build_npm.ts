@@ -1,5 +1,5 @@
 // ex. scripts/build_npm.ts
-import { build, emptyDir } from "https://deno.land/x/dnt/mod.ts";
+import { build, emptyDir } from "https://deno.land/x/dnt@0.34.0/mod.ts";
 
 await emptyDir("./npm");
 
@@ -16,7 +16,7 @@ await build({
   shims: {
     // see JS docs for overview and more options
     deno: true,
-    // Shim fetch, File, FormData, Headers, Request, and Response 
+    // Shim fetch, File, FormData, Headers, Request, and Response
     undici: true,
   },
   package: {
