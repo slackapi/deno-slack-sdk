@@ -6,7 +6,7 @@ import { PossibleParameterKeys } from "../../parameters/types.ts";
 
 type emptyParameterType = Record<string, never>;
 
-Deno.test("DefineFunction sets appropriate defaults", () => {
+Deno.test("DefineFunction returns an instance of `SlackFunctionDefinition`", () => {
   const func = DefineFunction({
     callback_id: "my_function",
     title: "My function",
