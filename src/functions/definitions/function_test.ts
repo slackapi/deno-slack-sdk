@@ -79,6 +79,7 @@ Deno.test("TestBaseFunctionDefinition with required params", () => {
     },
   });
 
+  assertEquals(AllTypesFunction.definition.callback_id, "my_function");
   assertEquals(AllTypesFunction.definition.input_parameters?.required, [
     "myString",
     "myNumber",
