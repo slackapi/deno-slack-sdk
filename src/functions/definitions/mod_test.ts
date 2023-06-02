@@ -24,7 +24,7 @@ Deno.test("DefineFunction sets appropriate defaults", () => {
   );
 });
 
-Deno.test("DefineConnector sets appropriate defaults", () => {
+Deno.test("DefineConnector returns an instance of ConnectorFunctionDefinition", () => {
   const connector = DefineConnector({
     callback_id: "my_connector",
     title: "My Connector",
