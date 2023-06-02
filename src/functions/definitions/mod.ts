@@ -1,5 +1,5 @@
-import { SlackFunctionDefinition } from "./slack_function.ts";
-import { ConnectorFunctionDefinition } from "./connector_function.ts";
+import { SlackFunctionDefinition } from "./slack-function.ts";
+import { ConnectorFunctionDefinition } from "./connector-function.ts";
 
 import {
   ParameterSetDefinition,

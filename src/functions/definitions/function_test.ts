@@ -1,6 +1,6 @@
 import { assertEquals } from "../../dev_deps.ts";
 import Schema from "../../schema/mod.ts";
-import { FunctionDefinition } from "./base_function.ts";
+import { FunctionDefinition } from "./function.ts";
 
 import {
   ManifestFunctionSchema,

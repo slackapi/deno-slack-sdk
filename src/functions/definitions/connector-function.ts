@@ -7,7 +7,7 @@ import {
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
 import { FunctionDefinitionArgs } from "../types.ts";
-import { FunctionDefinition } from "./base_function.ts";
+import { FunctionDefinition } from "./function.ts";
 
 export class ConnectorFunctionDefinition<
   InputParameters extends ParameterSetDefinition,
