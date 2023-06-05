@@ -213,7 +213,7 @@ export type ManifestFunctionSchema = {
   type?: ManifestFunctionType;
   title?: string;
   description?: string;
-  source_file?: string;
+  source_file: string;
   input_parameters: ManifestFunctionParameters;
   output_parameters: ManifestFunctionParameters;
 };
