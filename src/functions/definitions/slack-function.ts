@@ -80,7 +80,7 @@ export class SlackFunctionDefinition<
   }
 }
 
-export function isCustomFunction<
+export function isCustomFunctionDefinition<
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInput extends PossibleParameterKeys<InputParameters>,

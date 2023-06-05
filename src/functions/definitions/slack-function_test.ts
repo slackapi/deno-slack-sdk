@@ -7,7 +7,7 @@ import Schema from "../../schema/mod.ts";
 import { PossibleParameterKeys } from "../../parameters/types.ts";
 import {
   DefineFunction,
-  isCustomFunction,
+  isCustomFunctionDefinition,
   SlackFunctionDefinition,
 } from "./slack-function.ts";
 import {
@@ -263,7 +263,7 @@ Deno.test("isCustomFunction should return true when SlackFunctionDefinition is p
   });
 
   assertInstanceOf(NoParamFunction, SlackFunctionDefinition);
-  assertEquals(true, isCustomFunction(NoParamFunction));
+  assertEquals(true, isCustomFunctionDefinition(NoParamFunction));
 });
 
 Deno.test("isCustomFunction should return false when ConnectorFunctionDefinition is passed to it", () => {
@@ -273,5 +273,5 @@ Deno.test("isCustomFunction should return false when ConnectorFunctionDefinition
   });
 
   assertInstanceOf(NoParamConnector, ConnectorFunctionDefinition);
-  assertEquals(false, isCustomFunction(NoParamConnector));
+  assertEquals(false, isCustomFunctionDefinition(NoParamConnector));
 });

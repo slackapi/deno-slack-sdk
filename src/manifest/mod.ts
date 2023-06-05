@@ -19,7 +19,7 @@ import {
   ManifestWorkflowsSchema,
 } from "./manifest_schema.ts";
 import { isCustomType } from "../types/mod.ts";
-import { isCustomFunction } from "../functions/definitions/slack-function.ts";
+import { isCustomFunctionDefinition } from "../functions/definitions/slack-function.ts";
 
 export const Manifest = (
   definition: Omit<ISlackManifestRunOnSlack, "runOnSlack">,
@@ -64,7 +64,7 @@ export class SlackManifest {
     if (def.functions) {
       manifest.functions = def.functions?.reduce<ManifestFunctionsSchema>(
         (acc = {}, fn) => {
-          if (isCustomFunction(fn)) {
+          if (isCustomFunctionDefinition(fn)) {
             acc[fn.id] = fn.export();
           }
           return acc;
@@ -132,7 +132,7 @@ export class SlackManifest {
     });
     // Loop through functions to automatically register any referenced types
     this.definition.functions?.forEach((func) => {
-      if (isCustomFunction(func)) {
+      if (isCustomFunctionDefinition(func)) {
         func.registerParameterTypes(this);
       }
     });
