@@ -22,6 +22,7 @@ import {
   mock,
 } from "../dev_deps.ts";
 import { DefineConnector } from "../functions/mod.ts";
+import { InternalSlackTypes } from "../schema/slack/types/custom/mod.ts";
 
 Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
   const definition: SlackManifestType = {
@@ -798,6 +799,7 @@ Deno.test("SlackManifest() registration functions don't allow duplicates", () =>
   Manifest.registerType(CustomObjectType);
   Manifest.registerType(CustomArrayType);
   Manifest.registerType(CustomStringType);
+  Manifest.registerType(InternalSlackTypes.form_input_object);
 
   const exportedManifest = Manifest.export();
 

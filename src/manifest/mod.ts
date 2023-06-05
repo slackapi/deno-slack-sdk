@@ -164,7 +164,7 @@ export class SlackManifest {
 
   // Loop through a ParameterSetDefinition to register each individual type
   registerTypes(parameterSet: ParameterSetDefinition) {
-    Object.values(parameterSet ?? {}).forEach((param) => {
+    Object.values(parameterSet).forEach((param) => {
       if (isCustomType(param.type)) {
         this.registerType(param.type);
       }

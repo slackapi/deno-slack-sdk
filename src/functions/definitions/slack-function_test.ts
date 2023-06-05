@@ -1,16 +1,15 @@
 import {
-  DefineFunction,
-  isCustomFunction,
-  SlackFunctionDefinition,
-} from "./slack-function.ts";
-import {
-  // assert,
   assertEquals,
   assertInstanceOf,
   assertStrictEquals,
 } from "../../dev_deps.ts";
 import Schema from "../../schema/mod.ts";
 import { PossibleParameterKeys } from "../../parameters/types.ts";
+import {
+  DefineFunction,
+  isCustomFunction,
+  SlackFunctionDefinition,
+} from "./slack-function.ts";
 import {
   ConnectorFunctionDefinition,
   DefineConnector,
