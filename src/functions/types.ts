@@ -1,6 +1,9 @@
 import { SlackAPIClient } from "../deps.ts";
 import { Env } from "../types.ts";
-import { ManifestFunctionSchema } from "../manifest/manifest_schema.ts";
+import {
+  ManifestFunctionSchema,
+  ManifestFunctionType,
+} from "../manifest/manifest_schema.ts";
 import {
   ParameterPropertiesDefinition,
   ParameterSetDefinition,
@@ -305,15 +308,16 @@ export interface ISlackFunctionDefinition<
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > {
-  id: string;
-  definition: FunctionDefinitionArgs<
+  readonly type: ManifestFunctionType;
+  readonly id: string;
+  readonly definition: FunctionDefinitionArgs<
     InputParameters,
     OutputParameters,
     RequiredInput,
     RequiredOutputs
   >;
-  export: () => ManifestFunctionSchema;
-  registerParameterTypes: (manifest: SlackManifest) => void;
+  export?: (() => ManifestFunctionSchema) | undefined;
+  registerParameterTypes?: ((manifest: SlackManifest) => void) | undefined;
 }
 
 export type SlackFunctionDefinitionArgs<

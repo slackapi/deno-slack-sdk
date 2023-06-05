@@ -1,80 +1,89 @@
-import { assertEquals, assertStrictEquals } from "../../dev_deps.ts";
+import {
+  assertEquals,
+  assertInstanceOf,
+  assertStrictEquals,
+} from "../../dev_deps.ts";
+import { PossibleParameterKeys } from "../../parameters/types.ts";
 import Schema from "../../schema/mod.ts";
-import { ConnectorFunctionDefinition } from "./connector-function.ts";
+import {
+  ConnectorFunctionDefinition,
+  DefineConnector,
+} from "./connector-function.ts";
 
-const emptyParameter = Object.freeze({ required: [], properties: {} });
+type emptyParameterType = Record<string, never>;
 
-Deno.test("ConnectorFunctionDefinition sets appropriate defaults", () => {
-  const Func = new ConnectorFunctionDefinition({
+Deno.test("DefineConnector returns an instance of DefineConnector", () => {
+  const connector = DefineConnector({
+    callback_id: "my_connector",
+    title: "My Connector",
+  });
+
+  assertInstanceOf(
+    connector,
+    ConnectorFunctionDefinition<
+      emptyParameterType,
+      emptyParameterType,
+      PossibleParameterKeys<emptyParameterType>,
+      PossibleParameterKeys<emptyParameterType>
+    >,
+  );
+});
+
+Deno.test("DefineConnector sets appropriate defaults", () => {
+  const Func = DefineConnector({
     callback_id: "my_connector",
     title: "My Connector",
   });
 
   assertEquals(Func.id, Func.definition.callback_id);
+  assertStrictEquals(Func.type, "API");
   assertEquals(Func.definition.title, "My Connector");
-
-  const exportedFunc = Func.export();
-  assertStrictEquals(exportedFunc.type, "API");
-  assertEquals(exportedFunc.input_parameters, emptyParameter);
-  assertEquals(exportedFunc.output_parameters, emptyParameter);
+  assertEquals(Func.definition.input_parameters, undefined);
+  assertEquals(Func.definition.output_parameters, undefined);
 });
 
-Deno.test("ConnectorFunctionDefinition without input and output parameters", () => {
-  const NoParamFunction = new ConnectorFunctionDefinition({
-    callback_id: "no_params",
-    title: "No Parameter Function",
-  });
-
-  assertEquals(emptyParameter, NoParamFunction.export().input_parameters);
-  assertEquals(
-    emptyParameter,
-    NoParamFunction.export().output_parameters,
-  );
-});
-
-Deno.test("ConnectorFunctionDefinition with input parameters but no output parameters", () => {
+Deno.test("DefineConnector with input parameters but no output parameters", () => {
   const inputParameters = {
     properties: {
       aString: { type: Schema.types.string },
     },
     required: [],
   };
-  const NoOutputParamFunction = new ConnectorFunctionDefinition({
+  const NoOutputParamFunction = DefineConnector({
     callback_id: "input_params_only",
     title: "No Parameter Function",
     input_parameters: inputParameters,
   });
-  NoOutputParamFunction.export();
 
   assertStrictEquals(
-    inputParameters,
     NoOutputParamFunction.definition.input_parameters,
+    inputParameters,
   );
   assertEquals(
-    emptyParameter,
-    NoOutputParamFunction.export().output_parameters,
+    NoOutputParamFunction.definition.output_parameters,
+    undefined,
   );
 });
 
-Deno.test("ConnectorFunctionDefinition with output parameters but no input parameters", () => {
+Deno.test("DefineConnector with output parameters but no input parameters", () => {
   const outputParameters = {
     properties: {
       aString: { type: Schema.types.string },
     },
     required: [],
   };
-  const NoInputParamFunction = new ConnectorFunctionDefinition({
+  const NoInputParamFunction = DefineConnector({
     callback_id: "output_params_only",
     title: "No Parameter Function",
     output_parameters: outputParameters,
   });
 
   assertEquals(
-    emptyParameter,
-    NoInputParamFunction.export().input_parameters,
+    NoInputParamFunction.definition.input_parameters,
+    undefined,
   );
   assertStrictEquals(
-    outputParameters,
     NoInputParamFunction.definition.output_parameters,
+    outputParameters,
   );
 });

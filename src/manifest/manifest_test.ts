@@ -21,6 +21,7 @@ import {
   IsExact,
   mock,
 } from "../dev_deps.ts";
+import { DefineConnector } from "../functions/mod.ts";
 
 Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
   const definition: SlackManifestType = {
@@ -1030,4 +1031,45 @@ Deno.test("Manifest supports multiple workflows with parameters", () => {
   });
 
   assertEquals(Object.keys(manifest.workflows || {}).length, 2);
+});
+
+Deno.test("Manifest() does not register connectors used by workflows", () => {
+  const Function = DefineConnector(
+    {
+      callback_id: "test_connector",
+      title: "Connector title",
+      input_parameters: {
+        properties: { aString: { type: Schema.types.string } },
+        required: [],
+      },
+      output_parameters: {
+        properties: { aType: { type: Schema.types.string } },
+        required: [],
+      },
+    },
+  );
+
+  const Workflow = DefineWorkflow({
+    title: "test workflow",
+    callback_id: "test_workflow",
+  });
+
+  Workflow.addStep(Function, {
+    aString: "test",
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    longDescription: "LongDescription",
+    botScopes: [],
+    workflows: [Workflow],
+  };
+  const manifest = Manifest(definition);
+
+  assertEquals(manifest.workflows, {
+    [Workflow.id]: Workflow.export(),
+  });
+  assertEquals(manifest.functions, {});
 });
