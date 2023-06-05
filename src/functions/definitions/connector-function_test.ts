@@ -12,7 +12,7 @@ import {
 
 type emptyParameterType = Record<string, never>;
 
-Deno.test("DefineConnector returns an instance of DefineConnector", () => {
+Deno.test("DefineConnector returns an instance of `ConnectorFunctionDefinition`", () => {
   const connector = DefineConnector({
     callback_id: "my_connector",
     title: "My Connector",
