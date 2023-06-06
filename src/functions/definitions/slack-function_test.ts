@@ -10,10 +10,7 @@ import {
   isCustomFunctionDefinition,
   SlackFunctionDefinition,
 } from "./slack-function.ts";
-import {
-  ConnectorFunctionDefinition,
-  DefineConnector,
-} from "./connector-function.ts";
+import { ISlackFunctionDefinition } from "../types.ts";
 
 // TODO: Re-add tests to validate function execution when we've determined how to execute functions locally
 
@@ -198,22 +195,22 @@ Deno.test("DefineFunction using an OAuth2 property requests a provider key", () 
   });
 
   /**
- * TODO: Support the following test for static error
-  // ts-expect-error `oauth2_provider_key` must be set
-  const _IncompleteOAuth2Function = DefineFunction({
-  callback_id: "oauth",
-  title: "OAuth Function",
-  source_file: "functions/oauth.ts",
-  input_parameters: {
-    properties: {
-    googleAccessTokenId: {
-      type: Schema.slack.types.oauth2,
-    },
-    },
-    required: [],
-  },
-  });
-	 */
+   * TODO: Support the following test for static error
+    // ts-expect-error `oauth2_provider_key` must be set
+    const _IncompleteOAuth2Function = DefineFunction({
+      callback_id: "oauth",
+      title: "OAuth Function",
+      source_file: "functions/oauth.ts",
+      input_parameters: {
+        properties: {
+          googleAccessTokenId: {
+            type: Schema.slack.types.oauth2,
+          },
+        },
+        required: [],
+      },
+    });
+   */
 
   assertEquals(
     {
@@ -255,7 +252,7 @@ Deno.test("DefineFunction using an OAuth2 property allows require_end_user_auth"
   );
 });
 
-Deno.test("isCustomFunction should return true when SlackFunctionDefinition is passed to it", () => {
+Deno.test("isCustomFunction should return true when SlackFunctionDefinition is passed", () => {
   const NoParamFunction = DefineFunction({
     callback_id: "no_params",
     title: "No Parameter Function",
@@ -266,12 +263,22 @@ Deno.test("isCustomFunction should return true when SlackFunctionDefinition is p
   assertEquals(true, isCustomFunctionDefinition(NoParamFunction));
 });
 
-Deno.test("isCustomFunction should return false when ConnectorFunctionDefinition is passed to it", () => {
-  const NoParamConnector = DefineConnector({
-    callback_id: "no_params",
-    title: "No Parameter Function",
-  });
-
-  assertInstanceOf(NoParamConnector, ConnectorFunctionDefinition);
-  assertEquals(false, isCustomFunctionDefinition(NoParamConnector));
+Deno.test("isCustomFunction should return false when a non custom function is passed", () => {
+  const notCustomFunction: ISlackFunctionDefinition<
+    emptyParameterType,
+    emptyParameterType,
+    PossibleParameterKeys<emptyParameterType>,
+    PossibleParameterKeys<emptyParameterType>
+  > = {
+    type: "API",
+    id: "not_custom",
+    definition: {
+      callback_id: "not_custom",
+      title: "Not a custom Function",
+      description: undefined,
+      input_parameters: undefined,
+      output_parameters: undefined,
+    },
+  };
+  assertEquals(false, isCustomFunctionDefinition(notCustomFunction));
 });
