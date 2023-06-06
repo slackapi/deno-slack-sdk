@@ -55,6 +55,63 @@ Deno.test("DefineFunction sets appropriate defaults", () => {
   assertEquals(exportedFunc.output_parameters, emptyParameterObject);
 });
 
+Deno.test("DefineFunction with required params", () => {
+  const AllTypesFunction = DefineFunction({
+    callback_id: "my_function",
+    title: "All Types Function",
+    source_file: "functions/example.ts",
+    input_parameters: {
+      properties: {
+        myString: {
+          type: Schema.types.string,
+          title: "My string",
+          description: "a really neat value",
+          hint: "Ex. my neat value",
+        },
+        myBoolean: {
+          type: Schema.types.boolean,
+          title: "My boolean",
+          hint: "Ex: true/false",
+        },
+        myInteger: {
+          type: Schema.types.integer,
+          description: "integer",
+          hint: "0-100",
+        },
+        myNumber: {
+          type: Schema.types.number,
+          description: "number",
+        },
+      },
+      required: ["myString", "myNumber"],
+    },
+    output_parameters: {
+      properties: {
+        out: {
+          type: Schema.types.string,
+        },
+      },
+      required: ["out"],
+    },
+  });
+
+  assertEquals(AllTypesFunction.definition.input_parameters?.required, [
+    "myString",
+    "myNumber",
+  ]);
+  assertEquals(AllTypesFunction.definition.output_parameters?.required, [
+    "out",
+  ]);
+  assertEquals(
+    AllTypesFunction.definition.input_parameters?.properties.myString.hint,
+    "Ex. my neat value",
+  );
+  assertEquals(
+    AllTypesFunction.definition.input_parameters?.properties.myBoolean.hint,
+    "Ex: true/false",
+  );
+});
+
 Deno.test("DefineFunction without input and output parameters", () => {
   const NoParamFunction = DefineFunction({
     callback_id: "no_params",
@@ -119,63 +176,6 @@ Deno.test("DefineFunction with output parameters but no input parameters", () =>
   );
 });
 
-Deno.test("DefineFunction with required params", () => {
-  const AllTypesFunction = DefineFunction({
-    callback_id: "my_function",
-    title: "All Types Function",
-    source_file: "functions/example.ts",
-    input_parameters: {
-      properties: {
-        myString: {
-          type: Schema.types.string,
-          title: "My string",
-          description: "a really neat value",
-          hint: "Ex. my neat value",
-        },
-        myBoolean: {
-          type: Schema.types.boolean,
-          title: "My boolean",
-          hint: "Ex: true/false",
-        },
-        myInteger: {
-          type: Schema.types.integer,
-          description: "integer",
-          hint: "0-100",
-        },
-        myNumber: {
-          type: Schema.types.number,
-          description: "number",
-        },
-      },
-      required: ["myString", "myNumber"],
-    },
-    output_parameters: {
-      properties: {
-        out: {
-          type: Schema.types.string,
-        },
-      },
-      required: ["out"],
-    },
-  });
-
-  assertEquals(AllTypesFunction.definition.input_parameters?.required, [
-    "myString",
-    "myNumber",
-  ]);
-  assertEquals(AllTypesFunction.definition.output_parameters?.required, [
-    "out",
-  ]);
-  assertEquals(
-    AllTypesFunction.definition.input_parameters?.properties.myString.hint,
-    "Ex. my neat value",
-  );
-  assertEquals(
-    AllTypesFunction.definition.input_parameters?.properties.myBoolean.hint,
-    "Ex: true/false",
-  );
-});
-
 Deno.test("DefineFunction using an OAuth2 property requests a provider key", () => {
   /**
    * The `oauth2_provider_key` is not currently required because `type` supports any string
@@ -198,21 +198,21 @@ Deno.test("DefineFunction using an OAuth2 property requests a provider key", () 
   });
 
   /**
-	 * TODO: Support the following test for static error
-	  // ts-expect-error `oauth2_provider_key` must be set
-	  const _IncompleteOAuth2Function = DefineFunction({
-		callback_id: "oauth",
-		title: "OAuth Function",
-		source_file: "functions/oauth.ts",
-		input_parameters: {
-		  properties: {
-			googleAccessTokenId: {
-			  type: Schema.slack.types.oauth2,
-			},
-		  },
-		  required: [],
-		},
-	  });
+ * TODO: Support the following test for static error
+  // ts-expect-error `oauth2_provider_key` must be set
+  const _IncompleteOAuth2Function = DefineFunction({
+  callback_id: "oauth",
+  title: "OAuth Function",
+  source_file: "functions/oauth.ts",
+  input_parameters: {
+    properties: {
+    googleAccessTokenId: {
+      type: Schema.slack.types.oauth2,
+    },
+    },
+    required: [],
+  },
+  });
 	 */
 
   assertEquals(

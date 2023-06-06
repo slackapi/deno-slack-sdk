@@ -308,9 +308,9 @@ export interface ISlackFunctionDefinition<
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > {
-  readonly type: ManifestFunctionType;
-  readonly id: string;
-  readonly definition: FunctionDefinitionArgs<
+  type: ManifestFunctionType;
+  id: string;
+  definition: FunctionDefinitionArgs<
     InputParameters,
     OutputParameters,
     RequiredInput,
