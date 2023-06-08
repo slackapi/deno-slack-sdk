@@ -252,7 +252,7 @@ Deno.test("DefineFunction using an OAuth2 property allows require_end_user_auth"
   );
 });
 
-Deno.test("isCustomFunction should return true when SlackFunctionDefinition is passed", () => {
+Deno.test("isCustomFunctionDefinition should return true when SlackFunctionDefinition is passed", () => {
   const NoParamFunction = DefineFunction({
     callback_id: "no_params",
     title: "No Parameter Function",
