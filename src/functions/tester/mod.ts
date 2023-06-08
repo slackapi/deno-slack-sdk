@@ -3,7 +3,7 @@ import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import { SlackFunctionDefinition } from "../mod.ts";
+import { SlackFunctionDefinition } from "../definitions/mod.ts";
 import type { FunctionRuntimeParameters } from "../types.ts";
 import {
   CreateFunctionContext,

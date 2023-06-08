@@ -1,6 +1,9 @@
 import { SlackAPIClient } from "../deps.ts";
 import { Env } from "../types.ts";
-import { ManifestFunctionSchema } from "../manifest/manifest_schema.ts";
+import {
+  ManifestFunctionSchema,
+  ManifestFunctionType,
+} from "../manifest/manifest_schema.ts";
 import {
   ParameterPropertiesDefinition,
   ParameterSetDefinition,
@@ -305,6 +308,7 @@ export interface ISlackFunctionDefinition<
   RequiredInput extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > {
+  type: ManifestFunctionType;
   id: string;
   definition: FunctionDefinitionArgs<
     InputParameters,
@@ -312,9 +316,23 @@ export interface ISlackFunctionDefinition<
     RequiredInput,
     RequiredOutputs
   >;
-  export: () => ManifestFunctionSchema;
-  registerParameterTypes: (manifest: SlackManifest) => void;
+  export?: (() => ManifestFunctionSchema) | undefined;
+  registerParameterTypes?: ((manifest: SlackManifest) => void) | undefined;
 }
+
+export type SlackFunctionDefinitionArgs<
+  InputParameters extends ParameterSetDefinition,
+  OutputParameters extends ParameterSetDefinition,
+  RequiredInputs extends PossibleParameterKeys<InputParameters>,
+  RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
+> =
+  & FunctionDefinitionArgs<
+    InputParameters,
+    OutputParameters,
+    RequiredInputs,
+    RequiredOutputs
+  >
+  & { source_file: string };
 
 export type FunctionDefinitionArgs<
   InputParameters extends ParameterSetDefinition,
@@ -325,7 +343,6 @@ export type FunctionDefinitionArgs<
   callback_id: string;
   /** A title for your function. */
   title: string;
-  source_file: string;
   /** An optional description for your function. */
   description?: string;
   /** An optional map of input parameter names containing information about their type, title, description, required and (additional) properties. */

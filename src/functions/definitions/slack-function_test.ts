@@ -1,10 +1,39 @@
-import { DefineFunction } from "./mod.ts";
-import Schema from "../schema/mod.ts";
-import { assertEquals, assertStrictEquals } from "../dev_deps.ts";
+import {
+  assertEquals,
+  assertInstanceOf,
+  assertStrictEquals,
+} from "../../dev_deps.ts";
+import Schema from "../../schema/mod.ts";
+import { PossibleParameterKeys } from "../../parameters/types.ts";
+import {
+  DefineFunction,
+  isCustomFunctionDefinition,
+  SlackFunctionDefinition,
+} from "./slack-function.ts";
+import { ISlackFunctionDefinition } from "../types.ts";
 
 // TODO: Re-add tests to validate function execution when we've determined how to execute functions locally
 
 const emptyParameterObject = Object.freeze({ required: [], properties: {} });
+type emptyParameterType = Record<string, never>;
+
+Deno.test("DefineFunction returns an instance of `SlackFunctionDefinition`", () => {
+  const func = DefineFunction({
+    callback_id: "my_function",
+    title: "My function",
+    source_file: "functions/dino.ts",
+  });
+
+  assertInstanceOf(
+    func,
+    SlackFunctionDefinition<
+      emptyParameterType,
+      emptyParameterType,
+      PossibleParameterKeys<emptyParameterType>,
+      PossibleParameterKeys<emptyParameterType>
+    >,
+  );
+});
 
 Deno.test("DefineFunction sets appropriate defaults", () => {
   const Func = DefineFunction({
@@ -221,4 +250,35 @@ Deno.test("DefineFunction using an OAuth2 property allows require_end_user_auth"
     },
     OAuth2Function.export().input_parameters.properties,
   );
+});
+
+Deno.test("isCustomFunctionDefinition should return true when SlackFunctionDefinition is passed", () => {
+  const NoParamFunction = DefineFunction({
+    callback_id: "no_params",
+    title: "No Parameter Function",
+    source_file: "functions/no_params.ts",
+  });
+
+  assertInstanceOf(NoParamFunction, SlackFunctionDefinition);
+  assertEquals(true, isCustomFunctionDefinition(NoParamFunction));
+});
+
+Deno.test("isCustomFunctionDefinition should return false when a non custom function is passed", () => {
+  const notCustomFunction: ISlackFunctionDefinition<
+    emptyParameterType,
+    emptyParameterType,
+    PossibleParameterKeys<emptyParameterType>,
+    PossibleParameterKeys<emptyParameterType>
+  > = {
+    type: "API",
+    id: "not_custom",
+    definition: {
+      callback_id: "not_custom",
+      title: "Not a custom Function",
+      description: undefined,
+      input_parameters: undefined,
+      output_parameters: undefined,
+    },
+  };
+  assertEquals(false, isCustomFunctionDefinition(notCustomFunction));
 });
