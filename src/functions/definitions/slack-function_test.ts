@@ -263,7 +263,7 @@ Deno.test("isCustomFunction should return true when SlackFunctionDefinition is p
   assertEquals(true, isCustomFunctionDefinition(NoParamFunction));
 });
 
-Deno.test("isCustomFunction should return false when a non custom function is passed", () => {
+Deno.test("isCustomFunctionDefinition should return false when a non custom function is passed", () => {
   const notCustomFunction: ISlackFunctionDefinition<
     emptyParameterType,
     emptyParameterType,
