@@ -25,9 +25,15 @@ export interface CustomTypeParameterDefinition
   type: ICustomType;
 }
 
+type TypeUnion =
+  | typeof SchemaTypes[keyof typeof SchemaTypes]
+  | typeof SlackPrimitiveTypes[keyof typeof SlackPrimitiveTypes]
+  // deno-lint-ignore ban-types
+  | (string & {});
+
 interface BaseParameterDefinition<T> {
   /** Defines the parameter type. */
-  type: string;
+  type: TypeUnion;
   /** An optional parameter title. */
   title?: string;
   /** An optional parameter description. */
