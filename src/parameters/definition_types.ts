@@ -1,5 +1,9 @@
-import SchemaTypes from "../schema/schema_types.ts";
-import { SlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
+import SchemaTypes, { ValidSchemaTypes } from "../schema/schema_types.ts";
+import {
+  SlackPrimitiveTypes,
+  ValidSlackPrimitiveTypes,
+} from "../schema/slack/types/mod.ts";
+import { LooseStringAutocomplete } from "../type_utils.ts";
 import { ICustomType } from "../types/types.ts";
 
 export type ParameterDefinition = TypedParameterDefinition;
@@ -25,15 +29,9 @@ export interface CustomTypeParameterDefinition
   type: ICustomType;
 }
 
-type TypeUnion =
-  | typeof SchemaTypes[keyof typeof SchemaTypes]
-  | typeof SlackPrimitiveTypes[keyof typeof SlackPrimitiveTypes]
-  // deno-lint-ignore ban-types
-  | (string & {});
-
 interface BaseParameterDefinition<T> {
   /** Defines the parameter type. */
-  type: TypeUnion;
+  type: LooseStringAutocomplete<ValidSchemaTypes | ValidSlackPrimitiveTypes>;
   /** An optional parameter title. */
   title?: string;
   /** An optional parameter description. */

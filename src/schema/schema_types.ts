@@ -7,4 +7,6 @@ const SchemaTypes = {
   array: "array",
 } as const;
 
+export type ValidSchemaTypes = typeof SchemaTypes[keyof typeof SchemaTypes];
+
 export default SchemaTypes;
