@@ -8,7 +8,6 @@ import type { LooseStringAutocomplete } from "../type_utils.ts";
 
 type InvalidDatastoreTypes =
   | typeof SlackPrimitiveTypes.blocks
-  | typeof SlackPrimitiveTypes.message_ts
   | typeof SlackPrimitiveTypes.oauth2;
 
 type ValidDatastoreTypes = Exclude<
