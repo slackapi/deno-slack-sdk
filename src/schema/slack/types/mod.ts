@@ -10,4 +10,7 @@ const SlackPrimitiveTypes = {
   message_ts: "slack#/types/message_ts",
 } as const;
 
+export type ValidSlackPrimitiveTypes =
+  typeof SlackPrimitiveTypes[keyof typeof SlackPrimitiveTypes];
+
 export { SlackPrimitiveTypes };

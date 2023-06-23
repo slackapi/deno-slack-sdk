@@ -13,3 +13,7 @@ export type IncreaseDepth<Depth extends RecursionDepthLevel = 0> = Depth extends
   : Depth extends 4 ? 5
   : Depth extends 5 ? MaxRecursionDepth
   : MaxRecursionDepth;
+
+/** @description Provides typeahead for passed strict string values while allowing any other string to be passed as well */
+// deno-lint-ignore ban-types
+export type LooseStringAutocomplete<T> = T | (string & {});

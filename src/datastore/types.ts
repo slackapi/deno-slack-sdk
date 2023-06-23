@@ -1,10 +1,24 @@
 import { ICustomType } from "../types/types.ts";
 import { ManifestDatastoreSchema } from "../manifest/manifest_schema.ts";
 import { SlackManifest } from "../manifest/mod.ts";
+import { SlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
+import type { ValidSchemaTypes } from "../schema/schema_types.ts";
+import type { ValidSlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
+import type { LooseStringAutocomplete } from "../type_utils.ts";
+
+type InvalidDatastoreTypes =
+  | typeof SlackPrimitiveTypes.blocks
+  | typeof SlackPrimitiveTypes.oauth2;
+
+type ValidDatastoreTypes = Exclude<
+  | ValidSchemaTypes
+  | ValidSlackPrimitiveTypes,
+  InvalidDatastoreTypes
+>;
 
 export type SlackDatastoreAttribute = {
   // supports custom types, primitive types, inline objects and lists
-  type: string | ICustomType;
+  type: LooseStringAutocomplete<ValidDatastoreTypes> | ICustomType;
 };
 
 export type SlackDatastoreAttributes = Record<string, SlackDatastoreAttribute>;
