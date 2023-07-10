@@ -747,7 +747,7 @@ Deno.test("Manifest() correctly assigns other app features", () => {
 
 Deno.test("Manifest() ensures that apps defining user-level scopes also manage tokens", () => {
   const definition: SlackManifestType = {
-    runOnSlack: false,
+    runOnSlack: true,
     name: "fear and loathing in las vegas",
     description:
       "fear and loathing in las vegas: a savage journey to the heart of the american dream",
@@ -768,6 +768,24 @@ Deno.test("Manifest() ensures that apps defining user-level scopes also manage t
   assertStrictEquals(
     manifest.oauth_config.token_management_enabled,
     true,
+  );
+
+  const definition2: SlackManifestType = {
+    runOnSlack: true,
+    name: "fear and loathing in las vegas",
+    description:
+      "fear and loathing in las vegas: a savage journey to the heart of the american dream",
+    displayName: "fear and loathing",
+    icon: "icon.png",
+    botScopes: ["channels:history", "chat:write", "commands"],
+    userScopes: [], // empty user scopes
+  };
+  const manifest2 = Manifest(definition2);
+
+  // ensure that token management is set to false
+  assertStrictEquals(
+    manifest2.oauth_config.token_management_enabled,
+    false,
   );
 });
 

@@ -276,9 +276,15 @@ export class SlackManifest {
 
     // Oauth Config
     // Run On Slack manage their own tokens
-    // if and only if user scopes are included in the manifest
-    manifest.oauth_config.token_management_enabled =
-      manifest.oauth_config.scopes.user != undefined;
+    // if and only if at least one user scope is included in the manifest
+    if (
+      manifest.oauth_config.scopes.user != undefined &&
+      manifest.oauth_config.scopes.user.length > 0
+    ) {
+      manifest.oauth_config.token_management_enabled = true;
+    } else {
+      manifest.oauth_config.token_management_enabled = false;
+    }
 
     // Required App Settings for run on slack apps
     manifest.settings.org_deploy_enabled = true;
