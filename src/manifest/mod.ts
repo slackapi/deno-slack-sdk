@@ -50,6 +50,7 @@ export class SlackManifest {
       oauth_config: {
         scopes: {
           bot: this.ensureBotScopes(),
+          user: def.userScopes,
         },
       },
       features: {
@@ -256,10 +257,9 @@ export class SlackManifest {
     manifest.app_directory = def.appDirectory;
 
     //OauthConfig
-    manifest.oauth_config.scopes.user = def.userScopes;
     manifest.oauth_config.redirect_urls = def.redirectUrls;
 
-    // Remote-hosted Slack apps manage their own tokens
+    // Remote-hosted Slack apps always manage their own tokens
     manifest.oauth_config.token_management_enabled = true;
 
     // Remote Features
@@ -274,9 +274,11 @@ export class SlackManifest {
   private assignRunOnSlackManifestProperties(manifest: ManifestSchema) {
     const def = this.definition as ISlackManifestRunOnSlack;
 
-    // Run on Slack Apps do not manage access tokens
-    // This is set by default as false
-    manifest.oauth_config.token_management_enabled = false;
+    // Oauth Config
+    // Run On Slack manage their own tokens
+    // if and only if user scopes are included in the manifest
+    manifest.oauth_config.token_management_enabled =
+      manifest.oauth_config.scopes.user != undefined;
 
     // Required App Settings for run on slack apps
     manifest.settings.org_deploy_enabled = true;
