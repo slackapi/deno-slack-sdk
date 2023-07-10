@@ -35,6 +35,7 @@ export class SlackManifest {
 
   export() {
     const def = this.definition;
+
     const manifest: ManifestSchema = {
       _metadata: {
         // todo: is there a more idiomatic way of defining this? constant file?
@@ -275,16 +276,8 @@ export class SlackManifest {
     const def = this.definition as ISlackManifestRunOnSlack;
 
     // Oauth Config
-    // Run On Slack manage their own tokens
-    // if and only if at least one user scope is included in the manifest
-    if (
-      manifest.oauth_config.scopes.user != undefined &&
-      manifest.oauth_config.scopes.user.length > 0
-    ) {
-      manifest.oauth_config.token_management_enabled = true;
-    } else {
-      manifest.oauth_config.token_management_enabled = false;
-    }
+    // Run On Slack don't manage their own tokens
+    manifest.oauth_config.token_management_enabled = false;
 
     // Required App Settings for run on slack apps
     manifest.settings.org_deploy_enabled = true;
