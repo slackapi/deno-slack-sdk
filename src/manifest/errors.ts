@@ -7,12 +7,8 @@ import {
   ManifestWorkflowSchema,
 } from "./manifest_schema.ts";
 
-export function createDuplicateWorkflowError(options: {
-  id: string;
-  current: ManifestWorkflowSchema;
-  old: ManifestWorkflowSchema;
-}) {
-  const stringifySimpleSchema = (schema: ManifestWorkflowSchema) =>
+export class DuplicateWorkflowError extends Error {
+  static stringifySimpleSchema = (schema: ManifestWorkflowSchema) =>
     JSON.stringify(
       {
         title: schema.title ?? "",
@@ -21,20 +17,23 @@ export function createDuplicateWorkflowError(options: {
       null,
       1,
     );
-  return Error([
-    `Duplicate callback_id: "${options.id}" for Workflow`,
-    stringifySimpleSchema(options.current),
-    "---",
-    stringifySimpleSchema(options.old),
-  ].join("\n"));
+
+  constructor(
+    id: string,
+    current: ManifestWorkflowSchema,
+    old: ManifestWorkflowSchema,
+  ) {
+    super([
+      `Duplicate callback_id: "${id}" for Workflow`,
+      DuplicateWorkflowError.stringifySimpleSchema(current),
+      "---",
+      DuplicateWorkflowError.stringifySimpleSchema(old),
+    ].join("\n"));
+  }
 }
 
-export function createDuplicateFunctionError(options: {
-  id: string;
-  current: ManifestFunctionSchema;
-  old: ManifestFunctionSchema;
-}) {
-  const stringifySimpleSchema = (schema: ManifestFunctionSchema) =>
+export class DuplicateFunctionError extends Error {
+  static stringifySimpleSchema = (schema: ManifestFunctionSchema) =>
     JSON.stringify(
       {
         title: schema.title ?? "",
@@ -44,20 +43,23 @@ export function createDuplicateFunctionError(options: {
       null,
       1,
     );
-  return Error([
-    `Duplicate callback_id: "${options.id}" for Function`,
-    stringifySimpleSchema(options.current),
-    "---",
-    stringifySimpleSchema(options.old),
-  ].join("\n"));
+
+  constructor(
+    id: string,
+    current: ManifestFunctionSchema,
+    old: ManifestFunctionSchema,
+  ) {
+    super([
+      `Duplicate callback_id: "${id}" for Function`,
+      DuplicateFunctionError.stringifySimpleSchema(current),
+      "---",
+      DuplicateFunctionError.stringifySimpleSchema(old),
+    ].join("\n"));
+  }
 }
 
-export function createDuplicateCustomTypeError(options: {
-  id: string;
-  current: ManifestCustomTypeSchema;
-  old: ManifestCustomTypeSchema;
-}) {
-  const stringifySimpleSchema = (schema: ManifestCustomTypeSchema) =>
+export class DuplicateCustomTypeError extends Error {
+  static stringifySimpleSchema = (schema: ManifestCustomTypeSchema) =>
     JSON.stringify(
       {
         type: schema.type,
@@ -67,40 +69,46 @@ export function createDuplicateCustomTypeError(options: {
       null,
       1,
     );
-  return Error([
-    `Duplicate name: "${options.id}" for CustomType`,
-    stringifySimpleSchema(options.current),
-    "---",
-    stringifySimpleSchema(options.old),
-  ].join("\n"));
+
+  constructor(
+    id: string,
+    current: ManifestCustomTypeSchema,
+    old: ManifestCustomTypeSchema,
+  ) {
+    super([
+      `Duplicate name: "${id}" for CustomType`,
+      DuplicateCustomTypeError.stringifySimpleSchema(current),
+      "---",
+      DuplicateCustomTypeError.stringifySimpleSchema(old),
+    ].join("\n"));
+  }
 }
 
-export function createDuplicateDataStoreError(options: {
-  name: string;
-  current: ManifestDatastoreSchema;
-  old: ManifestDatastoreSchema;
-}) {
-  const stringifySimpleSchema = (schema: ManifestDatastoreSchema) =>
+export class DuplicateDatastoreError extends Error {
+  static stringifySimpleSchema = (schema: ManifestDatastoreSchema) =>
     JSON.stringify(
       {
         primary_key: schema.primary_key,
         attributes: Object.keys(schema.attributes),
       },
     );
-  return Error([
-    `Duplicate name: "${options.name}" for DataStore`,
-    stringifySimpleSchema(options.current),
-    "---",
-    stringifySimpleSchema(options.old),
-  ].join("\n"));
+
+  constructor(
+    name: string,
+    current: ManifestDatastoreSchema,
+    old: ManifestDatastoreSchema,
+  ) {
+    super([
+      `Duplicate name: "${name}" for Datastore`,
+      DuplicateDatastoreError.stringifySimpleSchema(current),
+      "---",
+      DuplicateDatastoreError.stringifySimpleSchema(old),
+    ].join("\n"));
+  }
 }
 
-export function createDuplicateCustomEventError(options: {
-  id: string;
-  current: ManifestCustomEventSchema;
-  old: ManifestCustomEventSchema;
-}) {
-  const stringifySimpleSchema = (schema: ManifestCustomEventSchema) =>
+export class DuplicateCustomEventError extends Error {
+  static stringifySimpleSchema = (schema: ManifestCustomEventSchema) =>
     JSON.stringify(
       {
         type: schema.type,
@@ -110,30 +118,43 @@ export function createDuplicateCustomEventError(options: {
       null,
       1,
     );
-  return Error([
-    `Duplicate name: "${options.id}" for CustomEvent`,
-    stringifySimpleSchema(options.current),
-    "---",
-    stringifySimpleSchema(options.old),
-  ].join("\n"));
+
+  constructor(
+    id: string,
+    current: ManifestCustomEventSchema,
+    old: ManifestCustomEventSchema,
+  ) {
+    super([
+      `Duplicate name: "${id}" for CustomEvent`,
+      DuplicateCustomEventError.stringifySimpleSchema(current),
+      "---",
+      DuplicateCustomEventError.stringifySimpleSchema(old),
+    ].join("\n"));
+  }
 }
 
-export function createDuplicateProviderError(options: {
-  id: string;
-  current: ManifestOAuth2ProviderSchema;
-  old: ManifestOAuth2ProviderSchema;
-}) {
-  const stringifySimpleSchema = (schema: ManifestOAuth2ProviderSchema) =>
+export class DuplicateProviderError extends Error {
+  static stringifySimpleSchema = (schema: ManifestOAuth2ProviderSchema) =>
     JSON.stringify(
       {
         provider_type: schema.provider_type,
-        options: Object.keys(schema.options),
+        provider_name: schema.options.provider_name ?? "",
+        authorization_url: schema.options.authorization_url ?? "",
       },
+      null,
+      1,
     );
-  return Error([
-    `Duplicate provider_key: "${options.id}" for OAuth2Provider`,
-    stringifySimpleSchema(options.current),
-    "---",
-    stringifySimpleSchema(options.old),
-  ].join("\n"));
+
+  constructor(
+    id: string,
+    current: ManifestOAuth2ProviderSchema,
+    old: ManifestOAuth2ProviderSchema,
+  ) {
+    super([
+      `Duplicate provider_key: "${id}" for OAuth2Provider`,
+      DuplicateProviderError.stringifySimpleSchema(current),
+      "---",
+      DuplicateProviderError.stringifySimpleSchema(old),
+    ].join("\n"));
+  }
 }

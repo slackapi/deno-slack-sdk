@@ -2,10 +2,12 @@ export {
   assertEquals,
   assertExists,
   assertInstanceOf,
+  AssertionError,
   assertMatch,
   assertRejects,
   assertStrictEquals,
   assertStringIncludes,
+  fail,
 } from "https://deno.land/std@0.152.0/testing/asserts.ts";
 export * as mock from "https://deno.land/std@0.152.0/testing/mock.ts";
 

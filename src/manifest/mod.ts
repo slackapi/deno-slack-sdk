@@ -20,12 +20,12 @@ import {
 import { isCustomType } from "../types/mod.ts";
 import { isCustomFunctionDefinition } from "../functions/definitions/slack-function.ts";
 import {
-  createDuplicateCustomEventError,
-  createDuplicateCustomTypeError,
-  createDuplicateDataStoreError,
-  createDuplicateFunctionError,
-  createDuplicateProviderError,
-  createDuplicateWorkflowError,
+  DuplicateCustomEventError,
+  DuplicateCustomTypeError,
+  DuplicateDatastoreError,
+  DuplicateFunctionError,
+  DuplicateProviderError,
+  DuplicateWorkflowError,
 } from "./errors.ts";
 
 export const Manifest = (
@@ -73,11 +73,7 @@ export class SlackManifest {
         (acc = {}, fn) => {
           if (isCustomFunctionDefinition(fn)) {
             if (fn.id in acc) {
-              throw createDuplicateFunctionError({
-                id: fn.id,
-                current: fn.export(),
-                old: acc[fn.id],
-              });
+              throw new DuplicateFunctionError(fn.id, fn.export(), acc[fn.id]);
             }
             acc[fn.id] = fn.export();
           }
@@ -91,11 +87,11 @@ export class SlackManifest {
       manifest.workflows = def.workflows.reduce<ManifestWorkflowsSchema>(
         (acc = {}, workflow) => {
           if (workflow.id in acc) {
-            throw createDuplicateWorkflowError({
-              id: workflow.id,
-              current: workflow.export(),
-              old: acc[workflow.id],
-            });
+            throw new DuplicateWorkflowError(
+              workflow.id,
+              workflow.export(),
+              acc[workflow.id],
+            );
           }
           acc[workflow.id] = workflow.export();
           return acc;
@@ -108,11 +104,11 @@ export class SlackManifest {
       manifest.types = def.types.reduce<ManifestCustomTypesSchema>(
         (acc = {}, customType) => {
           if (customType.id in acc) {
-            throw createDuplicateCustomTypeError({
-              id: customType.id,
-              current: customType.export(),
-              old: acc[customType.id],
-            });
+            throw new DuplicateCustomTypeError(
+              customType.id,
+              customType.export(),
+              acc[customType.id],
+            );
           }
           acc[customType.id] = customType.export();
           return acc;
@@ -125,11 +121,11 @@ export class SlackManifest {
       manifest.datastores = def.datastores.reduce<ManifestDataStoresSchema>(
         (acc = {}, datastore) => {
           if (datastore.name in acc) {
-            throw createDuplicateDataStoreError({
-              name: datastore.name,
-              current: datastore.export(),
-              old: acc[datastore.name],
-            });
+            throw new DuplicateDatastoreError(
+              datastore.name,
+              datastore.export(),
+              acc[datastore.name],
+            );
           }
           acc[datastore.name] = datastore.export();
           return acc;
@@ -142,11 +138,11 @@ export class SlackManifest {
       manifest.events = def.events.reduce<ManifestCustomEventsSchema>(
         (acc = {}, event) => {
           if (event.id in acc) {
-            throw createDuplicateCustomEventError({
-              id: event.id,
-              current: event.export(),
-              old: acc[event.id],
-            });
+            throw new DuplicateCustomEventError(
+              event.id,
+              event.export(),
+              acc[event.id],
+            );
           }
           acc[event.id] = event.export();
           return acc;
@@ -348,11 +344,11 @@ export class SlackManifest {
         (acc, provider) => {
           acc["oauth2"] = acc["oauth2"] ?? {};
           if (provider.id in acc["oauth2"]) {
-            throw createDuplicateProviderError({
-              id: provider.id,
-              current: provider.export(),
-              old: acc["oauth2"][provider.id],
-            });
+            throw new DuplicateProviderError(
+              provider.id,
+              provider.export(),
+              acc["oauth2"][provider.id],
+            );
           }
           acc["oauth2"][provider.id] = provider.export();
           return acc;

@@ -1,10 +1,10 @@
 import {
-  createDuplicateCustomEventError,
-  createDuplicateCustomTypeError,
-  createDuplicateDataStoreError,
-  createDuplicateFunctionError,
-  createDuplicateProviderError,
-  createDuplicateWorkflowError,
+  DuplicateCustomEventError,
+  DuplicateCustomTypeError,
+  DuplicateDatastoreError,
+  DuplicateFunctionError,
+  DuplicateProviderError,
+  DuplicateWorkflowError,
 } from "./errors.ts";
 import {
   ManifestCustomEventSchema,
@@ -22,7 +22,7 @@ const OLD_SCHEMA_DESCRIPTION = "This is an old schema";
 const CURRENT_SCHEMA_TITLE = "current";
 const CURRENT_SCHEMA_DESCRIPTION = "This is a current schema";
 
-Deno.test(createDuplicateWorkflowError.name, async (t) => {
+Deno.test(DuplicateWorkflowError.name, async (t) => {
   const old: ManifestWorkflowSchema = {
     title: OLD_SCHEMA_TITLE,
     description: OLD_SCHEMA_DESCRIPTION,
@@ -38,7 +38,7 @@ Deno.test(createDuplicateWorkflowError.name, async (t) => {
         steps: [],
       };
 
-      const actual = createDuplicateWorkflowError({ id: "test", current, old });
+      const actual = new DuplicateWorkflowError("test", current, old);
 
       assertStringIncludes(actual.message, `callback_id: "test"`);
       assertStringIncludes(actual.message, "Workflow");
@@ -65,7 +65,7 @@ Deno.test(createDuplicateWorkflowError.name, async (t) => {
         steps: [],
       };
 
-      const actual = createDuplicateWorkflowError({ id: "test", current, old });
+      const actual = new DuplicateWorkflowError("test", current, old);
 
       assertStringIncludes(actual.message, `callback_id: "test"`);
       assertStringIncludes(actual.message, `"title": ""`);
@@ -74,7 +74,7 @@ Deno.test(createDuplicateWorkflowError.name, async (t) => {
   );
 });
 
-Deno.test(createDuplicateFunctionError.name, async (t) => {
+Deno.test(DuplicateFunctionError.name, async (t) => {
   const old: ManifestFunctionSchema = {
     title: OLD_SCHEMA_TITLE,
     description: OLD_SCHEMA_DESCRIPTION,
@@ -94,7 +94,7 @@ Deno.test(createDuplicateFunctionError.name, async (t) => {
         output_parameters: { properties: {} },
       };
 
-      const actual = createDuplicateFunctionError({ id: "test", current, old });
+      const actual = new DuplicateFunctionError("test", current, old);
 
       assertStringIncludes(actual.message, `callback_id: "test"`);
       assertStringIncludes(actual.message, "Function");
@@ -124,7 +124,7 @@ Deno.test(createDuplicateFunctionError.name, async (t) => {
         output_parameters: { properties: {} },
       };
 
-      const actual = createDuplicateFunctionError({ id: "test", current, old });
+      const actual = new DuplicateFunctionError("test", current, old);
 
       assertStringIncludes(actual.message, `callback_id: "test"`);
       assertStringIncludes(actual.message, `"title": ""`);
@@ -133,7 +133,7 @@ Deno.test(createDuplicateFunctionError.name, async (t) => {
   );
 });
 
-Deno.test(createDuplicateCustomTypeError.name, async (t) => {
+Deno.test(DuplicateCustomTypeError.name, async (t) => {
   const old: ManifestCustomTypeSchema = {
     type: "string",
     title: OLD_SCHEMA_TITLE,
@@ -149,11 +149,7 @@ Deno.test(createDuplicateCustomTypeError.name, async (t) => {
         description: CURRENT_SCHEMA_DESCRIPTION,
       };
 
-      const actual = createDuplicateCustomTypeError({
-        id: "test",
-        current,
-        old,
-      });
+      const actual = new DuplicateCustomTypeError("test", current, old);
 
       assertStringIncludes(actual.message, `name: "test"`);
       assertStringIncludes(actual.message, "CustomType");
@@ -181,11 +177,7 @@ Deno.test(createDuplicateCustomTypeError.name, async (t) => {
         type: "string",
       };
 
-      const actual = createDuplicateCustomTypeError({
-        id: "test",
-        current,
-        old,
-      });
+      const actual = new DuplicateCustomTypeError("test", current, old);
 
       assertStringIncludes(actual.message, `name: "test"`);
       assertStringIncludes(actual.message, `"title": ""`);
@@ -194,7 +186,7 @@ Deno.test(createDuplicateCustomTypeError.name, async (t) => {
   );
 });
 
-Deno.test(createDuplicateDataStoreError.name, async (t) => {
+Deno.test(DuplicateDatastoreError.name, async (t) => {
   const old: ManifestDatastoreSchema = {
     primary_key: OLD_SCHEMA_TITLE,
     attributes: {
@@ -216,14 +208,10 @@ Deno.test(createDuplicateDataStoreError.name, async (t) => {
         },
       };
 
-      const actual = createDuplicateDataStoreError({
-        name: "test",
-        current,
-        old,
-      });
+      const actual = new DuplicateDatastoreError("test", current, old);
 
       assertStringIncludes(actual.message, `name: "test"`);
-      assertStringIncludes(actual.message, "DataStore");
+      assertStringIncludes(actual.message, "Datastore");
       assertStringIncludes(
         actual.message,
         `"primary_key":"${OLD_SCHEMA_TITLE}"`,
@@ -245,11 +233,7 @@ Deno.test(createDuplicateDataStoreError.name, async (t) => {
         attributes: {},
       };
 
-      const actual = createDuplicateDataStoreError({
-        name: "test",
-        current,
-        old,
-      });
+      const actual = new DuplicateDatastoreError("test", current, old);
 
       assertStringIncludes(actual.message, `name: "test"`);
       assertStringIncludes(actual.message, `"attributes":[]`);
@@ -257,7 +241,7 @@ Deno.test(createDuplicateDataStoreError.name, async (t) => {
   );
 });
 
-Deno.test(createDuplicateCustomEventError.name, async (t) => {
+Deno.test(DuplicateCustomEventError.name, async (t) => {
   const old: ManifestCustomEventSchema = {
     type: "string",
     title: OLD_SCHEMA_TITLE,
@@ -273,11 +257,7 @@ Deno.test(createDuplicateCustomEventError.name, async (t) => {
         description: CURRENT_SCHEMA_DESCRIPTION,
       };
 
-      const actual = createDuplicateCustomEventError({
-        id: "test",
-        current,
-        old,
-      });
+      const actual = new DuplicateCustomEventError("test", current, old);
 
       assertStringIncludes(actual.message, `name: "test"`);
       assertStringIncludes(actual.message, "CustomEvent");
@@ -305,11 +285,7 @@ Deno.test(createDuplicateCustomEventError.name, async (t) => {
         type: "string",
       };
 
-      const actual = createDuplicateCustomEventError({
-        id: "test",
-        current,
-        old,
-      });
+      const actual = new DuplicateCustomEventError("test", current, old);
 
       assertStringIncludes(actual.message, `name: "test"`);
       assertStringIncludes(actual.message, `"title": ""`);
@@ -318,10 +294,15 @@ Deno.test(createDuplicateCustomEventError.name, async (t) => {
   );
 });
 
-Deno.test(createDuplicateProviderError.name, async (t) => {
+Deno.test(DuplicateProviderError.name, async (t) => {
   const old: ManifestOAuth2ProviderSchema = {
     provider_type: Schema.providers.oauth2.CUSTOM,
-    options: { old: "test" },
+    options: {
+      provider_name: OLD_SCHEMA_TITLE,
+      authorization_url: OLD_SCHEMA_DESCRIPTION,
+      client_id: OLD_SCHEMA_TITLE,
+      scope: [],
+    },
   };
 
   await t.step(
@@ -329,23 +310,38 @@ Deno.test(createDuplicateProviderError.name, async (t) => {
     () => {
       const current: ManifestOAuth2ProviderSchema = {
         provider_type: Schema.providers.oauth2.CUSTOM,
-        options: { current: "test" },
+        options: {
+          provider_name: CURRENT_SCHEMA_TITLE,
+          authorization_url: CURRENT_SCHEMA_DESCRIPTION,
+          client_id: CURRENT_SCHEMA_TITLE,
+          scope: [],
+        },
       };
 
-      const actual = createDuplicateProviderError({
-        id: "test",
-        current,
-        old,
-      });
+      const actual = new DuplicateProviderError("test", current, old);
 
       assertStringIncludes(actual.message, `provider_key: "test"`);
       assertStringIncludes(actual.message, "OAuth2Provider");
       assertStringIncludes(
         actual.message,
-        `"provider_type":"${Schema.providers.oauth2.CUSTOM}"`,
+        `"provider_type": "${Schema.providers.oauth2.CUSTOM}"`,
       );
-      assertStringIncludes(actual.message, `"options":["old"]`);
-      assertStringIncludes(actual.message, `"options":["current"]`);
+      assertStringIncludes(
+        actual.message,
+        `"provider_name": "${CURRENT_SCHEMA_TITLE}"`,
+      );
+      assertStringIncludes(
+        actual.message,
+        `"provider_name": "${OLD_SCHEMA_TITLE}"`,
+      );
+      assertStringIncludes(
+        actual.message,
+        `"authorization_url": "${OLD_SCHEMA_DESCRIPTION}"`,
+      );
+      assertStringIncludes(
+        actual.message,
+        `"authorization_url": "${CURRENT_SCHEMA_DESCRIPTION}"`,
+      );
     },
   );
 
@@ -354,21 +350,17 @@ Deno.test(createDuplicateProviderError.name, async (t) => {
     () => {
       const current: ManifestOAuth2ProviderSchema = {
         provider_type: Schema.providers.oauth2.CUSTOM,
-        options: {},
+        options: {
+          client_id: CURRENT_SCHEMA_TITLE,
+          scope: [],
+        },
       };
 
-      const actual = createDuplicateProviderError({
-        id: "test",
-        current,
-        old,
-      });
+      const actual = new DuplicateProviderError("test", current, old);
 
       assertStringIncludes(actual.message, `provider_key: "test"`);
-      assertStringIncludes(
-        actual.message,
-        `"provider_type":"${Schema.providers.oauth2.CUSTOM}"`,
-      );
-      assertStringIncludes(actual.message, `"options":[]`);
+      assertStringIncludes(actual.message, `"provider_name": ""`);
+      assertStringIncludes(actual.message, `"authorization_url": ""`);
     },
   );
 });
