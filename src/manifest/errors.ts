@@ -7,27 +7,104 @@ import {
   ManifestWorkflowSchema,
 } from "./manifest_schema.ts";
 
+interface CompareRow {
+  key: string;
+  current: string;
+  old: string;
+}
+
+class CompareTable<T extends Record<string, string>> {
+  current = "current";
+  old = "old";
+  keyPad = 0;
+  currentPad = 0;
+  oldPad = 0;
+
+  public rows: CompareRow[] = [];
+
+  constructor(current: T, old: T) {
+    for (const key in current) {
+      this.push({ key, current: current[key], old: old[key] });
+    }
+  }
+
+  push(row: CompareRow): number {
+    this.keyPad = this.keyPad > row.key.length ? this.keyPad : row.key.length;
+    this.currentPad = this.currentPad > row.current.length
+      ? this.currentPad
+      : row.current.length;
+    this.oldPad = this.oldPad > row.old.length ? this.oldPad : row.old.length;
+    return this.rows.push(row);
+  }
+
+  stringifyRow(row: CompareRow): string {
+    return `|${row.key.padEnd(this.keyPad)}|${
+      row.current.padEnd(this.currentPad)
+    }|${row.old.padEnd(this.oldPad)}|`;
+  }
+
+  horizontalRule(): string {
+    return `|${"-".repeat(this.keyPad)}-${"-".repeat(this.currentPad)}-${
+      "-".repeat(this.oldPad)
+    }|`;
+  }
+
+  stringify() {
+    const table: string[] = [
+      this.horizontalRule(),
+      this.stringifyRow({ key: "", current: this.current, old: this.old }),
+      this.stringifyRow({
+        key: "-".repeat(this.keyPad),
+        current: "-".repeat(this.currentPad),
+        old: "-".repeat(this.oldPad),
+      }),
+    ];
+    this.rows.forEach((row: CompareRow) => {
+      table.push(this.stringifyRow(row));
+    });
+    table.push(this.horizontalRule());
+    return table.join("\n");
+  }
+}
+
+function buildCompareTable<T extends Record<string, string>>(
+  current: T,
+  old: T,
+): Record<string, Record<string, string>> {
+  const compareTable: Record<string, Record<string, string>> = {};
+  for (const key in current) {
+    compareTable[key] = {
+      current: current[key],
+      old: old[key],
+    };
+  }
+  return compareTable;
+}
+
 export class DuplicateWorkflowError extends Error {
-  static stringifySimpleSchema = (schema: ManifestWorkflowSchema) =>
-    JSON.stringify(
-      {
-        title: schema.title ?? "",
-        description: schema.description ?? "",
-      },
-      null,
-      1,
-    );
+  static simpleSchema = (schema: ManifestWorkflowSchema) => {
+    return {
+      title: schema.title ?? "",
+      description: schema.description ?? "",
+    };
+  };
 
   constructor(
     id: string,
     current: ManifestWorkflowSchema,
     old: ManifestWorkflowSchema,
   ) {
+    const compareTable = new CompareTable(
+      DuplicateWorkflowError.simpleSchema(current),
+      DuplicateWorkflowError.simpleSchema(old),
+    );
+    console.table(buildCompareTable(
+      DuplicateWorkflowError.simpleSchema(current),
+      DuplicateWorkflowError.simpleSchema(old),
+    ));
     super([
       `Duplicate callback_id: "${id}" for Workflow`,
-      DuplicateWorkflowError.stringifySimpleSchema(current),
-      "---",
-      DuplicateWorkflowError.stringifySimpleSchema(old),
+      compareTable.stringify(),
     ].join("\n"));
   }
 }
