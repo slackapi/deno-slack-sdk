@@ -1114,7 +1114,7 @@ Deno.test("Manifest throws error when workflows with duplicate callback_id are a
       icon: "icon.png",
       workflows: [workflow1, workflow2],
     });
-    fail("Manifest() should have thrown and error");
+    fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
     assertInstanceOf(error, DuplicateWorkflowError);
@@ -1142,7 +1142,7 @@ Deno.test("Manifest throws error when functions with duplicate callback_id are a
       icon: "icon.png",
       functions: [function1, function2],
     });
-    fail("Manifest() should have thrown and error");
+    fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
     assertInstanceOf(error, DuplicateFunctionError);
@@ -1168,7 +1168,7 @@ Deno.test("Manifest throws error when customType with duplicate name are added",
       icon: "icon.png",
       types: [customType1, customType2],
     });
-    fail("Manifest() should have thrown and error");
+    fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
     assertInstanceOf(error, DuplicateCustomTypeError);
@@ -1200,7 +1200,7 @@ Deno.test("Manifest throws error when Datastores with duplicate name are added",
       icon: "icon.png",
       datastores: [datastore1, datastore2],
     });
-    fail("Manifest() should have thrown and error");
+    fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
     assertInstanceOf(error, DuplicateDatastoreError);
@@ -1230,7 +1230,7 @@ Deno.test("Manifest throws error when CustomEvents with duplicate name are added
       icon: "icon.png",
       events: [customEvent1, customEvent2],
     });
-    fail("Manifest() should have thrown and error");
+    fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
     assertInstanceOf(error, DuplicateCustomEventError);
@@ -1264,7 +1264,7 @@ Deno.test("Manifest throws error when Providers with duplicate provider_keys are
       icon: "icon.png",
       externalAuthProviders: [provider1, provider2],
     });
-    fail("Manifest() should have thrown and error");
+    fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
     assertInstanceOf(error, DuplicateProviderError);
