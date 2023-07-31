@@ -27,12 +27,9 @@ import {
 import { DefineConnector } from "../functions/mod.ts";
 import { InternalSlackTypes } from "../schema/slack/types/custom/mod.ts";
 import {
-  DuplicateCustomEventError,
-  DuplicateCustomTypeError,
-  DuplicateDatastoreError,
-  DuplicateFunctionError,
-  DuplicateProviderError,
-  DuplicateWorkflowError,
+  DuplicateCallbackIdError,
+  DuplicateNameError,
+  DuplicateProviderKeyError,
 } from "./errors.ts";
 
 Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
@@ -1117,7 +1114,8 @@ Deno.test("Manifest throws error when workflows with duplicate callback_id are a
     fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
-    assertInstanceOf(error, DuplicateWorkflowError);
+    assertInstanceOf(error, DuplicateCallbackIdError);
+    assertStringIncludes(error.message, "Workflow");
   }
 });
 
@@ -1145,7 +1143,8 @@ Deno.test("Manifest throws error when functions with duplicate callback_id are a
     fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
-    assertInstanceOf(error, DuplicateFunctionError);
+    assertInstanceOf(error, DuplicateCallbackIdError);
+    assertStringIncludes(error.message, "Function");
   }
 });
 
@@ -1171,7 +1170,8 @@ Deno.test("Manifest throws error when customType with duplicate name are added",
     fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
-    assertInstanceOf(error, DuplicateCustomTypeError);
+    assertInstanceOf(error, DuplicateNameError);
+    assertStringIncludes(error.message, "CustomType");
   }
 });
 
@@ -1203,7 +1203,8 @@ Deno.test("Manifest throws error when Datastores with duplicate name are added",
     fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
-    assertInstanceOf(error, DuplicateDatastoreError);
+    assertInstanceOf(error, DuplicateNameError);
+    assertStringIncludes(error.message, "Datastore");
   }
 });
 
@@ -1233,7 +1234,8 @@ Deno.test("Manifest throws error when CustomEvents with duplicate name are added
     fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
-    assertInstanceOf(error, DuplicateCustomEventError);
+    assertInstanceOf(error, DuplicateNameError);
+    assertStringIncludes(error.message, "CustomEvent");
   }
 });
 
@@ -1267,6 +1269,7 @@ Deno.test("Manifest throws error when Providers with duplicate provider_keys are
     fail("Manifest() should have thrown an error");
   } catch (error) {
     if (error instanceof AssertionError) throw error;
-    assertInstanceOf(error, DuplicateProviderError);
+    assertInstanceOf(error, DuplicateProviderKeyError);
+    assertStringIncludes(error.message, "OAuth2Provider");
   }
 });
