@@ -295,10 +295,34 @@ export type ManifestOAuth2Schema = {
 };
 
 export type ManifestOAuth2ProviderSchema = {
+  /** Type of the provider */
   provider_type: OAuth2ProviderTypeValues;
-  options: {
-    // deno-lint-ignore no-explicit-any
-    [key: string]: any;
+  /** OAuth2 Configuration options for the provider */
+  options: OAuth2ProviderOptionsSchema;
+};
+
+export type OAuth2ProviderOptionsSchema = {
+  /** Client id for the provider */
+  client_id: string;
+  /** Scopes for the provider */
+  scope: string[];
+  /** Display name for the provider. Required for CUSTOM provider types. */
+  provider_name?: string;
+  /** Authorization url for the provider. Required for CUSTOM provider types. */
+  authorization_url?: string;
+  /** Token url for the provider. Required for CUSTOM provider types. */
+  token_url?: string;
+  /** Identity configuration for the provider. Required for CUSTOM provider types. */
+  identity_config?: OAuth2ProviderIdentitySchema;
+  /** Optional extras dict for authorization url for your provider. Required for CUSTOM provider types. */
+  authorization_url_extras?: { [key: string]: string };
+};
+
+export type OAuth2ProviderIdentitySchema = {
+  url: string;
+  account_identifier: string;
+  headers?: {
+    [key: string]: string;
   };
 };
 
