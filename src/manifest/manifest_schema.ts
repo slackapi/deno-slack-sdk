@@ -5,6 +5,7 @@ import type { ParameterDefinition } from "../parameters/definition_types.ts";
 import { OAuth2ProviderTypeValues } from "../schema/providers/oauth2/types.ts";
 import type { ICustomType } from "../types/types.ts";
 import { ISlackWorkflow } from "../workflows/types.ts";
+import { OAuth2ProviderOptions } from "../providers/oauth2/types.ts";
 
 // ----------------------------------------------------------------------------
 // Manifest Schema Types
@@ -296,10 +297,7 @@ export type ManifestOAuth2Schema = {
 
 export type ManifestOAuth2ProviderSchema = {
   provider_type: OAuth2ProviderTypeValues;
-  options: {
-    // deno-lint-ignore no-explicit-any
-    [key: string]: any;
-  };
+  options: OAuth2ProviderOptions;
 };
 
 export interface ManifestExternalAuthProviders {
