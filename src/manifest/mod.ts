@@ -4,7 +4,6 @@ import {
   SlackManifestType,
 } from "./types.ts";
 import { ICustomType } from "../types/types.ts";
-import { OAuth2Provider } from "../providers/oauth2/mod.ts";
 import { ParameterSetDefinition } from "../parameters/types.ts";
 import {
   ManifestAppHomeMessagesTabSchema,
@@ -20,6 +19,11 @@ import {
 } from "./manifest_schema.ts";
 import { isCustomType } from "../types/mod.ts";
 import { isCustomFunctionDefinition } from "../functions/definitions/slack-function.ts";
+import {
+  DuplicateCallbackIdError,
+  DuplicateNameError,
+  DuplicateProviderKeyError,
+} from "./errors.ts";
 
 export const Manifest = (
   definition: Omit<ISlackManifestRunOnSlack, "runOnSlack">,
@@ -62,9 +66,12 @@ export class SlackManifest {
 
     // Assign other shared properties
     if (def.functions) {
-      manifest.functions = def.functions?.reduce<ManifestFunctionsSchema>(
+      manifest.functions = def.functions.reduce<ManifestFunctionsSchema>(
         (acc = {}, fn) => {
           if (isCustomFunctionDefinition(fn)) {
+            if (fn.id in acc) {
+              throw new DuplicateCallbackIdError(fn.id, "Function");
+            }
             acc[fn.id] = fn.export();
           }
           return acc;
@@ -74,8 +81,11 @@ export class SlackManifest {
     }
 
     if (def.workflows) {
-      manifest.workflows = def.workflows?.reduce<ManifestWorkflowsSchema>(
+      manifest.workflows = def.workflows.reduce<ManifestWorkflowsSchema>(
         (acc = {}, workflow) => {
+          if (workflow.id in acc) {
+            throw new DuplicateCallbackIdError(workflow.id, "Workflow");
+          }
           acc[workflow.id] = workflow.export();
           return acc;
         },
@@ -84,8 +94,11 @@ export class SlackManifest {
     }
 
     if (def.types) {
-      manifest.types = def.types?.reduce<ManifestCustomTypesSchema>(
+      manifest.types = def.types.reduce<ManifestCustomTypesSchema>(
         (acc = {}, customType) => {
+          if (customType.id in acc) {
+            throw new DuplicateNameError(customType.id, "CustomType");
+          }
           acc[customType.id] = customType.export();
           return acc;
         },
@@ -94,8 +107,11 @@ export class SlackManifest {
     }
 
     if (def.datastores) {
-      manifest.datastores = def.datastores?.reduce<ManifestDataStoresSchema>(
+      manifest.datastores = def.datastores.reduce<ManifestDataStoresSchema>(
         (acc = {}, datastore) => {
+          if (datastore.name in acc) {
+            throw new DuplicateNameError(datastore.name, "Datastore");
+          }
           acc[datastore.name] = datastore.export();
           return acc;
         },
@@ -104,8 +120,11 @@ export class SlackManifest {
     }
 
     if (def.events) {
-      manifest.events = def.events?.reduce<ManifestCustomEventsSchema>(
+      manifest.events = def.events.reduce<ManifestCustomEventsSchema>(
         (acc = {}, event) => {
+          if (event.id in acc) {
+            throw new DuplicateNameError(event.id, "CustomEvent");
+          }
           acc[event.id] = event.export();
           return acc;
         },
@@ -302,12 +321,13 @@ export class SlackManifest {
 
     // External Auth providers
     if (def.externalAuthProviders?.length) {
-      manifest.external_auth_providers = def.externalAuthProviders?.reduce(
+      manifest.external_auth_providers = def.externalAuthProviders.reduce(
         (acc, provider) => {
-          if (provider instanceof OAuth2Provider) {
-            acc["oauth2"] = acc["oauth2"] ?? {};
-            acc["oauth2"][provider.id] = provider.export();
+          acc["oauth2"] = acc["oauth2"] ?? {};
+          if (provider.id in acc["oauth2"]) {
+            throw new DuplicateProviderKeyError(provider.id, "OAuth2Provider");
           }
+          acc["oauth2"][provider.id] = provider.export();
           return acc;
         },
         {} as NonNullable<ManifestSchema["external_auth_providers"]>,
