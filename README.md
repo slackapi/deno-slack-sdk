@@ -1,4 +1,7 @@
-# Deno Slack SDK
+<h1 align="center">
+  Deno Slack SDK
+  <br>
+</h1>
 
 This is the SDK for the Deno Runtime of Slack custom functions.
 
