@@ -3,7 +3,15 @@
   <br>
 </h1>
 
-This is the SDK for the Deno Runtime of Slack custom functions.
+<p align="center">
+  <i align="center">This is the SDK for the Deno Runtime of Slack custom functions.</i>
+</p>
+
+<p align="center">
+    <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/slackapi/deno-slack-sdk">
+    <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/slackapi/deno-slack-sdk">
+  </a>
+</p>
 
 ## Requirements
 
