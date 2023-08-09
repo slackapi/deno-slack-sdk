@@ -8,8 +8,9 @@
 </p>
 
 <p align="center">
-    <img alt="GitHub release (with filter)" src="https://img.shields.io/github/v/release/slackapi/deno-slack-sdk?style=flat-square">
-    <img alt="Codecov" src="https://img.shields.io/codecov/c/gh/slackapi/deno-slack-sdk?style=flat-square">
+    <img alt="deno.land version" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fdeno-visualizer.danopia.net%2Fshields%2Flatest-version%2Fx%2Fdeno_slack_sdk%2Fmod.ts">
+    <img alt="deno dependencies" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fdeno-visualizer.danopia.net%2Fshields%2Fupdates%2Fx%2Fdeno_slack_sdk%2Fmod.ts">
+    <img alt="Samples Integration Type-checking" src="https://github.com/slackapi/deno-slack-sdk/workflows/Samples%20Integration%20Type-checking/badge.svg">
   </a>
 </p>
 
