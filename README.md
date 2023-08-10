@@ -18,10 +18,6 @@
 
 A recent version of `deno`.
 
-## Documentation
-
-Check out the [`./docs`](./docs) directory!
-
 ## Versioning
 
 Releases for this repository follow the [SemVer](https://semver.org/) versioning
