@@ -26,6 +26,19 @@ scheme. The SDK's contract is determined by the top-level exports from
 internal and any modifications will not be treated as breaking changes. As such,
 internal exports should be treated as unstable and used at your own risk.
 
+## Setup
+
+Before getting started, first make sure you have a development workspace where
+you have permission to install apps. **Please note that the features in this
+project require that the workspace be part of
+[a Slack paid plan](https://slack.com/pricing).**
+
+### Install the Slack CLI
+
+To use this template, you need to install and configure the Slack CLI.
+Step-by-step instructions can be found in our
+[Quickstart Guide](https://api.slack.com/automation/quickstart).
+
 ## Running Tests
 
 If you make changes to this repo, or just want to make sure things are working
