@@ -11,7 +11,7 @@ There are many ways you can contribute! :heart:
 - If you find a bug, please search for it in the
   [Issues](https://github.com/slackapi/deno-slack-sdk/issues), and if it isn't
   already tracked,
-  [create a new issue](https://github.com/slackapi/deno-slack-sdk/issues/new).
+  [create a new Bug Report Issue](https://github.com/slackapi/deno-slack-sdk/issues/new/choose).
   Fill out the "Bug Report" section of the issue template. Even if an Issue is
   closed, feel free to comment and add details, it will still be reviewed.
 - Issues that have already been identified as a bug (note: able to reproduce)
@@ -24,7 +24,7 @@ There are many ways you can contribute! :heart:
 
 - If you'd like to add new functionality to this project, describe the problem
   you want to solve in a
-  [new Issue](https://github.com/slackapi/deno-slack-sdk/issues/new).
+  [new Feature Request Issue](https://github.com/slackapi/deno-slack-sdk/issues/new/choose).
 - Issues that have been identified as a feature request will be labelled
   `enhancement`.
 - If you'd like to implement the new feature, please wait for feedback from the
