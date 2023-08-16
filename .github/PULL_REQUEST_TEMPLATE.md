@@ -8,7 +8,7 @@
 
 <!-- Describe what steps a reviewer should follow to test your changes. -->
 
-#### Special notes
+### Special notes
 
 <!-- Any special notes reviewers should be aware of. -->
 

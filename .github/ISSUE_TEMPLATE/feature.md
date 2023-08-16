@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest new functionality to this project
+about: Suggest a new feature for this project
 title: '[FEATURE] <title>'
 ---
 
@@ -16,7 +16,4 @@ title: '[FEATURE] <title>'
 
 **Requirements**
 
-Please read the [Contributing
-guidelines](https://github.com/slackapi/deno-slack-sdk/blob/main/.github/contributing.md)
-and [Code of Conduct](https://slackhq.github.io/code-of-conduct) before creating
-this issue or pull request. By submitting, you are agreeing to those rules.
+Please read the [Contributing guidelines](https://github.com/slackapi/deno-slack-sdk/blob/main/.github/contributing.md) and [Code of Conduct](https://slackhq.github.io/code-of-conduct) before creating this issue or pull request. By submitting, you are agreeing to those rules.

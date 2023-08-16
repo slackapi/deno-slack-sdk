@@ -11,7 +11,7 @@
 </p>
 
 A Deno SDK to build Slack apps with the latest platform features. Read the
-[Quickstart Guide](https://api.slack.com/automation/quickstart) and look at our
+[quickstart guide](https://api.slack.com/automation/quickstart) and look at our
 [code samples](https://api.slack.com/automation/samples) to learn how to build
 apps.
 
@@ -90,8 +90,8 @@ export default SlackFunction(
 `DefineFunction` is used to define a custom function and provide Slack with the
 information required to use it.
 
-`SlackFunction` uses the definition returned by `DefineFunction` and the your
-custom executable code to export a Slack usable custom function.
+`SlackFunction` uses the definition returned by `DefineFunction` and your custom
+executable code to export a Slack usable custom function.
 
 ### Create a [workflow](https://api.slack.com/automation/workflows)
 
@@ -131,8 +131,8 @@ export default HelloWorldWorkflowDef;
 information required to use it.
 
 `HelloWorldWorkflow.addStep` is used to add a step to the workflow, here we add
-your `HelloWorldFunction` and then the `SendMessage` Slack Function that will
-post the `message` to slack.
+the `HelloWorldFunction` and then the `SendMessage` Slack Function that will
+post the `message` to a Slack channel.
 
 ### Update the [manifest](https://api.slack.com/automation/manifest)
 
@@ -151,8 +151,9 @@ export default Manifest({
 });
 ```
 
-`Manifest` is used to define your apps Manifest and provides Slack with the
-information required to create it.
+`Manifest` is used to define your apps
+[manifest](https://api.slack.com/automation/manifest) and provides Slack with
+the information required to manage it.
 
 ### Create a [trigger](https://api.slack.com/automation/triggers)
 
@@ -180,6 +181,10 @@ const trigger: Trigger<typeof HelloWorldWorkflow.definition> = {
 
 export default trigger;
 ```
+
+The `Trigger` object is used to define a trigger that will invoke the
+`HelloWorldWorkflow`. The Slack CLI will detect this file and prompt you for its
+creation.
 
 ## Running an app
 

@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Create a bug report to help us
+about: Report a bug encountered while using this project
 title: '[BUG] <title>'
 ---
 
@@ -39,7 +39,4 @@ title: '[BUG] <title>'
 
 **Requirements**
 
-Please read the [Contributing
-guidelines](https://github.com/slackapi/deno-slack-sdk/blob/main/.github/contributing.md)
-and [Code of Conduct](https://slackhq.github.io/code-of-conduct) before creating
-this issue or pull request. By submitting, you are agreeing to those rules.
+Please read the [Contributing guidelines](https://github.com/slackapi/deno-slack-sdk/blob/main/.github/contributing.md) and [Code of Conduct](https://slackhq.github.io/code-of-conduct) before creating this issue or pull request. By submitting, you are agreeing to those rules.
