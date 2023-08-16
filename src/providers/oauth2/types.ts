@@ -8,6 +8,10 @@ export type OAuth2ProviderIdentitySchema = {
   };
 };
 
+export type tokenUrlConfigSchema = {
+  "uses_basic_authentication_scheme"?: boolean;
+};
+
 export type OAuth2ProviderOptions = {
   /** Client id for your provider */
   "client_id": string;
@@ -19,6 +23,8 @@ export type OAuth2ProviderOptions = {
   "authorization_url"?: string;
   /** Token url for your provider. Required for CUSTOM provider types. */
   "token_url"?: string;
+  /** Optional configs for token url. Required for CUSTOM provider types. */
+  "token_url_config"?: tokenUrlConfigSchema;
   /** Identity configuration for your provider. Required for CUSTOM provider types. */
   "identity_config"?: OAuth2ProviderIdentitySchema;
   /** Optional extras dict for authorization url for your provider. Required for CUSTOM provider types. */
