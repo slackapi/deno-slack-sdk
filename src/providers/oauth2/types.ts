@@ -9,7 +9,7 @@ export type OAuth2ProviderIdentitySchema = {
 };
 
 export type tokenUrlConfigSchema = {
-  "uses_basic_authentication_scheme"?: boolean;
+  "use_basic_authentication_scheme"?: boolean;
 };
 
 export type OAuth2ProviderOptions = {
@@ -29,6 +29,8 @@ export type OAuth2ProviderOptions = {
   "identity_config"?: OAuth2ProviderIdentitySchema;
   /** Optional extras dict for authorization url for your provider. Required for CUSTOM provider types. */
   "authorization_url_extras"?: { [key: string]: string };
+  /** Optional boolean flag to specify if the provider requires PKCE. Required for CUSTOM provider types. */
+  "use_pkce"?: boolean;
 };
 
 export type OAuth2ProviderDefinitionArgs = {
