@@ -37,7 +37,7 @@ be found on our
 
 ## Creating an app
 
-Create a blank project by executing
+Create a blank project by executing the following command:
 
 ```zsh
 slack create my-app --template slack-samples/deno-blank-template
