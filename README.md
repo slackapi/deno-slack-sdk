@@ -202,7 +202,7 @@ Post the `Hello world shortcut trigger` in a slack message and **use it**
 [This documentation](https://api.slack.com/automation) has more information on
 basic and advanced concepts of the Deno Slack SDK.
 
-If you otherwise get stuck, we're here to help. The following are the best ways
+If you get stuck, we're here to help. The following are the best ways
 to get assistance working through your issue:
 
 - [Issue Tracker](https://github.com/slackapi/deno-slack-sdk/issues?q=is%3Aissue)
