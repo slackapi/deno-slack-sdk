@@ -130,7 +130,7 @@ export default HelloWorldWorkflowDef;
 `DefineWorkflow` is used to define a workflow and provide Slack with the
 information required to use it.
 
-`HelloWorldWorkflow.addStep` is used to add a step to the workflow, here we add
+`HelloWorldWorkflow.addStep` is used to add a step to the workflow; here we add
 the `HelloWorldFunction` and then the `SendMessage` Slack Function that will
 post the `message` to a Slack channel.
 
