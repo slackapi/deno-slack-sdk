@@ -212,5 +212,5 @@ to get assistance working through your issue:
 
 ## Contributing
 
-Contributions are more then welcome please look at the
+Contributions are more then welcome. Please look at the
 [contributing guidelines](.github/CONTRIBUTING.md) for more info!
