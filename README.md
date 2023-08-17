@@ -91,7 +91,7 @@ export default SlackFunction(
 information required to use it.
 
 `SlackFunction` uses the definition returned by `DefineFunction` and your custom
-executable code to export a Slack usable custom function.
+executable code to export a Slack-usable custom function.
 
 ### Create a [workflow](https://api.slack.com/automation/workflows)
 
