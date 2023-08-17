@@ -192,7 +192,7 @@ creation.
 slack run
 ```
 
-When prompted, create the `triggers/hello_world.ts` trigger! This will send your
+When prompted, create the `triggers/hello_world.ts` trigger. This will send your
 trigger configuration to Slack.
 
 Post the `Hello world shortcut trigger` in a slack message and **use it**
