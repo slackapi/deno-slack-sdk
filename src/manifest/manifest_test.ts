@@ -972,6 +972,49 @@ Deno.test("SlackManifest() oauth2 providers get set properly", () => {
   });
 });
 
+Deno.test("SlackManifest() oauth2 providers get set properly with use_pkce", () => {
+  const providerKey1 = "test_provider_with_with_pkce_true";
+  const providerKey2 = "test_provider_with_with_pkce_false";
+
+  const Provider1 = DefineOAuth2Provider({
+    provider_key: providerKey1,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "use_pkce": true,
+    },
+  });
+
+  const Provider2 = DefineOAuth2Provider({
+    provider_key: providerKey2,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "use_pkce": false,
+    },
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+    externalAuthProviders: [Provider1, Provider2],
+  };
+  assertEquals(definition.externalAuthProviders, [Provider1, Provider2]);
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+
+  assertEquals(exportedManifest.external_auth_providers, {
+    "oauth2": {
+      "test_provider_with_with_pkce_true": Provider1.export(),
+      "test_provider_with_with_pkce_false": Provider2.export(),
+    },
+  });
+});
+
 Deno.test("SlackManifest() oauth2 providers are undefined when not configured", () => {
   const definition: SlackManifestType = {
     name: "Name",
