@@ -20,9 +20,14 @@
       "exclude": ["src/schema/slack/functions/_scripts/functions.json", "**/*.md"]
     }
   },
+  "test": {
+    "files": {
+      "include": ["src", "tests"]
+    }
+  },
   "tasks": {
-    "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test --allow-read --parallel src/ tests/",
-    "coverage": "rm -rf .coverage && deno test --reporter=dot --parallel --allow-read --coverage=.coverage src/  && deno coverage --exclude=fixtures --exclude=test --lcov --output=lcov.info .coverage && deno run --allow-read https://deno.land/x/code_coverage@0.2.0/cli.ts"
+    "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test --allow-read --parallel",
+    "coverage": "deno test --reporter=dot --parallel --allow-read --coverage=.coverage && deno coverage --exclude=fixtures --exclude=test --lcov --output=lcov.info .coverage && deno run --allow-read https://deno.land/x/code_coverage@0.2.0/cli.ts"
   },
   "lock": false
 }
