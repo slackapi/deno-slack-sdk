@@ -6,7 +6,9 @@ import {
   ObjectFunctionProperty,
 } from "./types.ts";
 
-const FUNCTIONS_JSON_PATH = "functions.json";
+const FUNCTIONS_JSON_PATH = Deno.cwd().includes("_scripts")
+  ? "functions.json"
+  : "src/schema/slack/functions/_scripts/functions.json";
 
 const green = "\x1b[92m";
 const yellow = "\x1b[38;5;214m";
