@@ -4,15 +4,15 @@ import {
   getSlackCallbackId,
   renderFunctionImport,
   renderTypeImports,
-} from "../template_utils.ts";
+} from "./utils.ts";
 import {
   assertEquals,
   assertStringIncludes,
-} from "../../../../../../../dev_deps.ts";
-import { FunctionRecord } from "../../types.ts";
-import SchemaTypes from "../../../../../../schema_types.ts";
-import SlackTypes from "../../../../../schema_types.ts";
-import { InternalSlackTypes } from "../../../../../types/custom/mod.ts";
+} from "../../../../../../dev_deps.ts";
+import { FunctionRecord } from "../types.ts";
+import SchemaTypes from "../../../../../schema_types.ts";
+import SlackTypes from "../../../../schema_types.ts";
+import { InternalSlackTypes } from "../../../../types/custom/mod.ts";
 
 const DESCRIPTION = "Test the Slack function template";
 const TITLE = "test function";
