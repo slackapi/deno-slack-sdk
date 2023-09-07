@@ -9,7 +9,10 @@ ls -1 -d $PWD/../* | { grep "\.ts$" || :; } | while read -r filename ; do
 done
 
 # Temporaraly generate a mod.ts file to prevent circular imports
-echo "const SlackFunctions = {};export default SlackFunctions;" >> $PWD/../mod.ts
+cat > $PWD/../mod.ts <<EOL
+const SlackFunctions = {};
+export default SlackFunctions;
+EOL
 
 # Writes the function & test files based on a functions.json file existing alongside this script
 deno run --quiet --allow-read --allow-write ./src/write_function_files.ts
