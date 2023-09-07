@@ -4,6 +4,7 @@ import {
   getSlackCallbackId,
   renderFunctionImport,
   renderTypeImports,
+  sanitize,
 } from "../template_utils.ts";
 import {
   assertEquals,
@@ -207,4 +208,10 @@ Deno.test("renderTypeImports should render imports required for primitive & comp
   };
   const actual = renderTypeImports(dfi);
   assertStringIncludes(actual, "SchemaTypes");
+});
+
+Deno.test(`${sanitize.name} should properly escape \" characters`, () => {
+  const testText = 'Send an "only visible to you" message';
+  const actual = sanitize(testText);
+  assertEquals(actual, 'Send an \\"only visible to you\\" message');
 });

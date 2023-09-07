@@ -82,3 +82,7 @@ export function renderTypeImports(functionRecord: FunctionRecord) {
   }
   return typescript.join("\n");
 }
+
+export function sanitize(value: string): string {
+  return value.replaceAll('"', '\\"');
+}
