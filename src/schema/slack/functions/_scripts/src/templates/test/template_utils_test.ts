@@ -213,5 +213,5 @@ Deno.test("renderTypeImports should render imports required for primitive & comp
 Deno.test(`${sanitize.name} should properly escape \" characters`, () => {
   const testText = 'Send an "only visible to you" message';
   const actual = sanitize(testText);
-  assertEquals(actual, 'Send an \\"only visible to you\\" message');
+  assertEquals(actual, '"Send an \\"only visible to you\\" message"');
 });

@@ -84,5 +84,5 @@ export function renderTypeImports(functionRecord: FunctionRecord) {
 }
 
 export function sanitize(value: string): string {
-  return value.replaceAll('"', '\\"');
+  return JSON.stringify(value);
 }
