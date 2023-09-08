@@ -19,6 +19,7 @@ jobs:
           - slack-samples/deno-message-translator
           - slack-samples/deno-request-time-off
           - slack-samples/deno-simple-survey
+          - slack-samples/deno-github-functions
 
     steps:
       - name: Setup Deno
