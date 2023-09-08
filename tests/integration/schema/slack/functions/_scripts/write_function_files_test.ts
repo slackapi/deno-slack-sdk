@@ -33,8 +33,8 @@ Deno.test(`write_function_files.ts ${_internals.main.name} function snapshot tes
     await _internals.main();
     mock.assertSpyCalls(writeTextFileStub, 3);
     mock.assertSpyCalls(getSlackFunctionsStub, 1);
-    assertSnapshot(t, paths);
-    assertSnapshot(t, fileContents);
+    await assertSnapshot(t, paths);
+    await assertSnapshot(t, fileContents);
   } finally {
     writeTextFileStub.restore();
     getSlackFunctionsStub.restore();

@@ -4,6 +4,7 @@ import {
   getSlackCallbackId,
   renderFunctionImport,
   renderTypeImports,
+  sanitize,
 } from "./utils.ts";
 import {
   assertEquals,
