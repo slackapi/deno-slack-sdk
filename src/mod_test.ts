@@ -1,6 +1,6 @@
 import { assertExists } from "./dev_deps.ts";
-import * as template_functions from "./mod.ts";
+import * as mod from "./mod.ts";
 
-Deno.test("Include mod.ts in code coverage", () => {
-  assertExists(template_functions);
+Deno.test("Include all content of mod.ts in code coverage", () => {
+  assertExists(mod);
 });
