@@ -42,10 +42,10 @@ const propertyToTypeScript = (
     `type: ${schemaTypeMap[property.type]}`,
   );
   if (property.description) {
-    typescript.push(`description: "${property.description}"`);
+    typescript.push(`description: ${sanitize(property.description)}`);
   }
   if (property.title) {
-    typescript.push(`title: "${property.title}"`);
+    typescript.push(`title: ${sanitize(property.title)}`);
   }
   if (isArrayFunctionProperty(property)) {
     typescript.push(`items: ${propertyToTypeScript(property.items)}`);
@@ -101,10 +101,14 @@ export function manifestFunctionFieldsToTypeScript(
   const typescript: string[] = [];
   typescript.push(`source_file: ""`);
   if (functionRecord.title) {
-    typescript.push(`title: "${functionRecord.title}"`);
+    typescript.push(
+      `title: ${sanitize(functionRecord.title)}`,
+    );
   }
   if (functionRecord.description) {
-    typescript.push(`description: "${functionRecord.description}"`);
+    typescript.push(
+      `description: ${sanitize(functionRecord.description)}`,
+    );
   }
   typescript.push(
     `input_parameters: ${
@@ -124,7 +128,7 @@ const defineFunctionInputToTypeScript = (
 ) => {
   const typescript: string[] = [];
   typescript.push(
-    `callback_id: "${getSlackCallbackId(functionRecord)}"`,
+    `callback_id: ${sanitize(getSlackCallbackId(functionRecord))}`,
   );
   typescript.push(manifestFunctionFieldsToTypeScript(functionRecord));
   return `{${typescript.join(",\n")}}`;
