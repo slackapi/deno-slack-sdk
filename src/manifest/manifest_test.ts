@@ -1346,3 +1346,88 @@ Deno.test("Manifest throws error when Providers with duplicate provider_keys are
     assertStringIncludes(error.message, "OAuth2Provider");
   }
 });
+
+Deno.test("SlackManifest() oauth2 providers get set properly with token_url_config", () => {
+  const providerKey1 = "test_provider_with_token_url_config_unset";
+  const providerKey2 =
+    "test_provider_with_use_basic_authentication_scheme_false";
+  const providerKey3 =
+    "test_provider_with_use_basic_authentication_scheme_true";
+
+  const Provider1 = DefineOAuth2Provider({
+    provider_key: providerKey1,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "token_url_config": {},
+    },
+  });
+
+  const Provider2 = DefineOAuth2Provider({
+    provider_key: providerKey2,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "token_url_config": {
+        "use_basic_authentication_scheme": false,
+      },
+    },
+  });
+
+  const Provider3 = DefineOAuth2Provider({
+    provider_key: providerKey3,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "token_url_config": {
+        "use_basic_authentication_scheme": true,
+      },
+    },
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+    externalAuthProviders: [Provider1, Provider2, Provider3],
+  };
+  assertEquals(definition.externalAuthProviders, [
+    Provider1,
+    Provider2,
+    Provider3,
+  ]);
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+
+  assertEquals(exportedManifest.external_auth_providers, {
+    "oauth2": {
+      "test_provider_with_token_url_config_unset": Provider1.export(),
+      "test_provider_with_use_basic_authentication_scheme_false": Provider2
+        .export(),
+      "test_provider_with_use_basic_authentication_scheme_true": Provider3
+        .export(),
+    },
+  });
+  assertStrictEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_token_url_config_unset?.options
+      ?.token_url_config?.use_basic_authentication_scheme,
+    undefined,
+  );
+  assertStrictEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_use_basic_authentication_scheme_false?.options
+      ?.token_url_config?.use_basic_authentication_scheme,
+    false,
+  );
+  assertStrictEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_use_basic_authentication_scheme_true?.options
+      ?.token_url_config?.use_basic_authentication_scheme,
+    true,
+  );
+});
