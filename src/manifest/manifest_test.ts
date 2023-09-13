@@ -1348,12 +1348,8 @@ Deno.test("Manifest throws error when Providers with duplicate provider_keys are
 });
 
 Deno.test("SlackManifest() oauth2 providers get set properly with token_url_config", () => {
+  // test with token_url_config unset
   const providerKey1 = "test_provider_with_token_url_config_unset";
-  const providerKey2 =
-    "test_provider_with_use_basic_authentication_scheme_false";
-  const providerKey3 =
-    "test_provider_with_use_basic_authentication_scheme_true";
-
   const Provider1 = DefineOAuth2Provider({
     provider_key: providerKey1,
     provider_type: Schema.providers.oauth2.CUSTOM,
@@ -1363,7 +1359,9 @@ Deno.test("SlackManifest() oauth2 providers get set properly with token_url_conf
       "token_url_config": {},
     },
   });
-
+  // test with use_basic_authentication_scheme false
+  const providerKey2 =
+    "test_provider_with_use_basic_authentication_scheme_false";
   const Provider2 = DefineOAuth2Provider({
     provider_key: providerKey2,
     provider_type: Schema.providers.oauth2.CUSTOM,
@@ -1375,7 +1373,9 @@ Deno.test("SlackManifest() oauth2 providers get set properly with token_url_conf
       },
     },
   });
-
+  // test with use_basic_authentication_scheme true
+  const providerKey3 =
+    "test_provider_with_use_basic_authentication_scheme_true";
   const Provider3 = DefineOAuth2Provider({
     provider_key: providerKey3,
     provider_type: Schema.providers.oauth2.CUSTOM,
@@ -1387,7 +1387,6 @@ Deno.test("SlackManifest() oauth2 providers get set properly with token_url_conf
       },
     },
   });
-
   const definition: SlackManifestType = {
     name: "Name",
     description: "Description",
@@ -1412,18 +1411,21 @@ Deno.test("SlackManifest() oauth2 providers get set properly with token_url_conf
         .export(),
     },
   });
+  // test with use_basic_authentication_scheme unset
   assertStrictEquals(
     exportedManifest.external_auth_providers?.oauth2
       ?.test_provider_with_token_url_config_unset?.options
       ?.token_url_config?.use_basic_authentication_scheme,
     undefined,
   );
+  // test with use_basic_authentication_scheme false
   assertStrictEquals(
     exportedManifest.external_auth_providers?.oauth2
       ?.test_provider_with_use_basic_authentication_scheme_false?.options
       ?.token_url_config?.use_basic_authentication_scheme,
     false,
   );
+  // test with use_basic_authentication_scheme true
   assertStrictEquals(
     exportedManifest.external_auth_providers?.oauth2
       ?.test_provider_with_use_basic_authentication_scheme_true?.options
