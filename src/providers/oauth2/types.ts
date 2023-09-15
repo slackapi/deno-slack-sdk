@@ -1,11 +1,23 @@
 import { OAuth2ProviderTypeValues } from "../../schema/providers/oauth2/types.ts";
 
+const IdentityUrlHttpMethodTypes = {
+  POST: "POST",
+  GET: "GET",
+} as const;
+
+export type IdentityUrlHttpMethodTypeValues =
+  typeof IdentityUrlHttpMethodTypes[keyof typeof IdentityUrlHttpMethodTypes];
+
 export type OAuth2ProviderIdentitySchema = {
   "url": string;
   "account_identifier": string;
   "headers"?: {
     [key: string]: string;
   };
+  "body": {
+    [key: string]: string;
+  };
+  "http_method_type"?: IdentityUrlHttpMethodTypeValues;
 };
 
 export type tokenUrlConfigSchema = {
