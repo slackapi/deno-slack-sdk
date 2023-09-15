@@ -1433,3 +1433,120 @@ Deno.test("SlackManifest() oauth2 providers get set properly with token_url_conf
     true,
   );
 });
+
+Deno.test("SlackManifest() oauth2 providers get set properly with identity_config", () => {
+  //test with identity_config containing required fields
+  const providerKey1 =
+    "test_provider_with_identity_config_required_fields_set1";
+  const Provider1 = DefineOAuth2Provider({
+    provider_key: providerKey1,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "identity_config": {
+        "url": "https://example.com",
+        "account_identifier": "account_identifier_string",
+      },
+    },
+  });
+
+  //test with identity_config containing all fields with POST method
+  const providerKey2 =
+    "test_provider_with_identity_config_with_all_fields_set2";
+  const Provider2 = DefineOAuth2Provider({
+    provider_key: providerKey2,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "identity_config": {
+        "url": "https://example.com",
+        "account_identifier": "account_identifier_string",
+        "headers": { "key1": "header_1", "key2": "header_2" },
+        "body": { "param1": "body_1", "param2": "body_2" },
+        "http_method_type": "POST",
+      },
+    },
+  });
+
+  // test with identity_config containing all fields with GET method
+  const providerKey3 =
+    "test_provider_with_identity_config_with_all_fields_set3";
+  const Provider3 = DefineOAuth2Provider({
+    provider_key: providerKey3,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "identity_config": {
+        "url": "https://example.com",
+        "account_identifier": "account_identifier_string",
+        "headers": { "key1": "header_1", "key2": "header_2" },
+        "body": { "param1": "body_1", "param2": "body_2" },
+        "http_method_type": "GET",
+      },
+    },
+  });
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+    externalAuthProviders: [Provider1, Provider2, Provider3],
+  };
+  assertEquals(definition.externalAuthProviders, [
+    Provider1,
+    Provider2,
+    Provider3,
+  ]);
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+
+  assertEquals(exportedManifest.external_auth_providers, {
+    "oauth2": {
+      "test_provider_with_identity_config_required_fields_set1": Provider1
+        .export(),
+      "test_provider_with_identity_config_with_all_fields_set2": Provider2
+        .export(),
+      "test_provider_with_identity_config_with_all_fields_set3": Provider3
+        .export(),
+    },
+  });
+  //test with identity_config containing required fields
+  assertEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_identity_config_required_fields_set1?.options
+      ?.identity_config,
+    {
+      "url": "https://example.com",
+      "account_identifier": "account_identifier_string",
+    },
+  );
+  //test with identity_config containing all fields with POST method
+  assertEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_identity_config_with_all_fields_set2?.options
+      ?.identity_config,
+    {
+      "url": "https://example.com",
+      "account_identifier": "account_identifier_string",
+      "headers": { "key1": "header_1", "key2": "header_2" },
+      "body": { "param1": "body_1", "param2": "body_2" },
+      "http_method_type": "POST",
+    },
+  );
+  //test with identity_config containing all fields with GET metthod
+  assertEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_identity_config_with_all_fields_set3?.options
+      ?.identity_config,
+    {
+      "url": "https://example.com",
+      "account_identifier": "account_identifier_string",
+      "headers": { "key1": "header_1", "key2": "header_2" },
+      "body": { "param1": "body_1", "param2": "body_2" },
+      "http_method_type": "GET",
+    },
+  );
+});

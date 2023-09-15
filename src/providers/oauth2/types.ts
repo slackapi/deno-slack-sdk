@@ -14,7 +14,7 @@ export type OAuth2ProviderIdentitySchema = {
   "headers"?: {
     [key: string]: string;
   };
-  "body": {
+  "body"?: {
     [key: string]: string;
   };
   "http_method_type"?: IdentityUrlHttpMethodTypeValues;
