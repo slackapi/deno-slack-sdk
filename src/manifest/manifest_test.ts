@@ -972,6 +972,79 @@ Deno.test("SlackManifest() oauth2 providers get set properly", () => {
   });
 });
 
+Deno.test("SlackManifest() oauth2 providers get set properly with use_pkce", () => {
+  const providerKey1 = "test_provider_with_with_pkce_true";
+  const providerKey2 = "test_provider_with_with_pkce_false";
+  const providerKey3 = "test_provider_with_with_pkce_unset";
+
+  const Provider1 = DefineOAuth2Provider({
+    provider_key: providerKey1,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "use_pkce": true,
+    },
+  });
+
+  const Provider2 = DefineOAuth2Provider({
+    provider_key: providerKey2,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "use_pkce": false,
+    },
+  });
+
+  const Provider3 = DefineOAuth2Provider({
+    provider_key: providerKey3,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+    },
+  });
+
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+    externalAuthProviders: [Provider1, Provider2, Provider3],
+  };
+  assertEquals(definition.externalAuthProviders, [
+    Provider1,
+    Provider2,
+    Provider3,
+  ]);
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+
+  assertEquals(exportedManifest.external_auth_providers, {
+    "oauth2": {
+      "test_provider_with_with_pkce_true": Provider1.export(),
+      "test_provider_with_with_pkce_false": Provider2.export(),
+      "test_provider_with_with_pkce_unset": Provider3.export(),
+    },
+  });
+  assertStrictEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_with_pkce_true?.options?.use_pkce,
+    true,
+  );
+  assertStrictEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_with_pkce_false?.options?.use_pkce,
+    false,
+  );
+  assertStrictEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_with_pkce_unset?.options?.use_pkce,
+    undefined,
+  );
+});
+
 Deno.test("SlackManifest() oauth2 providers are undefined when not configured", () => {
   const definition: SlackManifestType = {
     name: "Name",
@@ -1272,4 +1345,91 @@ Deno.test("Manifest throws error when Providers with duplicate provider_keys are
     assertInstanceOf(error, DuplicateProviderKeyError);
     assertStringIncludes(error.message, "OAuth2Provider");
   }
+});
+
+Deno.test("SlackManifest() oauth2 providers get set properly with token_url_config", () => {
+  // test with token_url_config unset
+  const providerKey1 = "test_provider_with_token_url_config_unset";
+  const Provider1 = DefineOAuth2Provider({
+    provider_key: providerKey1,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "token_url_config": {},
+    },
+  });
+  // test with use_basic_authentication_scheme false
+  const providerKey2 =
+    "test_provider_with_use_basic_authentication_scheme_false";
+  const Provider2 = DefineOAuth2Provider({
+    provider_key: providerKey2,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "token_url_config": {
+        "use_basic_authentication_scheme": false,
+      },
+    },
+  });
+  // test with use_basic_authentication_scheme true
+  const providerKey3 =
+    "test_provider_with_use_basic_authentication_scheme_true";
+  const Provider3 = DefineOAuth2Provider({
+    provider_key: providerKey3,
+    provider_type: Schema.providers.oauth2.CUSTOM,
+    options: {
+      "client_id": "123.456",
+      "scope": ["scope_a", "scope_b"],
+      "token_url_config": {
+        "use_basic_authentication_scheme": true,
+      },
+    },
+  });
+  const definition: SlackManifestType = {
+    name: "Name",
+    description: "Description",
+    icon: "icon.png",
+    botScopes: [],
+    externalAuthProviders: [Provider1, Provider2, Provider3],
+  };
+  assertEquals(definition.externalAuthProviders, [
+    Provider1,
+    Provider2,
+    Provider3,
+  ]);
+  const Manifest = new SlackManifest(definition);
+  const exportedManifest = Manifest.export();
+
+  assertEquals(exportedManifest.external_auth_providers, {
+    "oauth2": {
+      "test_provider_with_token_url_config_unset": Provider1.export(),
+      "test_provider_with_use_basic_authentication_scheme_false": Provider2
+        .export(),
+      "test_provider_with_use_basic_authentication_scheme_true": Provider3
+        .export(),
+    },
+  });
+  // test with use_basic_authentication_scheme unset
+  assertStrictEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_token_url_config_unset?.options
+      ?.token_url_config?.use_basic_authentication_scheme,
+    undefined,
+  );
+  // test with use_basic_authentication_scheme false
+  assertStrictEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_use_basic_authentication_scheme_false?.options
+      ?.token_url_config?.use_basic_authentication_scheme,
+    false,
+  );
+  // test with use_basic_authentication_scheme true
+  assertStrictEquals(
+    exportedManifest.external_auth_providers?.oauth2
+      ?.test_provider_with_use_basic_authentication_scheme_true?.options
+      ?.token_url_config?.use_basic_authentication_scheme,
+    true,
+  );
 });
