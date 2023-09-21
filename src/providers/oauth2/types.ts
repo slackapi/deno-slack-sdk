@@ -2,16 +2,24 @@ import {
   OAuth2ProviderTypeValues,
 } from "../../schema/providers/oauth2/types.ts";
 
+/** Http Method types that are currently supported by identity config */
 export type IdentityUrlHttpMethodTypes = "GET" | "POST";
 export type OAuth2ProviderIdentitySchema = {
+  /** url that is used to identify the authed user */
   "url": string;
+  /** A field name that is returned in response to invoking the identity config url that
+   * can be used as the account identifier of the authed user */
   "account_identifier": string;
+  /** Extra headers that the identity url might expect.
+   * Note: It adds `Authorization` header automatically so no need to specify this. */
   "headers"?: {
     [key: string]: string;
   };
+  /** static body parameters that the identity url expects. This is nullable since only POST methods use this */
   "body"?: {
     [key: string]: string;
   };
+  /** method type of the identity url configured above. By default it is considered GET. */
   "http_method_type"?: IdentityUrlHttpMethodTypes;
 };
 
