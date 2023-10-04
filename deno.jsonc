@@ -32,8 +32,8 @@
     }
   },
   "tasks": {
-    "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test --allow-read --allow-run --parallel src/ tests/",
-    "coverage": "rm -rf .coverage && deno test --reporter=dot --parallel --allow-read --coverage=.coverage src/ && deno coverage --exclude=fixtures --exclude=_test --lcov --output=lcov.info .coverage && deno run --allow-read https://deno.land/x/code_coverage@0.2.2/cli.ts"
+    "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test --allow-read --allow-run --parallel",
+    "coverage": "rm -rf .coverage && deno test --reporter=dot --parallel --allow-read --coverage=.coverage src/ && deno coverage --exclude=fixtures --exclude=test --lcov --output=lcov.info .coverage && deno run --allow-read https://deno.land/x/code_coverage@0.2.2/cli.ts"
   },
   "lock": false
 }
