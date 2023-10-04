@@ -5,13 +5,13 @@ import {
   isObjectFunctionProperty,
   redText,
   yellowText,
-} from "./utils.ts";
-import { assert, assertEquals, IsExact } from "../../../../../dev_deps.ts";
+} from "../utils.ts";
+import { assert, assertEquals, IsExact } from "../../../../../../dev_deps.ts";
 import {
   ArrayFunctionProperty,
   FunctionProperty,
   ObjectFunctionProperty,
-} from "./types.ts";
+} from "../types.ts";
 
 Deno.test("colored text remain consistent", () => {
   assertEquals("\x1b[92mtest\x1b[0m", greenText("test"));
