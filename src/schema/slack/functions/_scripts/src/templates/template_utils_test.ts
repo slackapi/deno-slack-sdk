@@ -5,7 +5,7 @@ import {
   renderFunctionImport,
   renderTypeImports,
   sanitize,
-} from "./utils.ts";
+} from "./template_utils.ts";
 import {
   assertEquals,
   assertStringIncludes,

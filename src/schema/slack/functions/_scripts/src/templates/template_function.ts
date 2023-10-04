@@ -14,7 +14,7 @@ import {
   getSlackCallbackId,
   renderTypeImports,
   sanitize,
-} from "./utils.ts";
+} from "./template_utils.ts";
 import { AllowedTypeValue, AllowedTypeValueObject } from "./types.ts";
 
 const typeMap: Record<string, AllowedTypeValueObject> = {
