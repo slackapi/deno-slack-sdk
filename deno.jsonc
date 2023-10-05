@@ -2,7 +2,15 @@
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "fmt": {
     "files": {
-      "include": ["src", "tests", "docs", "README.md", "scripts", ".github/maintainers_guide.md", ".github/CONTRIBUTING.md"],
+      "include": [
+        "src",
+        "tests",
+        "docs",
+        "README.md",
+        "scripts",
+        ".github/maintainers_guide.md",
+        ".github/CONTRIBUTING.md"
+      ],
       "exclude": ["src/schema/slack/functions/_scripts/functions.json"]
     },
     "options": {
@@ -17,17 +25,15 @@
   "lint": {
     "files": {
       "include": ["src", "tests", "scripts"],
-      "exclude": ["src/schema/slack/functions/_scripts/functions.json", "**/*.md"]
-    }
-  },
-  "test": {
-    "files": {
-      "include": ["src", "tests"]
+      "exclude": [
+        "src/schema/slack/functions/_scripts/functions.json",
+        "**/*.md"
+      ]
     }
   },
   "tasks": {
-    "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test --allow-read --parallel",
-    "coverage": "rm -rf .coverage && deno test --reporter=dot --parallel --allow-read --coverage=.coverage && deno coverage --exclude=fixtures --exclude=test --lcov --output=lcov.info .coverage && deno run --allow-read https://deno.land/x/code_coverage@0.2.0/cli.ts"
+    "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test --allow-read --parallel src/ tests/",
+    "coverage": "rm -rf .coverage && deno test --reporter=dot --parallel --allow-read --coverage=.coverage src/ && deno coverage --exclude=fixtures --exclude=_test --lcov --output=lcov.info .coverage && deno run --allow-read https://deno.land/x/code_coverage@0.2.2/cli.ts"
   },
   "lock": false
 }

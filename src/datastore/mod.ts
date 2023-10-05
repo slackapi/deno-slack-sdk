@@ -36,7 +36,7 @@ export class SlackDatastore<
   }
 
   registerAttributeTypes(manifest: SlackManifest) {
-    Object.values(this.definition.attributes ?? {})?.forEach((attribute) => {
+    Object.values(this.definition.attributes).forEach((attribute) => {
       if (isCustomType(attribute.type)) {
         manifest.registerType(attribute.type);
       }
