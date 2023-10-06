@@ -4,7 +4,7 @@ import {
   getSlackCallbackId,
   renderFunctionImport,
   renderTypeImports,
-} from "./template_utils.ts";
+} from "./utils.ts";
 import { FunctionParameter, FunctionRecord } from "../types.ts";
 import { manifestFunctionFieldsToTypeScript } from "./template_function.ts";
 
