@@ -76,6 +76,8 @@ export class SlackFunctionDefinition<
         { properties: {}, required: [] },
       output_parameters: this.definition.output_parameters ??
         { properties: {}, required: [] },
+      is_widget: this.definition.is_widget,
+      widget_configuration: this.definition.widget_configuration,
     };
   }
 }

@@ -68,9 +68,9 @@ type FunctionInputRuntimeType<
   CurrentDepth extends MaxRecursionDepth ? UnknownRuntimeType
     : Param["type"] extends ICustomType
       ? Param extends CustomTypeParameterDefinition ? FunctionInputRuntimeType<
-          Param["type"]["definition"],
-          IncreaseDepth<CurrentDepth>
-        >
+        Param["type"]["definition"],
+        IncreaseDepth<CurrentDepth>
+      >
       : UnknownRuntimeType
     : Param["type"] extends
       | typeof SchemaTypes.string
@@ -112,10 +112,10 @@ type TypedObjectFunctionInputRuntimeType<
     >;
   }
   & (RequiredProps extends Array<keyof Props> ? {
-      [prop in RequiredProps[number]]: FunctionInputRuntimeType<
-        Props[prop]
-      >;
-    }
+    [prop in RequiredProps[number]]: FunctionInputRuntimeType<
+      Props[prop]
+    >;
+  }
     : Record<never, never>)
   & (Param["additionalProperties"] extends false ? Record<never, never> : {
     [key: string]: UnknownRuntimeType;
@@ -355,6 +355,8 @@ export type FunctionDefinitionArgs<
     OutputParameters,
     RequiredOutputs
   >;
+  is_widget?: boolean;
+  widget_configuration?: Record<string, unknown>;
 };
 
 export type SlackFunctionType<Definition> = Definition extends
