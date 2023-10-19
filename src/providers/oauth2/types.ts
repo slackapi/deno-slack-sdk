@@ -25,7 +25,7 @@ export type OAuth2ProviderIdentitySchema = {
 
 export type tokenUrlConfigSchema = {
   /** Default value is false */
-  "use_basic_authentication_scheme"?: boolean;
+  "use_basic_auth_scheme"?: boolean;
 };
 
 export type OAuth2ProviderOptions = {
@@ -42,7 +42,7 @@ export type OAuth2ProviderOptions = {
   /** Optional configs for token url. Required for CUSTOM provider types. */
   "token_url_config"?: tokenUrlConfigSchema;
   /** Identity configuration for your provider. Required for CUSTOM provider types.
-   * If token_url_config is not present, use_basic_authentication_scheme value is false by default. */
+   * If token_url_config is not present, use_basic_auth_scheme value is false by default. */
   "identity_config"?: OAuth2ProviderIdentitySchema;
   /** Optional extras dict for authorization url for your provider. Required for CUSTOM provider types. */
   "authorization_url_extras"?: { [key: string]: string };
