@@ -6,7 +6,6 @@ export default DefineFunction({
   callback_id: "slack#/functions/archive_channel",
   source_file: "",
   title: "Archive a channel",
-  description: "Archive a Slack channel",
   input_parameters: {
     properties: {
       channel_id: {

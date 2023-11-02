@@ -6,8 +6,7 @@ import SlackTypes from "../schema_types.ts";
 export default DefineFunction({
   callback_id: "slack#/functions/send_dm",
   source_file: "",
-  title: "Send a direct message",
-  description: "Send a direct message to someone",
+  title: "Send a message to a person",
   input_parameters: {
     properties: {
       user_id: {
@@ -24,6 +23,12 @@ export default DefineFunction({
         type: SlackTypes.blocks,
         description: "Button(s) to send with the message",
         title: "Button(s) to send with the message",
+      },
+      files: {
+        type: SchemaTypes.array,
+        description: "File(s) to attach to the message",
+        title: "File(s) to attach to the message",
+        items: { type: SlackTypes.file_id },
       },
     },
     required: ["user_id", "message"],
@@ -55,7 +60,23 @@ export default DefineFunction({
         description: "Reference to the message sent",
         title: "Reference to the message sent",
       },
+      timestamp_started: {
+        type: SlackTypes.timestamp,
+        description: "Time when step started",
+        title: "Time when step started",
+      },
+      timestamp_completed: {
+        type: SlackTypes.timestamp,
+        description: "Time when step ended",
+        title: "Time when step ended",
+      },
     },
-    required: ["message_timestamp", "message_link", "message_context"],
+    required: [
+      "message_timestamp",
+      "message_link",
+      "message_context",
+      "timestamp_started",
+      "timestamp_completed",
+    ],
   },
 });

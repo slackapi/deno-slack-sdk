@@ -5,8 +5,8 @@ import SchemaTypes from "../../schema_types.ts";
 export default DefineFunction({
   callback_id: "slack#/functions/delay",
   source_file: "",
-  title: "Delay",
-  description: "Pause the workflow for a set amount of time",
+  title: "Delay this workflow",
+  description: "Pauses the workflow at this step",
   input_parameters: {
     properties: {
       minutes_to_delay: {

@@ -6,8 +6,8 @@ import SlackTypes from "../schema_types.ts";
 export default DefineFunction({
   callback_id: "slack#/functions/add_user_to_usergroup",
   source_file: "",
-  title: "Add to user group",
-  description: "Add someone to a user group.",
+  title: "Add people to a user group",
+  description: "Additional permissions might be required",
   input_parameters: {
     properties: {
       usergroup_id: {
