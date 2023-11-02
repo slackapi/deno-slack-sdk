@@ -13,9 +13,9 @@ Deno.test("InviteUserToChannel generates valid FunctionManifest", () => {
   );
   const expected: ManifestFunctionSchema = {
     source_file: "",
-    title: "Invite to channel",
+    title: "Add people to a channel",
     description:
-      "Invite someone to a channel. This will only work if this workflow created the channel.",
+      "You or the people using the workflow must have permission to invite others to the channel",
     input_parameters: {
       properties: {
         channel_ids: {

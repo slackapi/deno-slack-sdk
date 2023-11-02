@@ -13,7 +13,6 @@ Deno.test("ArchiveChannel generates valid FunctionManifest", () => {
   const expected: ManifestFunctionSchema = {
     source_file: "",
     title: "Archive a channel",
-    description: "Archive a Slack channel",
     input_parameters: {
       properties: {
         channel_id: {

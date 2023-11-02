@@ -13,8 +13,8 @@ Deno.test("AddUserToUsergroup generates valid FunctionManifest", () => {
   );
   const expected: ManifestFunctionSchema = {
     source_file: "",
-    title: "Add to user group",
-    description: "Add someone to a user group.",
+    title: "Add people to a user group",
+    description: "Additional permissions might be required",
     input_parameters: {
       properties: {
         usergroup_id: {

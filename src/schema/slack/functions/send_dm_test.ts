@@ -10,8 +10,7 @@ Deno.test("SendDm generates valid FunctionManifest", () => {
   assertEquals(SendDm.definition.callback_id, "slack#/functions/send_dm");
   const expected: ManifestFunctionSchema = {
     source_file: "",
-    title: "Send a direct message",
-    description: "Send a direct message to someone",
+    title: "Send a message to a person",
     input_parameters: {
       properties: {
         user_id: {
@@ -28,6 +27,12 @@ Deno.test("SendDm generates valid FunctionManifest", () => {
           type: SlackTypes.blocks,
           description: "Button(s) to send with the message",
           title: "Button(s) to send with the message",
+        },
+        files: {
+          type: SchemaTypes.array,
+          description: "File(s) to attach to the message",
+          title: "File(s) to attach to the message",
+          items: { type: SlackTypes.file_id },
         },
       },
       required: ["user_id", "message"],
@@ -59,8 +64,24 @@ Deno.test("SendDm generates valid FunctionManifest", () => {
           description: "Reference to the message sent",
           title: "Reference to the message sent",
         },
+        timestamp_started: {
+          type: SlackTypes.timestamp,
+          description: "Time when step started",
+          title: "Time when step started",
+        },
+        timestamp_completed: {
+          type: SlackTypes.timestamp,
+          description: "Time when step ended",
+          title: "Time when step ended",
+        },
       },
-      required: ["message_timestamp", "message_link", "message_context"],
+      required: [
+        "message_timestamp",
+        "message_link",
+        "message_context",
+        "timestamp_started",
+        "timestamp_completed",
+      ],
     },
   };
   const actual = SendDm.export();
@@ -96,4 +117,6 @@ Deno.test("All outputs of Slack function SendDm should exist", () => {
   assertExists(step.outputs.action);
   assertExists(step.outputs.interactivity);
   assertExists(step.outputs.message_context);
+  assertExists(step.outputs.timestamp_started);
+  assertExists(step.outputs.timestamp_completed);
 });

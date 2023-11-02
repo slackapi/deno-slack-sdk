@@ -13,9 +13,9 @@ Deno.test("UpdateChannelTopic generates valid FunctionManifest", () => {
   );
   const expected: ManifestFunctionSchema = {
     source_file: "",
-    title: "Update channel topic",
+    title: "Update the channel topic",
     description:
-      "Update the topic of a specific channel. This will work only if this workflow created the channel.",
+      "You or the people using the workflow must be members of the channel",
     input_parameters: {
       properties: {
         channel_id: {

@@ -14,7 +14,7 @@ Deno.test("CreateUsergroup generates valid FunctionManifest", () => {
   const expected: ManifestFunctionSchema = {
     source_file: "",
     title: "Create a user group",
-    description: "Create a Slack user group",
+    description: "Additional permissions might be required",
     input_parameters: {
       properties: {
         usergroup_handle: {

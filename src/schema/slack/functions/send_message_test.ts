@@ -13,8 +13,7 @@ Deno.test("SendMessage generates valid FunctionManifest", () => {
   );
   const expected: ManifestFunctionSchema = {
     source_file: "",
-    title: "Send a message to channel",
-    description: "Send a message to channel",
+    title: "Send a message to a channel",
     input_parameters: {
       properties: {
         channel_id: {
@@ -43,6 +42,12 @@ Deno.test("SendMessage generates valid FunctionManifest", () => {
           type: SlackTypes.blocks,
           description: "Button(s) to send with the message",
           title: "Button(s) to send with the message",
+        },
+        files: {
+          type: SchemaTypes.array,
+          description: "File(s) to attach to the message",
+          title: "File(s) to attach to the message",
+          items: { type: SlackTypes.file_id },
         },
       },
       required: ["channel_id", "message"],
@@ -74,8 +79,24 @@ Deno.test("SendMessage generates valid FunctionManifest", () => {
           description: "Reference to the message sent",
           title: "Reference to the message sent",
         },
+        timestamp_started: {
+          type: SlackTypes.timestamp,
+          description: "Time when step started",
+          title: "Time when step started",
+        },
+        timestamp_completed: {
+          type: SlackTypes.timestamp,
+          description: "Time when step ended",
+          title: "Time when step ended",
+        },
       },
-      required: ["message_timestamp", "message_link", "message_context"],
+      required: [
+        "message_timestamp",
+        "message_link",
+        "message_context",
+        "timestamp_started",
+        "timestamp_completed",
+      ],
     },
   };
   const actual = SendMessage.export();
@@ -111,4 +132,6 @@ Deno.test("All outputs of Slack function SendMessage should exist", () => {
   assertExists(step.outputs.action);
   assertExists(step.outputs.interactivity);
   assertExists(step.outputs.message_context);
+  assertExists(step.outputs.timestamp_started);
+  assertExists(step.outputs.timestamp_completed);
 });

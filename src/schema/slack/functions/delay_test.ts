@@ -9,8 +9,8 @@ Deno.test("Delay generates valid FunctionManifest", () => {
   assertEquals(Delay.definition.callback_id, "slack#/functions/delay");
   const expected: ManifestFunctionSchema = {
     source_file: "",
-    title: "Delay",
-    description: "Pause the workflow for a set amount of time",
+    title: "Delay this workflow",
+    description: "Pauses the workflow at this step",
     input_parameters: {
       properties: {
         minutes_to_delay: {

@@ -13,8 +13,9 @@ Deno.test("SendEphemeralMessage generates valid FunctionManifest", () => {
   );
   const expected: ManifestFunctionSchema = {
     source_file: "",
-    title: "Send an ephemeral message",
-    description: "Send a private message to someone in a channel",
+    title: 'Send an "only visible to you" message',
+    description:
+      "Send a temporary message to someone in a channel that only they can see",
     input_parameters: {
       properties: {
         channel_id: {
@@ -32,7 +33,6 @@ Deno.test("SendEphemeralMessage generates valid FunctionManifest", () => {
           description: "Add a message",
           title: "Add a message",
         },
-        // thread_ts will be removed, maybe, in a future change. ask @shapirone if in doubt
         thread_ts: {
           type: SchemaTypes.string,
           description:
@@ -44,7 +44,6 @@ Deno.test("SendEphemeralMessage generates valid FunctionManifest", () => {
     },
     output_parameters: {
       properties: {
-        // message_ts will be renamed message_timestamp.. soon. ask @shapirone for more info
         message_ts: {
           type: SlackTypes.message_ts,
           description: "Message time stamp",

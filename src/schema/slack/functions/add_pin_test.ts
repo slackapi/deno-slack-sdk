@@ -10,8 +10,7 @@ Deno.test("AddPin generates valid FunctionManifest", () => {
   assertEquals(AddPin.definition.callback_id, "slack#/functions/add_pin");
   const expected: ManifestFunctionSchema = {
     source_file: "",
-    title: "Pin to channel",
-    description: "Pin a message to a channel",
+    title: "Pin a message",
     input_parameters: {
       properties: {
         channel_id: {
@@ -21,8 +20,8 @@ Deno.test("AddPin generates valid FunctionManifest", () => {
         },
         message: {
           type: SchemaTypes.string,
-          description: "Enter a message URL or message timestamp",
-          title: "Message URL or message timestamp",
+          description: "Enter a message link or message timestamp",
+          title: "Message link or message timestamp",
         },
       },
       required: ["channel_id", "message"],

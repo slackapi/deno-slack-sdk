@@ -11,8 +11,8 @@ Deno.test("OpenForm generates valid FunctionManifest", () => {
   assertEquals(OpenForm.definition.callback_id, "slack#/functions/open_form");
   const expected: ManifestFunctionSchema = {
     source_file: "",
-    title: "Open a form",
-    description: "Opens a form for the user",
+    title: "Collect info in a form",
+    description: "Uses a form to collect information",
     input_parameters: {
       properties: {
         title: {
@@ -56,8 +56,29 @@ Deno.test("OpenForm generates valid FunctionManifest", () => {
           description: "Context about the form submit action interactive event",
           title: "interactivity",
         },
+        submit_user: {
+          type: SlackTypes.user_id,
+          description: "Person who submitted the form",
+          title: "Person who submitted the form",
+        },
+        timestamp_started: {
+          type: SlackTypes.timestamp,
+          description: "Time when step started",
+          title: "Time when step started",
+        },
+        timestamp_completed: {
+          type: SlackTypes.timestamp,
+          description: "Time when step ended",
+          title: "Time when step ended",
+        },
       },
-      required: ["fields", "interactivity"],
+      required: [
+        "fields",
+        "interactivity",
+        "submit_user",
+        "timestamp_started",
+        "timestamp_completed",
+      ],
     },
   };
   const actual = OpenForm.export();
@@ -99,4 +120,7 @@ Deno.test("All outputs of Slack function OpenForm should exist", () => {
   });
   assertExists(step.outputs.fields);
   assertExists(step.outputs.interactivity);
+  assertExists(step.outputs.submit_user);
+  assertExists(step.outputs.timestamp_started);
+  assertExists(step.outputs.timestamp_completed);
 });

@@ -6,9 +6,9 @@ import SlackTypes from "../schema_types.ts";
 export default DefineFunction({
   callback_id: "slack#/functions/update_channel_topic",
   source_file: "",
-  title: "Update channel topic",
+  title: "Update the channel topic",
   description:
-    "Update the topic of a specific channel. This will work only if this workflow created the channel.",
+    "You or the people using the workflow must be members of the channel",
   input_parameters: {
     properties: {
       channel_id: {
