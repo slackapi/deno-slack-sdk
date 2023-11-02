@@ -4,6 +4,7 @@ export {
   assertInstanceOf,
   AssertionError,
   assertMatch,
+  assertNotStrictEquals,
   assertRejects,
   assertStrictEquals,
   assertStringIncludes,
