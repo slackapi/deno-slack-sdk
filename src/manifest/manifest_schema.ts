@@ -5,6 +5,7 @@ import type { ParameterDefinition } from "../parameters/definition_types.ts";
 import { OAuth2ProviderTypeValues } from "../schema/providers/oauth2/types.ts";
 import type { ICustomType } from "../types/types.ts";
 import { ISlackWorkflow } from "../workflows/types.ts";
+import { ISlackWidget } from "../widgets/types.ts";
 
 // ----------------------------------------------------------------------------
 // Manifest Schema Types
@@ -25,6 +26,7 @@ export type ManifestSchema = {
   datastores?: ManifestDataStoresSchema;
   events?: ManifestCustomEventsSchema;
   external_auth_providers?: ManifestExternalAuthProviders;
+  widgets?: ManifestWidgetSchema;
 };
 
 // ---------------------------------------------------------------------------
@@ -216,6 +218,8 @@ export type ManifestFunctionSchema = {
   source_file: string;
   input_parameters: ManifestFunctionParameters;
   output_parameters: ManifestFunctionParameters;
+  is_widget?: boolean;
+  widget_configuration?: Record<string, unknown>;
 };
 
 export type ManifestFunctionParameters = {
@@ -305,6 +309,22 @@ export type ManifestOAuth2ProviderSchema = {
 export interface ManifestExternalAuthProviders {
   oauth2?: ManifestOAuth2Schema;
 }
+
+// ---------------------------------------------------------------------------
+// Manifest: widget
+// Not to be confused with ManifestWorkflowStepsSchemaLegacy
+// ---------------------------------------------------------------------------
+export type ManifestWidget = ISlackWidget;
+
+export type ManifestWidgetsSchema = { [key: string]: ManifestWidgetSchema };
+export type ManifestWidgetSchema = {
+  title?: string;
+  description?: string;
+  source_file: string;
+  function_id: string;
+  input_parameters?: ManifestFunctionParameters;
+  output_parameters?: ManifestFunctionParameters;
+};
 
 // -------------------------------------------------------------------------
 // Utilities
