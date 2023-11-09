@@ -6,7 +6,8 @@ import SlackTypes from "../schema_types.ts";
 export default DefineFunction({
   callback_id: "slack#/functions/send_message",
   source_file: "",
-  title: "Send a message to a channel",
+  title: "Send a message to channel",
+  description: "Send a message to channel",
   input_parameters: {
     properties: {
       channel_id: {
@@ -35,12 +36,6 @@ export default DefineFunction({
         type: SlackTypes.blocks,
         description: "Button(s) to send with the message",
         title: "Button(s) to send with the message",
-      },
-      files: {
-        type: SchemaTypes.array,
-        description: "File(s) to attach to the message",
-        title: "File(s) to attach to the message",
-        items: { type: SlackTypes.file_id },
       },
     },
     required: ["channel_id", "message"],
@@ -72,23 +67,7 @@ export default DefineFunction({
         description: "Reference to the message sent",
         title: "Reference to the message sent",
       },
-      timestamp_started: {
-        type: SlackTypes.timestamp,
-        description: "Time when step started",
-        title: "Time when step started",
-      },
-      timestamp_completed: {
-        type: SlackTypes.timestamp,
-        description: "Time when step ended",
-        title: "Time when step ended",
-      },
     },
-    required: [
-      "message_timestamp",
-      "message_link",
-      "message_context",
-      "timestamp_started",
-      "timestamp_completed",
-    ],
+    required: ["message_timestamp", "message_link", "message_context"],
   },
 });
