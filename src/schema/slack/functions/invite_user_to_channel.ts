@@ -6,9 +6,9 @@ import SlackTypes from "../schema_types.ts";
 export default DefineFunction({
   callback_id: "slack#/functions/invite_user_to_channel",
   source_file: "",
-  title: "Add people to a channel",
+  title: "Invite to channel",
   description:
-    "You or the people using the workflow must have permission to invite others to the channel",
+    "Invite someone to a channel. This will only work if this workflow created the channel.",
   input_parameters: {
     properties: {
       channel_ids: {

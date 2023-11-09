@@ -6,8 +6,8 @@ import SlackTypes from "../schema_types.ts";
 export default DefineFunction({
   callback_id: "slack#/functions/remove_user_from_usergroup",
   source_file: "",
-  title: "Remove someone from a user group",
-  description: "Additional permissions might be required",
+  title: "Remove from a user group",
+  description: "Remove someone from a user group",
   input_parameters: {
     properties: {
       usergroup_id: {

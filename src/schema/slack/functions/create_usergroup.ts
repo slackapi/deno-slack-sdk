@@ -7,7 +7,7 @@ export default DefineFunction({
   callback_id: "slack#/functions/create_usergroup",
   source_file: "",
   title: "Create a user group",
-  description: "Additional permissions might be required",
+  description: "Create a Slack user group",
   input_parameters: {
     properties: {
       usergroup_handle: {

@@ -6,7 +6,8 @@ import SlackTypes from "../schema_types.ts";
 export default DefineFunction({
   callback_id: "slack#/functions/reply_in_thread",
   source_file: "",
-  title: "Reply to a message in thread",
+  title: "Reply in thread",
+  description: "Send a message in a thread",
   input_parameters: {
     properties: {
       message_context: {
@@ -36,17 +37,6 @@ export default DefineFunction({
         additionalProperties: true,
         required: ["event_type", "event_payload"],
       },
-      interactive_blocks: {
-        type: SlackTypes.blocks,
-        description: "Button(s) to send with the message",
-        title: "Button(s) to send with the message",
-      },
-      files: {
-        type: SchemaTypes.array,
-        description: "File(s) to attach to the message",
-        title: "File(s) to attach to the message",
-        items: { type: SlackTypes.file_id },
-      },
     },
     required: ["message_context", "message"],
   },
@@ -62,32 +52,7 @@ export default DefineFunction({
         description: "Message link",
         title: "Message link",
       },
-      action: {
-        type: SchemaTypes.object,
-        description: "Button interactivity data",
-        title: "Button interactivity data",
-      },
-      interactivity: {
-        type: SlackTypes.interactivity,
-        description: "Interactivity context",
-        title: "interactivity",
-      },
-      timestamp_started: {
-        type: SlackTypes.timestamp,
-        description: "Time when step started",
-        title: "Time when step started",
-      },
-      timestamp_completed: {
-        type: SlackTypes.timestamp,
-        description: "Time when step ended",
-        title: "Time when step ended",
-      },
     },
-    required: [
-      "message_context",
-      "message_link",
-      "timestamp_started",
-      "timestamp_completed",
-    ],
+    required: ["message_context", "message_link"],
   },
 });

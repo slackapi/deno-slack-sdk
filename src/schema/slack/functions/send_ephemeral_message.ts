@@ -6,9 +6,8 @@ import SlackTypes from "../schema_types.ts";
 export default DefineFunction({
   callback_id: "slack#/functions/send_ephemeral_message",
   source_file: "",
-  title: 'Send an "only visible to you" message',
-  description:
-    "Send a temporary message to someone in a channel that only they can see",
+  title: "Send an ephemeral message",
+  description: "Send a private message to someone in a channel",
   input_parameters: {
     properties: {
       channel_id: {
