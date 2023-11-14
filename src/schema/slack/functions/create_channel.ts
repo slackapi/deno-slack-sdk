@@ -7,7 +7,6 @@ export default DefineFunction({
   callback_id: "slack#/functions/create_channel",
   source_file: "",
   title: "Create a channel",
-  description: "Create a Slack channel",
   input_parameters: {
     properties: {
       channel_name: {

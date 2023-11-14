@@ -6,8 +6,7 @@ import SlackTypes from "../schema_types.ts";
 export default DefineFunction({
   callback_id: "slack#/functions/add_pin",
   source_file: "",
-  title: "Pin to channel",
-  description: "Pin a message to a channel",
+  title: "Pin a message",
   input_parameters: {
     properties: {
       channel_id: {
@@ -17,8 +16,8 @@ export default DefineFunction({
       },
       message: {
         type: SchemaTypes.string,
-        description: "Enter a message URL or message timestamp",
-        title: "Message URL or message timestamp",
+        description: "Enter a message link or message timestamp",
+        title: "Message link or message timestamp",
       },
     },
     required: ["channel_id", "message"],
