@@ -28,7 +28,7 @@ import {
   UnhandledEventHandler,
   ViewClosedHandler,
   ViewSubmissionHandler,
-} from "./interactivity/types.ts";
+} from "../functions/interactivity/types.ts";
 import { ICustomType } from "../types/types.ts";
 import {
   IncreaseDepth,
@@ -36,7 +36,7 @@ import {
   RecursionDepthLevel,
 } from "../type_utils.ts";
 
-export type { BlockActionHandler } from "./interactivity/types.ts";
+export type { BlockActionHandler } from "../functions/interactivity/types.ts";
 
 export type FunctionInvocationBody = {
   "team_id": string;
@@ -332,7 +332,7 @@ export type SlackFunctionDefinitionArgs<
     RequiredInputs,
     RequiredOutputs
   >
-  & { source_file: string };
+  & { source_file: string; function_id: string };
 
 export type FunctionDefinitionArgs<
   InputParameters extends ParameterSetDefinition,
@@ -355,8 +355,6 @@ export type FunctionDefinitionArgs<
     OutputParameters,
     RequiredOutputs
   >;
-  is_widget?: boolean;
-  widget_configuration?: Record<string, unknown>;
 };
 
 export type SlackFunctionType<Definition> = Definition extends

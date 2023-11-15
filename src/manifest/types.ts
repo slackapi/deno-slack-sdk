@@ -10,6 +10,7 @@ import {
   ManifestShortcutsSchema,
   ManifestSlashCommandsSchema,
   ManifestUnfurlDomainsSchema,
+  ManifestWidget,
   ManifestWorkflow,
   ManifestWorkflowStepsSchemaLegacy,
 } from "./manifest_schema.ts";
@@ -76,6 +77,7 @@ interface ISlackManifestShared {
   botScopes: Array<string>;
   functions?: ManifestFunction[];
   workflows?: ManifestWorkflow[];
+  widgets?: ManifestWidget[];
   outgoingDomains?: Array<string>;
   events?: ICustomEvent[];
   types?: ICustomType[];
