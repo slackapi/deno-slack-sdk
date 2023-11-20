@@ -132,7 +132,13 @@ export class SlackManifest {
       );
     }
 
-    manifest.outgoing_domains = def.outgoingDomains || [];
+    manifest.outgoing_domains = (def.outgoingDomains || []).map((domain) => {
+      try {
+        return new URL(domain).hostname;
+      } catch (e) {
+        throw new Error(`Invalid outgoing domain: ${domain}, error ${e}`);
+      }
+    });
 
     // Assign remote hosted app properties
     if (manifest.settings.function_runtime === "slack") {
