@@ -37,11 +37,23 @@ export const validateOutgoingDomains = (
 ) => {
   return domains.map((domain) => {
     try {
-      return new URL(domain).hostname;
+      const url = domain.includes("://") ? domain : `http://${domain}`;
+      return new URL(url).hostname;
     } catch (e) {
-      return domain;
+      if (isValidDomain(domain)) {
+        return domain;
+      } else {
+        throw new Error(
+          `Invalid outgoing domain: ${domain}, error ${e}`,
+        );
+      }
     }
   });
+};
+
+const isValidDomain = (domain: string) => {
+  const domainPattern = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/;
+  return domainPattern.test(domain);
 };
 
 export class SlackManifest {
