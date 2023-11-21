@@ -32,6 +32,18 @@ export const Manifest = (
   return manifest.export();
 };
 
+export const validateOutgoingDomains = (
+  domains: string[],
+) => {
+  return domains.map((domain) => {
+    try {
+      return new URL(domain).hostname;
+    } catch (e) {
+      throw new Error(`Invalid outgoing domain: ${domain}, error ${e}`);
+    }
+  });
+};
+
 export class SlackManifest {
   constructor(private definition: SlackManifestType) {
     this.registerFeatures();
@@ -132,13 +144,9 @@ export class SlackManifest {
       );
     }
 
-    manifest.outgoing_domains = (def.outgoingDomains || []).map((domain) => {
-      try {
-        return new URL(domain).hostname;
-      } catch (e) {
-        throw new Error(`Invalid outgoing domain: ${domain}, error ${e}`);
-      }
-    });
+    manifest.outgoing_domains = validateOutgoingDomains(
+      def.outgoingDomains || [],
+    );
 
     // Assign remote hosted app properties
     if (manifest.settings.function_runtime === "slack") {
