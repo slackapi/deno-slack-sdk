@@ -39,7 +39,7 @@ export const validateOutgoingDomains = (
     try {
       return new URL(domain).hostname;
     } catch (e) {
-      throw new Error(`Invalid outgoing domain: ${domain}, error ${e}`);
+      return domain;
     }
   });
 };
