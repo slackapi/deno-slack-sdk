@@ -1,0 +1,161 @@
+import { SlackManifest } from "../manifest/mod.ts";
+import {
+  ManifestFunction,
+  ManifestWidgetStepSchema,
+} from "../manifest/manifest_schema.ts";
+import { ISlackFunctionDefinition } from "../functions/types.ts";
+import {
+  CreateUntypedObjectParameterVariable,
+  ParameterVariable,
+} from "../parameters/mod.ts";
+import {
+  ParameterSetDefinition,
+  ParameterVariableType,
+  PossibleParameterKeys,
+} from "../parameters/types.ts";
+import { WidgetStepInputs, WidgetStepOutputs } from "./types.ts";
+
+const localFnPrefix = "#/functions/";
+
+export type WidgetStepDefinition =
+  // deno-lint-ignore no-explicit-any
+  | TypedWidgetStepDefinition<any, any, any, any>
+  | UntypedWidgetStepDefinition;
+
+abstract class BaseWidgetStepDefinition {
+  protected stepId: string;
+
+  protected functionReference: string;
+
+  protected inputs: Record<string, unknown>;
+
+  constructor(
+    stepId: string,
+    functionReference: string,
+    inputs: Record<string, unknown>,
+  ) {
+    this.stepId = stepId;
+    // ensures the function reference is a full path - local functions will only be passing in the function callback id
+    this.functionReference = functionReference.includes("#/")
+      ? functionReference
+      : `${localFnPrefix}${functionReference}`;
+    this.inputs = inputs;
+  }
+
+  templatizeInputs() {
+    const templatizedInputs: ManifestWidgetStepSchema["inputs"] =
+      {} as ManifestWidgetStepSchema["inputs"];
+
+    for (const [inputName, inputValue] of Object.entries(this.inputs)) {
+      try {
+        templatizedInputs[inputName] = JSON.parse(JSON.stringify(inputValue));
+      } catch {
+        templatizedInputs[inputName] = undefined;
+      }
+    }
+
+    return templatizedInputs;
+  }
+
+  export(): ManifestWidgetStepSchema {
+    return {
+      id: this.stepId,
+      function_id: this.functionReference,
+      inputs: this.templatizeInputs(),
+    };
+  }
+
+  toJSON() {
+    return this.export();
+  }
+
+  registerFunction(_manifest: SlackManifest) {
+    // default is a noop, only steps using a function definition will register themselves on the manifest
+  }
+
+  protected isLocalFunctionReference(): boolean {
+    return this.functionReference.startsWith(localFnPrefix);
+  }
+}
+
+export class TypedWidgetStepDefinition<
+  InputParameters extends ParameterSetDefinition,
+  OutputParameters extends ParameterSetDefinition,
+  RequiredInputs extends PossibleParameterKeys<InputParameters>,
+  RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
+> extends BaseWidgetStepDefinition {
+  public definition: ISlackFunctionDefinition<
+    InputParameters,
+    OutputParameters,
+    RequiredInputs,
+    RequiredOutputs
+  >;
+
+  public outputs: WidgetStepOutputs<
+    OutputParameters,
+    RequiredOutputs
+  >;
+
+  constructor(
+    stepId: string,
+    slackFunction: ISlackFunctionDefinition<
+      InputParameters,
+      OutputParameters,
+      RequiredInputs,
+      RequiredOutputs
+    >,
+    inputs: WidgetStepInputs<InputParameters, RequiredInputs>,
+  ) {
+    super(stepId, slackFunction.id, inputs);
+
+    this.definition = slackFunction;
+
+    this.outputs = {} as WidgetStepOutputs<
+      OutputParameters,
+      RequiredOutputs
+    >;
+
+    // Setup step outputs for use in input template expressions
+    for (
+      const [outputName, outputDefinition] of Object.entries(
+        slackFunction?.definition?.output_parameters?.properties ?? {},
+      )
+    ) {
+      // deno-lint-ignore ban-ts-comment
+      //@ts-ignore
+      this.outputs[
+        outputName as keyof OutputParameters
+      ] = ParameterVariable(
+        `steps.${this.stepId}`,
+        outputName,
+        outputDefinition,
+      ) as ParameterVariableType<
+        OutputParameters[typeof outputName]
+      >;
+    }
+  }
+
+  registerFunction(manifest: SlackManifest) {
+    if (this.isLocalFunctionReference()) {
+      manifest.registerFunction(this.definition as ManifestFunction);
+    }
+  }
+}
+
+export class UntypedWidgetStepDefinition extends BaseWidgetStepDefinition {
+  public outputs: ReturnType<typeof CreateUntypedObjectParameterVariable>;
+
+  constructor(
+    stepId: string,
+    functionReference: string,
+    // deno-lint-ignore no-explicit-any
+    inputs: WidgetStepInputs<any, any>,
+  ) {
+    super(stepId, functionReference, inputs);
+
+    this.outputs = CreateUntypedObjectParameterVariable(
+      `steps.${stepId}`,
+      "",
+    );
+  }
+}

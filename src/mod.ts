@@ -13,6 +13,8 @@ export {
 } from "./functions/interactivity/mod.ts";
 export type { ViewEvents } from "./functions/interactivity/view_types.ts";
 export { DefineWorkflow } from "./workflows/mod.ts";
+export { DefineWidget } from "./widgets/mod.ts";
+export { SlackWidgetDataMode } from "./widgets/types.ts";
 export { DefineEvent } from "./events/mod.ts";
 export { DefineType } from "./types/mod.ts";
 export { DefineOAuth2Provider } from "./providers/oauth2/mod.ts";

@@ -15,6 +15,7 @@ import {
   ManifestFunctionRuntime,
   ManifestFunctionsSchema,
   ManifestSchema,
+  ManifestWidgetSchema,
   ManifestWorkflowsSchema,
 } from "./manifest_schema.ts";
 import { isCustomType } from "../types/mod.ts";
@@ -126,6 +127,16 @@ export class SlackManifest {
             throw new DuplicateNameError(event.id, "CustomEvent");
           }
           acc[event.id] = event.export();
+          return acc;
+        },
+        {},
+      );
+    }
+
+    if (def.widgets) {
+      manifest.widgets = def.widgets?.reduce<ManifestWidgetSchema>(
+        (acc = {}, widget) => {
+          acc[widget.id] = widget.export();
           return acc;
         },
         {},
