@@ -319,13 +319,6 @@ export type ManifestWidgetSchema = {
   data_mode: SlackWidgetDataMode;
   workflow_id: string;
 };
-export type ManifestWidgetStepSchema = {
-  id: string;
-  function_id: string;
-  inputs: {
-    [name: string]: unknown;
-  };
-};
 
 // -------------------------------------------------------------------------
 // Utilities
