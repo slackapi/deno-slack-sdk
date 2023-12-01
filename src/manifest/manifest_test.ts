@@ -9,6 +9,7 @@ import {
   DefineEvent,
   DefineFunction,
   DefineType,
+  DefineWidget,
   DefineWorkflow,
   Schema,
 } from "../mod.ts";
@@ -26,6 +27,7 @@ import {
 import { DefineConnector } from "../functions/mod.ts";
 import { InternalSlackTypes } from "../schema/slack/types/custom/mod.ts";
 import { DuplicateCallbackIdError, DuplicateNameError } from "./errors.ts";
+import { SlackWidgetDataMode } from "../widgets/types.ts";
 
 Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
   const definition: SlackManifestType = {
@@ -977,6 +979,34 @@ Deno.test("Manifest supports multiple workflows with parameters", () => {
   assertEquals(Object.keys(manifest.workflows || {}).length, 2);
 });
 
+Deno.test("Manifest supports multiple widgets", () => {
+  const widget1 = DefineWidget({
+    callback_id: "test",
+    title: "test",
+    description: "this widget",
+    workflow_id: "1",
+    data_mode: SlackWidgetDataMode.PER_INSTALLER,
+  });
+
+  const widget2 = DefineWidget({
+    callback_id: "test2",
+    title: "test2",
+    description: "this widget",
+    workflow_id: "1",
+    data_mode: SlackWidgetDataMode.PER_INSTALLER,
+  });
+
+  const manifest = Manifest({
+    name: "Name",
+    description: "Description",
+    botScopes: [],
+    icon: "icon.png",
+    widgets: [widget1, widget2],
+  });
+
+  assertEquals(Object.keys(manifest.widgets || {}).length, 2);
+});
+
 Deno.test("Manifest() does not register connectors used by workflows", () => {
   const Function = DefineConnector(
     {
@@ -1050,6 +1080,39 @@ Deno.test("Manifest throws error when workflows with duplicate callback_id are a
     if (error instanceof AssertionError) throw error;
     assertInstanceOf(error, DuplicateCallbackIdError);
     assertStringIncludes(error.message, "Workflow");
+  }
+});
+
+Deno.test("Manifest throws error when widgets with duplicate callback_id are added", () => {
+  const widget1 = DefineWidget({
+    callback_id: "test",
+    title: "widget1",
+    description: "this widget",
+    workflow_id: "1",
+    data_mode: SlackWidgetDataMode.PER_INSTALLER,
+  });
+
+  const widget2 = DefineWidget({
+    callback_id: "test",
+    title: "widget2",
+    description: "this widget2",
+    workflow_id: "1",
+    data_mode: SlackWidgetDataMode.PER_INSTALLER,
+  });
+
+  try {
+    Manifest({
+      name: "Name",
+      description: "Description",
+      botScopes: [],
+      icon: "icon.png",
+      widgets: [widget1, widget2],
+    });
+    fail("Manifest() should have thrown an error");
+  } catch (error) {
+    if (error instanceof AssertionError) throw error;
+    assertInstanceOf(error, DuplicateCallbackIdError);
+    assertStringIncludes(error.message, "Widget");
   }
 });
 

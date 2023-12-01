@@ -136,9 +136,10 @@ export class SlackManifest {
     if (def.widgets) {
       manifest.widgets = def.widgets?.reduce<ManifestWidgetsSchema>(
         (acc = {}, widget) => {
-          const id = widget.id;
-          const exported = widget.export();
-          acc[id] = exported;
+          if (widget.id in acc) {
+            throw new DuplicateCallbackIdError(widget.id, "Widget");
+          }
+          acc[widget.id] = widget.export();
           return acc;
         },
         {},
