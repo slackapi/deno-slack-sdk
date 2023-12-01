@@ -14,6 +14,8 @@ Deno.test("Widget exports json as expected", () => {
     ...widgetSerialized,
   });
 
-  const json = widget.export();
+  const exported = widget.export();
+  const json = widget.toJSON();
+  assertEquals(exported, widgetSerialized);
   assertEquals(json, widgetSerialized);
 });
