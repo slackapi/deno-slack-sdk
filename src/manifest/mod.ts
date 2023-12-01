@@ -15,7 +15,7 @@ import {
   ManifestFunctionRuntime,
   ManifestFunctionsSchema,
   ManifestSchema,
-  ManifestWidgetSchema,
+  ManifestWidgetsSchema,
   ManifestWorkflowsSchema,
 } from "./manifest_schema.ts";
 import { isCustomType } from "../types/mod.ts";
@@ -134,9 +134,11 @@ export class SlackManifest {
     }
 
     if (def.widgets) {
-      manifest.widgets = def.widgets?.reduce<ManifestWidgetSchema>(
+      manifest.widgets = def.widgets?.reduce<ManifestWidgetsSchema>(
         (acc = {}, widget) => {
-          acc[widget.id] = widget.export();
+          const id = widget.id;
+          const exported = widget.export();
+          acc[id] = exported;
           return acc;
         },
         {},
