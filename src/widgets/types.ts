@@ -6,8 +6,8 @@ export interface ISlackWidget {
 }
 
 export enum SlackWidgetDataMode {
-  PER_INSTALLER = "per_installer",
-  PER_USER = "per_user",
+  PER_INSTALLER = "PER_INSTALLER",
+  PER_USER = "PER_USER",
 }
 
 export type SlackWidgetDefinition<Definition> = Definition extends
