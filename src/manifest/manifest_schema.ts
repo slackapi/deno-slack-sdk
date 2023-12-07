@@ -317,7 +317,7 @@ export type ManifestWidgetSchema = {
   title: string;
   description: string;
   data_mode: SlackWidgetDataMode;
-  workflow_id: string;
+  workflow_callback_id: string;
 };
 
 // -------------------------------------------------------------------------

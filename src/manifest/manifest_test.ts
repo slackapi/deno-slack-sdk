@@ -984,7 +984,7 @@ Deno.test("Manifest supports multiple widgets", () => {
     callback_id: "test",
     title: "test",
     description: "this widget",
-    workflow_id: "1",
+    workflow_callback_id: "1",
     data_mode: SlackWidgetDataMode.PER_INSTALLER,
   });
 
@@ -992,7 +992,7 @@ Deno.test("Manifest supports multiple widgets", () => {
     callback_id: "test2",
     title: "test2",
     description: "this widget",
-    workflow_id: "1",
+    workflow_callback_id: "1",
     data_mode: SlackWidgetDataMode.PER_INSTALLER,
   });
 
@@ -1088,7 +1088,7 @@ Deno.test("Manifest throws error when widgets with duplicate callback_id are add
     callback_id: "test",
     title: "widget1",
     description: "this widget",
-    workflow_id: "1",
+    workflow_callback_id: "1",
     data_mode: SlackWidgetDataMode.PER_INSTALLER,
   });
 
@@ -1096,7 +1096,7 @@ Deno.test("Manifest throws error when widgets with duplicate callback_id are add
     callback_id: "test",
     title: "widget2",
     description: "this widget2",
-    workflow_id: "1",
+    workflow_callback_id: "1",
     data_mode: SlackWidgetDataMode.PER_INSTALLER,
   });
 

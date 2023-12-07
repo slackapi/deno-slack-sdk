@@ -6,7 +6,7 @@ Deno.test("Widget exports json as expected", () => {
   const widgetSerialized = {
     title: "test",
     description: "this widget",
-    workflow_id: "1",
+    workflow_callback_id: "1",
     data_mode: SlackWidgetDataMode.PER_INSTALLER,
   };
   const widget = DefineWidget({

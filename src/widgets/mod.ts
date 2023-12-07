@@ -57,7 +57,7 @@ export class WidgetDefinition<
       title: this.definition.title,
       description: this.definition.description,
       data_mode: this.definition.data_mode,
-      workflow_id: this.definition.workflow_id,
+      workflow_callback_id: this.definition.workflow_callback_id,
     };
   }
 

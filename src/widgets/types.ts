@@ -25,11 +25,11 @@ export type SlackWidgetDefinitionArgs<
   Title extends string,
   Description extends string,
   DataMode extends SlackWidgetDataMode,
-  WorkflowID extends string,
+  WorkflowCallbackID extends string,
 > = {
   callback_id: CallbackID;
   title: Title;
   description: Description;
   data_mode: DataMode;
-  workflow_id: WorkflowID;
+  workflow_callback_id: WorkflowCallbackID;
 };
