@@ -4,26 +4,24 @@
 name: Build & Deploy to NPM
 
 on:
-  push:    
-    tags:        
-      - '*.*.*'
-    
+  push:
+    tags:
+      - "*.*.*"
 
 jobs:
-
   build:
     runs-on: macos-latest
-    
+
     steps:
       - name: Actions checkout
         uses: actions/checkout@v3
-      
+
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: latest
           registry-url: https://registry.npmjs.org/
-          
+
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
@@ -31,21 +29,12 @@ jobs:
 
       - name: Get the tag name
         id: get_tag_name
-        run: echo ::set-output name=TAG::${GITHUB_REF#refs/*/}
-        
+        run: echo "TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
       - name: Run build_npm.ts
         run: deno run -A scripts/build_npm.ts ${{steps.get_tag_name.outputs.TAG}}
-        
-      - name: Publish to NPM    
+
+      - name: Publish to NPM
         run: cd npm && npm publish --access=public
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}                 
-      
-        
-         
-    
-    
-
-      
-
-
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
