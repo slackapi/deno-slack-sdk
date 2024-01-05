@@ -6,7 +6,12 @@ import { OAuth2ProviderTypeValues } from "../schema/providers/oauth2/types.ts";
 import type { ICustomType } from "../types/types.ts";
 import { ISlackWorkflow } from "../workflows/types.ts";
 import { OAuth2ProviderOptions } from "../providers/oauth2/types.ts";
-import { ISlackWidget, SlackWidgetDataMode } from "../widgets/types.ts";
+import {
+  ISlackWidget,
+  SlackWidgetDataMode,
+  SlackWidgetDependencies,
+  SlackWidgetView,
+} from "../widgets/types.ts";
 
 // ----------------------------------------------------------------------------
 // Manifest Schema Types
@@ -317,7 +322,11 @@ export type ManifestWidgetSchema = {
   title: string;
   description: string;
   data_mode: SlackWidgetDataMode;
-  workflow_callback_id: string;
+  workflow_callback_id?: string;
+  input_parameters?: ManifestFunctionParameters;
+  output_parameters?: ManifestFunctionParameters;
+  dependencies?: SlackWidgetDependencies;
+  view?: SlackWidgetView;
 };
 
 // -------------------------------------------------------------------------

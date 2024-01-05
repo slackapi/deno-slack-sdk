@@ -1,5 +1,9 @@
 import { ManifestWidgetSchema } from "../manifest/manifest_schema.ts";
 import {
+  ParameterSetDefinition,
+  PossibleParameterKeys,
+} from "../parameters/types.ts";
+import {
   ISlackWidget,
   SlackWidgetDataMode,
   SlackWidgetDefinitionArgs,
@@ -11,13 +15,21 @@ export const DefineWidget = <
   Description extends string,
   DataMode extends SlackWidgetDataMode,
   WorkflowID extends string,
+  InputParameters extends ParameterSetDefinition,
+  OutputParameters extends ParameterSetDefinition,
+  RequiredInputs extends PossibleParameterKeys<InputParameters>,
+  RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 >(
   definition: SlackWidgetDefinitionArgs<
     CallbackID,
     Title,
     Description,
     DataMode,
-    WorkflowID
+    WorkflowID,
+    InputParameters,
+    OutputParameters,
+    RequiredInputs,
+    RequiredOutputs
   >,
 ) => {
   return new WidgetDefinition(definition);
@@ -29,6 +41,10 @@ export class WidgetDefinition<
   Description extends string,
   DataMode extends SlackWidgetDataMode,
   WorkflowID extends string,
+  InputParameters extends ParameterSetDefinition,
+  OutputParameters extends ParameterSetDefinition,
+  RequiredInputs extends PossibleParameterKeys<InputParameters>,
+  RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
 > implements ISlackWidget {
   public id: string;
   public definition: SlackWidgetDefinitionArgs<
@@ -36,7 +52,11 @@ export class WidgetDefinition<
     Title,
     Description,
     DataMode,
-    WorkflowID
+    WorkflowID,
+    InputParameters,
+    OutputParameters,
+    RequiredInputs,
+    RequiredOutputs
   >;
 
   constructor(
@@ -45,7 +65,11 @@ export class WidgetDefinition<
       Title,
       Description,
       DataMode,
-      WorkflowID
+      WorkflowID,
+      InputParameters,
+      OutputParameters,
+      RequiredInputs,
+      RequiredOutputs
     >,
   ) {
     this.id = definition.callback_id;
@@ -58,6 +82,10 @@ export class WidgetDefinition<
       description: this.definition.description,
       data_mode: this.definition.data_mode,
       workflow_callback_id: this.definition.workflow_callback_id,
+      input_parameters: this.definition.input_parameters,
+      output_parameters: this.definition.output_parameters,
+      dependencies: this.definition.dependencies,
+      view: this.definition.view,
     };
   }
 
