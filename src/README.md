@@ -216,4 +216,4 @@ assistance working through your issue:
 ## Contributing
 
 Contributions are more then welcome. Please look at the
-[contributing guidelines](.github/CONTRIBUTING.md) for more info!
+[contributing guidelines](https://github.com/slackapi/deno-slack-sdk/blob/add-readme-to-denoland/CONTRIBUTING.md) for more info!
