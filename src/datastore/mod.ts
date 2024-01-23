@@ -16,8 +16,14 @@ export const DefineDatastore = <
   Name extends string,
   Attributes extends SlackDatastoreAttributes,
   PrimaryKey extends keyof Attributes,
+  TimeToLiveAttribute extends keyof Attributes,
 >(
-  definition: SlackDatastoreDefinition<Name, Attributes, PrimaryKey>,
+  definition: SlackDatastoreDefinition<
+    Name,
+    Attributes,
+    PrimaryKey,
+    TimeToLiveAttribute
+  >,
 ) => {
   return new SlackDatastore(definition);
 };
@@ -26,11 +32,17 @@ export class SlackDatastore<
   Name extends string,
   Attributes extends SlackDatastoreAttributes,
   PrimaryKey extends keyof Attributes,
+  TimeToLiveAttribute extends keyof Attributes,
 > implements ISlackDatastore {
   public name: Name;
 
   constructor(
-    public definition: SlackDatastoreDefinition<Name, Attributes, PrimaryKey>,
+    public definition: SlackDatastoreDefinition<
+      Name,
+      Attributes,
+      PrimaryKey,
+      TimeToLiveAttribute
+    >,
   ) {
     this.name = definition.name;
   }
@@ -46,6 +58,7 @@ export class SlackDatastore<
   export(): ManifestDatastoreSchema {
     return {
       primary_key: this.definition.primary_key as string,
+      time_to_live_attribute: this.definition.time_to_live_attribute as string,
       attributes: this.definition.attributes,
     };
   }

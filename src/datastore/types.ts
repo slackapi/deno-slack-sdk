@@ -27,9 +27,11 @@ export type SlackDatastoreDefinition<
   Name extends string,
   Attributes extends SlackDatastoreAttributes,
   PrimaryKey extends keyof Attributes,
+  TimeToLiveAttribute extends keyof Attributes,
 > = {
   name: Name;
   "primary_key": PrimaryKey;
+  "time_to_live_attribute"?: TimeToLiveAttribute;
   attributes: Attributes;
 };
 
