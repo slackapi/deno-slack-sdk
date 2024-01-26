@@ -62,11 +62,13 @@ export type SlackWidgetDefinition<Definition> = Definition extends
     infer D,
     infer DM,
     infer WFID,
+    infer PIIP,
+    infer PUIP,
     infer IP,
     infer OP,
     infer RI,
     infer RO
-  > ? SlackWidgetDefinitionArgs<I, T, D, DM, WFID, IP, OP, RI, RO>
+  > ? SlackWidgetDefinitionArgs<I, T, D, DM, WFID, PIIP, PUIP, IP, OP, RI, RO>
   : never;
 
 export type SlackWidgetDefinitionArgs<
@@ -75,6 +77,8 @@ export type SlackWidgetDefinitionArgs<
   Description extends string,
   DataMode extends SlackWidgetDataMode,
   WorkflowCallbackID extends string,
+  PerInstallerInputParameters extends string[],
+  PerUserInputParameters extends string[],
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
@@ -85,6 +89,8 @@ export type SlackWidgetDefinitionArgs<
   description: Description;
   data_mode: DataMode;
   workflow_callback_id?: WorkflowCallbackID;
+  per_installer_input_parameters?: PerInstallerInputParameters;
+  per_user_input_parameters?: PerUserInputParameters;
   "input_parameters"?: ParameterPropertiesDefinition<
     InputParameters,
     RequiredInputs
