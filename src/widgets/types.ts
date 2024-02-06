@@ -16,6 +16,10 @@ export enum SlackWidgetDataMode {
   PER_USER = "PER_USER",
 }
 
+export interface SlackWidgetCache {
+  in_ms: number;
+}
+
 export interface SlackWidgetDependencies {
   [k: string]: SlackWidgetDependency;
 }
@@ -64,11 +68,13 @@ export type SlackWidgetDefinition<Definition> = Definition extends
     infer WFID,
     infer PIIP,
     infer PUIP,
+    infer C,
     infer IP,
     infer OP,
     infer RI,
     infer RO
-  > ? SlackWidgetDefinitionArgs<I, T, D, DM, WFID, PIIP, PUIP, IP, OP, RI, RO>
+  >
+  ? SlackWidgetDefinitionArgs<I, T, D, DM, WFID, PIIP, PUIP, C, IP, OP, RI, RO>
   : never;
 
 export type SlackWidgetDefinitionArgs<
@@ -79,6 +85,7 @@ export type SlackWidgetDefinitionArgs<
   WorkflowCallbackID extends string,
   PerInstallerInputParameters extends string[],
   PerUserInputParameters extends string[],
+  Cache extends SlackWidgetCache,
   InputParameters extends ParameterSetDefinition,
   OutputParameters extends ParameterSetDefinition,
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
@@ -91,6 +98,7 @@ export type SlackWidgetDefinitionArgs<
   workflow_callback_id?: WorkflowCallbackID;
   per_installer_input_parameters?: PerInstallerInputParameters;
   per_user_input_parameters?: PerUserInputParameters;
+  cache?: Cache;
   "input_parameters"?: ParameterPropertiesDefinition<
     InputParameters,
     RequiredInputs
