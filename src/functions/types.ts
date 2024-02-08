@@ -77,6 +77,8 @@ type FunctionInputRuntimeType<
       | typeof SlackSchemaTypes.user_id
       | typeof SlackSchemaTypes.usergroup_id
       | typeof SlackSchemaTypes.channel_id
+      | typeof SlackSchemaTypes.canvas_id
+      | typeof SlackSchemaTypes.canvas_template_id
       | typeof SlackSchemaTypes.date
       | typeof SlackSchemaTypes.message_ts ? string
     : Param["type"] extends
@@ -95,6 +97,8 @@ type FunctionInputRuntimeType<
       > ? TypedObjectFunctionInputRuntimeType<P, RP, Param>
       : UnknownRuntimeType
     : Param["type"] extends typeof SlackSchemaTypes.rich_text
+      ? UnknownRuntimeType
+    : Param["type"] extends typeof SlackSchemaTypes.expanded_rich_text
       ? UnknownRuntimeType
     : UnknownRuntimeType;
 
