@@ -273,7 +273,7 @@ export type ManifestCustomTypesSchema = {
 export type ManifestDatastore = ISlackDatastore;
 export type ManifestDatastoreSchema = {
   primary_key: string;
-  time_to_live_attribute: string;
+  time_to_live_attribute?: string;
   attributes: {
     [key: string]: {
       type: string | ICustomType;
