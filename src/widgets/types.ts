@@ -17,7 +17,7 @@ export enum SlackWidgetDataMode {
 }
 
 export interface SlackWidgetCache {
-  in_ms: number;
+  ttl_secs: number;
 }
 
 export interface SlackWidgetDependencies {
