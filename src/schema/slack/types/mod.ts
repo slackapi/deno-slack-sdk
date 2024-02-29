@@ -6,9 +6,12 @@ const SlackPrimitiveTypes = {
   timestamp: "slack#/types/timestamp",
   blocks: "slack#/types/blocks",
   oauth2: "slack#/types/credential/oauth2",
+  expanded_rich_text: "slack#/types/expanded_rich_text",
   rich_text: "slack#/types/rich_text",
   message_ts: "slack#/types/message_ts",
   file_id: "slack#/types/file_id",
+  canvas_id: "slack#/types/canvas_id",
+  canvas_template_id: "slack#/types/canvas_template_id",
 } as const;
 
 export type ValidSlackPrimitiveTypes =
