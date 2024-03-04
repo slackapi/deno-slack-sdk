@@ -7,6 +7,7 @@ import {
   ISlackWidget,
   SlackWidgetDataMode,
   SlackWidgetDefinitionArgs,
+  SlackWidgetView
 } from "./types.ts";
 
 export const DefineWidget = <
@@ -19,6 +20,7 @@ export const DefineWidget = <
   OutputParameters extends ParameterSetDefinition,
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
+  View extends SlackWidgetView,
 >(
   definition: SlackWidgetDefinitionArgs<
     CallbackID,
@@ -29,7 +31,8 @@ export const DefineWidget = <
     InputParameters,
     OutputParameters,
     RequiredInputs,
-    RequiredOutputs
+    RequiredOutputs,
+    View
   >,
 ) => {
   return new WidgetDefinition(definition);

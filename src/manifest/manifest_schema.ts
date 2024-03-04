@@ -9,7 +9,7 @@ import { OAuth2ProviderOptions } from "../providers/oauth2/types.ts";
 import {
   ISlackWidget,
   SlackWidgetDataMode,
-  SlackWidgetDependencies,
+  // SlackWidgetDependencies,
   SlackWidgetView,
 } from "../widgets/types.ts";
 
@@ -325,7 +325,7 @@ export type ManifestWidgetSchema = {
   workflow_callback_id?: string;
   input_parameters?: ManifestFunctionParameters;
   output_parameters?: ManifestFunctionParameters;
-  dependencies?: SlackWidgetDependencies;
+  dependencies?: SlackWidgetDependency[];
   view?: SlackWidgetView;
 };
 

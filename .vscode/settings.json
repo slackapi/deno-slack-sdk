@@ -5,5 +5,25 @@
   "[typescript]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "denoland.vscode-deno"
-  }
+  },
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#62e9f2",
+    "activityBar.background": "#62e9f2",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#f04ee6",
+    "activityBarBadge.foreground": "#15202b",
+    "commandCenter.border": "#15202b99",
+    "sash.hoverBorder": "#62e9f2",
+    "statusBar.background": "#33e3ee",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#12d0dc",
+    "statusBarItem.remoteBackground": "#33e3ee",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#33e3ee",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#33e3ee99",
+    "titleBar.inactiveForeground": "#15202b99"
+  },
+  "peacock.color": "#33e3ee"
 }

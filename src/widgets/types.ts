@@ -16,10 +16,11 @@ export enum SlackWidgetDataMode {
   PER_USER = "PER_USER",
 }
 
-export interface SlackWidgetDependencies {
-  [k: string]: SlackWidgetDependency;
-}
+// export interface SlackWidgetDependencies {
+//   SlackWidgetDependency[];
+// }
 export interface SlackWidgetDependency {
+  name: string;
   function:
     | string
     | ISlackFunctionDefinition<
@@ -47,12 +48,13 @@ export interface SlackWidgetViewAction {
 export interface SlackWidgetView {
   type: string;
   title: string;
-  data?: {
-    [k: string]: SlackWidgetViewData;
-  };
-  actions?: {
-    [k: string]: SlackWidgetViewAction;
-  };
+  // data?: {
+  //   [k: string]: SlackWidgetViewData;
+  // };
+  // actions?: {
+  //   [k: string]: SlackWidgetViewAction;
+  // };
+  blocks: object[];
 }
 
 export type SlackWidgetDefinition<Definition> = Definition extends
@@ -65,8 +67,9 @@ export type SlackWidgetDefinition<Definition> = Definition extends
     infer IP,
     infer OP,
     infer RI,
-    infer RO
-  > ? SlackWidgetDefinitionArgs<I, T, D, DM, WFID, IP, OP, RI, RO>
+    infer RO,
+    infer WV
+  > ? SlackWidgetDefinitionArgs<I, T, D, DM, WFID, IP, OP, RI, RO, WV>
   : never;
 
 export type SlackWidgetDefinitionArgs<
@@ -79,6 +82,7 @@ export type SlackWidgetDefinitionArgs<
   OutputParameters extends ParameterSetDefinition,
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
+  View extends SlackWidgetView,
 > = {
   callback_id: CallbackID;
   title: Title;
@@ -93,6 +97,6 @@ export type SlackWidgetDefinitionArgs<
     OutputParameters,
     RequiredOutputs
   >;
-  dependencies?: SlackWidgetDependencies;
+  dependencies?: SlackWidgetDependency[];
   view?: SlackWidgetView;
 };
