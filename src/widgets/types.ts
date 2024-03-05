@@ -20,10 +20,8 @@ export interface SlackWidgetCache {
   ttl_secs: number;
 }
 
-export interface SlackWidgetDependencies {
-  [k: string]: SlackWidgetDependency;
-}
 export interface SlackWidgetDependency {
+  name: string;
   function:
     | string
     | ISlackFunctionDefinition<
@@ -51,12 +49,7 @@ export interface SlackWidgetViewAction {
 export interface SlackWidgetView {
   type: string;
   title: string;
-  data?: {
-    [k: string]: SlackWidgetViewData;
-  };
-  actions?: {
-    [k: string]: SlackWidgetViewAction;
-  };
+  blocks: object[];
 }
 
 export type SlackWidgetDefinition<Definition> = Definition extends
@@ -72,9 +65,23 @@ export type SlackWidgetDefinition<Definition> = Definition extends
     infer IP,
     infer OP,
     infer RI,
-    infer RO
+    infer RO,
+    infer WV
+  > ? SlackWidgetDefinitionArgs<
+    I,
+    T,
+    D,
+    DM,
+    WFID,
+    PIIP,
+    PUIP,
+    C,
+    IP,
+    OP,
+    RI,
+    RO,
+    WV
   >
-  ? SlackWidgetDefinitionArgs<I, T, D, DM, WFID, PIIP, PUIP, C, IP, OP, RI, RO>
   : never;
 
 export type SlackWidgetDefinitionArgs<
@@ -90,6 +97,7 @@ export type SlackWidgetDefinitionArgs<
   OutputParameters extends ParameterSetDefinition,
   RequiredInputs extends PossibleParameterKeys<InputParameters>,
   RequiredOutputs extends PossibleParameterKeys<OutputParameters>,
+  View extends SlackWidgetView,
 > = {
   callback_id: CallbackID;
   title: Title;
@@ -107,6 +115,6 @@ export type SlackWidgetDefinitionArgs<
     OutputParameters,
     RequiredOutputs
   >;
-  dependencies?: SlackWidgetDependencies;
-  view?: SlackWidgetView;
+  dependencies?: SlackWidgetDependency[];
+  view?: View;
 };

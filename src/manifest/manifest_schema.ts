@@ -10,9 +10,11 @@ import {
   ISlackWidget,
   SlackWidgetCache,
   SlackWidgetDataMode,
-  SlackWidgetDependencies,
+  SlackWidgetDependency,
   SlackWidgetView,
 } from "../widgets/types.ts";
+import { JWTProviderTypeValues } from "../schema/providers/jwt/types.ts";
+import { JWTProviderOptions } from "../providers/jwt/types.ts";
 
 // ----------------------------------------------------------------------------
 // Manifest Schema Types
@@ -310,7 +312,20 @@ export type ManifestOAuth2ProviderSchema = {
 
 export interface ManifestExternalAuthProviders {
   oauth2?: ManifestOAuth2Schema;
+  jwt?: ManifestJWTSchema;
 }
+
+// -------------------------------------------------------------------------
+// Manifest: JWT provider
+// -------------------------------------------------------------------------
+export type ManifestJWTSchema = {
+  [key: string]: ManifestJWTProviderSchema;
+};
+
+export type ManifestJWTProviderSchema = {
+  provider_type: JWTProviderTypeValues;
+  options: JWTProviderOptions;
+};
 
 // ---------------------------------------------------------------------------
 // Manifest: widget
@@ -329,7 +344,7 @@ export type ManifestWidgetSchema = {
   cache?: SlackWidgetCache;
   input_parameters?: ManifestFunctionParameters;
   output_parameters?: ManifestFunctionParameters;
-  dependencies?: SlackWidgetDependencies;
+  dependencies?: SlackWidgetDependency[];
   view?: SlackWidgetView;
 };
 

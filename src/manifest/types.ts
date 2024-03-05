@@ -18,6 +18,7 @@ import { OAuth2Provider } from "../providers/oauth2/mod.ts";
 import { ICustomType } from "../types/types.ts";
 import { CamelCasedPropertiesDeep } from "./types_util.ts";
 import { ICustomEvent } from "../events/types.ts";
+import { JWTProvider } from "../providers/jwt/mod.ts";
 
 /** Manifest definition.
  *
@@ -39,7 +40,7 @@ export type SlackManifestType =
 export interface ISlackManifestRunOnSlack extends ISlackManifestShared {
   runOnSlack?: true; // maps to function_runtime = "slack" in ManifestSchema, optional since the apps are slack hosted by default
   features?: ISlackManifestRunOnSlackFeaturesSchema;
-  externalAuthProviders?: (OAuth2Provider /*|OAuth1Provider*/)[];
+  externalAuthProviders?: (OAuth2Provider | JWTProvider /*|OAuth1Provider*/)[];
 }
 
 /** Non-Slack hosted app manifest
