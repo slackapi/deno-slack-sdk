@@ -5,6 +5,8 @@ import ArchiveChannel from "./archive_channel.ts";
 import CanvasCopy from "./canvas_copy.ts";
 import CanvasCreate from "./canvas_create.ts";
 import CanvasUpdateContent from "./canvas_update_content.ts";
+import CanvasFetchHeaderSections from "./canvas_fetch_header_sections.ts";
+import CanvasFetchVariables from "./canvas_fetch_placeholders.ts";
 import ChannelCanvasCreate from "./channel_canvas_create.ts";
 import CreateChannel from "./create_channel.ts";
 import CreateUsergroup from "./create_usergroup.ts";
@@ -27,6 +29,8 @@ const SlackFunctions = {
   CanvasCreate,
   CanvasUpdateContent,
   ChannelCanvasCreate,
+  CanvasFetchHeaderSections,
+  CanvasFetchVariables,
   CreateChannel,
   CreateUsergroup,
   Delay,
