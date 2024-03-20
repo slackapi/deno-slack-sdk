@@ -25,17 +25,23 @@ Deno.test("InviteUserToChannel generates valid FunctionManifest", () => {
         channel_ids: {
           type: SchemaTypes.array,
           description: "Search all channels",
-          title: "Select channel(s)",
+          title: "Select channels",
           items: { type: SlackTypes.channel_id },
         },
         user_ids: {
           type: SchemaTypes.array,
           description: "Search all people",
-          title: "Select member(s)",
+          title: "Select members",
           items: { type: SlackTypes.user_id },
         },
+        usergroup_ids: {
+          type: SchemaTypes.array,
+          description: "Search all user groups",
+          title: "Select user groups",
+          items: { type: SlackTypes.usergroup_id },
+        },
       },
-      required: ["channel_ids", "user_ids"],
+      required: ["channel_ids"],
     },
     output_parameters: {
       properties: {
@@ -44,6 +50,12 @@ Deno.test("InviteUserToChannel generates valid FunctionManifest", () => {
           description: "Person(s) who were invited",
           title: "Person(s) who were invited",
           items: { type: SlackTypes.user_id },
+        },
+        usergroup_ids: {
+          type: SchemaTypes.array,
+          description: "Usergroup(s) who were invited",
+          title: "Usergroup(s) who were invited",
+          items: { type: SlackTypes.usergroup_id },
         },
       },
       required: [],
@@ -60,14 +72,11 @@ Deno.test("InviteUserToChannel can be used as a Slack function in a workflow ste
     title: "Test InviteUserToChannel",
     description: "This is a generated test to test InviteUserToChannel",
   });
-  testWorkflow.addStep(InviteUserToChannel, {
-    channel_ids: "test",
-    user_ids: "test",
-  });
+  testWorkflow.addStep(InviteUserToChannel, { channel_ids: "test" });
   const actual = testWorkflow.steps[0].export();
 
   assertEquals(actual.function_id, "slack#/functions/invite_user_to_channel");
-  assertEquals(actual.inputs, { channel_ids: "test", user_ids: "test" });
+  assertEquals(actual.inputs, { channel_ids: "test" });
 });
 
 Deno.test("All outputs of Slack function InviteUserToChannel should exist", () => {
@@ -78,7 +87,7 @@ Deno.test("All outputs of Slack function InviteUserToChannel should exist", () =
   });
   const step = testWorkflow.addStep(InviteUserToChannel, {
     channel_ids: "test",
-    user_ids: "test",
   });
   assertExists(step.outputs.user_ids);
+  assertExists(step.outputs.usergroup_ids);
 });
