@@ -1,7 +1,7 @@
 # Generating Slack function source files
 
-This script will generate the necessary built-in function TypeScript files along with
-their tests in the `schema/slack/functions` directory, i.e.
+This script will generate the necessary built-in function TypeScript files along
+with their tests in the `schema/slack/functions` directory, i.e.
 `schema/slack/functions/send_message.ts` and
 `schema/slack/functions/send_message_test.ts`. It will also update the
 `schema/slack/functions/mod.ts` file to import/export all of the defined
@@ -11,18 +11,22 @@ corresponding test, the tests must be removed manually.
 ## Instructions
 
 1. First, you'll need to grab a payload from the `functions.list` HTTP API and
-   place the response in a `functions.json` file inside of this `_scripts` directory.
-   Typically, for public releases of this SDK, this is done using the API tester on
-   https://api.slack.com/methods with a production workspace access token that does
-   not use any special toggles or experiments. This is to ensure that we expose function
-   definitions only for publicly-available built-in functions.
-  - Note that if you want to generate built-in function definitions based on
-    non-publicly-available functions, such as those only available in dev or behind
-    a toggle, then you will need to retrieve the `functions.list` payload from dev (if
-    applicable) and/or with an access token from a workspace with the relevant toggles/
-    experiments (if applicable). This may apply in cases where you want to test pre-release
-    or hidden built-in function definitions. Any such built-in functions should NOT be sent
-    as pull requests to this repo, but is rather intended for internal development.
+   place the response in a `functions.json` file inside of this `_scripts`
+   directory. Typically, for public releases of this SDK, this is done using the
+   API tester on https://api.slack.com/methods with a production workspace
+   access token that does not use any special toggles or experiments. This is to
+   ensure that we expose function definitions only for publicly-available
+   built-in functions.
+
+- Note that if you want to generate built-in function definitions based on
+  non-publicly-available functions, such as those only available in dev or
+  behind a toggle, then you will need to retrieve the `functions.list` payload
+  from dev (if applicable) and/or with an access token from a workspace with the
+  relevant toggles/ experiments (if applicable). This may apply in cases where
+  you want to test pre-release or hidden built-in function definitions. Any such
+  built-in functions should NOT be sent as pull requests to this repo, but is
+  rather intended for internal development.
+
 2. With this `_scripts` directory as your working directory, run the generate
    script:
 
