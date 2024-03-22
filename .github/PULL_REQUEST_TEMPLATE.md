@@ -1,4 +1,9 @@
-<!--  Thanks for sending a pull request! -->
+<!--
+Thanks for sending a pull request!
+
+Friendly reminder: this project is open sourced, the internet can see it,
+make sure all the info/links shared in this pull request are public information.
+-->
 
 ### Summary
 
