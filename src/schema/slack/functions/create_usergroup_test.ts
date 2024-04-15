@@ -21,6 +21,11 @@ Deno.test("CreateUsergroup generates valid FunctionManifest", () => {
     description: "Additional permissions might be required",
     input_parameters: {
       properties: {
+        team_id: {
+          type: undefined,
+          description: "Search all teams",
+          title: "Select a team",
+        },
         usergroup_handle: {
           type: SchemaTypes.string,
           description: "Ex: accounts-team",
@@ -28,7 +33,7 @@ Deno.test("CreateUsergroup generates valid FunctionManifest", () => {
         },
         usergroup_name: {
           type: SchemaTypes.string,
-          description: "Ex. Accounts Team",
+          description: "Ex: Accounts Team",
           title: "Display name",
         },
       },

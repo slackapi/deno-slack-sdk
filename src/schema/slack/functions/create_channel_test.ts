@@ -20,6 +20,11 @@ Deno.test("CreateChannel generates valid FunctionManifest", () => {
     title: "Create a channel",
     input_parameters: {
       properties: {
+        team_id: {
+          type: undefined,
+          description: "Search all workspaces",
+          title: "Select a workspace",
+        },
         channel_name: {
           type: SchemaTypes.string,
           description: "Enter a channel name",
