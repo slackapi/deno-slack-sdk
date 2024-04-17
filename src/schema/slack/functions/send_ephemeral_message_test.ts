@@ -50,8 +50,8 @@ Deno.test("SendEphemeralMessage generates valid FunctionManifest", () => {
       properties: {
         message_ts: {
           type: SlackTypes.message_ts,
-          description: "Message time stamp",
-          title: "Message time stamp",
+          description: "Message timestamp",
+          title: "Message timestamp",
         },
       },
       required: ["message_ts"],

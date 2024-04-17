@@ -7,7 +7,6 @@ import {
 import { DefineWorkflow } from "../../../workflows/mod.ts";
 import { ManifestFunctionSchema } from "../../../manifest/manifest_schema.ts";
 import SchemaTypes from "../../schema_types.ts";
-import { SlackPrimitiveTypes } from "../../slack/types/mod.ts";
 import SlackTypes from "../schema_types.ts";
 import ShareCanvas from "./share_canvas.ts";
 
@@ -22,7 +21,7 @@ Deno.test("ShareCanvas generates valid FunctionManifest", () => {
     input_parameters: {
       properties: {
         canvas_id: {
-          type: SlackPrimitiveTypes.canvas_id,
+          type: SlackTypes.canvas_id,
           description: "Search all canvases",
           title: "Select a canvas",
         },
@@ -54,7 +53,7 @@ Deno.test("ShareCanvas generates valid FunctionManifest", () => {
     output_parameters: {
       properties: {
         canvas_id: {
-          type: SlackPrimitiveTypes.canvas_id,
+          type: SlackTypes.canvas_id,
           description: "Canvas link",
           title: "Canvas link",
         },

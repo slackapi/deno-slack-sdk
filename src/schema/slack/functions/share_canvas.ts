@@ -2,7 +2,6 @@
 import { DefineFunction } from "../../../functions/mod.ts";
 import SchemaTypes from "../../schema_types.ts";
 import SlackTypes from "../schema_types.ts";
-import { SlackPrimitiveTypes } from "../../slack/types/mod.ts";
 
 export default DefineFunction({
   callback_id: "slack#/functions/share_canvas",
@@ -11,7 +10,7 @@ export default DefineFunction({
   input_parameters: {
     properties: {
       canvas_id: {
-        type: SlackPrimitiveTypes.canvas_id,
+        type: SlackTypes.canvas_id,
         description: "Search all canvases",
         title: "Select a canvas",
       },
@@ -43,7 +42,7 @@ export default DefineFunction({
   output_parameters: {
     properties: {
       canvas_id: {
-        type: SlackPrimitiveTypes.canvas_id,
+        type: SlackTypes.canvas_id,
         description: "Canvas link",
         title: "Canvas link",
       },
