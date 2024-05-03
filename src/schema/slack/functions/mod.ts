@@ -17,6 +17,7 @@ import SendDm from "./send_dm.ts";
 import SendEphemeralMessage from "./send_ephemeral_message.ts";
 import SendMessage from "./send_message.ts";
 import ShareCanvas from "./share_canvas.ts";
+import ShareCanvasInThread from "./share_canvas_in_thread.ts";
 import UpdateChannelTopic from "./update_channel_topic.ts";
 
 const SlackFunctions = {
@@ -38,6 +39,7 @@ const SlackFunctions = {
   SendEphemeralMessage,
   SendMessage,
   ShareCanvas,
+  ShareCanvasInThread,
   UpdateChannelTopic,
 } as const;
 

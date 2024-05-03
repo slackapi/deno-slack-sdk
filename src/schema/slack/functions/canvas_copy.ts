@@ -22,7 +22,7 @@ export default DefineFunction({
       },
       owner_id: {
         type: SlackTypes.user_id,
-        description: "Canvas owner id",
+        description: "Person",
         title: "Owner",
       },
       placeholder_values: {

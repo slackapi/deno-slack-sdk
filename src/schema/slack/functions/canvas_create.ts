@@ -28,7 +28,7 @@ export default DefineFunction({
       owner_id: {
         type: SlackTypes.user_id,
         description: "Person",
-        title: "Canvas owner",
+        title: "Owner",
       },
       content: {
         type: SlackPrimitiveTypes.expanded_rich_text,
