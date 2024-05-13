@@ -26,6 +26,6 @@ jobs:
         run: deno task coverage
 
       - name: Upload coverage to CodeCov
-        uses: codecov/codecov-action@v3.1.0
+        uses: codecov/codecov-action@v4.3.1
         with:
           file: ./lcov.info
