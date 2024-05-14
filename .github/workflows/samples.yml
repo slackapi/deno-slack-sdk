@@ -27,11 +27,11 @@ jobs:
           deno-version: v1.x
 
       - name: Checkout the sdk
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./deno-slack-sdk
       - name: Checkout the ${{ matrix.sample }} sample
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: ${{ matrix.sample }}
           path: ./sample
