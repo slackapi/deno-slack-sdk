@@ -2,9 +2,9 @@ name: Deno
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deno:
@@ -26,6 +26,7 @@ jobs:
         run: deno task coverage
 
       - name: Upload coverage to CodeCov
-        uses: codecov/codecov-action@v4.3.1
+        uses: codecov/codecov-action@v4
         with:
           file: ./lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
