@@ -47,12 +47,6 @@ Deno.test("SendMessage generates valid FunctionManifest", () => {
           description: "Button(s) to send with the message",
           title: "Button(s) to send with the message",
         },
-        files: {
-          type: SchemaTypes.array,
-          description: "File(s) to attach to the message",
-          title: "File(s) to attach to the message",
-          items: { type: SlackTypes.file_id },
-        },
       },
       required: ["channel_id", "message"],
     },
@@ -68,30 +62,10 @@ Deno.test("SendMessage generates valid FunctionManifest", () => {
           description: "Message link",
           title: "Message link",
         },
-        action: {
-          type: SchemaTypes.object,
-          description: "Button interactivity data",
-          title: "Button interactivity data",
-        },
-        interactivity: {
-          type: SlackTypes.interactivity,
-          description: "Interactivity context",
-          title: "interactivity",
-        },
         message_context: {
           type: SlackTypes.message_context,
           description: "Reference to the message sent",
           title: "Reference to the message sent",
-        },
-        timestamp_started: {
-          type: SlackTypes.timestamp,
-          description: "Time when step started",
-          title: "Time when step started",
-        },
-        timestamp_completed: {
-          type: SlackTypes.timestamp,
-          description: "Time when step ended",
-          title: "Time when step ended",
         },
       },
       required: [

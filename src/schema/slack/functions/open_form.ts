@@ -37,12 +37,6 @@ export default DefineFunction({
           "Context about the interactive event that led to opening of the form",
         title: "interactivity",
       },
-      on_submit_function_config: {
-        type: SchemaTypes.object,
-        description:
-          "Workflow step configuration for a function to be executed on submission of the form`",
-        title: "on_submit_function_config",
-      },
     },
     required: ["title", "fields", "interactivity"],
   },
@@ -52,11 +46,6 @@ export default DefineFunction({
         type: SchemaTypes.object,
         description: "fields",
         title: "fields",
-      },
-      interactivity: {
-        type: SlackTypes.interactivity,
-        description: "Context about the form submit action interactive event",
-        title: "interactivity",
       },
       submit_user: {
         type: SlackTypes.user_id,

@@ -41,12 +41,6 @@ export default DefineFunction({
         description: "Button(s) to send with the message",
         title: "Button(s) to send with the message",
       },
-      files: {
-        type: SchemaTypes.array,
-        description: "File(s) to attach to the message",
-        title: "File(s) to attach to the message",
-        items: { type: SlackTypes.file_id },
-      },
     },
     required: ["message_context", "message"],
   },
@@ -61,16 +55,6 @@ export default DefineFunction({
         type: SchemaTypes.string,
         description: "Message link",
         title: "Message link",
-      },
-      action: {
-        type: SchemaTypes.object,
-        description: "Button interactivity data",
-        title: "Button interactivity data",
-      },
-      interactivity: {
-        type: SlackTypes.interactivity,
-        description: "Interactivity context",
-        title: "interactivity",
       },
       timestamp_started: {
         type: SlackTypes.timestamp,
