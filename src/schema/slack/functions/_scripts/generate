@@ -2,6 +2,8 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
+test -n "${XOXC}" || (echo "'XOXC' environment variable not present!" && exit 1);
+
 # Clean parent directory of all files ending in .ts
 echo "Cleaning folder directory"
 ls -1 -d $PWD/../* | { grep "\.ts$" || :; } | while read -r filename ; do

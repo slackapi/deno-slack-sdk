@@ -10,9 +10,12 @@ corresponding test, the tests must be removed manually.
 
 ## Instructions
 
-1. First, you'll need to grab a payload from `functions.list` and place the
-   response in a `functions.json` file inside of this `_scripts` directory.
-
+1. First, you'll need to grab the response from `functions.categories.list` API method tester:
+  - Choose a session token from a public production enterprise grid workspace.
+  - Pass the `category_type=builtins_categories` parameter to this API.
+  - Place the response in a `categories.json` file inside of this `_scripts` directory. 
+  - Take a note of the `Bearer xoxc-***` token used in this call; save the `xoxc-***` token into an environment variable `XOXC`, e.g. `export XOXC=xoxc-****` 
+2. Next, grab the response from `functions.categories.steps.list`
 2. With this `_scripts` directory as your working directory, run the generate
    script:
 
