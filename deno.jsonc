@@ -1,35 +1,29 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "fmt": {
-    "files": {
-      "include": [
-        "src",
-        "tests",
-        "docs",
-        "README.md",
-        "scripts",
-        ".github/maintainers_guide.md",
-        ".github/CONTRIBUTING.md"
-      ],
-      "exclude": ["src/schema/slack/functions/_scripts/functions.json"]
-    },
-    "options": {
-      "semiColons": true,
-      "indentWidth": 2,
-      "lineWidth": 80,
-      "proseWrap": "always",
-      "singleQuote": false,
-      "useTabs": false
-    }
+    "include": [
+      "src",
+      "tests",
+      "docs",
+      "README.md",
+      "scripts",
+      ".github/maintainers_guide.md",
+      ".github/CONTRIBUTING.md"
+    ],
+    "exclude": ["src/schema/slack/functions/_scripts/functions.json"]
+    "semiColons": true,
+    "indentWidth": 2,
+    "lineWidth": 80,
+    "proseWrap": "always",
+    "singleQuote": false,
+    "useTabs": false
   },
   "lint": {
-    "files": {
-      "include": ["src", "tests", "scripts"],
-      "exclude": [
-        "src/schema/slack/functions/_scripts/functions.json",
-        "**/*.md"
-      ]
-    }
+    "include": ["src", "tests", "scripts"],
+    "exclude": [
+      "src/schema/slack/functions/_scripts/functions.json",
+      "**/*.md"
+    ]
   },
   "tasks": {
     "test": "deno fmt --check && deno lint && deno bundle src/mod.ts && deno test --allow-read --allow-run --parallel src/ tests/",

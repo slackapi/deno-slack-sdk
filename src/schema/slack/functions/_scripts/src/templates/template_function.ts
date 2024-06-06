@@ -17,10 +17,17 @@ import {
 } from "./utils.ts";
 import { AllowedTypeValue, AllowedTypeValueObject } from "./types.ts";
 
-function warnAboutHiddenParameters (paramType: string, parameters: FunctionParameter[]) {
+function warnAboutHiddenParameters(
+  paramType: string,
+  parameters: FunctionParameter[],
+) {
   const hiddenParams = parameters.filter((p) => p.is_hidden);
   if (hiddenParams.length) {
-    console.warn(`WARNING! Detected hidden ${paramType} parameters (${hiddenParams.map((p) => p.name).join(', ')}); consider manually removing.`);
+    console.warn(
+      `WARNING! Detected hidden ${paramType} parameters (${
+        hiddenParams.map((p) => p.name).join(", ")
+      }); consider manually removing.`,
+    );
   }
 }
 
@@ -119,8 +126,8 @@ export function manifestFunctionFieldsToTypeScript(
       `description: ${sanitize(functionRecord.description)}`,
     );
   }
-  warnAboutHiddenParameters('input', functionRecord.input_parameters);
-  warnAboutHiddenParameters('output', functionRecord.input_parameters);
+  warnAboutHiddenParameters("input", functionRecord.input_parameters);
+  warnAboutHiddenParameters("output", functionRecord.input_parameters);
   typescript.push(
     `input_parameters: ${
       manifestParametersToTypeScript(functionRecord.input_parameters)
