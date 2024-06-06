@@ -8,8 +8,6 @@ import { DefineWorkflow } from "../../../workflows/mod.ts";
 import { ManifestFunctionSchema } from "../../../manifest/manifest_schema.ts";
 import SchemaTypes from "../../schema_types.ts";
 import SlackTypes from "../schema_types.ts";
-import { SlackPrimitiveTypes } from "../../slack/types/mod.ts";
-
 import CanvasCopy from "./canvas_copy.ts";
 
 Deno.test("CanvasCopy generates valid FunctionManifest", () => {
@@ -23,7 +21,7 @@ Deno.test("CanvasCopy generates valid FunctionManifest", () => {
     input_parameters: {
       properties: {
         canvas_id: {
-          type: SlackPrimitiveTypes.canvas_id,
+          type: SlackTypes.canvas_id,
           description: "Search all canvases",
           title: "Select a canvas",
         },
@@ -34,8 +32,8 @@ Deno.test("CanvasCopy generates valid FunctionManifest", () => {
         },
         owner_id: {
           type: SlackTypes.user_id,
-          description: "Canvas owner id",
-          title: "Owner",
+          description: "Person",
+          title: "Canvas owner",
         },
         placeholder_values: {
           type: SchemaTypes.object,
@@ -48,7 +46,7 @@ Deno.test("CanvasCopy generates valid FunctionManifest", () => {
     output_parameters: {
       properties: {
         canvas_id: {
-          type: SlackPrimitiveTypes.canvas_id,
+          type: SlackTypes.canvas_id,
           description: "Canvas link",
           title: "Canvas link",
         },

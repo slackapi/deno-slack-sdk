@@ -2,7 +2,6 @@
 import { DefineFunction } from "../../../functions/mod.ts";
 import SchemaTypes from "../../schema_types.ts";
 import SlackTypes from "../schema_types.ts";
-import { SlackPrimitiveTypes } from "../../slack/types/mod.ts";
 
 export default DefineFunction({
   callback_id: "slack#/functions/channel_canvas_create",
@@ -21,12 +20,12 @@ export default DefineFunction({
         title: "Type of creation",
       },
       canvas_template_id: {
-        type: SlackPrimitiveTypes.canvas_template_id,
+        type: SlackTypes.canvas_template_id,
         description: "Select an option",
         title: "Select a canvas template",
       },
       content: {
-        type: SlackPrimitiveTypes.expanded_rich_text,
+        type: SlackTypes.expanded_rich_text,
         description: "Add content to the canvas",
         title: "Add content",
       },
@@ -41,7 +40,7 @@ export default DefineFunction({
   output_parameters: {
     properties: {
       canvas_id: {
-        type: SlackPrimitiveTypes.canvas_id,
+        type: SlackTypes.canvas_id,
         description: "Canvas link",
         title: "Canvas link",
       },
