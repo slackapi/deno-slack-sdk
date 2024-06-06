@@ -26,6 +26,7 @@ export type FunctionProperties = {
 export type FunctionParameter = FunctionProperty & {
   name: string;
   is_required?: boolean;
+  is_hidden?: boolean;
 };
 
 export type FunctionRecord = {

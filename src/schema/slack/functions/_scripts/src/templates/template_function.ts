@@ -80,6 +80,7 @@ const manifestParametersToTypeScript = (
 ) => {
   const typescript: string[] = [];
   typescript.push(
+    // TODO: we should probably filter out hidden parameters here, e.g. filter((p) => !p.is_hidden)
     `properties: {${
       functionParameters.map((parameter) =>
         `${parameter.name}: ${propertyToTypeScript(parameter)}`
