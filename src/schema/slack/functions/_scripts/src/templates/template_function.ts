@@ -24,7 +24,7 @@ type AllowedHiddenParamsMap = Record<
 // Oops we accidentally exposed hidden parameters. That's ok, we'll keep them public for now.
 export const allowedHiddenParams: AllowedHiddenParamsMap = {
   "open_form": {
-    input: ["on_submit_function_config"],
+    input: [],
     output: ["interactivity"],
   },
   "reply_in_thread": {
