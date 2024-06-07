@@ -33,14 +33,6 @@ corresponding test, the tests must be removed manually.
    > ./generate
    ```
 
-3. For now, the script will only generate warnings if it encounters hidden
-   parameters. If you see warnings around hidden parameters, carefully review
-   the generated output. As much as possible, we want to prevent hidden
-   parameters from being released. At the same time, we have released hidden
-   parameters in this SDK in the past, and so for backwards compatibility
-   reasons, we have kept them in. As such, **ensure no new hidden parameters are
-   introduced**.
-
 If it completes without any linter errors, you should be good to go, with new,
 formatted and linted TypeScript files for all of the Slack functions included in
 your `functions.json` payload. If there are any unexpected linting issues, you
