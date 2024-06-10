@@ -60,8 +60,8 @@ Deno.test("SendMessage generates valid FunctionManifest", () => {
       properties: {
         message_timestamp: {
           type: SlackTypes.timestamp,
-          description: "Message time stamp",
-          title: "Message time stamp",
+          description: "Message timestamp",
+          title: "Message timestamp",
         },
         message_link: {
           type: SchemaTypes.string,

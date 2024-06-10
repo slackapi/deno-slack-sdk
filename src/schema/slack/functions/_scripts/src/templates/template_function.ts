@@ -17,6 +17,40 @@ import {
 } from "./utils.ts";
 import { AllowedTypeValue, AllowedTypeValueObject } from "./types.ts";
 
+type AllowedHiddenParamsMap = Record<
+  string,
+  Record<"input" | "output", string[]>
+>;
+// Oops we accidentally exposed hidden parameters. That's ok, we'll keep them public for now.
+export const allowedHiddenParams: AllowedHiddenParamsMap = {
+  "open_form": {
+    input: [],
+    output: ["interactivity"],
+  },
+  "reply_in_thread": {
+    input: ["files"],
+    output: ["action", "interactivity"],
+  },
+  "send_dm": {
+    input: ["files"],
+    output: [
+      "action",
+      "interactivity",
+      "timestamp_started",
+      "timestamp_completed",
+    ],
+  },
+  "send_message": {
+    input: ["files"],
+    output: [
+      "action",
+      "interactivity",
+      "timestamp_started",
+      "timestamp_completed",
+    ],
+  },
+};
+
 const typeMap: Record<string, AllowedTypeValueObject> = {
   SchemaTypes,
   SlackTypes: SlackSchemaTypes,
@@ -76,12 +110,15 @@ const propertiesToTypeScript = (
 };
 
 const manifestParametersToTypeScript = (
+  allowedHiddenParams: string[],
   functionParameters: FunctionParameter[],
 ) => {
   const typescript: string[] = [];
   typescript.push(
     `properties: {${
-      functionParameters.map((parameter) =>
+      functionParameters.filter((p) =>
+        allowedHiddenParams.includes(p.name) || !p.is_hidden
+      ).map((parameter) =>
         `${parameter.name}: ${propertyToTypeScript(parameter)}`
       ).join(",\n")
     }}`,
@@ -97,6 +134,7 @@ const manifestParametersToTypeScript = (
 };
 
 export function manifestFunctionFieldsToTypeScript(
+  allowedParamsMap: AllowedHiddenParamsMap,
   functionRecord: FunctionRecord,
 ) {
   const typescript: string[] = [];
@@ -111,14 +149,22 @@ export function manifestFunctionFieldsToTypeScript(
       `description: ${sanitize(functionRecord.description)}`,
     );
   }
+  const allowedHiddenParams = allowedParamsMap[functionRecord.callback_id] ||
+    { input: [], output: [] };
   typescript.push(
     `input_parameters: ${
-      manifestParametersToTypeScript(functionRecord.input_parameters)
+      manifestParametersToTypeScript(
+        allowedHiddenParams.input,
+        functionRecord.input_parameters,
+      )
     }`,
   );
   typescript.push(
     `output_parameters: ${
-      manifestParametersToTypeScript(functionRecord.output_parameters)
+      manifestParametersToTypeScript(
+        allowedHiddenParams.output,
+        functionRecord.output_parameters,
+      )
     }`,
   );
   return typescript.join(",\n");
@@ -131,7 +177,9 @@ const defineFunctionInputToTypeScript = (
   typescript.push(
     `callback_id: ${sanitize(getSlackCallbackId(functionRecord))}`,
   );
-  typescript.push(manifestFunctionFieldsToTypeScript(functionRecord));
+  typescript.push(
+    manifestFunctionFieldsToTypeScript(allowedHiddenParams, functionRecord),
+  );
   return `{${typescript.join(",\n")}}`;
 };
 

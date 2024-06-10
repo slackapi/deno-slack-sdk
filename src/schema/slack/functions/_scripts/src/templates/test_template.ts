@@ -6,12 +6,17 @@ import {
   renderTypeImports,
 } from "./utils.ts";
 import { FunctionParameter, FunctionRecord } from "../types.ts";
-import { manifestFunctionFieldsToTypeScript } from "./template_function.ts";
+import {
+  allowedHiddenParams,
+  manifestFunctionFieldsToTypeScript,
+} from "./template_function.ts";
 
 export const manifestFunctionToTypeScript = (
   functionRecord: FunctionRecord,
 ) => {
-  return `{${manifestFunctionFieldsToTypeScript(functionRecord)}}`;
+  return `{${
+    manifestFunctionFieldsToTypeScript(allowedHiddenParams, functionRecord)
+  }}`;
 };
 
 const renderFunctionManifestTest = (

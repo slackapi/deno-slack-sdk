@@ -8,7 +8,6 @@ import { DefineWorkflow } from "../../../workflows/mod.ts";
 import { ManifestFunctionSchema } from "../../../manifest/manifest_schema.ts";
 import SchemaTypes from "../../schema_types.ts";
 import SlackTypes from "../schema_types.ts";
-import { SlackPrimitiveTypes } from "../../slack/types/mod.ts";
 import ChannelCanvasCreate from "./channel_canvas_create.ts";
 
 Deno.test("ChannelCanvasCreate generates valid FunctionManifest", () => {
@@ -32,12 +31,12 @@ Deno.test("ChannelCanvasCreate generates valid FunctionManifest", () => {
           title: "Type of creation",
         },
         canvas_template_id: {
-          type: SlackPrimitiveTypes.canvas_template_id,
+          type: SlackTypes.canvas_template_id,
           description: "Select an option",
           title: "Select a canvas template",
         },
         content: {
-          type: SlackPrimitiveTypes.expanded_rich_text,
+          type: SlackTypes.expanded_rich_text,
           description: "Add content to the canvas",
           title: "Add content",
         },
@@ -52,7 +51,7 @@ Deno.test("ChannelCanvasCreate generates valid FunctionManifest", () => {
     output_parameters: {
       properties: {
         canvas_id: {
-          type: SlackPrimitiveTypes.canvas_id,
+          type: SlackTypes.canvas_id,
           description: "Canvas link",
           title: "Canvas link",
         },
