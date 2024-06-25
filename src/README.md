@@ -215,6 +215,6 @@ assistance working through your issue:
 
 ## Contributing
 
-Contributions are more then welcome. Please look at the
+Contributions are more than welcome. Please look at the
 [contributing guidelines](https://github.com/slackapi/deno-slack-sdk/blob/main/.github/CONTRIBUTING.md)
 for more info!
