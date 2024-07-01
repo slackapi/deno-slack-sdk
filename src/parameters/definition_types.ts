@@ -22,7 +22,8 @@ export type TypedParameterDefinition =
   | TypedObjectParameter
   | UntypedObjectParameterDefinition
   | PrimitiveParameterDefinition
-  | OAuth2ParameterDefinition;
+  | OAuth2ParameterDefinition
+  | JWTParameterDefinition;
 
 export interface CustomTypeParameterDefinition
   extends Omit<BaseParameterDefinition<AllValues>, "type"> {
@@ -152,6 +153,11 @@ interface OAuth2ParameterDefinition extends BaseParameterDefinition<string> {
   oauth2_provider_key: string;
   /** Dictates whether only the auth of the user running the workflow should be used. Defaults to `false`. */
   require_end_user_auth?: boolean;
+}
+
+interface JWTParameterDefinition extends BaseParameterDefinition<string> {
+  type: typeof SlackPrimitiveTypes.jwt;
+  jwt_provider_key: string;
 }
 
 type EnumChoice<T> = {

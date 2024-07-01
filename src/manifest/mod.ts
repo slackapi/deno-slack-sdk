@@ -15,6 +15,7 @@ import {
   ManifestFunctionRuntime,
   ManifestFunctionsSchema,
   ManifestSchema,
+  ManifestWidgetsSchema,
   ManifestWorkflowsSchema,
 } from "./manifest_schema.ts";
 import { isCustomType } from "../types/mod.ts";
@@ -24,6 +25,8 @@ import {
   DuplicateNameError,
   DuplicateProviderKeyError,
 } from "./errors.ts";
+import { OAuth2Provider } from "../providers/oauth2/mod.ts";
+import { JWTProvider } from "../providers/jwt/mod.ts";
 
 export const Manifest = (
   definition: Omit<ISlackManifestRunOnSlack, "runOnSlack">,
@@ -126,6 +129,19 @@ export class SlackManifest {
             throw new DuplicateNameError(event.id, "CustomEvent");
           }
           acc[event.id] = event.export();
+          return acc;
+        },
+        {},
+      );
+    }
+
+    if (def.widgets) {
+      manifest.widgets = def.widgets?.reduce<ManifestWidgetsSchema>(
+        (acc = {}, widget) => {
+          if (widget.id in acc) {
+            throw new DuplicateCallbackIdError(widget.id, "Widget");
+          }
+          acc[widget.id] = widget.export();
           return acc;
         },
         {},
@@ -323,11 +339,33 @@ export class SlackManifest {
     if (def.externalAuthProviders?.length) {
       manifest.external_auth_providers = def.externalAuthProviders.reduce(
         (acc, provider) => {
+          const oauth2Provider = provider as OAuth2Provider;
+          const jwtProvider = provider as JWTProvider;
+
           acc["oauth2"] = acc["oauth2"] ?? {};
-          if (provider.id in acc["oauth2"]) {
-            throw new DuplicateProviderKeyError(provider.id, "OAuth2Provider");
+          acc["jwt"] = acc["jwt"] ?? {};
+
+          if (
+            (provider.definition.options as OAuth2Provider["options"]).client_id
+          ) {
+            if (oauth2Provider.id in acc["oauth2"]) {
+              throw new DuplicateProviderKeyError(
+                oauth2Provider.id,
+                "OAuth2Provider",
+              );
+            }
+            acc["oauth2"][oauth2Provider.id] = oauth2Provider.export();
+          } else if (
+            (provider.definition.options as JWTProvider["options"]).header
+          ) {
+            if (jwtProvider.id in acc["jwt"]) {
+              throw new DuplicateProviderKeyError(
+                jwtProvider.id,
+                "OAuth2Provider",
+              );
+            }
+            acc["jwt"][jwtProvider.id] = jwtProvider.export();
           }
-          acc["oauth2"][provider.id] = provider.export();
           return acc;
         },
         {} as NonNullable<ManifestSchema["external_auth_providers"]>,

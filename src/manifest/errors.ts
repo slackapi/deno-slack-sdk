@@ -1,5 +1,8 @@
 export class DuplicateCallbackIdError extends Error {
-  constructor(callbackId: string, readableType: "Function" | "Workflow") {
+  constructor(
+    callbackId: string,
+    readableType: "Function" | "Workflow" | "Widget",
+  ) {
     super(`Duplicate callback_id: "${callbackId}" found in ${readableType}.`);
   }
 }
