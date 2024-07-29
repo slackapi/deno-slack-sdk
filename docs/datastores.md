@@ -59,15 +59,14 @@ Now that you have a Datastore all set up, you can use it in your
 instantiate your client, and make an API call to one of the Datastore endpoints!
 
 ```ts
-import { SlackAPI } from "deno_slack_api/mod.ts";
+import { SlackFunction } from "deno_slack_api/mod.ts";
 
-const reverse = async ({ inputs, env, token }: any) => {
+export default SlackFunction(ReverseFunction, async ({ client, inputs }) => {
   const original = inputs.stringToReverse;
   const recordId = crypto.randomUUID();
   const reversed = inputs.stringToReverse.split("").reverse().join("");
 
-  const client = SlackAPI(token, {});
-  const putResp = await client.apiCall("apps.datastore.put", {
+  const putResp = await client.apps.datastore.put({
     datastore: "reversals",
     item: {
       id: recordId,
@@ -76,12 +75,12 @@ const reverse = async ({ inputs, env, token }: any) => {
     },
   });
   if (!putResp.ok) {
-    return await {
-      completed: false,
+    return {
       error: putResp.error,
     };
   }
-  ...
+  // ...
+});
 ```
 
 [functions]: ./functions.md
