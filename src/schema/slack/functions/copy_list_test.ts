@@ -18,7 +18,7 @@ Deno.test("CopyList generates valid FunctionManifest", () => {
     input_parameters: {
       properties: {
         list_id: {
-          type: undefined,
+          type: SlackTypes.list_id,
           description: "Search all lists",
           title: "Select a list",
         },
@@ -63,7 +63,7 @@ Deno.test("CopyList generates valid FunctionManifest", () => {
           title: "Link",
         },
         list_id_value: {
-          type: undefined,
+          type: SlackTypes.list_id,
           description: "List title",
           title: "List title",
         },

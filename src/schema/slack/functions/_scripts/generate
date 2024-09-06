@@ -21,3 +21,5 @@ echo "Formatting Slack function files..."
 deno fmt --quiet ../*.ts
 echo "Linting Slack function files..."
 deno lint --quiet ../*.ts
+echo "Type-checking Slack function files..."
+deno check --quiet ../*.ts

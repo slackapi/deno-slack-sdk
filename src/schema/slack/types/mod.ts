@@ -6,6 +6,7 @@ const SlackPrimitiveTypes = {
   date: "slack#/types/date",
   expanded_rich_text: "slack#/types/expanded_rich_text",
   file_id: "slack#/types/file_id",
+  list_id: "slack#/types/list_id",
   message_ts: "slack#/types/message_ts",
   oauth2: "slack#/types/credential/oauth2",
   rich_text: "slack#/types/rich_text",

@@ -22,7 +22,7 @@ Deno.test("ShareListUsers generates valid FunctionManifest", () => {
     input_parameters: {
       properties: {
         file_id: {
-          type: undefined,
+          type: SlackTypes.list_id,
           description: "Search all list",
           title: "Select a List",
         },
@@ -48,7 +48,7 @@ Deno.test("ShareListUsers generates valid FunctionManifest", () => {
     output_parameters: {
       properties: {
         file_id: {
-          type: undefined,
+          type: SlackTypes.list_id,
           description: "List title",
           title: "List title",
         },

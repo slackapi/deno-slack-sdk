@@ -7,6 +7,7 @@ import {
 import { DefineWorkflow } from "../../../workflows/mod.ts";
 import { ManifestFunctionSchema } from "../../../manifest/manifest_schema.ts";
 import SchemaTypes from "../../schema_types.ts";
+import SlackTypes from "../schema_types.ts";
 import ListAddRecord from "./list_add_record.ts";
 
 Deno.test("ListAddRecord generates valid FunctionManifest", () => {
@@ -21,7 +22,7 @@ Deno.test("ListAddRecord generates valid FunctionManifest", () => {
     input_parameters: {
       properties: {
         list_id: {
-          type: undefined,
+          type: SlackTypes.list_id,
           description: "Search all lists",
           title: "Select a list",
         },

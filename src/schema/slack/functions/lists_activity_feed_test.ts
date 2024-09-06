@@ -27,7 +27,7 @@ Deno.test("ListsActivityFeed generates valid FunctionManifest", () => {
           title: "User who updated the list item",
         },
         list_id: {
-          type: undefined,
+          type: SlackTypes.list_id,
           description: "Select a list",
           title: "Select a list",
         },

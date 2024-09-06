@@ -10,7 +10,7 @@ export default DefineFunction({
   input_parameters: {
     properties: {
       list_id: {
-        type: undefined,
+        type: SlackTypes.list_id,
         description: "Search all lists",
         title: "Select a list",
       },
@@ -55,7 +55,7 @@ export default DefineFunction({
         title: "Link",
       },
       list_id_value: {
-        type: undefined,
+        type: SlackTypes.list_id,
         description: "List title",
         title: "List title",
       },
