@@ -75,7 +75,9 @@ const propertyToTypeScript = (
   const typescript = [];
   const sdkType = schemaTypeMap[property.type];
   if (!sdkType) {
-    throw new Error(`Unrecognized type "${property.type}"! Maybe a new automation platform type was recently introduced? If so, add it to one of the type files under src/schema.`);
+    throw new Error(
+      `Unrecognized type "${property.type}"! Maybe a new automation platform type was recently introduced? If so, add it to one of the type files under src/schema.`,
+    );
   }
   typescript.push(
     `type: ${sdkType}`,
