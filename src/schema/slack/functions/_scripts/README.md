@@ -10,21 +10,14 @@ corresponding test, the tests must be removed manually.
 
 ## Instructions
 
-1. First, you'll need to grab the response from `functions.categories.list` API
-   method tester:
+1. First, you'll need to grab the response from `functions.list` API method
+   tester:
 
 - Choose a session token from a public production enterprise grid workspace that
-  is NOT enrolled in the `hermes_next` toggle. Recommend using the Slack DevRel
+  is NOT enrolled in any beta toggles. Recommend using the Slack DevRel
   production enterprise grid token.
-- Pass the `category_type=builtins_categories` parameter to this API.
-- Now for the super annoying part: for each builtin category, you will need to
-  manually call _another_ API and assemble a functions list yourself:
-  - Grab the response from `functions.categories.steps.list` API method tester,
-    using the same session token as earlier in this step, passing each
-    `category_id` retrieved earlier into this API call.
-  - Copy the `functions` array elements from each response into a fresh
-    `{"functions":[]}` array in `functions.json`, slowly building up a list of
-    all builtin functions.
+- Use `builtins` as the value for the `function_type` parameter to this API.
+- Copy the response into a `functions.json` file in this directory.
 
 2. With this `_scripts` directory as your working directory, run the generate
    script:

@@ -73,8 +73,14 @@ const propertyToTypeScript = (
   property: FunctionProperty,
 ): string => {
   const typescript = [];
+  const sdkType = schemaTypeMap[property.type];
+  if (!sdkType) {
+    throw new Error(
+      `Unrecognized type "${property.type}"! Maybe a new automation platform type was recently introduced? If so, add it to one of the type files under src/schema.`,
+    );
+  }
   typescript.push(
-    `type: ${schemaTypeMap[property.type]}`,
+    `type: ${sdkType}`,
   );
   if (property.description) {
     typescript.push(`description: ${sanitize(property.description)}`);
