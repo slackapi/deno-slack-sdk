@@ -8,14 +8,10 @@ import CanvasCopy from "./canvas_copy.ts";
 import CanvasCreate from "./canvas_create.ts";
 import CanvasUpdateContent from "./canvas_update_content.ts";
 import ChannelCanvasCreate from "./channel_canvas_create.ts";
-import CopyList from "./copy_list.ts";
 import CreateChannel from "./create_channel.ts";
 import CreateUsergroup from "./create_usergroup.ts";
 import Delay from "./delay.ts";
-import DeleteListRecord from "./delete_list_record.ts";
 import InviteUserToChannel from "./invite_user_to_channel.ts";
-import ListAddRecord from "./list_add_record.ts";
-import ListsActivityFeed from "./lists_activity_feed.ts";
 import OpenForm from "./open_form.ts";
 import RemoveReaction from "./remove_reaction.ts";
 import RemoveUserFromUsergroup from "./remove_user_from_usergroup.ts";
@@ -25,9 +21,7 @@ import SendEphemeralMessage from "./send_ephemeral_message.ts";
 import SendMessage from "./send_message.ts";
 import ShareCanvas from "./share_canvas.ts";
 import ShareCanvasInThread from "./share_canvas_in_thread.ts";
-import ShareListUsers from "./share_list_users.ts";
 import UpdateChannelTopic from "./update_channel_topic.ts";
-import UpdateListRecord from "./update_list_record.ts";
 
 const SlackFunctions = {
   AddBookmark,
@@ -39,14 +33,10 @@ const SlackFunctions = {
   CanvasCreate,
   CanvasUpdateContent,
   ChannelCanvasCreate,
-  CopyList,
   CreateChannel,
   CreateUsergroup,
   Delay,
-  DeleteListRecord,
   InviteUserToChannel,
-  ListAddRecord,
-  ListsActivityFeed,
   OpenForm,
   RemoveReaction,
   RemoveUserFromUsergroup,
@@ -56,9 +46,7 @@ const SlackFunctions = {
   SendMessage,
   ShareCanvas,
   ShareCanvasInThread,
-  ShareListUsers,
   UpdateChannelTopic,
-  UpdateListRecord,
 } as const;
 
 export default SlackFunctions;
