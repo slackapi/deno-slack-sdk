@@ -19,12 +19,12 @@ export const redText = (text: string) => red + text + reset;
 
 // TODO: once List steps work in code, bring this back
 const FUNCTIONS_TO_IGNORE = [
-  "slack#/functions/update_list_record",
-  "slack#/functions/share_list_users",
-  "slack#/functions/lists_activity_feed",
-  "slack#/functions/list_add_record",
-  "slack#/functions/delete_list_record",
-  "slack#/functions/copy_list",
+  "update_list_record",
+  "share_list_users",
+  "lists_activity_feed",
+  "list_add_record",
+  "delete_list_record",
+  "copy_list",
 ];
 
 export async function getSlackFunctions(
