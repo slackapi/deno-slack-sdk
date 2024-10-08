@@ -60,8 +60,13 @@ Deno.test("CanvasCreate generates valid FunctionManifest", () => {
           description: "Canvas link",
           title: "Canvas link",
         },
+        title: {
+          type: SchemaTypes.string,
+          description: "Canvas title",
+          title: "Canvas title",
+        },
       },
-      required: ["canvas_id"],
+      required: ["canvas_id", "title"],
     },
   };
   const actual = CanvasCreate.export();
@@ -93,4 +98,5 @@ Deno.test("All outputs of Slack function CanvasCreate should exist", () => {
     owner_id: "test",
   });
   assertExists(step.outputs.canvas_id);
+  assertExists(step.outputs.title);
 });

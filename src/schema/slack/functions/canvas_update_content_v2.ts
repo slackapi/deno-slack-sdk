@@ -4,7 +4,7 @@ import SchemaTypes from "../../schema_types.ts";
 import SlackTypes from "../schema_types.ts";
 
 export default DefineFunction({
-  callback_id: "slack#/functions/canvas_update_content",
+  callback_id: "slack#/functions/canvas_update_content_v2",
   source_file: "",
   title: "Update a canvas",
   input_parameters: {
@@ -24,7 +24,17 @@ export default DefineFunction({
         description: "Search standalone canvases",
         title: "Select a canvas",
       },
+      canvas_tab: {
+        type: SchemaTypes.string,
+        description: "Select an option",
+        title: "Choose which canvas to update",
+      },
       section_id: {
+        type: SchemaTypes.string,
+        description: "Select an option",
+        title: "Choose which section to update",
+      },
+      canvas_tab_section_id: {
         type: SchemaTypes.string,
         description: "Select an option",
         title: "Choose which section to update",

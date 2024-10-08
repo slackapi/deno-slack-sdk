@@ -14,6 +14,11 @@ export default DefineFunction({
         description: "Channel name",
         title: "Select a channel",
       },
+      title: {
+        type: SchemaTypes.string,
+        description: "Enter a canvas name",
+        title: "Canvas name",
+      },
       canvas_create_type: {
         type: SchemaTypes.string,
         description: "Type of creation",
