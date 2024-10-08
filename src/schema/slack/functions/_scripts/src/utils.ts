@@ -17,6 +17,16 @@ export const greenText = (text: string) => green + text + reset;
 export const yellowText = (text: string) => yellow + text + reset;
 export const redText = (text: string) => red + text + reset;
 
+// TODO: once List steps work in code, bring this back
+const FUNCTIONS_TO_IGNORE = [
+  "slack#/functions/update_list_record",
+  "slack#/functions/share_list_users",
+  "slack#/functions/lists_activity_feed",
+  "slack#/functions/list_add_record",
+  "slack#/functions/delete_list_record",
+  "slack#/functions/copy_list",
+];
+
 export async function getSlackFunctions(
   functionsPayloadPath: string = FUNCTIONS_JSON_PATH,
 ): Promise<FunctionRecord[]> {
@@ -24,7 +34,9 @@ export async function getSlackFunctions(
     functionsPayloadPath,
   ).then(JSON.parse);
 
-  return functionsPayload.functions.filter((fn) => fn.type == "builtin");
+  return functionsPayload.functions.filter((fn) =>
+    fn.type == "builtin" && !FUNCTIONS_TO_IGNORE.includes(fn.callback_id)
+  );
 }
 
 export function isObjectFunctionProperty(
