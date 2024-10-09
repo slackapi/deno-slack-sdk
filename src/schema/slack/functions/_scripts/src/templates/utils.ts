@@ -9,7 +9,7 @@ import { isArrayFunctionProperty, isObjectFunctionProperty } from "../utils.ts";
 
 // For coded workflow backwards compatibility, we alias certain builtins to their old names.
 const ID_ALIASES: Record<string, string> = {
-  "canvas_update_content_v2": "canvas_update_content"
+  "canvas_update_content_v2": "canvas_update_content",
 };
 
 function useIdAlias(callback_id: string): string {
