@@ -8,8 +8,8 @@ on:
     branches: [main]
 
 jobs:
-  samples:
+  e2e:
     runs-on: ubuntu-latest
     steps:
       - name: Baby steps
-        run: echo "hello world"
+        run: env
