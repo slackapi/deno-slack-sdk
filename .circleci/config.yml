@@ -64,6 +64,7 @@ workflows:
   e2e-test:
     jobs:
       - e2e-test:
-          e2e_target_branch: "main"
+          # TODO: update to `main` before merge and once https://github.com/slackapi/platform-devxp-test/pull/147 is merged
+          e2e_target_branch: "deno-sdk-parameter"
           sdk_branch: << pipeline.git.branch >>
           context: slack-cli-e2e
