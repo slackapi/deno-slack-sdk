@@ -1,0 +1,69 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+orbs:
+  jq: circleci/jq@2.2.0
+
+description: |
+  Run end-to-end integration tests between deno-slack-sdk, Slack Platform CLI and other Slack app development tooling.
+
+jobs:
+  e2e-test:
+    docker:
+      - image: cimg/base:current
+    parameters:
+      e2e_target_branch:
+        type: string
+        description: "What branch of the integration test repo should be used to test the CLI?"
+        # TODO: update to `main` before merge and once https://github.com/slackapi/platform-devxp-test/pull/147 is merged
+        default: deno-sdk-parameter
+      sdk_branch:
+        type: string
+        description: "What deno-slack-sdk branch should be used during testing?"
+        default: main
+    steps:
+      - checkout
+      - run:
+          name: Kick off platform-devpx-test pipeline
+          command: |
+            IMPORT_URL="https://raw.githubusercontent.com/slackapi/deno-slack-sdk/refs/heads/<< parameters.sdk_branch >>/src/";
+            # https://app.circleci.com/settings/organization/github/slackapi/contexts
+            TEST_JOB_WORKFLOW_ID=$(curl --location --request POST 'https://circleci.com/api/v2/project/gh/slackapi/platform-devxp-test/pipeline' \
+            --header 'Content-Type: application/json' \
+            -u "${FIL_CIRCLECI_PERSONAL_TOKEN}:" \
+            --data "{\"branch\":\"<< parameters.e2e_target_branch >>\",\"parameters\":{\"deno_sdk_import_url\":\"${IMPORT_URL}\"}}" | jq '.id')
+            echo "e2e test workflow started with id: $TEST_JOB_WORKFLOW_ID"
+            echo "export TEST_JOB_WORKFLOW_ID=${TEST_JOB_WORKFLOW_ID}" >> $BASH_ENV
+      - run:
+          name: Wait for platform-devxp-test E2E run to complete
+          command: |
+            E2E_RESULT="{}"
+            E2E_STATUS="running"
+            while [[ $E2E_STATUS != "failed" && $E2E_STATUS != "canceled" && $E2E_STATUS != "success" ]]
+            do
+              sleep 10
+              echo "Polling test job..."
+              E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/$TEST_JOB_WORKFLOW_ID/workflow" --header "Circle-Token: $CIRCLE_TOKEN")
+              E2E_STATUS=$(echo $E2E_RESULT | jq --raw-output '.items[0].status')
+              echo "Status is now: $E2E_STATUS"
+            done
+            if [ $E2E_STATUS = "failed" ]; then
+              E2E_PIPE_NUM=$(echo $E2E_RESULT | jq '.items[0].pipeline_number')
+              E2E_WORKFLOW_ID=$(echo $E2E_RESULT | jq -r '.items[0].id')
+              CIRCLE_FAIL_LINK="https://app.circleci.com/pipelines/github/slackapi/platform-devxp-test/${E2E_PIPE_NUM}/workflows/${E2E_WORKFLOW_ID}"
+              echo "Tests failed! Visit $CIRCLE_FAIL_LINK for more info."
+              exit 1
+            elif [ "$E2E_STATUS" = "canceled" ]; then
+              echo "Tests have been canceled and did not finish"
+              exit 1
+            else
+              echo "Tests passed woot 🎉"
+            fi
+
+workflows:
+  e2e-test:
+    jobs:
+      - e2e-test:
+          e2e_target_branch: "main"
+          sdk_branch: << pipeline.git.branch >>
+          context: slack-cli-e2e
