@@ -1,0 +1,15 @@
+# This workflow invokes a private end-to-end CI system for fuller integration testing
+name: E2E Integration
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  samples:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baby steps
+        run: echo "hello world"
