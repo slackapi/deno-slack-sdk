@@ -42,10 +42,11 @@ jobs:
             while [[ $E2E_STATUS != "failed" && $E2E_STATUS != "canceled" && $E2E_STATUS != "success" ]]
             do
               sleep 10
-              echo "Polling test job..."
+              echo "Polling test job ${TEST_JOB_WORKFLOW_ID}..."
               E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/$TEST_JOB_WORKFLOW_ID/workflow" --header "Circle-Token: $CIRCLE_TOKEN")
               E2E_STATUS=$(echo $E2E_RESULT | jq --raw-output '.items[0].status')
               echo "Status is now: $E2E_STATUS"
+              echo $E2E_RESULT
             done
             if [ $E2E_STATUS = "failed" ]; then
               E2E_PIPE_NUM=$(echo $E2E_RESULT | jq '.items[0].pipeline_number')
