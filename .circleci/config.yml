@@ -15,8 +15,7 @@ jobs:
       e2e_target_branch:
         type: string
         description: "What branch of the integration test repo should be used to test the CLI?"
-        # TODO: update to `main` before merge and once https://github.com/slackapi/platform-devxp-test/pull/147 is merged
-        default: deno-sdk-parameter
+        default: main
       sdk_branch:
         type: string
         description: "What deno-slack-sdk branch should be used during testing?"
@@ -39,22 +38,23 @@ jobs:
           command: |
             E2E_RESULT="{}"
             E2E_STATUS="running"
-            while [[ $E2E_STATUS != "failed" && $E2E_STATUS != "canceled" && $E2E_STATUS != "success" ]]
+            # possible status values: success, running, not_run, failed, error, failing, on_hold, canceled, unauthorized
+            while [[ $E2E_STATUS != "failed" && $E2E_STATUS != "canceled" && $E2E_STATUS != "success" && $E2E_STATUS != "not_run" && $E2E_STATUS != "error" && $E2E_STATUS != "unauthorized" ]]
             do
-              sleep 10
+              sleep 30s
               echo "Polling test job ${TEST_JOB_WORKFLOW_ID}..."
               E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/$TEST_JOB_WORKFLOW_ID/workflow" --header "Circle-Token: $FIL_CIRCLECI_PERSONAL_TOKEN")
               E2E_STATUS=$(echo $E2E_RESULT | jq --raw-output '.items[0].status')
               echo "Status is now: $E2E_STATUS"
             done
-            if [ $E2E_STATUS = "failed" ]; then
+            if [ $E2E_STATUS = "failed" ] || [ $E2E_STATUS = "error" ]; then
               E2E_PIPE_NUM=$(echo $E2E_RESULT | jq '.items[0].pipeline_number')
               E2E_WORKFLOW_ID=$(echo $E2E_RESULT | jq -r '.items[0].id')
               CIRCLE_FAIL_LINK="https://app.circleci.com/pipelines/github/slackapi/platform-devxp-test/${E2E_PIPE_NUM}/workflows/${E2E_WORKFLOW_ID}"
               echo "Tests failed! Visit $CIRCLE_FAIL_LINK for more info."
               exit 1
-            elif [ "$E2E_STATUS" = "canceled" ]; then
-              echo "Tests have been canceled and did not finish"
+            elif [ "$E2E_STATUS" = "canceled" ] || [ "$E2E_STATUS" = "unauthorized" ] || [ $E2E_STATUS = "not_run" ]; then
+              echo "Tests have been ${E2E_STATUS} and did not finish!"
               exit 1
             else
               echo "Tests passed woot 🎉"
@@ -64,7 +64,6 @@ workflows:
   e2e-test:
     jobs:
       - e2e-test:
-          # TODO: update to `main` before merge and once https://github.com/slackapi/platform-devxp-test/pull/147 is merged
-          e2e_target_branch: "deno-sdk-parameter"
+          e2e_target_branch: "main"
           sdk_branch: << pipeline.git.branch >>
           context: slack-cli-e2e
