@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "docusaurus-json-schema-plugin": "^1.12.2"
+  }
+}
