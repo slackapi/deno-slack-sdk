@@ -1,0 +1,48 @@
+{
+  "name": "channel_canvas_create",
+  "description": "Create channel canvas",
+  "schema_reference": "slack#/functions/channel_canvas_create.md",
+  "schema_id": "Schema.slack.functions.ChannelCanvasCreate",
+  "category": "Canvas",
+  "scopes": ["canvases:read", "canvases:write"],
+  "input_parameters": [
+    {
+      "type": "Schema.slack.types.channel_id",
+      "name": "channel_id",
+      "description": "Select a channel",
+      "required": true
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "canvas_create_type",
+      "description": "Type of creation. Options are `blank` or `template`. Default is `blank`. If type is `blank` or undefined, no `canvas_template_id` is needed. If type is `template`, provide a `canvas_template_id`.",
+      "required": false
+    },
+    {
+      "type": "Schema.slack.types.canvas_template_id",
+      "name": "canvas_template_id",
+      "description": "Select a canvas template. Only needed if `canvas_create_type` is set to `template`.",
+      "required": false
+    },
+    {
+      "type": "Schema.slack.types.expanded_rich_text",
+      "name": "content",
+      "description": "Add content. Content should only be provided if `canvas_create_type` is set to `blank`.",
+      "required": false
+    },
+    {
+      "type": "Schema.types.object",
+      "name": "placeholder_values",
+      "description": "A dictionary of key-value pairs representing canvas variables provided only when `canvas_create_type` is set to `template`.",
+      "required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "Schema.slack.types.canvas_id",
+      "name": "canvas_id",
+      "description": "Canvas link",
+      "required": true
+    }
+  ]
+}

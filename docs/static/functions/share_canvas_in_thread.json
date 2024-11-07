@@ -1,0 +1,61 @@
+{
+  "name": "share_canvas_in_thread",
+  "description": "Share a canvas in thread",
+  "schema_reference": "slack#/functions/share_canvas_in_thread.md",
+  "schema_id": "Schema.slack.functions.ShareCanvasInThread",
+  "category": "Canvas",
+  "scopes": [
+    "chat:write",
+    "im:write",
+    "chat:write.public",
+    "groups:write",
+    "canvases:read",
+    "canvases:write"
+  ],
+  "input_parameters": [
+    {
+      "name": "canvas_id",
+      "type": "Schema.slack.types.canvas_id",
+      "description": "The ID of the canvas to share",
+      "required": true
+    },
+    {
+      "name": "message_context",
+      "type": "Schema.slack.types.message_context",
+      "description": "The message to reply to",
+      "required": true
+    },
+    {
+      "name": "access_level",
+      "type": "Schema.types.string",
+      "description": "Select an access level. Options are `view` or `edit`.",
+      "required": true
+    },
+    {
+      "name": "message",
+      "type": "Schema.slack.types.rich_text",
+      "description": "Add a message",
+      "required": false
+    },
+    {
+      "name": "reply_broadcast",
+      "type": "Schema.types.boolean",
+      "description": "Send to the conversation as well",
+      "required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "name": "canvas_id",
+      "type": "Schema.slack.types.canvas_id",
+      "description": "Canvas link",
+      "required": false
+    },
+    {
+      "name": "message_context",
+      "type": "Schema.slack.types.message_context",
+      "description": "Reference to the sent message",
+      "required": false
+    }
+  ]
+}

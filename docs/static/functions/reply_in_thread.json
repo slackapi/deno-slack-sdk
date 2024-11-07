@@ -1,0 +1,57 @@
+{
+  "name": "reply_in_thread",
+  "schema_reference": "slack#/functions/reply_in_thread.md",
+  "schema_id": "Schema.slack.functions.ReplyInThread",
+  "function_reference": "slack#/functions/reply_in_thread",
+  "description": "Reply to a message by creating or adding to a thread",
+  "category": "Messaging",
+  "scopes": ["chat:write", "chat:write.public"],
+  "input_parameters": [
+    {
+      "type": "Schema.slack.types.rich_text",
+      "name": "message",
+      "description": "The textual message to send in thread",
+      "required": true
+    },
+    {
+      "name": "message_context",
+      "type": "Schema.slack.types.message_context",
+      "description": "An individual instance of a message",
+      "required": true
+    },
+    {
+      "name": "reply_broadcast",
+      "type": "Schema.types.boolean",
+      "description": "Also send the message to the top-level conversation.",
+      "default": "false",
+      "required": false,
+      "examples": ["true", "false"]
+    },
+    {
+      "type": "Schema.slack.types.object",
+      "name": "metadata",
+      "description": "Additional [metadata](/metadata/publishing) about the message, which can then be used an [workflow event trigger](/automation/triggers/event).",
+      "required": false
+    },
+    {
+      "type": "Schema.slack.types.blocks",
+      "name": "interactive_blocks",
+      "description": "Buttons to send with the message. Must be wrapped in a block. Only accepts the [`workflow_button`](/reference/block-kit/block-elements#workflow_button) element.",
+      "required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "name": "message_context",
+      "type": "Schema.slack.types.message_context",
+      "description": "An individual instance of the message you sent",
+      "required": true
+    },
+    {
+      "type": "Schema.types.string",
+      "description": " Permalink URL of the message that was sent",
+      "name": "message_link",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "name": "create_usergroup",
+  "description": "Create a new user group",
+  "schema_reference": "slack#/functions/create_usergroup.md",
+  "schema_id": "Schema.slack.functions.CreateUsergroup",
+  "related_methods": ["usergroups.create"],
+  "category": "User management",
+  "input_parameters": [
+    {
+      "type": "Schema.types.string",
+      "name": "usergroup_name",
+      "description": "The name of the user group to be created",
+      "required": true,
+      "examples": ["Monetization Tiger Team", "Scruffy-looking nerf-herders"]
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "usergroup_handle",
+      "description": "The `@usergroup` handle that will be used to address the group in conversation",
+      "required": true,
+      "examples": ["tiger-team-money", "nerf-herders"]
+    },
+    {
+      "type": "SlackTypes.team_id",
+      "name": "team_id",
+      "description": "Select a team",
+      "examples": ["T1234567890"],
+      "required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "name": "usergroup_id",
+      "type": "Schema.slack.types.usergroup_id",
+      "description": "The ID for the user group you just created",
+      "examples": ["S123ABC456"],
+      "default": "",
+      "required": true
+    }
+  ]
+}

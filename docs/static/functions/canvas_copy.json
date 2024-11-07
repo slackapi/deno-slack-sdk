@@ -1,0 +1,42 @@
+{
+  "name": "canvas_copy",
+  "description": "Copy a canvas",
+  "schema_id": "Schema.slack.functions.CanvasCopy",
+  "schema_reference": "slack#/functions/canvas_copy",
+  "category": "Canvas",
+  "scopes": ["canvases:read", "canvases:write"],
+  "input_parameters": [
+    {
+      "type": "Schema.slack.types.canvas_id",
+      "name": "canvas_id",
+      "description": "Select a canvas",
+      "required": true
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "title",
+      "description": "Canvas name",
+      "required": true
+    },
+    {
+      "type": "Schema.slack.types.user_id",
+      "name": "owner_id",
+      "description": "Canvas owner id",
+      "required": true
+    },
+    {
+      "type": "Schema.types.object",
+      "name": "placeholder_values",
+      "description": "A dictionary of key-value pairs representing canvas variables.",
+      "required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "Schema.slack.types.canvas_id",
+      "name": "canvas_id",
+      "description": "Canvas link",
+      "required": true
+    }
+  ]
+}

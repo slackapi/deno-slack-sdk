@@ -1,0 +1,35 @@
+{
+  "name": "add_user_to_usergroup",
+  "description": "Add a user to a user group",
+  "schema_id": "Schema.slack.functions.AddUserToUsergroup",
+  "schema_reference": "slack#/functions/add_user_to_usergroup",
+  "scopes": ["usergroups:write"],
+  "related_methods": ["usergroups.users.update"],
+  "category": "User management",
+  "input_parameters": [
+    {
+      "name": "usergroup_id",
+      "type": "Schema.slack.types.usergroup_id",
+      "description": "The ID for the user group to add the user to",
+      "examples": ["S123ABC456"],
+      "required": true
+    },
+    {
+      "name": "user_ids",
+      "type": "Schema.types.array",
+      "description": "A list of user IDs to add to the User Group",
+      "examples": ["[\"U111AAA111\",\"U222BBB222\"]"],
+      "required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "name": "usergroup_id",
+      "type": "Schema.slack.types.usergroup_id",
+      "description": "The ID for the user group that now contains the added user(s)",
+      "examples": ["S123ABC456"],
+      "default": "",
+      "required": false
+    }
+  ]
+}

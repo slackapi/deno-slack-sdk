@@ -1,0 +1,65 @@
+{
+  "name": "open_form",
+  "filename": "functions/open_form.md",
+  "schema_id": "Schema.slack.functions.OpenForm",
+  "schema_reference": "slack#/functions/functions/open_form",
+  "description": "Open an interactive form",
+  "category": "Interactivity",
+  "input_parameters": [
+    {
+      "name": "title",
+      "type": "Schema.types.string",
+      "description": "Title of the form shown to the user (24 characters / 8 Japanese characters max)",
+      "examples": [
+        "How am I driving?",
+        "TPS Report Submission",
+        "Channel hero nomination"
+      ],
+      "required": true
+    },
+    {
+      "name": "fields",
+      "type": "Schema.types.object",
+      "description": "A collection of input fields to be shown on the form. See **[Using forms](/automation/forms#element-schema)** for schema.",
+      "required": true
+    },
+    {
+      "name": "interactivity",
+      "type": "Schema.slack.types.interactivity",
+      "description": "Context about the interactive event that led to opening of the form. See [form interactivity](/automation/forms) for more.",
+      "required": true
+    },
+    {
+      "name": "description",
+      "type": "Schema.types.string",
+      "description": "Description of the form shown to the user",
+      "examples": [
+        "Request access to the underground lair on weekends",
+        "Submit your ideas to the think tank",
+        "Choose your next adventure"
+      ],
+      "required": false
+    },
+    {
+      "name": "submit_label",
+      "type": "Schema.types.string",
+      "description": "Label of the submit button that the user will click to submit the form",
+      "examples": ["Submit complaint", "Save call log", "Open mailbox"],
+      "required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "name": "fields",
+      "type": "Schema.types.object",
+      "description": "Values of the input fields filled by the user. See [Using forms](/automation/forms#element-schema) for details.",
+      "required": true
+    },
+    {
+      "name": "interactivity",
+      "type": "Schema.slack.types.interactivity",
+      "description": "Context about the form submit action interactive event",
+      "required": true
+    }
+  ]
+}

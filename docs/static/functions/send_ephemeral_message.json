@@ -1,0 +1,47 @@
+{
+  "name": "send_ephemeral_message",
+  "description": "Send an ephemeral message (one that only the recipient can see)",
+  "schema_reference": "slack#/functions/send_ephemeral_message.md",
+  "schema_id": "Schema.slack.functions.SendEphemeralMessage",
+  "category": "Messaging",
+  "scopes": ["chat:write"],
+  "input_parameters": [
+    {
+      "name": "user_id",
+      "type": "Schema.slack.types.usergroup_id",
+      "description": "The ID of the user to show the ephemeral message to",
+      "examples": ["U111AAA111"],
+      "required": true
+    },
+    {
+      "type": "Schema.slack.types.channel_id",
+      "name": "channel_id",
+      "description": "The conversation ID for the channel you are sending the message to",
+      "required": true,
+      "examples": ["C123456", "D123ABC456"]
+    },
+    {
+      "type": "Schema.slack.types.rich_text",
+      "name": "message",
+      "description": "The textual message to send to ephemerally (previously accepted as `text`)",
+      "required": true,
+      "examples": []
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "thread_ts",
+      "description": "The `ts` identifier of an _existing_ message to [send this message to as a reply](/surfaces/messages#threading).",
+      "required": false,
+      "examples": ["1355517523.000005"]
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "Schema.types.string",
+      "description": "The channel-specific unique identifier for this message, also serves as a confirmation that the message was sent.",
+      "name": "message_ts",
+      "required": true,
+      "examples": []
+    }
+  ]
+}

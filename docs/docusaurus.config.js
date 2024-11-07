@@ -49,7 +49,7 @@ const config = {
     ],
   ],
 
-themes: ["docusaurus-json-schema-plugin"],
+// themes: ["docusaurus-json-schema-plugin"],
 
 plugins:
 ['docusaurus-theme-github-codeblock',

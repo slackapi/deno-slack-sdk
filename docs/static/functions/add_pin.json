@@ -1,0 +1,32 @@
+{
+  "name": "add_pin",
+  "description": "Pin a message to a channel",
+  "schema_id": "Schema.slack.functions.AddPin",
+  "schema_reference": "slack#/functions/add_pin",
+  "scopes": ["pins:write"],
+  "related_methods": ["pins.add"],
+  "category": "Pinned items",
+  "input_parameters": [
+    {
+      "type": "Schema.slack.types.channel_id",
+      "name": "channel_id",
+      "description": "The conversation ID for the channel you are pinning the message to",
+      "required": true,
+      "hint": "",
+      "examples": ["C123ABC456", "D123ABC456"],
+      "default": ""
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "message",
+      "description": "The URL or message timestamp of the message you are pinning",
+      "required": true,
+      "hint": "",
+      "examples": [
+        "1355517523.000005",
+        "https://workface.slack.com/archives/CAZPFJXGD/p1676920733028759"
+      ],
+      "default": ""
+    }
+  ]
+}
