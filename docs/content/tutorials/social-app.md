@@ -1,4 +1,4 @@
-# Virtual Running Buddies
+# Virtual running buddies
 
 In this tutorial, you'll learn how to create a social app to log runs with your virtual running buddies. 
 

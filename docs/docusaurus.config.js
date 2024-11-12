@@ -1,10 +1,6 @@
-// @ts-check
-// `@type` JSDoc annotations allow editor autocompletion and type checking
-// (when paired with `@ts-check`).
-// There are various equivalent ways to declare your Docusaurus config.
-// See: https://docusaurus.io/docs/api/docusaurus-config
-
 import {themes as prismThemes} from 'prism-react-renderer';
+const footer = require('./footerConfig');
+const navbar = require('./navbarConfig');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -42,14 +38,9 @@ const config = {
         theme: {
           customCss: './src/css/custom.css',
         },
-        gtag: {
-          trackingID: 'G-9H1YZW28BG',
-        },
       }),
     ],
   ],
-
-// themes: ["docusaurus-json-schema-plugin"],
 
 plugins:
 ['docusaurus-theme-github-codeblock',
@@ -64,23 +55,8 @@ plugins:
       ],
     },
   ],
-  // [
-  //   'docusaurus-plugin-typedoc',
-  //   {
-  //     id: 'generate-add-bookmark',
-  //     entryPoints: ['../src/schema/slack/functions/add_bookmark.ts'],
-  //     out: "./content/functions/generate-add-bookmark",
-  //     skipErrorChecking: true,
-  //     useCodeBlocks: true,
-
-  //     compilerOptions: {
-  //         allowImportingTsExtensions: true
-  //       }
-  //   },
-  // ],
   
 ],
-
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -93,102 +69,8 @@ plugins:
           autoCollapseCategories: true,
         },
       },
-      navbar: {
-        title: "Slack Developer Tools",
-        logo: {
-          alt: 'Slack logo',
-          src: 'img/slack-logo.svg',
-          href: 'https://tools.slack.dev',
-          target : '_self'
-        },
-        items: [
-          {
-            type: 'dropdown',
-            label: 'Bolt',
-            position: 'left',
-            items: [
-              {
-                label: 'Java',
-                to: 'https://tools.slack.dev/java-slack-sdk/guides/bolt-basics',
-                target: '_self',
-              },
-              {
-                label: 'JavaScript',
-                to: 'https://tools.slack.dev/bolt-js',
-                target: '_self',
-              },
-              {
-                label: 'Python',
-                to: 'https://tools.slack.dev/bolt-python',
-                target: '_self',
-              },
-            ]
-          },
-          {
-            type: 'dropdown',
-            label: 'SDKs',
-            position: 'left',
-            items: [
-              {
-                label: 'Java Slack SDK',
-                to: 'https://tools.slack.dev/java-slack-sdk/',
-                target: '_self',
-              },
-              {
-                label: 'Node Slack SDK',
-                to: 'https://tools.slack.dev/node-slack-sdk/',
-                target: '_self',
-              },
-              {
-                label: 'Python Slack SDK',
-                to: 'https://tools.slack.dev/python-slack-sdk/',
-                target: '_self',
-              },
-              {
-                label: 'Deno Slack SDK',
-                to: 'https://tools.slack.dev/deno-slack-sdk/',
-                target: '_self',
-              },
-            ]
-          },
-          {
-            type: 'dropdown',
-            label: 'Community',
-            position: 'left',
-            items: [
-              {
-                label: 'Community tools',
-                to: 'https://tools.slack.dev/community-tools',
-                target: '_self',
-              },
-              {
-                label: 'Slack Community',
-                to: 'https://slackcommunity.com/',
-                target: '_self',
-              },
-            ]
-          },
-          {
-            to: 'https://api.slack.com/docs',
-            label: 'API Docs',
-            target: '_self',
-          },
-          {
-            type: 'localeDropdown',
-            position: 'right',
-          },
-          {
-            'aria-label': 'GitHub Repository',
-            'className': 'navbar-github-link',
-            'href': 'https://github.com/slackapi/deno-slack-sdk',
-            'position': 'right',
-            target: '_self',
-          },
-        ],
-      },
-      footer: {
-        copyright: `<p> Made with ♡ by Slack and pals like you <p>`,
-      },
+      navbar,
+      footer,
       prism: {
         // switch to alucard when available in prism?
         theme: prismThemes.github, 
