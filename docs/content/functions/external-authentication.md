@@ -154,7 +154,7 @@ Great! With your app configured to interact with your defined OAuth2 provider, w
 
 ### 5. Initialize the OAuth2 flow {#initialize-oauth-flow}
 
-Once your provider's client secret has been added, it's time to create a token for your app to interact with your OAuth2 provider with [`external-auth add`](/automation/cli/commands#external-auth-add).
+Once your provider's client secret has been added, it's time to create a token for your app to interact with your OAuth2 provider with [`external-auth add`](https://tools.slack.dev/slack-cli/reference/slack_external-auth_add).
 
 Run the following command:
 
@@ -180,7 +180,7 @@ go ahead and create a token by initializing the OAuth2 sign-in flow.
 
 Select the provider you're working on, which will open a browser window for you to complete the OAuth2 sign-in flow according to your provider's requirements. You'll know you're successful when your browser sends you to a `oauth2.slack.com` page stating that your account was successfully connected.
 
-Verify that a valid token has been created by re-running the [`external-auth add`](/automation/cli/commands#external-auth-add) command:
+Verify that a valid token has been created by re-running the [`external-auth add`](https://tools.slack.dev/slack-cli/reference/slack_external-auth_add) command:
 
 ```
 slack external-auth add

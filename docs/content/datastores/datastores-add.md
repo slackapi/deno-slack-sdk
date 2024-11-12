@@ -7,7 +7,7 @@ There are a few ways you can add information to a datastore. You can:
 There's an important distinction between these methods! The `put` and `bulkPut` methods _replace_ entire existing items, while the `update` method will only _update_ the provided attributes for items. Be careful to not accidentally lose information when using the `put` and `bulkPut` methods. 
 
 :::tip[Slack CLI commands]
-You can also add items to a datastore with the [`datastore put`](automation/cli/commands#datastore-put), [`datastore bulk-put`](automation/cli/commands#datastore-bulk-put), and [`datastore update`](automation/cli/commands#datastore-update) Slack CLI commands. The `datastore bulk-put` command even supports importing data from a [JSON Lines](https://jsonlines.org/) file.
+You can also add items to a datastore with the [`datastore put`](https://tools.slack.dev/slack-cli/reference/slack_datastore_put), [`datastore bulk-put`](https://tools.slack.dev/slack-cli/reference/slack_datastore_bulk-put), and [`datastore update`](https://tools.slack.dev/slack-cli/reference/slack_datastore_datastore-update) Slack CLI commands. The `datastore bulk-put` command even supports importing data from a [JSON Lines](https://jsonlines.org/) file.
 
 :::
 

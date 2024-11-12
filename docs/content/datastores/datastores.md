@@ -127,7 +127,7 @@ Note that we've also added the required `datastore:read` and `datastore:write` b
 
 :::info
 
-Updates to an existing datastore that could result in data loss (removal of an existing datastore or attribute from the app) may require the use of the force flag (`--force`) when re-deploying the app. See [schema_compatibility_error](/automation/cli/errors#schema_compatibility_error) for more information.
+Updates to an existing datastore that could result in data loss (removal of an existing datastore or attribute from the app) may require the use of the force flag (`--force`) when re-deploying the app. See [schema_compatibility_error](https://tools.slack.dev/slack-cli/errors#schema_compatibility_error) for more information.
 
 :::
 
@@ -135,7 +135,7 @@ Updates to an existing datastore that could result in data loss (removal of an e
 
 ## Importing data to a datastore {#import}
 
-You can import data from a [JSON Lines](https://jsonlines.org/) file to a datastore using the [`datastore bulk-put`](/automation/cli/commands#datastore-bulk-put) command with the `--from-file` flag. For example: 
+You can import data from a [JSON Lines](https://jsonlines.org/) file to a datastore using the [`datastore bulk-put`](https://tools.slack.dev/slack-cli/reference/slack_datastore_bulk-put) command with the `--from-file` flag. For example: 
 
 ```
 slack datastore bulk-put '{"datastore": "running_datastore"}' —-from-file /path/to/file.jsonl
@@ -159,7 +159,7 @@ See the [Retrieve items from a datastore guide](/automation/datastores-retrieve)
 
 ## Counting items in a datastore {#count} 
 
-You can count the number of items in a datastore that match a query by using the [`datastore count`](/automation/cli/commands#datastore-count) command. This command handles paginating through an entire datastore to return the number of matched items (rather than the items themselves, as with the `datastore query` command).
+You can count the number of items in a datastore that match a query by using the [`datastore count`](https://tools.slack.dev/slack-cli/reference/slack_datastore_count) command. This command handles paginating through an entire datastore to return the number of matched items (rather than the items themselves, as with the `datastore query` command).
 
 See the [Count items in a datastore guide](/automation/datastores-retrieve#count) for more information on the API method underlying this command. 
 
@@ -169,7 +169,7 @@ See the [Count items in a datastore guide](/automation/datastores-retrieve#count
 
 There are two ways to interact with your app's datastore.
 
-➡️  **To interact with your datastore through the command-line tool**, see the [datastore commands](/automation/cli/commands#datastore) section on the commands page.
+➡️  **To interact with your datastore through the command-line tool**, see the [datastore commands](https://tools.slack.dev/slack-cli/reference/slack_datastore) section on the commands page.
 
 ⤵️ **To interact with your datastore within a [custom function](/automation/functions/custom)**, keep reading.
 
@@ -276,7 +276,7 @@ Ready to start manipulating data with your workflows? We've got a guide for each
 ---
 
 ## Deleting a datastore {#delete-datastore}
-If you need to delete a datastore completely, for instance you've changed the primary key, you have a couple of options. Datastores do support primary key changes, so first try using the `--force` flag on a [datastore CLI](/automation/cli/commands#datastores) operation if the Slack CLI informs you that the datastore has changed. Otherwise, do the following:
+If you need to delete a datastore completely, for instance you've changed the primary key, you have a couple of options. Datastores do support primary key changes, so first try using the `--force` flag on a [datastore CLI](https://tools.slack.dev/slack-cli/reference/slack_datastore) operation if the Slack CLI informs you that the datastore has changed. Otherwise, do the following:
 
 Step 1. Remove the datastore definition from the app's manifest.
 
@@ -290,7 +290,7 @@ Step 4. Run `slack deploy` again.
 
 ## Troubleshooting {#troubleshooting}
 
-If you're looking to audit or query your datastore from the terminal without having to go through code, see the [datastore commands](/automation/cli/commands#datastores).
+If you're looking to audit or query your datastore from the terminal without having to go through code, see the [datastore commands](https://tools.slack.dev/slack-cli/reference/slack_datastore).
 
 If you're getting errors, check the following:
 

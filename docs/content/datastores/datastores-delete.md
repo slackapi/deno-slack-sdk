@@ -6,7 +6,7 @@ There are a couple ways you can delete items from a datastore. You can:
 
 :::tip[Slack CLI commands]
 
-You can also delete items from a datastore with the [`datastore delete`](/automation/cli/commands#datastore-delete) and [`datastore bulk-delete`](/automation/cli/commands#datastore-bulk-delete) Slack CLI commands.
+You can also delete items from a datastore with the [`datastore delete`](https://tools.slack.dev/slack-cli/reference/slack_datastore_delete) and [`datastore bulk-delete`](https://tools.slack.dev/slack-cli/reference/slack_datastore_bulk-delete) Slack CLI commands.
 
 :::
 
@@ -166,7 +166,7 @@ const result = await client.apps.datastore.query({
 });
 ```
 
-To see an example of filtering out expired items via the command line, see the documentation on the [`datastore query`](/automation/cli/commands#datastore-query) command.
+To see an example of filtering out expired items via the command line, see the documentation on the [`datastore query`](https://tools.slack.dev/slack-cli/reference/slack_datastore_query) command.
 
 ### Disable the TTL feature {#disable-ttl}
 

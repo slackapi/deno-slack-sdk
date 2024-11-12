@@ -2,7 +2,7 @@
 
 An app goes through stages of development, from creation to experimentation and development to production. Sometimes a removal happens too.
 
-The [Slack CLI](https://api.slack.com/automation/cli) provides a set of commands to make managing these stages a bit easier with the following offerings:
+The [Slack CLI](https://tools.slack.dev/slack-cli) provides a set of commands to make managing these stages a bit easier with the following offerings:
 
 - [`slack create`](#create-app) to create a brand new app
 - [`slack app link`](#link-app) to link an existing app to a project
@@ -199,6 +199,6 @@ slack delete -a A123ABC456 -t T123ABC456
 
 ## Onward
 
-Your wish is our command! For information about other actions you can perform from the CLI, refer to the [CLI quick reference](/automation/cli/quick-reference) and [Commands](/automation/cli/commands).
+Your wish is our command! For information about other actions you can perform from the CLI, refer to the [Slack CLI commands guide](https://tools.slack.dev/slack-cli/commands).
 
 Check out more about how to configure your app via the [manifest](/automation/manifest). You can also start building [functions](/automation/functions) to perform some logic, chain them together in [workflows](/automation/workflows), and create [triggers](/automation/triggers) to invoke those workflows.

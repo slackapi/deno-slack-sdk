@@ -1,12 +1,12 @@
 # Custom function access
 
-To make a function available so that another user (or many users) can access workflows that reference that function, you'll use the [`function access`](/automation/cli/commands#function) command. At this time, functions can be made available to:
+To make a function available so that another user (or many users) can access workflows that reference that function, you'll use the [`function access`](https://tools.slack.dev/slack-cli/reference/slack_function) command. At this time, functions can be made available to:
 
 * _everyone_ in workspaces where the app has access,
 * your app's _collaborators_,
 * or _specific users_.
 
-In order to enable the [`function access`](/automation/cli/commands#function) command, your app must have been deployed _at least once before_ attempting to make your function available to others.
+In order to enable the [`function access`](https://tools.slack.dev/slack-cli/reference/slack_function) command, your app must have been deployed _at least once before_ attempting to make your function available to others.
 
 :::info[Re-deploy your app after using `function access`]
 
@@ -47,7 +47,7 @@ _To revoke access, replace `--grant` with `--revoke`._
 Given:
 - a function with a [callback ID](/automation/functions/custom#fields) of `notify_escal_team`
 
-You can make your `notify_escal_team` function available to all of your app's [collaborators](/automation/cli/commands#slack-collaborators) like this:
+You can make your `notify_escal_team` function available to all of your app's [collaborators](https://tools.slack.dev/slack-cli/reference/slack_slack_collaborators) like this:
 
 ```cmd
 $ slack function access --name notify_escal_team --app_collaborators --grant
@@ -127,4 +127,4 @@ If a guest or external user attempts to run a workflow containing a function wit
 
 ## More distribution options {#distribution-options}
 
-For more distributions options, including how to **revoke** access, head to the [distribute command reference](/automation/cli/commands#function).
+For more distributions options, including how to **revoke** access, head to the [distribute command reference](https://tools.slack.dev/slack-cli/reference/slack_function).

@@ -234,7 +234,7 @@ A Slack datastore query includes the following arguments:
 | `limit` | The maximum number of entries to return, 1-1000 (both inclusive); default is `100` | Optional |
 | `cursor` | The string value to access the next page of results | Optional |
 
-Here's an example of how to query our `drafts` datastore using the [Slack CLI](/automation/cli/install-mac-linux) and retrieve a list of all the announcements with messages containing "timesheet":
+Here's an example of how to query our `drafts` datastore using the [Slack CLI](https://tools.slack.dev/slack-cli/install-mac-linux) and retrieve a list of all the announcements with messages containing "timesheet":
 
 ```javascript
 const result = await client.apps.datastore.query({
@@ -276,7 +276,7 @@ Let's take a look at another example, this one exploring searching a datastore b
 }
 ```
 
-If we run the [CLI](/automation/cli/install-mac-linux) query:
+If we run the [Slack CLI](https://tools.slack.dev/slack-cli/install-mac-linux) query:
 ```bash
 slack datastore query '{
   "datastore": "messages",

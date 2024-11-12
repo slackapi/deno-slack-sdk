@@ -179,7 +179,7 @@ Similarly, when using a [locally running your app](/automation/run), you can use
 
 When composing your functions, you can:
 
-* leverage external APIs, and even store API credentials, using the CLI's [`slack env add`](/automation/cli/commands#env-add) command
+* leverage external APIs, and even store API credentials, using the CLI's [`slack env add`](https://tools.slack.dev/slack-cli/reference/slack_env_add) command
 * [call Slack API methods](/automation/apicalls) or [third-party APIs](/automation/faq#third-party)
 * store and retrieve data from [datastores](/automation/datastores)
 
@@ -206,7 +206,7 @@ Here are all the context properties available:
 
 | Property | Kind | Description |
 | ----- | ---- | ----------- |
-| `env` | String | Represents environment variables available to your function's execution context. A locally running app gets its `env` properties populated via the local `.env` file. A deployed app gets its `env` properties populated via the CLI's [`slack env add`](/automation/cli/commands#env) command. |
+| `env` | String | Represents environment variables available to your function's execution context. A locally running app gets its `env` properties populated via the local `.env` file. A deployed app gets its `env` properties populated via the CLI's [`slack env add`](https://tools.slack.dev/slack-cli/reference/slack_env_add) command. |
 | `inputs` |  Object | Contains the input parameters you defined as part of your function definition. |
 | `client` |  Object | An API client ready for use in your function. Useful for [calling Slack API methods](/automation/apicalls). |
 | `token` | String | Your application's access token.|
@@ -476,5 +476,5 @@ $ deno test
 
 ### Integrating a test into your CI/CD pipeline {#cicd-test}
 
-For more information, refer to [CI/CD pipeline setup](/automation/cli/CI-CD-setup).
+For more information, refer to [CI/CD pipeline setup](https://tools.slack.dev/slack-cli/CI-CD-setup).
 
