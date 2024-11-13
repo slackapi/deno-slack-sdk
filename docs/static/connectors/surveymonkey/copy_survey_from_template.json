@@ -1,0 +1,79 @@
+{
+  "id": "Fn05UG6KGYAW",
+  "callback_id": "copy_survey_from_template",
+  "title": "Copy a survey from a template",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "surveymonkey_access_token",
+      "description": "SurveyMonkey Credential to use",
+      "title": "SurveyMonkey Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "surveymonkey",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "template_id",
+      "description": "Select a template",
+      "title": "Survey template",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_survey_templates",
+        "inputs": {
+          "surveymonkey_access_token": {
+            "value": "{{input_parameters.surveymonkey_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.templates}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter text",
+      "title": "Survey title",
+      "is_required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "description": "New survey ID",
+      "title": "Survey ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "New survey title",
+      "title": "Survey title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "url",
+      "description": "The URL where users can edit the new survey before sending",
+      "title": "Design survey URL",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05U1HZ9XGF",
+  "category_label": "SurveyMonkey",
+  "app_id": "A05U1HZ9XGF",
+  "date_created": 1695978040,
+  "date_released": 0,
+  "date_updated": 1701966922,
+  "date_deleted": 0,
+  "form_enabled": false
+}

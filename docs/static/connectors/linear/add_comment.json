@@ -1,0 +1,92 @@
+{
+  "id": "Fn05UW12J4R1",
+  "callback_id": "add_comment",
+  "title": "Add a comment",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "issue_update_id",
+      "description": "Select an issue",
+      "title": "Issue",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_issues",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "linear_access_token": {
+            "value": "{{input_parameters.linear_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.issues}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "comment",
+      "description": "Enter comment",
+      "title": "Comment",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "linear_access_token",
+      "title": "Linear access token",
+      "is_required": true,
+      "oauth2_provider_key": "linear"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "issue_id",
+      "description": "Id of the issue",
+      "title": "Issue ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "comment_id",
+      "title": "Comment ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "title": "Title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "body",
+      "description": "Body of the comment",
+      "title": "Comment",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "comment_url",
+      "title": "Comment URL",
+      "is_required": false,
+      "format": "url"
+    }
+  ],
+  "category_id": "A05ULH1PNMA",
+  "category_label": "Linear",
+  "app_id": "A05ULH1PNMA",
+  "date_created": 1696318667,
+  "date_released": 0,
+  "date_updated": 1723463970,
+  "date_deleted": 0,
+  "form_enabled": false
+}

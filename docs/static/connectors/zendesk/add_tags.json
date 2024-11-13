@@ -1,0 +1,96 @@
+{
+  "id": "Fn069ZESKC8Z",
+  "callback_id": "add_tags",
+  "title": "Add tags",
+  "description": "Add tags on a ticket without affecting existing ones",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "integer",
+      "name": "ticket_id",
+      "description": "Enter ticket ID",
+      "title": "Ticket ID",
+      "is_required": true
+    },
+    {
+      "type": "array",
+      "name": "add_tags",
+      "title": "Add tags",
+      "is_required": false,
+      "hint": "Tag must already exist in the Zendesk workspace.",
+      "dynamic_options": {
+        "function": "#/functions/search_tags",
+        "inputs": {
+          "tag_name": {
+            "value": "{{client.query}}"
+          },
+          "zendesk_access_token": {
+            "value": "{{input_parameters.zendesk_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "string",
+            "value": "{{output_parameters.zendesk_tags}}"
+          }
+        }
+      },
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "zendesk_access_token",
+      "description": "Zendesk credential to use",
+      "title": "Zendesk Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "zendesk"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "integer",
+      "name": "ticket_id",
+      "title": "Ticket ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "ticket_url",
+      "description": "The ticket URL",
+      "title": "Ticket URL",
+      "is_required": true,
+      "format": "url"
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "title": "Status",
+      "is_required": true
+    },
+    {
+      "type": "array",
+      "name": "additional_tags",
+      "title": "Added tags",
+      "is_required": true,
+      "items": {
+        "type": "string"
+      }
+    }
+  ],
+  "category_id": "A0660D0LBV3",
+  "category_label": "Zendesk",
+  "app_id": "A0660D0LBV3",
+  "date_created": 1702313752,
+  "date_released": 0,
+  "date_updated": 1719893888,
+  "date_deleted": 0,
+  "form_enabled": false
+}

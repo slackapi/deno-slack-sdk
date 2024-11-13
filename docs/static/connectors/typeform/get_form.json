@@ -1,0 +1,85 @@
+{
+  "id": "Fn05U7JXGXTP",
+  "callback_id": "get_form",
+  "title": "Get a form",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "form_id",
+      "description": "Select a form",
+      "title": "Select a form",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_forms",
+        "inputs": {
+          "search_query": {
+            "value": "{{client.query}}"
+          },
+          "typeform_access_token": {
+            "value": "{{input_parameters.typeform_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.forms}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "typeform_access_token",
+      "title": "Typeform access token",
+      "is_required": true,
+      "oauth2_provider_key": "typeform"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "object",
+      "name": "form",
+      "title": "Form",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "form_id",
+      "title": "Form ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "form_title",
+      "title": "Form name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "form_url",
+      "title": "Form display URL",
+      "is_required": false
+    },
+    {
+      "type": "array",
+      "name": "form_fields",
+      "title": "Form fields",
+      "is_required": false,
+      "items": {
+        "type": "#/types/form"
+      }
+    }
+  ],
+  "category_id": "A05T70HT5E1",
+  "category_label": "Typeform",
+  "app_id": "A05T70HT5E1",
+  "date_created": 1695896782,
+  "date_released": 0,
+  "date_updated": 1709543926,
+  "date_deleted": 0,
+  "form_enabled": false
+}

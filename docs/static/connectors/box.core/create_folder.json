@@ -1,0 +1,99 @@
+{
+  "id": "Fn05S2VDSLA1",
+  "callback_id": "create_folder",
+  "title": "Create a folder",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "box_access_token",
+      "title": "Box Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "box"
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter a name",
+      "title": "Folder name",
+      "is_required": true,
+      "maxLength": 255
+    },
+    {
+      "type": "string",
+      "name": "parent_folder_id",
+      "description": "Select a folder",
+      "title": "Parent folder",
+      "is_required": false,
+      "hint": "If left blank, the folder will be created in your root directory. It can take up to 10 mins for a newly created folder to be searchable.",
+      "dynamic_options": {
+        "function": "#/functions/search_folders",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "box_access_token": {
+            "value": "{{input_parameters.box_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.folders}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        },
+        "validation": {
+          "function": "#/functions/fetch_folder",
+          "inputs": {
+            "box_access_token": {
+              "value": "{{input_parameters.box_access_token}}"
+            },
+            "parent_folder_id": {
+              "value": "{{input_parameters.parent_folder_id}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.folder}}"
+            },
+            "value_path": "id",
+            "label_path": "name"
+          }
+        }
+      },
+      "default": "0"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "title": "Folder ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "web_link",
+      "title": "Folder URL",
+      "is_required": true,
+      "format": "url"
+    }
+  ],
+  "category_id": "A05QNBAB4UA",
+  "category_label": "Box",
+  "app_id": "A05QNBAB4UA",
+  "date_created": 1694611447,
+  "date_released": 0,
+  "date_updated": 1730929068,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,61 @@
+{
+  "id": "Fn06053X89LG",
+  "callback_id": "fetch_employees",
+  "title": "Fetch employees",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "employment_status",
+      "title": "Employment status",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_employment_status",
+        "options": {
+          "target_array": {
+            "type": "string",
+            "value": "{{output_parameters.employment_statuses}}"
+          }
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "array",
+      "name": "emails",
+      "title": "Email IDs",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "array",
+      "name": "names",
+      "title": "Names",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "array",
+      "name": "employee_ids",
+      "title": "Employee IDs",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    }
+  ],
+  "category_id": "A05RY71E6UE",
+  "category_label": "Greenhouse Onboarding",
+  "app_id": "A05RY71E6UE",
+  "date_created": 1696318742,
+  "date_released": 0,
+  "date_updated": 1696402402,
+  "date_deleted": 0,
+  "form_enabled": false
+}

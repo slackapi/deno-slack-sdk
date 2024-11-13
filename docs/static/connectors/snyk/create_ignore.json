@@ -1,0 +1,146 @@
+{
+  "id": "Fn05HAMD2917",
+  "callback_id": "create_ignore",
+  "title": "Ignore an issue",
+  "description": "Ignores vulnerabilities or license issues for a given organization and project",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "org_id",
+      "description": "Please select an option",
+      "title": "Organization",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_organizations",
+        "inputs": {
+          "snyk_access_token": {
+            "value": "{{input_parameters.snyk_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.orgs}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "project_id",
+      "description": "Please select an option",
+      "title": "Project",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_projects",
+        "inputs": {
+          "org_id": {
+            "value": "{{input_parameters.org_id}}"
+          },
+          "snyk_access_token": {
+            "value": "{{input_parameters.snyk_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.projects}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "issue_id",
+      "description": "Enter text",
+      "title": "Issue ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "reason",
+      "description": "Enter text",
+      "title": "Reason",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "reason_type",
+      "description": "Please select an option",
+      "title": "Reason type",
+      "is_required": true,
+      "enum": [
+        "not-vulnerable",
+        "wont-fix",
+        "temporary-ignore"
+      ],
+      "choices": [
+        {
+          "title": "Not vulnerable",
+          "value": "not-vulnerable"
+        },
+        {
+          "title": "Wont fix",
+          "value": "wont-fix"
+        },
+        {
+          "title": "Temporarily Ignore",
+          "value": "temporary-ignore"
+        }
+      ]
+    },
+    {
+      "type": "boolean",
+      "name": "disregard_if_fixable",
+      "description": "Toggle if issue is not fixable...",
+      "title": "Disregard if fixable",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "snyk_access_token",
+      "description": "Snyk Credential to use",
+      "title": "Snyk Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "snyk",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "issue_id",
+      "description": "Snyk issue identifier",
+      "title": "Issue ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "reason_type",
+      "description": "Category for the reason to ignore the issue",
+      "title": "Issue reason type",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "reason",
+      "description": "The reason why the issue was ignored",
+      "title": "Issue reason",
+      "is_required": false,
+      "nullable": true
+    }
+  ],
+  "category_id": "A05DD2DNMGF",
+  "category_label": "Snyk",
+  "app_id": "A05DD2DNMGF",
+  "date_created": 1689267951,
+  "date_released": 0,
+  "date_updated": 1694013380,
+  "date_deleted": 0,
+  "form_enabled": false
+}

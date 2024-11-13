@@ -1,0 +1,155 @@
+{
+  "id": "Fn05Q6A9NN5Q",
+  "callback_id": "merge_pull_request",
+  "title": "Merge pull request",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "workspace",
+      "description": "Enter Bitbucket workspace",
+      "title": "Bitbucket workspace",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_workspace",
+        "inputs": {
+          "bitbucket_access_token": {
+            "value": "{{input_parameters.bitbucket_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.workspaces}}"
+          },
+          "value_path": "workspace.uuid",
+          "label_path": "workspace.name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "repo_slug",
+      "description": "Enter repository name",
+      "title": "Repository",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_workspace_repositories",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "workspace_uuid": {
+            "value": "{{input_parameters.workspace}}"
+          },
+          "bitbucket_access_token": {
+            "value": "{{input_parameters.bitbucket_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.repositories}}"
+          },
+          "value_path": "uuid",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "pull_request_id",
+      "description": "Enter a pull request ID",
+      "title": "Pull request ID",
+      "is_required": true,
+      "hint": "Enter a pull request ID"
+    },
+    {
+      "type": "string",
+      "name": "message",
+      "description": "Enter a message",
+      "title": "Message",
+      "is_required": false,
+      "hint": "Enter a message"
+    },
+    {
+      "type": "boolean",
+      "name": "close_source_branch",
+      "description": "Enter Close Source Branch",
+      "title": "Close Source Branch",
+      "is_required": false,
+      "hint": "Whether to close the source branch"
+    },
+    {
+      "type": "string",
+      "name": "merge_strategy",
+      "description": "Enter merge strategy",
+      "title": "Merge strategy",
+      "is_required": false,
+      "hint": "Merge strategy to use",
+      "enum": [
+        "merge_commit",
+        "squash",
+        "fast_forward"
+      ],
+      "choices": [
+        {
+          "title": "merge commit",
+          "value": "merge_commit"
+        },
+        {
+          "title": "squash",
+          "value": "squash"
+        },
+        {
+          "title": "fast forward",
+          "value": "fast_forward"
+        }
+      ]
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "bitbucket_access_token",
+      "title": "bitbucket access token",
+      "is_required": true,
+      "oauth2_provider_key": "bitbucket",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "response",
+      "title": "Response code",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "workspace",
+      "title": "Bitbucket workspace ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "repo_slug",
+      "title": "Repository ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "pull_request_id",
+      "description": "ID of the pull request to be merged",
+      "title": "Pull request ID",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05Q8KLHEHJ",
+  "category_label": "Bitbucket",
+  "app_id": "A05Q8KLHEHJ",
+  "date_created": 1693378014,
+  "date_released": 0,
+  "date_updated": 1725950927,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,115 @@
+{
+  "id": "Fn04V00HBM52",
+  "callback_id": "create_meeting",
+  "title": "Create a meeting",
+  "description": "Create a Zoom meeting",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "topic",
+      "description": "Enter a meeting title...",
+      "title": "Meeting title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "agenda",
+      "description": "Enter an agenda...",
+      "title": "Agenda",
+      "is_required": false
+    },
+    {
+      "type": "array",
+      "name": "invitees",
+      "description": "Search all people...",
+      "title": "Invitees",
+      "is_required": true,
+      "items": {
+        "type": "slack#/types/user_id"
+      },
+      "default": []
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "zoom_access_token",
+      "title": "Zoom access token",
+      "is_required": true,
+      "oauth2_provider_key": "zoom",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "number",
+      "name": "meeting_id",
+      "description": "Meeting ID",
+      "title": "Meeting ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "topic",
+      "description": "Topic of the meeting",
+      "title": "Meeting title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "agenda",
+      "description": "agenda",
+      "title": "Agenda",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "host_email",
+      "description": "Email of the meeting's host",
+      "title": "Host email",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "start_url",
+      "description": "Start url",
+      "title": "Start URL",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "join_url",
+      "description": "Join url",
+      "title": "Join URL",
+      "is_required": false
+    },
+    {
+      "type": "array",
+      "name": "invitees",
+      "description": "Meeting Invitees",
+      "title": "Invitees",
+      "is_required": false,
+      "items": {
+        "type": "slack#/types/user_id"
+      }
+    },
+    {
+      "type": "array",
+      "name": "invitee_emails",
+      "description": "Emails of the Invitees with comma separated",
+      "title": "Invitee emails",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    }
+  ],
+  "category_id": "A04S9208DRQ",
+  "category_label": "Zoom",
+  "app_id": "A04S9208DRQ",
+  "date_created": 1679396834,
+  "date_released": 0,
+  "date_updated": 1693547519,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,86 @@
+{
+  "id": "Fn06691F0WA3",
+  "callback_id": "get_spend_request",
+  "title": "Get a spend request",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "spend_request_id",
+      "description": "Select a spend request",
+      "title": "Spend request",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_spend_requests",
+        "inputs": {
+          "ramp_access_token": {
+            "value": "{{input_parameters.ramp_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.spend_requests}}"
+          },
+          "value_path": "id",
+          "label_path": "display_name"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "ramp_access_token",
+      "description": "Ramp Credential to use",
+      "title": "Ramp access token",
+      "is_required": true,
+      "oauth2_provider_key": "ramp"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "title": "Spend request ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "display_name",
+      "title": "Display name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "icon",
+      "title": "Icon",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "interval",
+      "title": "Interval",
+      "is_required": false
+    },
+    {
+      "type": "number",
+      "name": "amount_limit",
+      "title": "Amount limit",
+      "is_required": false
+    }
+  ],
+  "category_id": "A066PC9JKJ7",
+  "category_label": "Ramp",
+  "app_id": "A066PC9JKJ7",
+  "date_created": 1700564099,
+  "date_released": 0,
+  "date_updated": 1700822092,
+  "date_deleted": 0,
+  "form_enabled": false
+}

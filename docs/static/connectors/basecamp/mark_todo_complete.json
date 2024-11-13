@@ -1,0 +1,146 @@
+{
+  "id": "Fn05UN05M3BK",
+  "callback_id": "mark_todo_complete",
+  "title": "Mark a to-do complete",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "domain",
+      "description": "Select an account",
+      "title": "Account",
+      "is_required": true,
+      "hint": "Only 100 accounts will be listed",
+      "dynamic_options": {
+        "function": "#/functions/fetch_accounts",
+        "inputs": {
+          "basecamp_access_token": {
+            "value": "{{input_parameters.basecamp_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.accounts}}"
+          },
+          "value_path": "href",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "project_id",
+      "description": "Select a project",
+      "title": "Project",
+      "is_required": true,
+      "hint": "Only 100 projects will be listed",
+      "dynamic_options": {
+        "function": "#/functions/fetch_projects",
+        "inputs": {
+          "domain": {
+            "value": "{{input_parameters.domain}}"
+          },
+          "basecamp_access_token": {
+            "value": "{{input_parameters.basecamp_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.projects}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "todo_list_id",
+      "description": "Select a to-do list",
+      "title": "To-do list",
+      "is_required": true,
+      "hint": "Only 100 to-do lists will be listed",
+      "dynamic_options": {
+        "function": "#/functions/fetch_todo_lists",
+        "inputs": {
+          "domain": {
+            "value": "{{input_parameters.domain}}"
+          },
+          "project_id": {
+            "value": "{{input_parameters.project_id}}"
+          },
+          "basecamp_access_token": {
+            "value": "{{input_parameters.basecamp_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.todo_lists}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "todo_id",
+      "description": "Select a to-do",
+      "title": "To-do",
+      "is_required": true,
+      "hint": "Only 100 to-do will be listed",
+      "dynamic_options": {
+        "function": "#/functions/fetch_todos",
+        "inputs": {
+          "domain": {
+            "value": "{{input_parameters.domain}}"
+          },
+          "project_id": {
+            "value": "{{input_parameters.project_id}}"
+          },
+          "todo_list_id": {
+            "value": "{{input_parameters.todo_list_id}}"
+          },
+          "basecamp_access_token": {
+            "value": "{{input_parameters.basecamp_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.todos}}"
+          },
+          "value_path": "id",
+          "label_path": "content"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "basecamp_access_token",
+      "title": "Basecamp access token",
+      "is_required": true,
+      "oauth2_provider_key": "basecamp"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "title": "To-do ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05UU55CFFA",
+  "category_label": "Basecamp",
+  "app_id": "A05UU55CFFA",
+  "date_created": 1695879470,
+  "date_released": 0,
+  "date_updated": 1723464095,
+  "date_deleted": 0,
+  "form_enabled": false
+}

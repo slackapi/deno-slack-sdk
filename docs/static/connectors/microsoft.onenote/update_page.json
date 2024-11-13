@@ -1,0 +1,86 @@
+{
+  "id": "Fn05UW3X880J",
+  "callback_id": "update_page",
+  "title": "Update a page",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "page_id",
+      "description": "Select page",
+      "title": "Page",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_pages",
+        "inputs": {
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "microsoft_access_token": {
+            "value": "{{input_parameters.microsoft_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.pages}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        },
+        "validation": {
+          "function": "#/functions/fetch_page",
+          "inputs": {
+            "page_id": {
+              "value": "{{input_parameters.page_id}}"
+            },
+            "microsoft_access_token": {
+              "value": "{{input_parameters.microsoft_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.page}}"
+            },
+            "value_path": "id",
+            "label_path": "title"
+          }
+        }
+      }
+    },
+    {
+      "type": "slack#/types/rich_text",
+      "name": "content",
+      "description": "Enter content",
+      "title": "Content",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "microsoft_access_token",
+      "description": "Microsoft credential to use",
+      "title": "Microsoft access token",
+      "is_required": true,
+      "oauth2_provider_key": "onenote",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "response_code",
+      "title": "Response code",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05UBDPKYP8",
+  "category_label": "Microsoft OneNote",
+  "app_id": "A05UBDPKYP8",
+  "date_created": 1696318658,
+  "date_released": 0,
+  "date_updated": 1696399326,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,101 @@
+{
+  "id": "Fn050C9CC1J7",
+  "callback_id": "create_event",
+  "title": "Create a calendar event",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "google_access_token",
+      "description": "Google credential to use",
+      "title": "Google access token",
+      "is_required": false,
+      "oauth2_provider_key": "google",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "start_time",
+      "description": "Start time for event",
+      "title": "Start time",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "end_time",
+      "description": "End time for event",
+      "title": "End time",
+      "is_required": true
+    },
+    {
+      "type": "array",
+      "name": "attendees",
+      "description": "Search all people...",
+      "title": "Attendees",
+      "is_required": false,
+      "items": {
+        "type": "slack#/types/user_id"
+      },
+      "default": []
+    },
+    {
+      "type": "array",
+      "name": "additional_attendees",
+      "description": "Enter email addresses",
+      "title": "Additional attendees",
+      "is_required": false,
+      "hint": "Enter email addresses",
+      "items": {
+        "type": "string",
+        "format": "email"
+      },
+      "default": []
+    },
+    {
+      "type": "string",
+      "name": "summary",
+      "description": "Event title",
+      "title": "Title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "location",
+      "description": "Location of event",
+      "title": "Location",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Description of event",
+      "title": "Description",
+      "is_required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "event_id",
+      "description": "Calendar event ID",
+      "title": "Event ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "event_link",
+      "description": "Calendar event link",
+      "title": "Event link",
+      "is_required": false
+    }
+  ],
+  "category_id": "A050C90PUF5",
+  "category_label": "Google Calendar",
+  "app_id": "A050C90PUF5",
+  "date_created": 1679900375,
+  "date_released": 0,
+  "date_updated": 1708076364,
+  "date_deleted": 0,
+  "form_enabled": false
+}

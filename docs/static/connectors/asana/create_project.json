@@ -1,0 +1,185 @@
+{
+  "id": "Fn05LQSV6Q8Y",
+  "callback_id": "create_project",
+  "title": "Create a project",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "workspace_gid",
+      "title": "Workspace",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_workspaces",
+        "inputs": {
+          "asana_access_token": {
+            "value": "{{input_parameters.asana_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.asana_workspaces}}"
+          },
+          "value_path": "gid",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "team",
+      "title": "Team",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_teams",
+        "inputs": {
+          "workspace_gid": {
+            "value": "{{input_parameters.workspace_gid}}"
+          },
+          "asana_access_token": {
+            "value": "{{input_parameters.asana_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.asana_teams}}"
+          },
+          "value_path": "gid",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "project_name",
+      "description": "Enter text",
+      "title": "Project name",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/date",
+      "name": "start_on",
+      "title": "Start on",
+      "is_required": false,
+      "hint": "Be sure to set a due date as well."
+    },
+    {
+      "type": "slack#/types/date",
+      "name": "due_on",
+      "title": "Due on",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter text",
+      "title": "Description",
+      "is_required": false,
+      "long": true,
+      "default": ""
+    },
+    {
+      "type": "array",
+      "name": "collaborators",
+      "title": "Collaborators",
+      "is_required": false,
+      "hint": "The user's Slack email and Asana email must match. Check a user's Slack email on their profile.",
+      "items": {
+        "type": "slack#/types/user_id"
+      },
+      "default": []
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "asana_access_token",
+      "description": "Asana credential to use",
+      "title": "Asana Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "asana"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "team",
+      "description": "The team the project is shared with.",
+      "title": "Team",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "workspace",
+      "description": "The workspace the project exists within",
+      "title": "Workspace",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "project_name",
+      "description": "The name of the project",
+      "title": "Project name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "The description for the project",
+      "title": "Description",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "created_at",
+      "description": "The datetime the project was created at",
+      "title": "Created at",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "start_on",
+      "description": "The datetime the project is to be started on",
+      "title": "Start on",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "due_on",
+      "description": "The datetime the project is due on",
+      "title": "Due on",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "permalink_url",
+      "description": "Link for the created project",
+      "title": "Link to project",
+      "is_required": true,
+      "format": "url"
+    },
+    {
+      "type": "array",
+      "name": "collaborator_emails",
+      "description": "Emails of the Collaborators with comma separated",
+      "title": "Collaborator emails",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    }
+  ],
+  "category_id": "A05KUFPF86S",
+  "category_label": "Asana",
+  "app_id": "A05KUFPF86S",
+  "date_created": 1691007479,
+  "date_released": 0,
+  "date_updated": 1723457842,
+  "date_deleted": 0,
+  "form_enabled": false
+}

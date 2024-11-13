@@ -1,0 +1,95 @@
+{
+  "id": "Fn05UA1SMU0J",
+  "callback_id": "create_item",
+  "title": "Create an item",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "monday_access_token",
+      "title": "Monday Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "monday",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "board_id",
+      "description": "Select a board",
+      "title": "Board",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_boards",
+        "inputs": {
+          "monday_access_token": {
+            "value": "{{input_parameters.monday_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.boards}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "group_id",
+      "description": "Select a group",
+      "title": "Group",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_groups",
+        "inputs": {
+          "board_id": {
+            "value": "{{input_parameters.board_id}}"
+          },
+          "monday_access_token": {
+            "value": "{{input_parameters.monday_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.groups}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "item_name",
+      "description": "Enter text",
+      "title": "Item name",
+      "is_required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "item_id",
+      "title": "Item ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "item_name",
+      "title": "Item name",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05U2T0F8PP",
+  "category_label": "Monday",
+  "app_id": "A05U2T0F8PP",
+  "date_created": 1695890172,
+  "date_released": 0,
+  "date_updated": 1725260658,
+  "date_deleted": 0,
+  "form_enabled": false
+}

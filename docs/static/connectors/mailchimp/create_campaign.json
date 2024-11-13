@@ -1,0 +1,109 @@
+{
+  "id": "Fn05TWJ2397V",
+  "callback_id": "create_campaign",
+  "title": "Create an email campaign",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "mailchimp_access_token",
+      "title": "Mailchimp access token",
+      "is_required": true,
+      "oauth2_provider_key": "mailchimp",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "campaign_title",
+      "description": "Enter text",
+      "title": "Campaign title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "subject_line",
+      "description": "Enter text",
+      "title": "Subject line",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "preview_text",
+      "description": "Enter text",
+      "title": "Preview text",
+      "is_required": true,
+      "hint": "This field appears in email preview"
+    },
+    {
+      "type": "string",
+      "name": "from_name",
+      "description": "Enter text",
+      "title": "Who is sending this mail ?",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "reply_to",
+      "description": "Enter email",
+      "title": "Reply to address",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "audience_id",
+      "description": "Select audience",
+      "title": "Audience",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_audiences",
+        "inputs": {
+          "mailchimp_access_token": {
+            "value": "{{input_parameters.mailchimp_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 2
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.audiences}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "title": "Campaign ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "title": "Campaign status",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "url",
+      "title": "Campaign URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05TPV44YKG",
+  "category_label": "Mailchimp",
+  "app_id": "A05TPV44YKG",
+  "date_created": 1695705956,
+  "date_released": 0,
+  "date_updated": 1697606913,
+  "date_deleted": 0,
+  "form_enabled": false
+}

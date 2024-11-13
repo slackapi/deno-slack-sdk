@@ -1,0 +1,310 @@
+{
+  "id": "Fn0627DY8XJ9",
+  "callback_id": "create_contract",
+  "title": "Create a new contract",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "deel_access_token",
+      "description": "Deel Credentials to use",
+      "title": "Deel Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "deel",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter the title of the contract",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "legal_entity_id",
+      "description": "Select the legal entity",
+      "title": "Legal Entity",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_legal_entities",
+        "inputs": {
+          "deel_access_token": {
+            "value": "{{input_parameters.deel_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.legal_entities}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "team_id",
+      "description": "Select the team",
+      "title": "Team",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_teams",
+        "inputs": {
+          "deel_access_token": {
+            "value": "{{input_parameters.deel_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.teams}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "job_title",
+      "description": "Enter the job title",
+      "title": "Job title",
+      "is_required": true
+    },
+    {
+      "type": "boolean",
+      "name": "documents_required",
+      "title": "Are documents required?",
+      "is_required": true,
+      "hint": "Require the contractor to upload necessary compliance documents as per their country's labor laws."
+    },
+    {
+      "type": "string",
+      "name": "contract_type",
+      "description": "Select contract type",
+      "title": "Contract type",
+      "is_required": true,
+      "enum": [
+        "pay_as_you_go_time_based",
+        "payg_tasks",
+        "payg_milestones",
+        "ongoing_time_based"
+      ],
+      "choices": [
+        {
+          "title": "Pay as you go time based",
+          "value": "pay_as_you_go_time_based"
+        },
+        {
+          "title": "Pay as go task based",
+          "value": "payg_tasks"
+        },
+        {
+          "title": "Pay as go milestone based",
+          "value": "payg_milestones"
+        },
+        {
+          "title": "Ongoing time based",
+          "value": "ongoing_time_based"
+        }
+      ]
+    },
+    {
+      "type": "slack#/types/date",
+      "name": "start_date",
+      "description": "Enter Start Date",
+      "title": "Start Date",
+      "is_required": true
+    },
+    {
+      "type": "number",
+      "name": "amount",
+      "description": "Enter the amount to be paid",
+      "title": "Amount",
+      "is_required": false,
+      "hint": "This field can be excluded when creating a Pay-as-you-go task-based or Milestone contracts."
+    },
+    {
+      "type": "string",
+      "name": "currency_code",
+      "description": "Select the currency",
+      "title": "Currency",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_currencies",
+        "inputs": {
+          "deel_access_token": {
+            "value": "{{input_parameters.deel_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.currencies}}"
+          },
+          "value_path": "code",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "frequency",
+      "title": "Scale of the invoice cycle",
+      "is_required": true,
+      "enum": [
+        "weekly",
+        "monthly",
+        "biweekly",
+        "semimonthly",
+        "calendar-month"
+      ],
+      "choices": [
+        {
+          "title": "Weekly",
+          "value": "weekly"
+        },
+        {
+          "title": "Biweekly",
+          "value": "biweekly"
+        },
+        {
+          "title": "Semimonthly",
+          "value": "semimonthly"
+        },
+        {
+          "title": "Monthly",
+          "value": "monthly"
+        },
+        {
+          "title": "Calender month",
+          "value": "calendar-month"
+        }
+      ]
+    },
+    {
+      "type": "number",
+      "name": "cycle_end",
+      "description": "Select a date between 1-31",
+      "title": "Date invoice cycle ends",
+      "is_required": true,
+      "maximum": 31,
+      "minimum": 1
+    },
+    {
+      "type": "string",
+      "name": "cycle_end_type",
+      "title": "Select the cycle end type",
+      "is_required": true,
+      "hint": "Cycle end can be weekly 1-7 (Monday = 1) or monthly 1-31.",
+      "enum": [
+        "DAY_OF_WEEK",
+        "DAY_OF_LAST_WEEK",
+        "DAY_OF_MONTH"
+      ],
+      "choices": [
+        {
+          "title": "Day of week",
+          "value": "DAY_OF_WEEK"
+        },
+        {
+          "title": "Day of last week",
+          "value": "DAY_OF_LAST_WEEK"
+        },
+        {
+          "title": "Day of month",
+          "value": "DAY_OF_MONTH"
+        }
+      ]
+    },
+    {
+      "type": "string",
+      "name": "payment_due_type",
+      "title": "Select the payment due type",
+      "is_required": true,
+      "hint": "If the payment is due on the last day of month, enter 'WITHIN_MONTH'.",
+      "enum": [
+        "REGULAR",
+        "WITHIN_MONTH"
+      ]
+    },
+    {
+      "type": "number",
+      "name": "payment_due_days",
+      "description": "Enter payment due days between 0-90",
+      "title": "Payment due days",
+      "is_required": true,
+      "maximum": 90,
+      "minimum": 0
+    },
+    {
+      "type": "string",
+      "name": "scale",
+      "description": "Select the scale at which the amount is paid.",
+      "title": "Scale of the invoice cycle",
+      "is_required": false,
+      "hint": "This field can be excluded when creating a Pay-as-you-go task-based or Milestone contracts.",
+      "enum": [
+        "hourly",
+        "weekly",
+        "monthly",
+        "biweekly",
+        "semimonthly",
+        "calendar-month"
+      ],
+      "choices": [
+        {
+          "title": "Hourly",
+          "value": "hourly"
+        },
+        {
+          "title": "Weekly",
+          "value": "weekly"
+        },
+        {
+          "title": "Biweekly",
+          "value": "biweekly"
+        },
+        {
+          "title": "Semimonthly",
+          "value": "semimonthly"
+        },
+        {
+          "title": "Monthly",
+          "value": "monthly"
+        },
+        {
+          "title": "Calender month",
+          "value": "calendar-month"
+        }
+      ]
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "contract_id",
+      "description": "Contract ID",
+      "title": "Contract ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "contract_url",
+      "description": "Contract URL",
+      "title": "Contract URL",
+      "is_required": true
+    }
+  ],
+  "category_id": "A061MGQNY2K",
+  "category_label": "Deel",
+  "app_id": "A061MGQNY2K",
+  "date_created": 1698044451,
+  "date_released": 0,
+  "date_updated": 1722316535,
+  "date_deleted": 0,
+  "form_enabled": false
+}

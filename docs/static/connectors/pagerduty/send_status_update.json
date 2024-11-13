@@ -1,0 +1,154 @@
+{
+  "id": "Fn07RV0Y932M",
+  "callback_id": "send_status_update",
+  "title": "Create a status update",
+  "description": "You'll choose an incident to get the update",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "description": "Enter incident name",
+      "title": "Incident",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_incidents",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "pagerduty_access_token": {
+            "value": "{{input_parameters.pagerduty_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.incidents}}"
+          },
+          "value_path": "id",
+          "label_path": "summary"
+        },
+        "validation": {
+          "function": "#/functions/get_incident",
+          "inputs": {
+            "incident_id": {
+              "value": "{{input_parameters.incident_id}}"
+            },
+            "pagerduty_access_token": {
+              "value": "{{input_parameters.pagerduty_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.incident}}"
+            },
+            "value_path": "id",
+            "label_path": "summary"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "message",
+      "description": "Enter text",
+      "title": "Status update",
+      "is_required": true,
+      "hint": "Write your update content here."
+    },
+    {
+      "type": "string",
+      "name": "subject",
+      "description": "Enter text",
+      "title": "Status update email subject",
+      "is_required": false,
+      "hint": "Status updates may also be sent as emails, depending on your PagerDuty settings. Add a subject here to override the standard email subject."
+    },
+    {
+      "type": "string",
+      "name": "html_message",
+      "description": "Enter text",
+      "title": "Status update email",
+      "is_required": false,
+      "hint": "Add content to override any standard PagerDuty emails sent when status updates are updated. You can format using HTML.",
+      "long": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "pagerduty_access_token",
+      "description": "Pagerduty access token",
+      "title": "PagerDuty access token",
+      "is_required": true,
+      "oauth2_provider_key": "pagerduty"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "description": "Status update ID",
+      "title": "Status update ID",
+      "is_required": true
+    },
+    {
+      "type": "object",
+      "name": "sender",
+      "title": "Created by",
+      "is_required": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "ID"
+        },
+        "type": {
+          "type": "string",
+          "title": "Type"
+        },
+        "summary": {
+          "type": "string",
+          "title": "Name"
+        },
+        "html_url": {
+          "type": "string",
+          "title": "URL"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "message",
+      "title": "Status update",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "subject",
+      "title": "Status update email subject",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "html_message",
+      "title": "Status update email",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "created_at",
+      "title": "Created at",
+      "is_required": true
+    }
+  ],
+  "category_id": "A04RSGH23L7",
+  "category_label": "PagerDuty",
+  "app_id": "A04RSGH23L7",
+  "date_created": 1728647273,
+  "date_released": 1729793990,
+  "date_updated": 1729793990,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,195 @@
+{
+  "id": "Fn066S0XSXKN",
+  "callback_id": "create_physical_card",
+  "title": "Create new physical card",
+  "description": "Create an async task to request for new physical card.",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "user_id",
+      "description": "Select a user",
+      "title": "User",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "inputs": {
+          "email_query": {
+            "value": "{{client.query}}"
+          },
+          "ramp_access_token": {
+            "value": "{{input_parameters.ramp_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "email"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "card_name",
+      "description": "Enter text",
+      "title": "Card name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "address1",
+      "description": "Enter text",
+      "title": "Street address",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "address2",
+      "description": "Enter text",
+      "title": "Floor/Suite/Office",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "city",
+      "description": "Enter text",
+      "title": "City",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "country",
+      "description": "Enter text",
+      "title": "Country",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "first_name",
+      "description": "Enter text",
+      "title": "First name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "last_name",
+      "description": "Enter text",
+      "title": "Last name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "phone",
+      "description": "Enter text",
+      "title": "Phone number",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "postal_code",
+      "description": "Enter text",
+      "title": "Zip code",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "state",
+      "description": "Enter text",
+      "title": "State",
+      "is_required": true
+    },
+    {
+      "type": "number",
+      "name": "amount_limit",
+      "description": "Enter amount",
+      "title": "Amount",
+      "is_required": true,
+      "hint": "Total amount limit per interval"
+    },
+    {
+      "type": "string",
+      "name": "interval",
+      "description": "Select an option",
+      "title": "Frequency",
+      "is_required": true,
+      "hint": "Time interval to apply limit to",
+      "enum": [
+        "ANNUAL",
+        "DAILY",
+        "MONTHLY",
+        "QUARTERLY",
+        "TERTIARY",
+        "TOTAL",
+        "WEEKLY",
+        "YEARLY"
+      ],
+      "choices": [
+        {
+          "title": "Daily",
+          "value": "DAILY"
+        },
+        {
+          "title": "Weekly",
+          "value": "WEEKLY"
+        },
+        {
+          "title": "Monthly",
+          "value": "MONTHLY"
+        },
+        {
+          "title": "Quarterly",
+          "value": "QUARTERLY"
+        },
+        {
+          "title": "Tertiary",
+          "value": "TERTIARY"
+        },
+        {
+          "title": "Yearly",
+          "value": "YEARLY"
+        },
+        {
+          "title": "Annually",
+          "value": "ANNUAL"
+        },
+        {
+          "title": "Total",
+          "value": "TOTAL"
+        }
+      ]
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "ramp_access_token",
+      "description": "Ramp Credential to use",
+      "title": "Ramp access token",
+      "is_required": true,
+      "oauth2_provider_key": "ramp"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "user_id",
+      "title": "User ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "deferred_task_id",
+      "title": "Deferred task ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A066PC9JKJ7",
+  "category_label": "Ramp",
+  "app_id": "A066PC9JKJ7",
+  "date_created": 1700564099,
+  "date_released": 0,
+  "date_updated": 1700822092,
+  "date_deleted": 0,
+  "form_enabled": false
+}

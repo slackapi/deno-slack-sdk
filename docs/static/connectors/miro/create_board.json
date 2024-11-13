@@ -1,0 +1,87 @@
+{
+  "id": "Fn05P77PJVA9",
+  "callback_id": "create_board",
+  "title": "Create board",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter the board name...",
+      "title": "Board name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter the description of the board...",
+      "title": "Description",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "miro_access_token",
+      "description": "Miro access token",
+      "title": "Miro access token",
+      "is_required": true,
+      "oauth2_provider_key": "miro"
+    },
+    {
+      "type": "string",
+      "name": "team_access",
+      "description": "Anyone in the team...",
+      "title": "Team level access",
+      "is_required": false,
+      "enum": [
+        "private",
+        "view",
+        "comment",
+        "edit"
+      ],
+      "choices": [
+        {
+          "title": "No access",
+          "value": "private"
+        },
+        {
+          "title": "Can view",
+          "value": "view"
+        },
+        {
+          "title": "Can comment",
+          "value": "comment"
+        },
+        {
+          "title": "Can edit",
+          "value": "edit"
+        }
+      ],
+      "default": "private"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "board_id",
+      "description": "Board ID",
+      "title": "Board ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "link",
+      "description": "Board URL",
+      "title": "Board URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05NR1RGCBZ",
+  "category_label": "Miro",
+  "app_id": "A05NR1RGCBZ",
+  "date_created": 1692861224,
+  "date_released": 0,
+  "date_updated": 1693995719,
+  "date_deleted": 0,
+  "form_enabled": false
+}

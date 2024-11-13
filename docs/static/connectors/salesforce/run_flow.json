@@ -1,0 +1,115 @@
+{
+  "id": "Fn04TFR6J29Z",
+  "callback_id": "run_flow",
+  "title": "Run a Flow",
+  "description": "Run a Salesforce Flow",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "flow_name",
+      "description": "Select a Salesforce flow...",
+      "title": "Select a Flow (Only auto-launched flows are currently supported)",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_flows",
+        "inputs": {
+          "salesforce_access_token": {
+            "value": "{{input_parameters.salesforce_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.flows}}"
+          },
+          "value_path": "name",
+          "label_path": "label"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "name": "metadata",
+      "title": "Name",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_inputs",
+        "inputs": {
+          "flow_name": {
+            "value": "{{input_parameters.flow_name}}"
+          },
+          "salesforce_access_token": {
+            "value": "{{input_parameters.salesforce_access_token}}"
+          }
+        },
+        "selection_type": "key-value",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.flow_inputs}}"
+          },
+          "key_path": "name",
+          "label_path": "label"
+        }
+      },
+      "default": {},
+      "nullable": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "salesforce_access_token",
+      "title": "Salesforce Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "salesforce"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "boolean",
+      "name": "success",
+      "title": "Response",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "flow_name",
+      "title": "Flow name",
+      "is_required": false
+    },
+    {
+      "type": "object",
+      "name": "result",
+      "title": "Flow outputs",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_outputs",
+        "inputs": {
+          "flow_name": {
+            "value": "{{input_parameters.flow_name}}"
+          },
+          "salesforce_access_token": {
+            "value": "{{input_parameters.salesforce_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.flow_outputs}}"
+          },
+          "key_path": "name",
+          "label_path": "label",
+          "property_type_path": "type"
+        }
+      }
+    }
+  ],
+  "category_id": "A04T99UKKQE",
+  "category_label": "Salesforce",
+  "app_id": "A04T99UKKQE",
+  "date_created": 1678490687,
+  "date_released": 0,
+  "date_updated": 1729666557,
+  "date_deleted": 0,
+  "form_enabled": false
+}

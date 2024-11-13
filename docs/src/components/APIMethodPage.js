@@ -4,18 +4,12 @@ import ReactMarkdown from 'react-markdown';
 
 const ApiMethodPage = ({ jsonFile }) => {
   const [methodData, setMethodData] = useState(null);
-  const history = useHistory();
+  // const history = useHistory();
 
-  const availablePages = [
-    { label: 'Send Message', value: 'sendMessage' },
-    { label: 'Receive Message', value: 'receiveMessage' },
-    // Add more pages here
-  ];
-
-  const handlePageChange = (event) => {
-    const selectedPage = event.target.value;
-    history.push(`/content/functions/${selectedPage}`);
-  };
+  // const handlePageChange = (event) => {
+  //   const selectedPage = event.target.value;
+  //   history.push(`/content/functions/${selectedPage}`);
+  // };
 
   useEffect(() => {
     // Load the JSON data from the specified file
@@ -32,7 +26,7 @@ const ApiMethodPage = ({ jsonFile }) => {
   }, [jsonFile]);
 
   if (!methodData) {
-    return <div>Oh no! Looks like this Slack function's page isn't functioning!</div>;
+    return ;
   }
 
   const {
@@ -73,14 +67,14 @@ const ApiMethodPage = ({ jsonFile }) => {
 
         <div className="info-row">
           <p>
-            <strong>Schema Reference</strong>
+            <strong>Schema reference</strong>
           </p>
           <code>{schema_reference}</code>
         </div>
 
         <div className="info-row">
           <p>
-            <strong>Scopes</strong>
+            <strong>Required scopes</strong>
           </p>
           <div className="scope-list">
             {scopes && scopes.length > 0 ? (

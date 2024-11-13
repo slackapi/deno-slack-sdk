@@ -1,0 +1,228 @@
+{
+  "id": "Fn05NAF6G05B",
+  "callback_id": "create_task",
+  "title": "Create a task",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "workspace_gid",
+      "title": "Workspace",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_workspaces",
+        "inputs": {
+          "asana_access_token": {
+            "value": "{{input_parameters.asana_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.asana_workspaces}}"
+          },
+          "value_path": "gid",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "project",
+      "title": "Project",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_projects",
+        "inputs": {
+          "project_name": {
+            "value": "{{client.query}}"
+          },
+          "workspace_gid": {
+            "value": "{{input_parameters.workspace_gid}}"
+          },
+          "asana_access_token": {
+            "value": "{{input_parameters.asana_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.asana_projects}}"
+          },
+          "value_path": "gid",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/user_id",
+      "name": "assignee",
+      "description": "Select a user",
+      "title": "Assignee",
+      "is_required": false,
+      "hint": "If the user you select isn't in the Asana workspace yet, they'll get an automatic email invite to join."
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter text",
+      "title": "Task name",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "start_at",
+      "title": "Start at",
+      "is_required": false,
+      "hint": "Ensure to set a due date as well; applicable for paid plans."
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "due_at",
+      "title": "Due at",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter text",
+      "title": "Description",
+      "is_required": false,
+      "long": true,
+      "default": ""
+    },
+    {
+      "type": "array",
+      "name": "tags",
+      "title": "Tags",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/get_tags",
+        "inputs": {
+          "tag_name": {
+            "value": "{{client.query}}"
+          },
+          "workspace_gid": {
+            "value": "{{input_parameters.workspace_gid}}"
+          },
+          "asana_access_token": {
+            "value": "{{input_parameters.asana_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.asana_tags}}"
+          },
+          "value_path": "gid",
+          "label_path": "name"
+        }
+      },
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    {
+      "type": "array",
+      "name": "collaborators",
+      "title": "Collaborators",
+      "is_required": false,
+      "hint": "If the users you select aren't in the Asana workspace yet, they'll get an automatic email invite to join.",
+      "items": {
+        "type": "slack#/types/user_id"
+      },
+      "default": []
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "asana_access_token",
+      "description": "Asana credential to use",
+      "title": "Asana Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "asana"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "task_gid",
+      "title": "Task ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "assignee",
+      "description": "The name of the user assigned to the task",
+      "title": "Assignee of task",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "task_name",
+      "description": "The name of the task",
+      "title": "Task name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "start_at",
+      "description": "The datetime the task is to be started on",
+      "title": "Start at",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "due_at",
+      "description": "The datetime the task is due at",
+      "title": "Due at",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "The description for the task",
+      "title": "Description",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "created_at",
+      "description": "The datetime the task was created at",
+      "title": "Created at",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "permalink_url",
+      "description": "Link for the created task",
+      "title": "Link to task",
+      "is_required": true,
+      "format": "url"
+    },
+    {
+      "type": "array",
+      "name": "collaborator_emails",
+      "description": "Emails of the Collaborators with comma separated",
+      "title": "Collaborator emails",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    }
+  ],
+  "category_id": "A05KUFPF86S",
+  "category_label": "Asana",
+  "app_id": "A05KUFPF86S",
+  "date_created": 1692335753,
+  "date_released": 0,
+  "date_updated": 1723457842,
+  "date_deleted": 0,
+  "form_enabled": false
+}

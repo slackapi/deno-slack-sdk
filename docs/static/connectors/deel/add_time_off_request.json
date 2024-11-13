@@ -1,0 +1,132 @@
+{
+  "id": "Fn061VRBHPC7",
+  "callback_id": "add_time_off_request",
+  "title": "Add a time off request",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "deel_access_token",
+      "description": "Deel Credentials to use",
+      "title": "Deel Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "deel"
+    },
+    {
+      "type": "string",
+      "name": "contract_id",
+      "description": "Select a contract",
+      "title": "Contract ID",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_contracts",
+        "inputs": {
+          "types": {
+            "value": [
+              "eor"
+            ]
+          },
+          "deel_access_token": {
+            "value": "{{input_parameters.deel_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.contracts}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "time_off_type",
+      "description": "Select the time off type",
+      "title": "Time off type",
+      "is_required": true,
+      "enum": [
+        "VACATION",
+        "SICK_LEAVE",
+        "OTHER"
+      ],
+      "choices": [
+        {
+          "title": "Vacation",
+          "value": "VACATION"
+        },
+        {
+          "title": "Sick leave",
+          "value": "SICK_LEAVE"
+        },
+        {
+          "title": "Other",
+          "value": "OTHER"
+        }
+      ]
+    },
+    {
+      "type": "slack#/types/date",
+      "name": "start_date",
+      "description": "Select the start date",
+      "title": "Start date",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/date",
+      "name": "end_date",
+      "description": "Select the end date",
+      "title": "End date",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "reason",
+      "description": "Enter a text",
+      "title": "Reason",
+      "is_required": false
+    },
+    {
+      "type": "boolean",
+      "name": "is_half_start_day",
+      "title": "Is the start day a half day?",
+      "is_required": false
+    },
+    {
+      "type": "boolean",
+      "name": "is_half_end_day",
+      "title": "Is the end day a half day?",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "other_timeoff_name",
+      "title": "Custom name for other time off",
+      "is_required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "request_id",
+      "title": "Time off request ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "title": "Request status",
+      "is_required": true
+    }
+  ],
+  "category_id": "A061MGQNY2K",
+  "category_label": "Deel",
+  "app_id": "A061MGQNY2K",
+  "date_created": 1698044451,
+  "date_released": 0,
+  "date_updated": 1722316535,
+  "date_deleted": 0,
+  "form_enabled": false
+}

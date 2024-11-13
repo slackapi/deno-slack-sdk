@@ -1,0 +1,93 @@
+{
+  "id": "Fn05265D015Y",
+  "callback_id": "create_issue",
+  "title": "Create an issue",
+  "description": "Create a GitHub issue",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "repository",
+      "description": "Select a GitHub repository",
+      "title": "Select a repository",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_repositories",
+        "inputs": {
+          "github_enterprise_server_access_token": {
+            "value": "{{input_parameters.github_enterprise_server_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.repositories}}"
+          },
+          "value_path": "url",
+          "label_path": "full_name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter an issue title...",
+      "title": "Issue title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter a description...",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "github_enterprise_server_access_token",
+      "description": "GitHub Credential to use",
+      "title": "GitHub Enterprise Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "github_enterprise_server"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "issue_number",
+      "description": "Issue number",
+      "title": "Issue number",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "issue_url",
+      "description": "Issue URL",
+      "title": "Issue URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Issue title",
+      "title": "Issue title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "body",
+      "description": "Issue description",
+      "title": "Description",
+      "is_required": true,
+      "nullable": true
+    }
+  ],
+  "category_id": "A0516LWJMFE",
+  "category_label": "GitHub Enterprise Server",
+  "app_id": "A0516LWJMFE",
+  "date_created": 1680803237,
+  "date_released": 0,
+  "date_updated": 1728655841,
+  "date_deleted": 0,
+  "form_enabled": false
+}

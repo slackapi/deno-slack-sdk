@@ -1,0 +1,68 @@
+{
+  "id": "Fn04V1JN5MC0",
+  "callback_id": "get_random_gif",
+  "title": "Random GIF",
+  "description": "Get a random Giphy GIF",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "tag",
+      "description": "Enter tags...",
+      "title": "Tag",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "rating",
+      "description": "Filter results by a specified rating",
+      "title": "Rating",
+      "is_required": true,
+      "enum": [
+        "g",
+        "pg",
+        "pg-13"
+      ],
+      "choices": [
+        {
+          "title": "G",
+          "value": "g"
+        },
+        {
+          "title": "PG",
+          "value": "pg"
+        },
+        {
+          "title": "PG-13",
+          "value": "pg-13"
+        }
+      ],
+      "default": "g"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "gif_title_url",
+      "description": "The title and URL for the GIF",
+      "title": "Giphy GIF",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "tag",
+      "description": "The tag used to return the GIF",
+      "title": "Tag",
+      "is_required": false,
+      "nullable": true
+    }
+  ],
+  "category_id": "A04U5QUE5EX",
+  "category_label": "Giphy",
+  "app_id": "A04U5QUE5EX",
+  "date_created": 1678991166,
+  "date_released": 0,
+  "date_updated": 1696841075,
+  "date_deleted": 0,
+  "form_enabled": false
+}

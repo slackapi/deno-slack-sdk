@@ -57,7 +57,7 @@ const navbar = {
 			],
 		},
 		{
-			label: "Deno Slack SDK",
+			label: "Deno",
 			to: "https://api.slack.com/automation/quickstart",
 			target: "_self",
 		},

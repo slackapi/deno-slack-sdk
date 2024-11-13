@@ -1,0 +1,104 @@
+{
+  "id": "Fn05T6M4F6FP",
+  "callback_id": "create_alert",
+  "title": "Create an alert",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "source",
+      "description": "Ex: Zendesk",
+      "title": "Source",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "summary",
+      "description": "Enter the text",
+      "title": "Summary",
+      "is_required": true
+    },
+    {
+      "type": "array",
+      "name": "service_ids",
+      "description": "Select service ID's to attach to the alert",
+      "title": "Service IDs",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_services",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.services}}"
+          },
+          "value_path": "id",
+          "label_path": "attributes.name"
+        }
+      },
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "array",
+      "name": "environment_ids",
+      "description": "Select environment ID's to attach to the alert",
+      "title": "Environment IDs",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_environments",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.environments}}"
+          },
+          "value_path": "id",
+          "label_path": "attributes.name"
+        }
+      },
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "started_at",
+      "title": "Started at",
+      "is_required": false
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "ended_at",
+      "title": "Ended at",
+      "is_required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "alert_id",
+      "description": "Alert ID",
+      "title": "Alert ID",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05TUC2EWBA",
+  "category_label": "Rootly",
+  "app_id": "A05TUC2EWBA",
+  "date_created": 1695271409,
+  "date_released": 0,
+  "date_updated": 1719817822,
+  "date_deleted": 0,
+  "form_enabled": false
+}

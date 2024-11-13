@@ -1,0 +1,338 @@
+{
+  "id": "Fn069LNBDHRR",
+  "callback_id": "create_ticket",
+  "title": "Create a ticket",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "requester_name",
+      "description": "Enter text",
+      "title": "Requester name",
+      "is_required": false,
+      "default": ""
+    },
+    {
+      "type": "string",
+      "name": "requester_email",
+      "description": "Enter text",
+      "title": "Requester email",
+      "is_required": false,
+      "format": "email",
+      "default": ""
+    },
+    {
+      "type": "integer",
+      "name": "assignee_id",
+      "title": "Assignee",
+      "is_required": false,
+      "hint": "Use to assign to a specific agent",
+      "dynamic_options": {
+        "function": "#/functions/search_users",
+        "inputs": {
+          "user": {
+            "value": "{{client.query}}"
+          },
+          "zendesk_access_token": {
+            "value": "{{input_parameters.zendesk_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.zendesk_users}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "integer",
+      "name": "group_id",
+      "title": "Group",
+      "is_required": false,
+      "hint": "Use to pass to a group of agents unassigned",
+      "dynamic_options": {
+        "function": "#/functions/get_assignable_groups",
+        "inputs": {
+          "zendesk_access_token": {
+            "value": "{{input_parameters.zendesk_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.zendesk_groups}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "array",
+      "name": "followers",
+      "description": "Enter internal agent emails",
+      "title": "Followers",
+      "is_required": false,
+      "items": {
+        "type": "string",
+        "format": "email"
+      },
+      "default": []
+    },
+    {
+      "type": "array",
+      "name": "cc_emails",
+      "description": "Enter external email CCs",
+      "title": "Email CCs",
+      "is_required": false,
+      "hint": "CCs are only added in public reply",
+      "items": {
+        "type": "string",
+        "format": "email"
+      },
+      "default": []
+    },
+    {
+      "type": "string",
+      "name": "subject",
+      "description": "Enter text",
+      "title": "Ticket subject",
+      "is_required": false,
+      "default": ""
+    },
+    {
+      "type": "string",
+      "name": "type",
+      "title": "Ticket type",
+      "is_required": false,
+      "enum": [
+        "problem",
+        "incident",
+        "question",
+        "task"
+      ],
+      "choices": [
+        {
+          "title": "Problem",
+          "value": "problem"
+        },
+        {
+          "title": "Incident",
+          "value": "incident"
+        },
+        {
+          "title": "Question",
+          "value": "question"
+        },
+        {
+          "title": "Task",
+          "value": "task"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "string",
+      "name": "priority",
+      "title": "Priority",
+      "is_required": false,
+      "enum": [
+        "urgent",
+        "high",
+        "normal",
+        "low"
+      ],
+      "choices": [
+        {
+          "title": "Urgent",
+          "value": "urgent"
+        },
+        {
+          "title": "High",
+          "value": "high"
+        },
+        {
+          "title": "Normal",
+          "value": "normal"
+        },
+        {
+          "title": "Low",
+          "value": "low"
+        }
+      ]
+    },
+    {
+      "type": "array",
+      "name": "tags",
+      "title": "Tags",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/search_tags",
+        "inputs": {
+          "tag_name": {
+            "value": "{{client.query}}"
+          },
+          "zendesk_access_token": {
+            "value": "{{input_parameters.zendesk_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "string",
+            "value": "{{output_parameters.zendesk_tags}}"
+          }
+        }
+      },
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    {
+      "type": "string",
+      "name": "reply_type",
+      "title": "Reply type",
+      "is_required": false,
+      "hint": "Defaults to an internal note if a value is not provided",
+      "enum": [
+        "true",
+        "false"
+      ],
+      "choices": [
+        {
+          "title": "Internal note",
+          "value": "false"
+        },
+        {
+          "title": "Public reply",
+          "value": "true"
+        }
+      ],
+      "default": "false"
+    },
+    {
+      "type": "string",
+      "name": "comment",
+      "description": "Enter text",
+      "title": "Comment",
+      "is_required": true,
+      "long": true
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "title": "Status",
+      "is_required": false,
+      "hint": "Defaults to new if a value is not provided",
+      "enum": [
+        "new",
+        "open",
+        "pending",
+        "hold",
+        "solved",
+        "closed"
+      ],
+      "choices": [
+        {
+          "title": "New",
+          "value": "new"
+        },
+        {
+          "title": "Open",
+          "value": "open"
+        },
+        {
+          "title": "Pending",
+          "value": "pending"
+        },
+        {
+          "title": "Hold",
+          "value": "hold"
+        },
+        {
+          "title": "Solved",
+          "value": "solved"
+        },
+        {
+          "title": "Closed",
+          "value": "closed"
+        }
+      ],
+      "default": "new"
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "zendesk_access_token",
+      "description": "Zendesk Credential to use",
+      "title": "Zendesk Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "zendesk"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "integer",
+      "name": "requester_id",
+      "description": "The ticket's requester ID",
+      "title": "Requester ID",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "requester_email",
+      "description": "The ticket's requester email",
+      "title": "Requester email",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "integer",
+      "name": "ticket_id",
+      "description": "The ticket ID",
+      "title": "Ticket ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "ticket_url",
+      "description": "The ticket URL",
+      "title": "Ticket URL",
+      "is_required": true,
+      "format": "url"
+    },
+    {
+      "type": "integer",
+      "name": "assignee_id",
+      "description": "ID for the assigned user",
+      "title": "Assignee ID",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "priority",
+      "description": "Priority of the ticket",
+      "title": "Priority",
+      "is_required": false,
+      "nullable": true
+    }
+  ],
+  "category_id": "A0660D0LBV3",
+  "category_label": "Zendesk",
+  "app_id": "A0660D0LBV3",
+  "date_created": 1702313752,
+  "date_released": 0,
+  "date_updated": 1719893888,
+  "date_deleted": 0,
+  "form_enabled": false
+}

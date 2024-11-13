@@ -1,0 +1,123 @@
+{
+  "id": "Fn058AK27BV0",
+  "callback_id": "add_to_event",
+  "title": "Add attendee to an event",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "google_access_token",
+      "description": "Google Credential to use",
+      "title": "Google Access Token",
+      "is_required": false,
+      "oauth2_provider_key": "google"
+    },
+    {
+      "type": "string",
+      "name": "calendar_id",
+      "description": "Select a Google Calendar",
+      "title": "Calendar",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_calendars",
+        "inputs": {
+          "google_access_token": {
+            "value": "{{input_parameters.google_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.calendars}}"
+          },
+          "value_path": "id",
+          "label_path": "summary"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "event_id",
+      "description": "Select an event from the chosen calendar",
+      "title": "Event",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_events",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "calendar_id": {
+            "value": "{{input_parameters.calendar_id}}"
+          },
+          "google_access_token": {
+            "value": "{{input_parameters.google_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.events}}"
+          },
+          "value_path": "id",
+          "label_path": "summary"
+        },
+        "validation": {
+          "function": "#/functions/fetch_event",
+          "inputs": {
+            "event_id": {
+              "value": "{{input_parameters.event_id}}"
+            },
+            "calendar_id": {
+              "value": "{{input_parameters.calendar_id}}"
+            },
+            "google_access_token": {
+              "value": "{{input_parameters.google_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.event}}"
+            },
+            "value_path": "id",
+            "label_path": "summary"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "attendee_email",
+      "description": "Email address of attendee",
+      "title": "Attendee Email",
+      "is_required": true,
+      "format": "email"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "event_summary",
+      "description": "Summary of the event",
+      "title": "Event Summary",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "event_url",
+      "description": "URL of the event",
+      "title": "Event URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A050C90PUF5",
+  "category_label": "Google Calendar",
+  "app_id": "A050C90PUF5",
+  "date_created": 1684360472,
+  "date_released": 0,
+  "date_updated": 1708076364,
+  "date_deleted": 0,
+  "form_enabled": false
+}

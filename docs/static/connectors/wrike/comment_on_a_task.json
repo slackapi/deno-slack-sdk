@@ -1,0 +1,95 @@
+{
+  "id": "Fn05P7TDE7UK",
+  "callback_id": "comment_on_a_task",
+  "title": "Comment on a task",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "task",
+      "description": "Enter task ID, or search task name",
+      "title": "Task",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_task",
+        "inputs": {
+          "title": {
+            "value": "{{client.query}}"
+          },
+          "wrike_access_token": {
+            "value": "{{input_parameters.wrike_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.task}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "text",
+      "description": "Enter text",
+      "title": "Comment",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "wrike_access_token",
+      "description": "Wrike credential to use",
+      "title": "Wrike Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "wrike"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "comment_id",
+      "description": "The ID of the comment",
+      "title": "Comment ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "author_id",
+      "description": "The ID of the author",
+      "title": "Author ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "text",
+      "description": "The content of the comment",
+      "title": "Comment",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "created_date",
+      "description": "The date in which the comment was created",
+      "title": "Created date",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "task_id",
+      "description": "The ID of the task",
+      "title": "Task ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05MDPYMGJC",
+  "category_label": "Wrike",
+  "app_id": "A05MDPYMGJC",
+  "date_created": 1692823281,
+  "date_released": 0,
+  "date_updated": 1723464154,
+  "date_deleted": 0,
+  "form_enabled": false
+}

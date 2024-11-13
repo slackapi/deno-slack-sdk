@@ -1,0 +1,148 @@
+{
+  "id": "Fn065NCYKGSX",
+  "callback_id": "create_task",
+  "title": "Create a task",
+  "description": " ",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "workast_access_token",
+      "title": "Workast Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "workast"
+    },
+    {
+      "type": "string",
+      "name": "space_id",
+      "description": "Select the space where the task is created",
+      "title": "Space",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_spaces",
+        "inputs": {
+          "name": {
+            "value": "{{client.query}}"
+          },
+          "workast_access_token": {
+            "value": "{{input_parameters.workast_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.spaces}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        },
+        "validation": {
+          "function": "#/functions/get_space",
+          "inputs": {
+            "space_id": {
+              "value": "{{input_parameters.space_id}}"
+            },
+            "workast_access_token": {
+              "value": "{{input_parameters.workast_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.space}}"
+            },
+            "value_path": "id",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "list_id",
+      "description": "Select which list the task is created in",
+      "title": "List",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_space_lists",
+        "inputs": {
+          "space_id": {
+            "value": "{{input_parameters.space_id}}"
+          },
+          "workast_access_token": {
+            "value": "{{input_parameters.workast_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.lists}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "summary",
+      "description": "Enter a summary",
+      "title": "Summary",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter a description",
+      "title": "Description",
+      "is_required": false,
+      "long": true
+    },
+    {
+      "type": "array",
+      "name": "assignees",
+      "description": "Select assignees",
+      "title": "Assign to",
+      "is_required": false,
+      "hint": "The user must have a Workast account in this team or your selection(s) will be ignored.",
+      "items": {
+        "type": "slack#/types/user_id"
+      },
+      "default": []
+    },
+    {
+      "type": "slack#/types/date",
+      "name": "due_date",
+      "title": "Due date",
+      "is_required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "title": "Task ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "task_url",
+      "title": "Task URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "title": "Status",
+      "is_required": false
+    }
+  ],
+  "category_id": "A0630UXR0AE",
+  "category_label": "Workast",
+  "app_id": "A0630UXR0AE",
+  "date_created": 1699970224,
+  "date_released": 0,
+  "date_updated": 1716904279,
+  "date_deleted": 0,
+  "form_enabled": false
+}

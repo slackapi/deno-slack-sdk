@@ -1,0 +1,72 @@
+{
+  "id": "Fn0527JVR291",
+  "callback_id": "delete_record",
+  "title": "Delete a record",
+  "description": "Delete a Salesforce record",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "salesforce_object_name",
+      "description": "Salesforce Object",
+      "title": "Salesforce object",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_salesforce_objects",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "salesforce_access_token": {
+            "value": "{{input_parameters.salesforce_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.salesforce_objects}}"
+          },
+          "value_path": "QualifiedApiName",
+          "label_path": "Label"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "record_id",
+      "description": "Ex: 1000000000Abcd",
+      "title": "Record ID",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "salesforce_access_token",
+      "title": "Salesforce Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "salesforce",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "integer",
+      "name": "code",
+      "title": "Response",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "record_id",
+      "title": "Record ID",
+      "is_required": false
+    }
+  ],
+  "category_id": "A04T99UKKQE",
+  "category_label": "Salesforce",
+  "app_id": "A04T99UKKQE",
+  "date_created": 1680824641,
+  "date_released": 1716909466,
+  "date_updated": 1729666557,
+  "date_deleted": 0,
+  "form_enabled": false
+}

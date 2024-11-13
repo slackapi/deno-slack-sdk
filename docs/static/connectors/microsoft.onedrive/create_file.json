@@ -1,0 +1,75 @@
+{
+  "id": "Fn05QMCL23QU",
+  "callback_id": "create_file",
+  "title": "Create a file",
+  "description": "Creates a file in users OneDrive root directory",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "onedrive_access_token",
+      "description": "Microsoft credential to use",
+      "title": "Microsoft access token",
+      "is_required": true,
+      "oauth2_provider_key": "onedrive",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "file_name",
+      "description": "Enter text",
+      "title": "File name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "file_type",
+      "description": "Select file type",
+      "title": "File type",
+      "is_required": true,
+      "enum": [
+        "pptx",
+        "docx",
+        "xlsx"
+      ],
+      "choices": [
+        {
+          "title": "PowerPoint",
+          "value": "pptx"
+        },
+        {
+          "title": "Word",
+          "value": "docx"
+        },
+        {
+          "title": "Excel",
+          "value": "xlsx"
+        }
+      ],
+      "default": "docx"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "file_url",
+      "title": "File URL",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "file_name",
+      "description": "File name",
+      "title": "File name",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05QGK4DF8A",
+  "category_label": "Microsoft OneDrive",
+  "app_id": "A05QGK4DF8A",
+  "date_created": 1693539875,
+  "date_released": 0,
+  "date_updated": 1693995004,
+  "date_deleted": 0,
+  "form_enabled": false
+}

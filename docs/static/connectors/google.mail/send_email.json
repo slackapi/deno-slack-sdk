@@ -1,0 +1,97 @@
+{
+  "id": "Fn05QLE0CP41",
+  "callback_id": "send_email",
+  "title": "Send an email",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "subject",
+      "description": "Enter text",
+      "title": "Subject",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/rich_text",
+      "name": "email_body",
+      "description": "Enter text",
+      "title": "Email body",
+      "is_required": true
+    },
+    {
+      "type": "boolean",
+      "name": "html",
+      "description": "Select this if your content looks like this: <b>This text is bold</b>",
+      "title": "Email body contains HTML text formatting",
+      "is_required": false,
+      "default": false
+    },
+    {
+      "type": "array",
+      "name": "recipients",
+      "description": "Search all people...",
+      "title": "Recipients",
+      "is_required": false,
+      "items": {
+        "type": "slack#/types/user_id"
+      },
+      "default": []
+    },
+    {
+      "type": "array",
+      "name": "additional_recipients",
+      "description": "Enter email addresses",
+      "title": "Additional Recipients",
+      "is_required": false,
+      "hint": "Enter email addresses",
+      "items": {
+        "type": "string",
+        "nullable": true
+      },
+      "default": []
+    },
+    {
+      "type": "array",
+      "name": "cc_recipients",
+      "description": "Enter email addresses",
+      "title": "CC Recipients",
+      "is_required": false,
+      "hint": "Enter email addresses",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    {
+      "type": "array",
+      "name": "bcc_recipients",
+      "description": "Enter email addresses",
+      "title": "BCC Recipients",
+      "is_required": false,
+      "hint": "Enter email addresses",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "google_access_token",
+      "description": "Google access token",
+      "title": "Google access token",
+      "is_required": true,
+      "oauth2_provider_key": "google",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [],
+  "category_id": "A05Q7MZ8WH1",
+  "category_label": "Google Mail",
+  "app_id": "A05Q7MZ8WH1",
+  "date_created": 1693395675,
+  "date_released": 0,
+  "date_updated": 1721827597,
+  "date_deleted": 0,
+  "form_enabled": false
+}

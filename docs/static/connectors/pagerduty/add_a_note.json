@@ -1,0 +1,55 @@
+{
+  "id": "Fn053RGQSH0C",
+  "callback_id": "add_a_note",
+  "title": "Add a note",
+  "description": "Add a note to a PagerDuty incident",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "description": "Enter incident ID...",
+      "title": "Incident ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "content",
+      "description": "Enter a note...",
+      "title": "Note",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "pagerduty_access_token",
+      "description": "Pagerduty access token",
+      "title": "PagerDuty access token",
+      "is_required": true,
+      "oauth2_provider_key": "pagerduty"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "content",
+      "description": "Note",
+      "title": "Note",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "created_at",
+      "description": "Created at",
+      "title": "Time added",
+      "is_required": false
+    }
+  ],
+  "category_id": "A04RSGH23L7",
+  "category_label": "PagerDuty",
+  "app_id": "A04RSGH23L7",
+  "date_created": 1681786811,
+  "date_released": 0,
+  "date_updated": 1729793988,
+  "date_deleted": 0,
+  "form_enabled": false
+}

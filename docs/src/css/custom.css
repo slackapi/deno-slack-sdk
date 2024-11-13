@@ -1,4 +1,5 @@
 :root {
+  --ifm-font-size-base: 15px;
   /* set hex colors here pls */
   --aubergine: #4a154b;
   /* aubergine-active is used in light mode. 
@@ -158,7 +159,7 @@ a[href^="https://api.slack.com/events"] > code {
 }
 
 .functions-section {
-  background-color: var(--horchata);
+  background-color: var(--ifm-code-background);
   border-radius: 5px;
   padding:1rem;
   margin-bottom: 2rem;
@@ -170,18 +171,22 @@ a[href^="https://api.slack.com/events"] > code {
   gap: 10px; /* Space between each scope */
 }
 
-.functions-section h2 {
+/* .functions-section h2 {
   border-bottom: 2px solid var(--aubergine);
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-}
+  padding-bottom: 0rem;
+} */
 
 .functions-section .type {
   text-align: right;
 }
 
+.param-required-section {
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 .param-container {
-  border-bottom: 1px solid var(--aubergine);
+  border-top: 1px solid;
   padding-top: 1rem;
 }
 
@@ -283,9 +288,9 @@ h1 {
   margin-bottom: 1rem;
 }
 
-.info-row p {
-  flex: 0 0 160px; /* fixed width for labels */
-  margin: 0;
+.info-key {
+  flex: 0 0 10rem;
+  align-items: center;
 }
 
 .scope-item {

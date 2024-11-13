@@ -1,0 +1,141 @@
+{
+  "id": "Fn05TUC79Z5J",
+  "callback_id": "update_incident",
+  "title": "Update an incident",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "description": "Select an incident",
+      "title": "Incident",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_incidents",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.incidents}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        },
+        "validation": {
+          "function": "#/functions/get_incident",
+          "inputs": {
+            "incident_id": {
+              "value": "{{input_parameters.incident_id}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.incident}}"
+            },
+            "value_path": "id",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter text",
+      "title": "Incident name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter text",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "priority",
+      "description": "Select an option",
+      "title": "Priority",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_priorities",
+        "inputs": {},
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.priorities}}"
+          },
+          "value_path": "slug",
+          "label_path": "slug"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "severity",
+      "description": "Select an option",
+      "title": "Severity",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_severities",
+        "inputs": {},
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.severities}}"
+          },
+          "value_path": "slug",
+          "label_path": "slug"
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "title": "Incident ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "incident_url",
+      "title": "Incident URL",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "incident_description",
+      "title": "Incident description",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "priority",
+      "title": "Incident priority",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "severity",
+      "title": "Incident severity",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05TG2LEXPV",
+  "category_label": "FireHydrant",
+  "app_id": "A05TG2LEXPV",
+  "date_created": 1695638603,
+  "date_released": 0,
+  "date_updated": 1719567249,
+  "date_deleted": 0,
+  "form_enabled": false
+}

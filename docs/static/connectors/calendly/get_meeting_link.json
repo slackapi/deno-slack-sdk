@@ -1,0 +1,83 @@
+{
+  "id": "Fn05946G2XTM",
+  "callback_id": "get_meeting_link",
+  "title": "Get meeting link",
+  "description": "Get a link to a Calendly meeting",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "calendly_user",
+      "title": "Calendly user",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_current_user",
+        "inputs": {
+          "calendly_access_token": {
+            "value": "{{input_parameters.calendly_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.calendly_user}}"
+          },
+          "value_path": "uri",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "event_type",
+      "title": "Event type",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_event_types",
+        "inputs": {
+          "calendly_user": {
+            "value": "{{input_parameters.calendly_user}}"
+          },
+          "calendly_access_token": {
+            "value": "{{input_parameters.calendly_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.events}}"
+          },
+          "value_path": "uri",
+          "label_path": "name"
+        }
+      },
+      "format": "url"
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "calendly_access_token",
+      "description": "Calendly credential to use",
+      "title": "Calendly Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "calendly"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "meeting_link",
+      "description": "A Calendly meeting link for sharing",
+      "title": "Calendly meeting link",
+      "is_required": true,
+      "format": "url"
+    }
+  ],
+  "category_id": "A050MUYMYFP",
+  "category_label": "Calendly",
+  "app_id": "A050MUYMYFP",
+  "date_created": 1684862616,
+  "date_released": 0,
+  "date_updated": 1692683807,
+  "date_deleted": 0,
+  "form_enabled": false
+}

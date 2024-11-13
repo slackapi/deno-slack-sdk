@@ -1,0 +1,98 @@
+{
+  "id": "Fn05SZ78UA9W",
+  "callback_id": "create_page",
+  "title": "Create a page",
+  "description": "Creates a page under a parent page",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "notion_access_token",
+      "title": "Notion access token",
+      "is_required": false,
+      "oauth2_provider_key": "notion",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "parent_page_id",
+      "description": "Enter text",
+      "title": "Parent page",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_pages",
+        "inputs": {
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "notion_access_token": {
+            "value": "{{input_parameters.notion_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.pages}}"
+          },
+          "value_path": "id",
+          "label_path": "properties.title.title[0].plain_text"
+        },
+        "validation": {
+          "function": "#/functions/get_page",
+          "inputs": {
+            "page_id": {
+              "value": "{{input_parameters.parent_page_id}}"
+            },
+            "notion_access_token": {
+              "value": "{{input_parameters.notion_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.page}}"
+            },
+            "value_path": "id",
+            "label_path": "properties.title.title[0].plain_text"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "page_title",
+      "description": "Enter text",
+      "title": "Page title",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/rich_text",
+      "name": "content",
+      "description": "Enter text",
+      "title": "Page content",
+      "is_required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "page_id",
+      "title": "Page ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "page_url",
+      "title": "Page URL",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05SUU730P2",
+  "category_label": "Notion",
+  "app_id": "A05SUU730P2",
+  "date_created": 1694671054,
+  "date_released": 0,
+  "date_updated": 1710912960,
+  "date_deleted": 0,
+  "form_enabled": false
+}

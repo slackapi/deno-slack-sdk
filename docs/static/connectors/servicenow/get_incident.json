@@ -1,0 +1,109 @@
+{
+  "id": "Fn07BAHRLYMB",
+  "callback_id": "get_incident",
+  "title": "Get an incident",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "incident_number",
+      "description": "Search incident",
+      "title": "Incident number",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_incidents",
+        "inputs": {
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "servicenow_access_token": {
+            "value": "{{input_parameters.servicenow_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.incidents}}"
+          },
+          "value_path": "number",
+          "label_path": "number"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "servicenow_access_token",
+      "description": "Servicenow Credential to use",
+      "title": "Servicenow Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "servicenow"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "incident_sys_id",
+      "description": "Incident sys_id",
+      "title": "Incident sys_id",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "incident_short_description",
+      "description": "Incident short description",
+      "title": "Incident short description",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "incident_state",
+      "description": "Incident state",
+      "title": "Incident state",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "incident_number",
+      "description": "Incident number",
+      "title": "Incident number",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "incident_priority",
+      "description": "Incident priority",
+      "title": "Incident priority",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "incident_url",
+      "description": "Incident url",
+      "title": "Incident url",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "timestamp_started",
+      "description": "Time when step started",
+      "title": "Time when step started",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "timestamp_completed",
+      "description": "Time when step completed",
+      "title": "Time when step completed",
+      "is_required": true
+    }
+  ],
+  "category_id": "A07AYPT9X4P",
+  "category_label": "ServiceNow",
+  "app_id": "A07AYPT9X4P",
+  "date_created": 1720420948,
+  "date_released": 1722841200,
+  "date_updated": 1727784340,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,183 @@
+{
+  "id": "Fn05Q8P8S9NG",
+  "callback_id": "create_issue",
+  "title": "Create an issue",
+  "description": "Create a bitbucket cloud issue",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "workspace",
+      "description": "Enter bitbucket workspace",
+      "title": "Bitbucket workspace",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_workspace",
+        "inputs": {
+          "bitbucket_access_token": {
+            "value": "{{input_parameters.bitbucket_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.workspaces}}"
+          },
+          "value_path": "workspace.uuid",
+          "label_path": "workspace.name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "repo_slug",
+      "description": "Enter repository name",
+      "title": "Repository",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_workspace_repositories",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "workspace_uuid": {
+            "value": "{{input_parameters.workspace}}"
+          },
+          "bitbucket_access_token": {
+            "value": "{{input_parameters.bitbucket_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.repositories}}"
+          },
+          "value_path": "uuid",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Title of the issue",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Description of the issue",
+      "title": "Description",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "kind",
+      "description": "Issue kind",
+      "title": "Kind",
+      "is_required": false,
+      "enum": [
+        "bug",
+        "enhancement",
+        "proposal",
+        "task"
+      ]
+    },
+    {
+      "type": "string",
+      "name": "priority",
+      "description": "Priority of the issue",
+      "title": "Priority",
+      "is_required": false,
+      "enum": [
+        "trivial",
+        "minior",
+        "major",
+        "critical",
+        "blocker"
+      ]
+    },
+    {
+      "type": "string",
+      "name": "assignee_uuid",
+      "description": "Select an option...",
+      "title": "Assignee",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_assignee",
+        "inputs": {
+          "workspace": {
+            "value": "{{input_parameters.workspace}}"
+          },
+          "bitbucket_access_token": {
+            "value": "{{input_parameters.bitbucket_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.assignees}}"
+          },
+          "value_path": "user.uuid",
+          "label_path": "user.display_name"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "bitbucket_access_token",
+      "title": "bitbucket access token",
+      "is_required": true,
+      "oauth2_provider_key": "bitbucket",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "issue_id",
+      "description": "Id of the issue",
+      "title": "Issue ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Title of the issue",
+      "title": "Title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "kind",
+      "description": "Kind of the issue",
+      "title": "Kind",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "priority",
+      "description": "Priority of the issue",
+      "title": "Priority",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "issue_url",
+      "description": "URL of the issue",
+      "title": "Issue URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05Q8KLHEHJ",
+  "category_label": "Bitbucket",
+  "app_id": "A05Q8KLHEHJ",
+  "date_created": 1693378014,
+  "date_released": 0,
+  "date_updated": 1725950927,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,73 @@
+{
+  "id": "Fn059Z5PS6G3",
+  "callback_id": "start_meeting",
+  "title": "Start a meeting",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "access_type",
+      "description": "Access type",
+      "title": "Access type",
+      "is_required": false,
+      "enum": [
+        "OPEN",
+        "TRUSTED",
+        "RESTRICTED"
+      ]
+    },
+    {
+      "type": "string",
+      "name": "entry_point_access",
+      "description": "Entry point access",
+      "title": "Entry point access",
+      "is_required": false,
+      "enum": [
+        "ALL",
+        "CREATOR_APP_ONLY"
+      ],
+      "choices": [
+        {
+          "title": "ALL",
+          "value": "ALL"
+        },
+        {
+          "title": "CREATOR APP ONLY",
+          "value": "CREATOR_APP_ONLY"
+        }
+      ]
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "google_access_token",
+      "title": "Google Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "google"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "name",
+      "description": "A unique server-generated ID for the meeting space",
+      "title": "Meeting ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "meeting_link",
+      "description": "A URL to identify and access the meeting space",
+      "title": "Meeting link",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05A1NP97K6",
+  "category_label": "Google Meet",
+  "app_id": "A05A1NP97K6",
+  "date_created": 1685394935,
+  "date_released": 0,
+  "date_updated": 1716831800,
+  "date_deleted": 0,
+  "form_enabled": false
+}

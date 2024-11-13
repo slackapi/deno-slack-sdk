@@ -1,0 +1,116 @@
+{
+  "id": "Fn05V9777ZMX",
+  "callback_id": "delete_record",
+  "title": "Delete a record",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "base_id",
+      "description": "Select a base",
+      "title": "Base",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_bases",
+        "inputs": {
+          "airtable_access_token": {
+            "value": "{{input_parameters.airtable_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.bases}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "table_id",
+      "description": "Select a table",
+      "title": "Table",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_tables",
+        "inputs": {
+          "base_id": {
+            "value": "{{input_parameters.base_id}}"
+          },
+          "airtable_access_token": {
+            "value": "{{input_parameters.airtable_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.tables}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "search_column",
+      "description": "Select a column",
+      "title": "Choose a column to search",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/fetch_columns",
+        "inputs": {
+          "base_id": {
+            "value": "{{input_parameters.base_id}}"
+          },
+          "table_id": {
+            "value": "{{input_parameters.table_id}}"
+          },
+          "airtable_access_token": {
+            "value": "{{input_parameters.airtable_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.columns}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "search_value",
+      "title": "Search value",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "airtable_access_token",
+      "title": "Airtable access token",
+      "is_required": true,
+      "oauth2_provider_key": "airtable"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "record_id",
+      "title": "Record ID",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05UG04QC4X",
+  "category_label": "Airtable",
+  "app_id": "A05UG04QC4X",
+  "date_created": 1696324772,
+  "date_released": 0,
+  "date_updated": 1729681280,
+  "date_deleted": 0,
+  "form_enabled": false
+}

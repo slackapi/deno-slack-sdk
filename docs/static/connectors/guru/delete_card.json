@@ -1,0 +1,84 @@
+{
+  "id": "Fn05RQS2613R",
+  "callback_id": "delete_card",
+  "title": "Delete a card",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "card_id",
+      "description": "Select a card",
+      "title": "Card",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_cards",
+        "inputs": {
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "guru_access_token": {
+            "value": "{{input_parameters.guru_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.cards}}"
+          },
+          "value_path": "id",
+          "label_path": "preferredPhrase"
+        },
+        "validation": {
+          "function": "#/functions/get_card",
+          "inputs": {
+            "card_id": {
+              "value": "{{input_parameters.card_id}}"
+            },
+            "guru_access_token": {
+              "value": "{{input_parameters.guru_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.card_info}}"
+            },
+            "value_path": "card_id",
+            "label_path": "title"
+          }
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "guru_access_token",
+      "description": "Whose account should be used?",
+      "title": "Guru Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "guru",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "card_id",
+      "title": "Card ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05RT1HSRRU",
+  "category_label": "Guru",
+  "app_id": "A05RT1HSRRU",
+  "date_created": 1694605795,
+  "date_released": 0,
+  "date_updated": 1719560660,
+  "date_deleted": 0,
+  "form_enabled": false
+}

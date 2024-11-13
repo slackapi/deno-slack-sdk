@@ -1,0 +1,150 @@
+{
+  "id": "Fn05S8AV8QG4",
+  "callback_id": "copy_file",
+  "title": "Copy a file",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "box_access_token",
+      "title": "Box Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "box"
+    },
+    {
+      "type": "string",
+      "name": "file_id",
+      "description": "Pick a file to copy",
+      "title": "File to copy",
+      "is_required": true,
+      "hint": "It can take up to 10 mins for a newly created file to be searchable.",
+      "dynamic_options": {
+        "function": "#/functions/search_files",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "box_access_token": {
+            "value": "{{input_parameters.box_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.files}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        },
+        "validation": {
+          "function": "#/functions/fetch_file",
+          "inputs": {
+            "file_id": {
+              "value": "{{input_parameters.file_id}}"
+            },
+            "box_access_token": {
+              "value": "{{input_parameters.box_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.file}}"
+            },
+            "value_path": "id",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "parent_folder_id",
+      "description": "Select a folder",
+      "title": "Destination folder",
+      "is_required": false,
+      "hint": "The destination folder the new file will be copied to. It can take up to 10 mins for a newly created folder to be searchable.",
+      "dynamic_options": {
+        "function": "#/functions/search_folders",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "box_access_token": {
+            "value": "{{input_parameters.box_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.folders}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        },
+        "validation": {
+          "function": "#/functions/fetch_folder",
+          "inputs": {
+            "box_access_token": {
+              "value": "{{input_parameters.box_access_token}}"
+            },
+            "parent_folder_id": {
+              "value": "{{input_parameters.parent_folder_id}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.folder}}"
+            },
+            "value_path": "id",
+            "label_path": "name"
+          }
+        }
+      },
+      "default": "0"
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter a new name",
+      "title": "Name",
+      "is_required": false,
+      "maxLength": 255
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "title": "File ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "web_link",
+      "title": "File URL",
+      "is_required": true,
+      "format": "url"
+    }
+  ],
+  "category_id": "A05QNBAB4UA",
+  "category_label": "Box",
+  "app_id": "A05QNBAB4UA",
+  "date_created": 1694611447,
+  "date_released": 0,
+  "date_updated": 1730929068,
+  "date_deleted": 0,
+  "form_enabled": false
+}

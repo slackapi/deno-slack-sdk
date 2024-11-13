@@ -1,0 +1,97 @@
+{
+  "id": "Fn06183D8T1V",
+  "callback_id": "trigger_build",
+  "title": "Trigger build",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "repo_slug",
+      "title": "Repository",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_repository",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.repositories}}"
+          },
+          "value_path": "slug",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "branch",
+      "description": "Select a branch",
+      "title": "Branch",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_branches",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "repo_slug": {
+            "value": "{{input_parameters.repo_slug}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.branches}}"
+          },
+          "value_path": "name",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "message",
+      "title": "Message",
+      "is_required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "request_id",
+      "title": "Request ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "request_message",
+      "title": "Message",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "branch",
+      "title": "Branch",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "repository",
+      "title": "Repository",
+      "is_required": false
+    }
+  ],
+  "category_id": "A0619K2GN2W",
+  "category_label": "Travis CI",
+  "app_id": "A0619K2GN2W",
+  "date_created": 1697620664,
+  "date_released": 0,
+  "date_updated": 1719904920,
+  "date_deleted": 0,
+  "form_enabled": false
+}

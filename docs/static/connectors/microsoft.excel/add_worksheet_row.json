@@ -1,0 +1,135 @@
+{
+  "id": "Fn05UMUEEULR",
+  "callback_id": "add_worksheet_row",
+  "title": "Add to worksheet",
+  "description": "Add a row to a Microsoft workbook worksheet",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "object",
+      "name": "workbook",
+      "description": "Select a workbook",
+      "title": "Workbook",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_workbooks",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "excel_access_token": {
+            "value": "{{input_parameters.excel_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.workbooks}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "worksheet_name",
+      "description": "Select a worksheet",
+      "title": "Worksheet",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/fetch_worksheets",
+        "inputs": {
+          "workbook": {
+            "value": "{{input_parameters.workbook}}"
+          },
+          "excel_access_token": {
+            "value": "{{input_parameters.excel_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.worksheets}}"
+          },
+          "value_path": "name",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "name": "columns",
+      "description": "Columns",
+      "title": "Columns",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/fetch_column_names",
+        "inputs": {
+          "workbook": {
+            "value": "{{input_parameters.workbook}}"
+          },
+          "worksheet_name": {
+            "value": "{{input_parameters.worksheet_name}}"
+          },
+          "excel_access_token": {
+            "value": "{{input_parameters.excel_access_token}}"
+          }
+        },
+        "selection_type": "key-value",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.column_names_obj_array}}"
+          },
+          "key_path": "index",
+          "label_path": "column_name"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "excel_access_token",
+      "description": "Access token for Microsoft Graph API",
+      "title": "Microsoft excel access token",
+      "is_required": true,
+      "oauth2_provider_key": "excel"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "workbook_id",
+      "description": "Workbook ID",
+      "title": "Workbook ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "worksheet_url",
+      "description": "Worksheet URL",
+      "title": "Worksheet URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "worksheet_name",
+      "description": "Worksheet name",
+      "title": "Worksheet name",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05UVANN1S4",
+  "category_label": "Microsoft Excel",
+  "app_id": "A05UVANN1S4",
+  "date_created": 1695878579,
+  "date_released": 0,
+  "date_updated": 1724819853,
+  "date_deleted": 0,
+  "form_enabled": false
+}

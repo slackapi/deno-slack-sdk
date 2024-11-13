@@ -1,0 +1,79 @@
+{
+  "id": "Fn05SDFW8CBV",
+  "callback_id": "create_feature_flag",
+  "title": "Create a boolean feature flag",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "project_key",
+      "description": "Please select an option",
+      "title": "Project",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_projects",
+        "inputs": {
+          "key": {
+            "value": "{{client.query}}"
+          },
+          "launchdarkly_access_token": {
+            "value": "{{input_parameters.launchdarkly_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.projects}}"
+          },
+          "value_path": "key",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter a unique, human-readable name",
+      "title": "Name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "key",
+      "description": "Enter a unique flag key",
+      "title": "Key",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "launchdarkly_access_token",
+      "description": "LaunchDarkly Credential to use",
+      "title": "LaunchDarkly access token",
+      "is_required": true,
+      "oauth2_provider_key": "launchdarkly"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Feature flag name",
+      "title": "Name",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05RF94AFB3",
+  "category_label": "LaunchDarkly",
+  "app_id": "A05RF94AFB3",
+  "date_created": 1694709411,
+  "date_released": 0,
+  "date_updated": 1718866104,
+  "date_deleted": 0,
+  "form_enabled": false
+}

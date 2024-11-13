@@ -1,0 +1,133 @@
+{
+  "id": "Fn05UA8QJWQZ",
+  "callback_id": "get_form_insights",
+  "title": "Get form insights",
+  "description": "Retrieve form summary (works with Business or higher plans)",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "form_id",
+      "description": "Select a form",
+      "title": "Select a form",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_forms",
+        "inputs": {
+          "search_query": {
+            "value": "{{client.query}}"
+          },
+          "typeform_access_token": {
+            "value": "{{input_parameters.typeform_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.forms}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "typeform_access_token",
+      "title": "Typeform access token",
+      "is_required": true,
+      "oauth2_provider_key": "typeform"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "object",
+      "name": "summary",
+      "title": "Form summary",
+      "is_required": false,
+      "properties": {
+        "average_time": {
+          "type": "string",
+          "title": "Average time"
+        },
+        "total_visits": {
+          "type": "string",
+          "title": "Total visits"
+        },
+        "unique_visits": {
+          "type": "string",
+          "title": "Unique visits"
+        },
+        "completion_rate": {
+          "type": "string",
+          "title": "Completion rate"
+        },
+        "responses_count": {
+          "type": "string",
+          "title": "Response count"
+        }
+      },
+      "additionalProperties": true
+    },
+    {
+      "type": "object",
+      "name": "views_per_question",
+      "title": "Views per question",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/get_form",
+        "inputs": {
+          "form_id": {
+            "value": "{{input_parameters.form_id}}"
+          },
+          "typeform_access_token": {
+            "value": "{{input_parameters.typeform_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.form_fields}}"
+          },
+          "key_path": "id",
+          "label_path": "title",
+          "property_type_path": "slack_type"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "name": "dropoffs_per_question",
+      "title": "Drop-offs per question",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/get_form",
+        "inputs": {
+          "form_id": {
+            "value": "{{input_parameters.form_id}}"
+          },
+          "typeform_access_token": {
+            "value": "{{input_parameters.typeform_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.form_fields}}"
+          },
+          "key_path": "id",
+          "label_path": "title",
+          "property_type_path": "slack_type"
+        }
+      }
+    }
+  ],
+  "category_id": "A05T70HT5E1",
+  "category_label": "Typeform",
+  "app_id": "A05T70HT5E1",
+  "date_created": 1695719094,
+  "date_released": 0,
+  "date_updated": 1709543926,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,246 @@
+{
+  "id": "Fn04S46CGQ5T",
+  "callback_id": "create_incident",
+  "title": "Trigger an incident",
+  "description": "Trigger a PagerDuty incident",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter incident title...",
+      "title": "Incident title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "details",
+      "description": "Enter incident details...",
+      "title": "Incident details",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "priority_id",
+      "description": "Priority",
+      "title": "Priority",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_priorities",
+        "inputs": {
+          "pagerduty_access_token": {
+            "value": "{{input_parameters.pagerduty_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.priorities}}"
+          },
+          "value_path": "id",
+          "label_path": "summary"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "pagerduty_access_token",
+      "description": "Pagerduty access token",
+      "title": "PagerDuty access token",
+      "is_required": true,
+      "oauth2_provider_key": "pagerduty"
+    },
+    {
+      "type": "string",
+      "name": "service_id",
+      "description": "PagerDuty Service",
+      "title": "Service",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_services",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "pagerduty_access_token": {
+            "value": "{{input_parameters.pagerduty_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.services}}"
+          },
+          "value_path": "id",
+          "label_path": "summary"
+        },
+        "validation": {
+          "function": "#/functions/get_escalation_policy",
+          "inputs": {
+            "service_id": {
+              "value": "{{input_parameters.service_id}}"
+            },
+            "pagerduty_access_token": {
+              "value": "{{input_parameters.pagerduty_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.service}}"
+            },
+            "value_path": "id",
+            "label_path": "summary"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "escalation_policy",
+      "description": "PagerDuty Escalation policy",
+      "title": "Escalation policy",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_escalation_policies",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "pagerduty_access_token": {
+            "value": "{{input_parameters.pagerduty_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.escalation_policies}}"
+          },
+          "value_path": "id",
+          "label_path": "summary"
+        },
+        "validation": {
+          "function": "#/functions/get_escalation_policy_helper",
+          "inputs": {
+            "escalation_policy": {
+              "value": "{{input_parameters.escalation_policy}}"
+            },
+            "pagerduty_access_token": {
+              "value": "{{input_parameters.pagerduty_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.escalation_policy}}"
+            },
+            "value_path": "id",
+            "label_path": "summary"
+          }
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "description": "Incident ID",
+      "title": "Incident ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "incident_url",
+      "description": "Incident URL",
+      "title": "Incident URL",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "incident_title",
+      "description": "Incident title",
+      "title": "Incident title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "incident_details",
+      "description": "Incident details",
+      "title": "Incident details",
+      "is_required": false
+    },
+    {
+      "type": "object",
+      "name": "escalation_policy",
+      "description": "Escalation Policy",
+      "title": "Escalation policy",
+      "is_required": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Escalation policy ID"
+        },
+        "summary": {
+          "type": "string",
+          "title": "Escalation policy summary"
+        },
+        "html_url": {
+          "type": "string",
+          "title": "Escalation policy URL"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "name": "service",
+      "description": "Service",
+      "title": "Service",
+      "is_required": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Service ID"
+        },
+        "summary": {
+          "type": "string",
+          "title": "Service summary"
+        },
+        "html_url": {
+          "type": "string",
+          "title": "Service URL"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "name": "team",
+      "description": "Team",
+      "title": "Team",
+      "is_required": false,
+      "nullable": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Team ID"
+        },
+        "summary": {
+          "type": "string",
+          "title": "Team summary"
+        },
+        "html_url": {
+          "type": "string",
+          "title": "Team URL"
+        }
+      }
+    }
+  ],
+  "category_id": "A04RSGH23L7",
+  "category_label": "PagerDuty",
+  "app_id": "A04RSGH23L7",
+  "date_created": 1677826676,
+  "date_released": 0,
+  "date_updated": 1729793988,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,96 @@
+{
+  "id": "Fn05RWKMHHM3",
+  "callback_id": "insert_task",
+  "title": "Insert a task",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "tasklist_id",
+      "description": "Select a list",
+      "title": "List",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_tasklists",
+        "inputs": {
+          "google_access_token": {
+            "value": "{{input_parameters.google_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.tasklists}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter task name",
+      "title": "Task",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "notes",
+      "description": "Add details",
+      "title": "Details",
+      "is_required": true,
+      "long": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "due",
+      "description": "Due date for the task",
+      "title": "Due on",
+      "is_required": false
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "google_access_token",
+      "description": "Whose account should be creating the tasks?",
+      "title": "Google access token",
+      "is_required": true,
+      "oauth2_provider_key": "google"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "title",
+      "title": "Task title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "task_id",
+      "title": "Task ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "notes",
+      "title": "Notes",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "title": "Status",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05RZA1NU7L",
+  "category_label": "Google Tasks",
+  "app_id": "A05RZA1NU7L",
+  "date_created": 1694525395,
+  "date_released": 0,
+  "date_updated": 1698905510,
+  "date_deleted": 0,
+  "form_enabled": false
+}
