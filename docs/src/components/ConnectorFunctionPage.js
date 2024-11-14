@@ -7,7 +7,7 @@ const ApiMethodPage = ({ jsonFilePath }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await import(`../../static/connectors${jsonFilePath}.json`);
+        const data = await import(`../../static/connectors${jsonFilePath}`);
         setMethodData(data.default);
       } catch (error) {
         console.error('Error loading the function data:', error);

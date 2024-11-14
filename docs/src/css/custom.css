@@ -312,3 +312,10 @@ h1 {
   appearance: none;
   cursor: pointer;
 }
+
+
+/* Styles for the page located at /docs/reference/connectors/connectors */
+.docs-doc-id-reference-connectors-connectors table {
+  width: 100%;
+  table-layout: fixed;
+}
