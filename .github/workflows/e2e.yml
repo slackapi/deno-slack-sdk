@@ -43,6 +43,8 @@ jobs:
         run: |
           E2E_RESULT="{}"
           E2E_STATUS="running"
+          echo "Length of CCI pat?"
+          echo $CCI_PAT | wc -m
           # possible status values: success, running, not_run, failed, error, failing, on_hold, canceled, unauthorized
           while [[ $E2E_STATUS != "failed" && $E2E_STATUS != "canceled" && $E2E_STATUS != "success" && $E2E_STATUS != "not_run" && $E2E_STATUS != "error" && $E2E_STATUS != "unauthorized" ]]
           do
@@ -51,6 +53,10 @@ jobs:
             E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/${TEST_JOB_WORKFLOW_ID}/workflow" --header "Circle-Token: ${CCI_PAT}")
             echo $E2E_RESULT;
             E2E_STATUS=$(echo $E2E_RESULT | jq --raw-output '.items[0].status')
+            if [ $E2E_STATUS = "null" ]; then
+              echo "Problem extracting status from job ID. Aborting!";
+              exit 1
+            fi
             echo "Status is now: $E2E_STATUS"
           done
           if [ $E2E_STATUS = "failed" ] || [ $E2E_STATUS = "error" ]; then
