@@ -22,6 +22,8 @@ jobs:
         run: |
           IMPORT_URL="https://raw.githubusercontent.com/slackapi/deno-slack-sdk/refs/heads/${GIT_BRANCH}/src/";
           echo "Import URL: ${IMPORT_URL}";
+          echo "Length of access token:";
+          echo $CCHEN_CIRCLECI_PERSONAL_TOKEN | wc -m;
           # https://app.circleci.com/settings/organization/github/slackapi/contexts
           TEST_PAYLOAD=$(curl --location --request POST 'https://circleci.com/api/v2/project/gh/slackapi/platform-devxp-test/pipeline' \
           --header 'Content-Type: application/json' \
