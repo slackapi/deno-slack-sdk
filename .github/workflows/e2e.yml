@@ -30,7 +30,7 @@ jobs:
           echo $TEST_PAYLOAD;
           TEST_JOB_WORKFLOW_ID=$(echo $TEST_PAYLOAD | jq '.id');
           if [ $TEST_JOB_WORKFLOW_ID = "null" ]; then
-            echo "Problem extracting job ID from invocation API call! Aborting.";
+            echo "Problem extracting job ID from invocation API call! Aborting!";
             exit 1;
           fi
           echo "e2e test workflow started with id: $TEST_JOB_WORKFLOW_ID"
