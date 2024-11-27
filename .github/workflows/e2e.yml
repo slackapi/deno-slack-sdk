@@ -1,0 +1,55 @@
+# This workflow invokes and waits for the result of Slack's private E2E CI system
+name: Internal E2E CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the sdk
+        uses: actions/checkout@v4
+      - name: Set environment variables
+        run: |
+          # Short name for current branch. For PRs, use source branch (GITHUB_HEAD_REF)
+          GIT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
+          echo "Identified branch name: ${GIT_BRANCH}";
+          echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
+      - name: Kick off platform-devpx-test pipeline
+        run: |
+          IMPORT_URL="https://raw.githubusercontent.com/slackapi/deno-slack-sdk/refs/heads/${GIT_BRANCH}/src/";
+          # https://app.circleci.com/settings/organization/github/slackapi/contexts
+          TEST_JOB_WORKFLOW_ID=$(curl --location --request POST 'https://circleci.com/api/v2/project/gh/slackapi/platform-devxp-test/pipeline' \
+          --header 'Content-Type: application/json' \
+          -u "${CCHEN_CIRCLECI_PERSONAL_TOKEN}:" \
+          --data "{\"branch\":\"main\",\"parameters\":{\"deno_sdk_import_url\":\"${IMPORT_URL}\"}}" | jq '.id')
+          echo "e2e test workflow started with id: $TEST_JOB_WORKFLOW_ID"
+          echo "TEST_JOB_WORKFLOW_ID=${TEST_JOB_WORKFLOW_ID}" >> $GITHUB_ENV
+      - name: Wait for platform-devxp-test E2E run to complete
+        run: |
+          E2E_RESULT="{}"
+          E2E_STATUS="running"
+          # possible status values: success, running, not_run, failed, error, failing, on_hold, canceled, unauthorized
+          while [[ $E2E_STATUS != "failed" && $E2E_STATUS != "canceled" && $E2E_STATUS != "success" && $E2E_STATUS != "not_run" && $E2E_STATUS != "error" && $E2E_STATUS != "unauthorized" ]]
+          do
+            sleep 30s
+            echo "Polling test job ${TEST_JOB_WORKFLOW_ID}..."
+            E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/$TEST_JOB_WORKFLOW_ID/workflow" --header "Circle-Token: $CCHEN_CIRCLECI_PERSONAL_TOKEN")
+            E2E_STATUS=$(echo $E2E_RESULT | jq --raw-output '.items[0].status')
+            echo "Status is now: $E2E_STATUS"
+          done
+          if [ $E2E_STATUS = "failed" ] || [ $E2E_STATUS = "error" ]; then
+            E2E_PIPE_NUM=$(echo $E2E_RESULT | jq '.items[0].pipeline_number')
+            E2E_WORKFLOW_ID=$(echo $E2E_RESULT | jq -r '.items[0].id')
+            CIRCLE_FAIL_LINK="https://app.circleci.com/pipelines/github/slackapi/platform-devxp-test/${E2E_PIPE_NUM}/workflows/${E2E_WORKFLOW_ID}"
+            echo "Tests failed! Visit $CIRCLE_FAIL_LINK for more info."
+            exit 1
+          elif [ "$E2E_STATUS" = "canceled" ] || [ "$E2E_STATUS" = "unauthorized" ] || [ $E2E_STATUS = "not_run" ]; then
+            echo "Tests have been ${E2E_STATUS} and did not finish!"
+            exit 1
+          else
+            echo "Tests passed woot 🎉"
+          fi
