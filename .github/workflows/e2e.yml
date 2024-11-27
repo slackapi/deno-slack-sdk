@@ -16,7 +16,7 @@ jobs:
         run: |
           # Short name for current branch. For PRs, use source branch (GITHUB_HEAD_REF)
           GIT_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
-          echo "Identified branch name: ${GIT_BRANCH}";
+          echo "Identified deno-slack-sdk branch name: ${GIT_BRANCH}; will invoke CI system to test this branch.";
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
       - name: Kick off platform-devpx-test pipeline
         env:
@@ -39,12 +39,10 @@ jobs:
           echo "TEST_JOB_WORKFLOW_ID=${TEST_JOB_WORKFLOW_ID}" >> $GITHUB_ENV
       - name: Wait for platform-devxp-test E2E run to complete
         env:
-          CCI_PAT: ${{ secrets.FIL_CIRCLECI_PERSONAL_TOKEN }}
+          CCI_PAT: ${{ secrets.CCHEN_CIRCLECI_PERSONAL_TOKEN }}
         run: |
           E2E_RESULT="{}"
           E2E_STATUS="running"
-          echo "Length of CCI pat?"
-          echo $CCI_PAT | wc -m
           # possible status values: success, running, not_run, failed, error, failing, on_hold, canceled, unauthorized
           while [[ $E2E_STATUS != "failed" && $E2E_STATUS != "canceled" && $E2E_STATUS != "success" && $E2E_STATUS != "not_run" && $E2E_STATUS != "error" && $E2E_STATUS != "unauthorized" ]]
           do
@@ -54,7 +52,7 @@ jobs:
             echo $E2E_RESULT;
             E2E_STATUS=$(echo $E2E_RESULT | jq --raw-output '.items[0].status')
             if [ $E2E_STATUS = "null" ]; then
-              echo "Problem extracting status from job ID. Aborting!";
+              echo "Problem extracting status from workflow API! Aborting!";
               exit 1
             fi
             echo "Status is now: $E2E_STATUS"
