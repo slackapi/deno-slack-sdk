@@ -39,7 +39,7 @@ jobs:
           echo "TEST_JOB_WORKFLOW_ID=${TEST_JOB_WORKFLOW_ID}" >> $GITHUB_ENV
       - name: Wait for platform-devxp-test E2E run to complete
         env:
-          CCI_PAT: ${{ secrets.CCHEN_CIRCLECI_PERSONAL_TOKEN }}
+          CCI_PAT: ${{ secrets.FIL_CIRCLECI_PERSONAL_TOKEN }}
         run: |
           E2E_RESULT="{}"
           E2E_STATUS="running"
