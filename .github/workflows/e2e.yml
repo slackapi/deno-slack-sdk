@@ -21,11 +21,14 @@ jobs:
       - name: Kick off platform-devpx-test pipeline
         run: |
           IMPORT_URL="https://raw.githubusercontent.com/slackapi/deno-slack-sdk/refs/heads/${GIT_BRANCH}/src/";
+          echo "Import URL: ${IMPORT_URL}";
           # https://app.circleci.com/settings/organization/github/slackapi/contexts
-          TEST_JOB_WORKFLOW_ID=$(curl --location --request POST 'https://circleci.com/api/v2/project/gh/slackapi/platform-devxp-test/pipeline' \
+          TEST_PAYLOAD=$(curl --location --request POST 'https://circleci.com/api/v2/project/gh/slackapi/platform-devxp-test/pipeline' \
           --header 'Content-Type: application/json' \
           -u "${CCHEN_CIRCLECI_PERSONAL_TOKEN}:" \
-          --data "{\"branch\":\"main\",\"parameters\":{\"deno_sdk_import_url\":\"${IMPORT_URL}\"}}" | jq '.id')
+          --data "{\"branch\":\"main\",\"parameters\":{\"deno_sdk_import_url\":\"${IMPORT_URL}\"}}")
+          echo $TEST_PAYLOAD;
+          TEST_JOB_WORKFLOW_ID=$(echo $TEST_PAYLOAD | jq '.id');
           echo "e2e test workflow started with id: $TEST_JOB_WORKFLOW_ID"
           echo "TEST_JOB_WORKFLOW_ID=${TEST_JOB_WORKFLOW_ID}" >> $GITHUB_ENV
       - name: Wait for platform-devxp-test E2E run to complete
