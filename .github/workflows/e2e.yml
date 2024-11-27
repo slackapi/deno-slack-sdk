@@ -23,11 +23,11 @@ jobs:
           IMPORT_URL="https://raw.githubusercontent.com/slackapi/deno-slack-sdk/refs/heads/${GIT_BRANCH}/src/";
           echo "Import URL: ${IMPORT_URL}";
           echo "Length of access token:";
-          echo $CCHEN_CIRCLECI_PERSONAL_TOKEN | wc -m;
+          echo $FIL_CIRCLECI_PERSONAL_TOKEN | wc -m;
           # https://app.circleci.com/settings/organization/github/slackapi/contexts
           TEST_PAYLOAD=$(curl --location --request POST 'https://circleci.com/api/v2/project/gh/slackapi/platform-devxp-test/pipeline' \
           --header 'Content-Type: application/json' \
-          -u "${CCHEN_CIRCLECI_PERSONAL_TOKEN}:" \
+          -u "${FIL_CIRCLECI_PERSONAL_TOKEN}:" \
           --data "{\"branch\":\"main\",\"parameters\":{\"deno_sdk_import_url\":\"${IMPORT_URL}\"}}")
           echo $TEST_PAYLOAD;
           TEST_JOB_WORKFLOW_ID=$(echo $TEST_PAYLOAD | jq '.id');
@@ -46,7 +46,7 @@ jobs:
           do
             sleep 30s
             echo "Polling test job ${TEST_JOB_WORKFLOW_ID}..."
-            E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/$TEST_JOB_WORKFLOW_ID/workflow" --header "Circle-Token: $CCHEN_CIRCLECI_PERSONAL_TOKEN")
+            E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/$TEST_JOB_WORKFLOW_ID/workflow" --header "Circle-Token: $FIL_CIRCLECI_PERSONAL_TOKEN")
             E2E_STATUS=$(echo $E2E_RESULT | jq --raw-output '.items[0].status')
             echo "Status is now: $E2E_STATUS"
           done
