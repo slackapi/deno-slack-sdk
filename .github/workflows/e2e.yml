@@ -48,7 +48,7 @@ jobs:
           do
             sleep 30s
             echo "Polling test job ${TEST_JOB_WORKFLOW_ID}..."
-            E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/${TEST_JOB_WORKFLOW_ID}/workflow" --header "Circle-Token: $CCI_PAT")
+            E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/${TEST_JOB_WORKFLOW_ID}/workflow" --header "Circle-Token: ${CCI_PAT}")
             echo $E2E_RESULT;
             E2E_STATUS=$(echo $E2E_RESULT | jq --raw-output '.items[0].status')
             echo "Status is now: $E2E_STATUS"
