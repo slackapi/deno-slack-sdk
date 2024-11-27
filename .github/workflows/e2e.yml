@@ -19,15 +19,15 @@ jobs:
           echo "Identified branch name: ${GIT_BRANCH}";
           echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
       - name: Kick off platform-devpx-test pipeline
+        env:
+          CCI_PAT: ${{ secrets.CCHEN_CIRCLECI_PERSONAL_TOKEN }}
         run: |
           IMPORT_URL="https://raw.githubusercontent.com/slackapi/deno-slack-sdk/refs/heads/${GIT_BRANCH}/src/";
           echo "Import URL: ${IMPORT_URL}";
-          echo "Length of access token:";
-          echo $FIL_CIRCLECI_PERSONAL_TOKEN | wc -m;
           # https://app.circleci.com/settings/organization/github/slackapi/contexts
           TEST_PAYLOAD=$(curl --location --request POST 'https://circleci.com/api/v2/project/gh/slackapi/platform-devxp-test/pipeline' \
           --header 'Content-Type: application/json' \
-          -u "${FIL_CIRCLECI_PERSONAL_TOKEN}:" \
+          -u "${CCI_PAT}:" \
           --data "{\"branch\":\"main\",\"parameters\":{\"deno_sdk_import_url\":\"${IMPORT_URL}\"}}")
           echo $TEST_PAYLOAD;
           TEST_JOB_WORKFLOW_ID=$(echo $TEST_PAYLOAD | jq '.id');
@@ -38,6 +38,8 @@ jobs:
           echo "e2e test workflow started with id: $TEST_JOB_WORKFLOW_ID"
           echo "TEST_JOB_WORKFLOW_ID=${TEST_JOB_WORKFLOW_ID}" >> $GITHUB_ENV
       - name: Wait for platform-devxp-test E2E run to complete
+        env:
+          CCI_PAT: ${{ secrets.CCHEN_CIRCLECI_PERSONAL_TOKEN }}
         run: |
           E2E_RESULT="{}"
           E2E_STATUS="running"
@@ -46,7 +48,7 @@ jobs:
           do
             sleep 30s
             echo "Polling test job ${TEST_JOB_WORKFLOW_ID}..."
-            E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/$TEST_JOB_WORKFLOW_ID/workflow" --header "Circle-Token: $FIL_CIRCLECI_PERSONAL_TOKEN")
+            E2E_RESULT=$(curl --location -sS --request GET "https://circleci.com/api/v2/pipeline/$TEST_JOB_WORKFLOW_ID/workflow" --header "Circle-Token: $CCI_PAT")
             E2E_STATUS=$(echo $E2E_RESULT | jq --raw-output '.items[0].status')
             echo "Status is now: $E2E_STATUS"
           done
