@@ -1,0 +1,34 @@
+{
+  "name": "remove_user_from_usergroup",
+  "description": "Remove a user from a user group",
+  "schema_reference": "slack#/functions/remove_user_from_usergroup.md",
+  "schema_id": "Schema.slack.functions.RemoveUserFromUsergroup",
+  "category": "User management",
+  "scopes": ["usergroups:write"],
+  "input_parameters": [
+    {
+      "name": "usergroup_id",
+      "type": "Schema.slack.types.usergroup_id",
+      "description": "The ID for the user group to remove the user from",
+      "examples": ["S123ABC456"],
+      "required": true
+    },
+    {
+      "name": "user_ids",
+      "type": "Schema.types.array",
+      "description": "A list of user IDs to remove from the User Group",
+      "examples": ["[\"U111AAA111\",\"U222BBB222\"]"],
+      "required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "name": "usergroup_id",
+      "type": "Schema.slack.types.usergroup_id",
+      "description": "The ID for the user group that now contains the removed user(s)",
+      "examples": ["S123ABC456"],
+      "default": "",
+      "required": false
+    }
+  ]
+}

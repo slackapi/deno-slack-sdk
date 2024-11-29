@@ -1,0 +1,144 @@
+{
+  "id": "Fn05TPQMD5M5",
+  "callback_id": "give_candidate_review",
+  "title": "Provide feedback for a candidate",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "reviewer_id",
+      "description": "Select reviewer",
+      "title": "Reviewer",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 3
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "firstName"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "job_id",
+      "description": "Select a job",
+      "title": "Job",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_jobs",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.jobs}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "candidate_id",
+      "description": "Select a candidate",
+      "title": "Candidate",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_candidates",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "job_id": {
+            "value": "{{input_parameters.job_id}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.candidates}}"
+          },
+          "value_path": "id",
+          "label_path": "firstName"
+        }
+      }
+    },
+    {
+      "type": "integer",
+      "name": "rating",
+      "description": "Enter a number between 1-5",
+      "title": "Rating",
+      "is_required": true,
+      "maximum": 5,
+      "minimum": 1
+    },
+    {
+      "type": "string",
+      "name": "comment",
+      "description": "Enter text",
+      "title": "Comment",
+      "is_required": false,
+      "long": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "candidate_id",
+      "title": "Candidate ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "job_id",
+      "title": "Job ID",
+      "is_required": true
+    },
+    {
+      "type": "integer",
+      "name": "rating",
+      "title": "Rating",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "comment",
+      "title": "Comment",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "review_id",
+      "title": "Review ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05UG19KZ3K",
+  "category_label": "SmartRecruiters",
+  "app_id": "A05UG19KZ3K",
+  "date_created": 1695810149,
+  "date_released": 0,
+  "date_updated": 1696442994,
+  "date_deleted": 0,
+  "form_enabled": false
+}

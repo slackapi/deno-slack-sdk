@@ -1,0 +1,74 @@
+{
+  "id": "Fn063F1TF7L7",
+  "callback_id": "send_sms",
+  "title": "Send an SMS",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "from_number",
+      "description": "Enter a phone number",
+      "title": "Sending number",
+      "is_required": true,
+      "hint": "Phone number must be E.164 format. e.g. +14155551234"
+    },
+    {
+      "type": "array",
+      "name": "to_numbers",
+      "description": "Enter phone number(s)",
+      "title": "Receiving numbers",
+      "is_required": true,
+      "hint": "Phone numbers must be E.164 format. e.g. +14155551234",
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "string",
+      "name": "text",
+      "description": "Enter text",
+      "title": "Text message content",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "dialpad_access_token",
+      "description": "Dialpad Credential to use",
+      "title": "Dialpad access token",
+      "is_required": true,
+      "oauth2_provider_key": "dialpad"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "message_status",
+      "description": "",
+      "title": "SMS status",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "from_number",
+      "description": "",
+      "title": "Sending number",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "text",
+      "description": "SMS text content",
+      "title": "SMS text content",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05USRAR873",
+  "category_label": "Dialpad",
+  "app_id": "A05USRAR873",
+  "date_created": 1698872282,
+  "date_released": 0,
+  "date_updated": 1700822134,
+  "date_deleted": 0,
+  "form_enabled": false
+}

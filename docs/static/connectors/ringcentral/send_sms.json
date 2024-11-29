@@ -1,0 +1,85 @@
+{
+  "id": "Fn05PSBKQAGN",
+  "callback_id": "send_sms",
+  "title": "Send a SMS",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "sender_nb",
+      "description": "Enter number",
+      "title": "Sender's number",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "recipient_nb",
+      "description": "Enter number",
+      "title": "Recipient's number",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "content",
+      "description": "Message",
+      "title": "Message content",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "ringcentral_access_token",
+      "description": "RingCentral Credential to use",
+      "title": "RingCentral access token",
+      "is_required": true,
+      "oauth2_provider_key": "ringcentral"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "subject",
+      "description": "Contents of the SMS message sent",
+      "title": "SMS content",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "id",
+      "description": "Identifier of the sent SMS message",
+      "title": "SMS ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "message_status",
+      "description": "Status of the SMS message",
+      "title": "SMS status",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "delivery_time",
+      "description": "Time when the SMS message was delivered",
+      "title": "SMS delivery time",
+      "is_required": true,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "delivery_error_code",
+      "description": "Error code if the SMS message was not able to send",
+      "title": "SMS delivery error code",
+      "is_required": true,
+      "nullable": true
+    }
+  ],
+  "category_id": "A05M3UW6YEN",
+  "category_label": "RingCentral",
+  "app_id": "A05M3UW6YEN",
+  "date_created": 1693290854,
+  "date_released": 0,
+  "date_updated": 1700822085,
+  "date_deleted": 0,
+  "form_enabled": false
+}

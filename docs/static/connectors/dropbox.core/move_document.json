@@ -1,0 +1,213 @@
+{
+  "id": "Fn05UFHFHGEB",
+  "callback_id": "move_document",
+  "title": "Move a document",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "document_type",
+      "description": "Select a document type",
+      "title": "Document type",
+      "is_required": true,
+      "enum": [
+        "folder",
+        "paper",
+        "spreadsheet",
+        "pdf",
+        "document",
+        "others",
+        "audio",
+        "video"
+      ],
+      "choices": [
+        {
+          "title": "Folder",
+          "value": "folder"
+        },
+        {
+          "title": "Paper",
+          "value": "paper"
+        },
+        {
+          "title": "Spreadsheet",
+          "value": "spreadsheet"
+        },
+        {
+          "title": "Pdf",
+          "value": "pdf"
+        },
+        {
+          "title": "Document",
+          "value": "document"
+        },
+        {
+          "title": "Others",
+          "value": "others"
+        },
+        {
+          "title": "Audio",
+          "value": "audio"
+        },
+        {
+          "title": "Video",
+          "value": "video"
+        }
+      ]
+    },
+    {
+      "type": "string",
+      "name": "from_path",
+      "description": "Select source",
+      "title": "Source",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_files",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "file_category": {
+            "value": "{{input_parameters.document_type}}"
+          },
+          "dropbox_access_token": {
+            "value": "{{input_parameters.dropbox_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.matches}}"
+          },
+          "value_path": "metadata.metadata.path_lower",
+          "label_path": "metadata.metadata.name"
+        },
+        "validation": {
+          "function": "#/functions/get_file",
+          "inputs": {
+            "path": {
+              "value": "{{input_parameters.from_path}}"
+            },
+            "dropbox_access_token": {
+              "value": "{{input_parameters.dropbox_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.file}}"
+            },
+            "value_path": "path_lower",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "to_path",
+      "description": "Select destination folder",
+      "title": "Destination",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/search_files",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "file_category": {
+            "value": "folder"
+          },
+          "dropbox_access_token": {
+            "value": "{{input_parameters.dropbox_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.matches}}"
+          },
+          "value_path": "metadata.metadata.path_lower",
+          "label_path": "metadata.metadata.name"
+        },
+        "validation": {
+          "function": "#/functions/get_file",
+          "inputs": {
+            "path": {
+              "value": "{{input_parameters.to_path}}"
+            },
+            "dropbox_access_token": {
+              "value": "{{input_parameters.dropbox_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.file}}"
+            },
+            "value_path": "path_lower",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter new name",
+      "title": "New name",
+      "is_required": true,
+      "hint": "Please ensure the name includes the file extension, if applicable."
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "dropbox_access_token",
+      "title": "Dropbox access token",
+      "is_required": true,
+      "oauth2_provider_key": "dropbox",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "description": "Id of the folder",
+      "title": "Folder ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Folder name",
+      "title": "Name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "path_display",
+      "description": "Display path",
+      "title": "Display path",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05U3EFESFR",
+  "category_label": "Dropbox",
+  "app_id": "A05U3EFESFR",
+  "date_created": 1696318579,
+  "date_released": 0,
+  "date_updated": 1723806780,
+  "date_deleted": 0,
+  "form_enabled": false
+}

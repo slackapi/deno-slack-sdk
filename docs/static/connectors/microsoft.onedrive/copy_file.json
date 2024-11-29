@@ -1,0 +1,98 @@
+{
+  "id": "Fn05Q4D3LDJT",
+  "callback_id": "copy_file",
+  "title": "Copy a file",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "onedrive_access_token",
+      "description": "Microsoft credential to use",
+      "title": "Microsoft access token",
+      "is_required": true,
+      "oauth2_provider_key": "onedrive",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "file_id",
+      "description": "Select file",
+      "title": "File ID",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_files",
+        "inputs": {
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "onedrive_access_token": {
+            "value": "{{input_parameters.onedrive_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.files}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        },
+        "validation": {
+          "function": "#/functions/get_file",
+          "inputs": {
+            "file_id": {
+              "value": "{{input_parameters.file_id}}"
+            },
+            "onedrive_access_token": {
+              "value": "{{input_parameters.onedrive_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.file}}"
+            },
+            "value_path": "id",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "new_file_name",
+      "description": "Enter text",
+      "title": "New file name",
+      "is_required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "response",
+      "title": "Response",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "new_file_name",
+      "title": "New file name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "file_url",
+      "title": "File URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05QGK4DF8A",
+  "category_label": "Microsoft OneDrive",
+  "app_id": "A05QGK4DF8A",
+  "date_created": 1693539875,
+  "date_released": 0,
+  "date_updated": 1693995069,
+  "date_deleted": 0,
+  "form_enabled": false
+}

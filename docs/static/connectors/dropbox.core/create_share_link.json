@@ -1,0 +1,172 @@
+{
+  "id": "Fn05UT60L5HT",
+  "callback_id": "create_share_link",
+  "title": "Create a shared link",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "path",
+      "description": "Select folder to share",
+      "title": "Folder",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_files",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "file_category": {
+            "value": "folder"
+          },
+          "dropbox_access_token": {
+            "value": "{{input_parameters.dropbox_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.matches}}"
+          },
+          "value_path": "metadata.metadata.path_lower",
+          "label_path": "metadata.metadata.name"
+        },
+        "validation": {
+          "function": "#/functions/get_file",
+          "inputs": {
+            "path": {
+              "value": "{{input_parameters.path}}"
+            },
+            "dropbox_access_token": {
+              "value": "{{input_parameters.dropbox_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.file}}"
+            },
+            "value_path": "path_lower",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "access",
+      "description": "Select access",
+      "title": "Access",
+      "is_required": true,
+      "enum": [
+        "viewer",
+        "editor",
+        "max",
+        "default"
+      ],
+      "choices": [
+        {
+          "title": "Viewer",
+          "value": "viewer"
+        },
+        {
+          "title": "Editor",
+          "value": "editor"
+        },
+        {
+          "title": "Max",
+          "value": "max"
+        },
+        {
+          "title": "Default",
+          "value": "default"
+        }
+      ]
+    },
+    {
+      "type": "string",
+      "name": "audience",
+      "description": "Select audience permission",
+      "title": "Audience",
+      "is_required": true,
+      "hint": "Basic users can only set public visibility",
+      "enum": [
+        "public",
+        "team",
+        "no_one"
+      ],
+      "choices": [
+        {
+          "title": "Public",
+          "value": "public"
+        },
+        {
+          "title": "Team",
+          "value": "team"
+        },
+        {
+          "title": "No one",
+          "value": "no_one"
+        }
+      ]
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "expires",
+      "title": "Expires",
+      "is_required": false,
+      "hint": "Not supported for Basic users"
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "dropbox_access_token",
+      "title": "Dropbox access token",
+      "is_required": true,
+      "oauth2_provider_key": "dropbox",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "description": "Id of the folder",
+      "title": "Folder ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Folder name",
+      "title": "Name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "path",
+      "title": "File path",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "share_url",
+      "title": "Shared link",
+      "is_required": false,
+      "format": "url"
+    }
+  ],
+  "category_id": "A05U3EFESFR",
+  "category_label": "Dropbox",
+  "app_id": "A05U3EFESFR",
+  "date_created": 1696318579,
+  "date_released": 0,
+  "date_updated": 1723806780,
+  "date_deleted": 0,
+  "form_enabled": false
+}

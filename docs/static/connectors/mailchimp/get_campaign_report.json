@@ -1,0 +1,126 @@
+{
+  "id": "Fn05TWLXNKEE",
+  "callback_id": "get_campaign_report",
+  "title": "Get campaign report",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "mailchimp_access_token",
+      "title": "Mailchimp access token",
+      "is_required": true,
+      "oauth2_provider_key": "mailchimp",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "campaign_id",
+      "description": "Select a campaign",
+      "title": "Campaign",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_campaigns",
+        "inputs": {
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "mailchimp_access_token": {
+            "value": "{{input_parameters.mailchimp_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 2
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.campaigns}}"
+          },
+          "value_path": "campaign.id",
+          "label_path": "campaign.settings.title"
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "campaign_type",
+      "title": "Campaign type",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "id",
+      "title": "Campaign ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "title": "Campaign status",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "emails_sent",
+      "title": "Number of emails sent",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "opens",
+      "title": "Total number of opens",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "unique_opens",
+      "title": "Number of unique opens",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "open_rate",
+      "description": "The number of unique opens divided by the total number of successful deliveries.",
+      "title": "Open rate",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "clicks",
+      "title": "Total number of clicks",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "unique_clicks",
+      "title": "Number of unique clicks",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "click_rate",
+      "description": "The number of unique clicks divided by the total number of successful deliveries.",
+      "title": "Click rate",
+      "is_required": false,
+      "nullable": true
+    }
+  ],
+  "category_id": "A05TPV44YKG",
+  "category_label": "Mailchimp",
+  "app_id": "A05TPV44YKG",
+  "date_created": 1695705956,
+  "date_released": 0,
+  "date_updated": 1697606913,
+  "date_deleted": 0,
+  "form_enabled": false
+}

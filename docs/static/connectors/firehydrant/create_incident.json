@@ -1,0 +1,136 @@
+{
+  "id": "Fn05TBCPAKDM",
+  "callback_id": "create_incident",
+  "title": "Create an incident",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter text",
+      "title": "Incident name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter text",
+      "title": "Description",
+      "is_required": false,
+      "long": true
+    },
+    {
+      "type": "string",
+      "name": "priority",
+      "description": "Select an option",
+      "title": "Priority",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_priorities",
+        "inputs": {},
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.priorities}}"
+          },
+          "value_path": "slug",
+          "label_path": "slug"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "severity",
+      "description": "Select an option",
+      "title": "Severity",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_severities",
+        "inputs": {},
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.severities}}"
+          },
+          "value_path": "slug",
+          "label_path": "slug"
+        }
+      }
+    },
+    {
+      "type": "array",
+      "name": "team_ids",
+      "description": "Select teams to be assigned",
+      "title": "Teams",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_teams",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.teams}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      },
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "string",
+      "name": "customer_impact_summary",
+      "description": "Enter text",
+      "title": "Customer impact summary",
+      "is_required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "title": "Incident ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "incident_url",
+      "title": "Incident URL",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "incident_description",
+      "title": "Incident description",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "priority",
+      "title": "Incident priority",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "severity",
+      "title": "Incident severity",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05TG2LEXPV",
+  "category_label": "FireHydrant",
+  "app_id": "A05TG2LEXPV",
+  "date_created": 1695638603,
+  "date_released": 0,
+  "date_updated": 1719567249,
+  "date_deleted": 0,
+  "form_enabled": false
+}

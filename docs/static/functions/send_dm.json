@@ -1,0 +1,81 @@
+{
+  "name": "send_dm",
+  "description": "Send a direct message",
+  "schema_reference": "slack#/functions/send_dm.md",
+  "schema_id": "Schema.slack.functions.SendDm",
+  "category": "Messaging",
+  "scopes": ["chat:write"],
+  "input_parameters": [
+    {
+      "name": "user_id",
+      "type": "Schema.slack.types.usergroup_id",
+      "description": "The ID of the user to send a message to",
+      "examples": ["U111AAA111"],
+      "required": true
+    },
+    {
+      "type": "Schema.slack.types.rich_text",
+      "name": "message",
+      "description": "The textual message to send as a direct message",
+      "required": true,
+      "examples": ["You've been swallowed by a grue."]
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "thread_ts",
+      "description": "The `ts` identifier of an _existing_ message to [send this message to as a reply](/surfaces/messages#threading).",
+      "required": false,
+      "examples": ["1355517523.000005"]
+    },
+    {
+      "type": "Schema.slack.types.object",
+      "name": "metadata",
+      "description": "Additional [metadata](/metadata/publishing) about the message, which can then be used an [workflow event trigger](/automation/triggers/event).",
+      "required": false,
+      "examples": []
+    },
+    {
+      "type": "Schema.slack.types.blocks",
+      "name": "interactive_blocks",
+      "description": "[Buttons](/reference/block-kit/block-elements#button__fields) to send with the message. Must be wrapped in a block.",
+      "required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "Schema.types.string",
+      "description": "The channel-specific unique identifier for this message, also serves as a confirmation that the message was sent.",
+      "name": "message_ts",
+      "required": true,
+      "examples": []
+    },
+    {
+      "name": "message_context",
+      "type": "Schema.slack.types.message_context",
+      "description": "An individual instance of the message you sent",
+      "required": true,
+      "examples": []
+    },
+    {
+      "type": "Schema.types.string",
+      "description": " Permalink URL of the message that was sent",
+      "name": "message_link",
+      "required": true,
+      "examples": []
+    },
+    {
+      "type": "Schema.types.object",
+      "description": "If `interactive_blocks` was provided, the action object contains the [button](/reference/block-kit/block-elements#button__fields) properties (see [action payload](#action-payload) below)",
+      "name": "action",
+      "required": false,
+      "examples": []
+    },
+    {
+      "type": "Schema.slack.types.interactivity",
+      "description": "If `interactive_blocks` is provided as an input parameter, the [interactivity](/automation/interactivity) context becomes available",
+      "name": "interactivity",
+      "required": false,
+      "examples": []
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "Fn05UW120H7D",
+  "callback_id": "create_page",
+  "title": "Create a page",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "microsoft_access_token",
+      "description": "Microsoft credential to use",
+      "title": "Microsoft access token",
+      "is_required": true,
+      "oauth2_provider_key": "onenote",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter title",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/rich_text",
+      "name": "content",
+      "description": "Enter content",
+      "title": "Content",
+      "is_required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "response_code",
+      "title": "Response code",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "onenote_web_url",
+      "title": "Web URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05UBDPKYP8",
+  "category_label": "Microsoft OneNote",
+  "app_id": "A05UBDPKYP8",
+  "date_created": 1696318658,
+  "date_released": 0,
+  "date_updated": 1696399326,
+  "date_deleted": 0,
+  "form_enabled": false
+}

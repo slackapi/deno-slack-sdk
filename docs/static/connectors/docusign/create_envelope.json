@@ -1,0 +1,109 @@
+{
+  "id": "Fn05BL8XPNVB",
+  "callback_id": "create_envelope",
+  "title": "Create an envelope",
+  "description": "Create a DocuSign envelope using a document template",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "subdomain",
+      "description": "Please select an option",
+      "title": "DocuSign domain",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_user_accounts",
+        "inputs": {
+          "docusign_access_token": {
+            "value": "{{input_parameters.docusign_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.accounts}}"
+          },
+          "value_path": "base_uri",
+          "label_path": "base_uri"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "account_id",
+      "description": "Please select an option",
+      "title": "Account",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_user_accounts",
+        "inputs": {
+          "docusign_access_token": {
+            "value": "{{input_parameters.docusign_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.accounts}}"
+          },
+          "value_path": "account_id",
+          "label_path": "account_name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "template_id",
+      "description": "Please select an option",
+      "title": "Template",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_templates",
+        "inputs": {
+          "subdomain": {
+            "value": "{{input_parameters.subdomain}}"
+          },
+          "account_id": {
+            "value": "{{input_parameters.account_id}}"
+          },
+          "docusign_access_token": {
+            "value": "{{input_parameters.docusign_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.templates}}"
+          },
+          "value_path": "templateId",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "docusign_access_token",
+      "description": "DocuSign Credential to use",
+      "title": "DocuSign Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "docusign"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "envelope_id",
+      "description": "New envelope Id",
+      "title": "Envelope ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05570UAVE0",
+  "category_label": "DocuSign",
+  "app_id": "A05570UAVE0",
+  "date_created": 1686252339,
+  "date_released": 0,
+  "date_updated": 1694013176,
+  "date_deleted": 0,
+  "form_enabled": false
+}

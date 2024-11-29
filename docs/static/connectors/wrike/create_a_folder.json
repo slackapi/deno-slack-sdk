@@ -1,0 +1,105 @@
+{
+  "id": "Fn05P80TUDT4",
+  "callback_id": "create_a_folder",
+  "title": "Create a folder",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "folder",
+      "title": "Folder to create folder in",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_folder",
+        "inputs": {
+          "wrike_access_token": {
+            "value": "{{input_parameters.wrike_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.folder}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter text",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter text",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "wrike_access_token",
+      "description": "Wrike credential to use",
+      "title": "Wrike Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "wrike"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "folder_id",
+      "description": "The ID of the folder",
+      "title": "Folder ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "account_id",
+      "description": "The ID of the account",
+      "title": "Account ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Title of the task",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Description of the task",
+      "title": "Description",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "created_date",
+      "description": "Date the folder was created",
+      "title": "Created date",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "updated_date",
+      "description": "Date the folder was updated",
+      "title": "Updated date",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05MDPYMGJC",
+  "category_label": "Wrike",
+  "app_id": "A05MDPYMGJC",
+  "date_created": 1692823281,
+  "date_released": 0,
+  "date_updated": 1723464154,
+  "date_deleted": 0,
+  "form_enabled": false
+}

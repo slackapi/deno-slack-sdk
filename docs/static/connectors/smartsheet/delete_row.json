@@ -1,0 +1,98 @@
+{
+  "id": "Fn05SN1PP8N9",
+  "callback_id": "delete_row",
+  "title": "Delete a row from Smartsheet",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "object",
+      "name": "sheet",
+      "description": "Select a Smartsheet",
+      "title": "Smartsheet",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/fetch_smartsheets",
+        "inputs": {
+          "smartsheet_access_token": {
+            "value": "{{input_parameters.smartsheet_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.smartsheets}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "select_row",
+      "description": "Enter row ID, or search cell content to find a row",
+      "title": "Select a row",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_sheet",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "sheet": {
+            "value": "{{input_parameters.sheet}}"
+          },
+          "smartsheet_access_token": {
+            "value": "{{input_parameters.smartsheet_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.rows}}"
+          },
+          "value_path": "objectId",
+          "label_path": "text"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "smartsheet_access_token",
+      "description": "Which account should we use to fetch Smartsheets?",
+      "title": "Smartsheet Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "smartsheet"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "smartsheet_url",
+      "description": "Smartsheet URL",
+      "title": "Smartsheet URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "sheet_id",
+      "description": "Smartsheet ID",
+      "title": "Smartsheet ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05SEF35LQY",
+  "category_label": "Smartsheet",
+  "app_id": "A05SEF35LQY",
+  "date_created": 1695014077,
+  "date_released": 1717572620,
+  "date_updated": 1728908244,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,61 @@
+{
+  "name": "canvas_update_content",
+  "description": "Updates a canvas",
+  "schema_reference": "slack#/functions/canvas_update_content.md",
+  "schema_id": "Schema.slack.functions.CanvasUpdateContent",
+  "category": "Canvas",
+  "scopes": [
+    "chat:write",
+    "im:write",
+    "chat:write.public",
+    "groups:write",
+    "canvases:read",
+    "canvases:write"
+  ],
+  "input_parameters": [
+    {
+      "type": "Schema.types.string",
+      "name": "canvas_update_type",
+      "description": "Type of update. Options are `standalone` or `channel_canvas`. Default is `standalone`.",
+      "required": false
+    },
+    {
+      "type": "Schema.slack.types.channel_id",
+      "name": "channel_id",
+      "description": "Select a channel in cases when `canvas_update_type` is set to `channel_canvas`.",
+      "required": false
+    },
+    {
+      "type": "Schema.slack.types.canvas_id",
+      "name": "canvas_id",
+      "description": "Select a canvas in cases when `canvas_update_type` is set to `standalone`.",
+      "required": false
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "section_id",
+      "description": "Choose which section to update",
+      "required": false
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "action",
+      "description": "How do you want to update? Options are `append`, `prepend`, or `replace`. Default is `prepend`.",
+      "required": true
+    },
+    {
+      "type": "Schema.slack.types.expanded_rich_text",
+      "name": "content",
+      "description": "Content to add to the canvas",
+      "required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "Schema.slack.types.canvas_id",
+      "name": "canvas_id",
+      "description": "Canvas link",
+      "required": true
+    }
+  ]
+}

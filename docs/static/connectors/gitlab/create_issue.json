@@ -1,0 +1,184 @@
+{
+  "id": "Fn0503UL1V8X",
+  "callback_id": "create_issue",
+  "title": "Create an issue",
+  "description": "Create a GitLab issue",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "project_id",
+      "description": "The ID of the project where the issue is created",
+      "title": "Project",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_projects",
+        "inputs": {
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "gitlab_access_token": {
+            "value": "{{input_parameters.gitlab_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.projects}}"
+          },
+          "value_path": "id",
+          "label_path": "name_with_namespace"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter an issue title...",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter a description...",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "issue_type",
+      "description": "The type of issue. Valid options are: issue or incident",
+      "title": "Issue type",
+      "is_required": true,
+      "enum": [
+        "issue",
+        "incident"
+      ],
+      "choices": [
+        {
+          "title": "Issue",
+          "value": "issue"
+        },
+        {
+          "title": "Incident",
+          "value": "incident"
+        }
+      ],
+      "default": "issue"
+    },
+    {
+      "type": "string",
+      "name": "milestone_id",
+      "description": "The Global ID of a milestone to assign the issue",
+      "title": "Milestone",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_milestones",
+        "inputs": {
+          "project_id": {
+            "value": "{{input_parameters.project_id}}"
+          },
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "gitlab_access_token": {
+            "value": "{{input_parameters.gitlab_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.milestones}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "boolean",
+      "name": "confidential",
+      "description": "Set the issue to be confidential and only be visible to team members with at least reporter access",
+      "title": "Confidential",
+      "is_required": true,
+      "default": false
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "gitlab_access_token",
+      "title": "GitLab Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "gitlab"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "issue_iid",
+      "description": "The issue's internal ID that is unique in the scope of the project",
+      "title": "Internal issue ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "issue_url",
+      "description": "The link to the issue on gitlab.com",
+      "title": "Issue URL",
+      "is_required": true,
+      "format": "url"
+    },
+    {
+      "type": "string",
+      "name": "issue_reference",
+      "description": "A reference path to the issue in a group/project. Can be used for crosslinking issues.",
+      "title": "Issue reference",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "The title of the issue",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "The description of the issue",
+      "title": "Description",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "issue_type",
+      "description": "The type of issue",
+      "title": "Issue type",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "milestone",
+      "description": "The milestone the issue is assign to",
+      "title": "Milestone",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "boolean",
+      "name": "confidential",
+      "description": "If the issue is confidential",
+      "title": "Confidential",
+      "is_required": true
+    }
+  ],
+  "category_id": "A050HLW5TFV",
+  "category_label": "GitLab",
+  "app_id": "A050HLW5TFV",
+  "date_created": 1679971296,
+  "date_released": 0,
+  "date_updated": 1687759386,
+  "date_deleted": 0,
+  "form_enabled": false
+}

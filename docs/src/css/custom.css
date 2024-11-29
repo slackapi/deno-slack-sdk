@@ -1,0 +1,321 @@
+:root {
+  --ifm-font-size-base: 15px;
+  /* set hex colors here pls */
+  --aubergine: #4a154b;
+  /* aubergine-active is used in light mode. 
+  use something like #853c8c if you use as a link vs black text ( 3:1 contr) */
+  --aubergine-active: #7c3085;
+  /* horchata is that beige color we use a lot */
+  --horchata: #f4ede4;
+  /* cloud blue from slack.dev. used for dark-mode links */
+  --slack-cloud-blue: #1ab9ff;
+  /* slack marketing color for links 1264A3. used for light-mode links */
+  --slack-dark-blue: #1264a3;
+  --dim: #eef2f6;
+}
+
+/* resets striped tables that hurt me eyes */
+table tr:nth-child(even) {
+  background-color: inherit;
+}
+
+/* changing the links to blue for accessibility  */
+p a, .markdown a {
+  color: var(--slack-cloud-blue);
+}
+
+a:hover {
+  color: var(--slack-cloud-blue);
+}
+
+/* adjusting for light and dark modes */
+[data-theme="light"] {
+  --docusaurus-highlighted-code-line-bg: var(--dim);
+  --ifm-color-primary: var(--aubergine-active);
+  --ifm-footer-background-color: var(--horchata);
+  --ifm-footer-color: black;
+  --slack-cloud-blue: var(--slack-dark-blue);
+  --ifm-table-stripe-background: var(--horchata);
+  --reference-section-color: var(--horchata);
+}
+
+[data-theme="dark"] {
+  --docusaurus-highlighted-code-line-bg: rgb(0 0 0 / 30%);
+  --ifm-color-primary: var(--slack-cloud-blue);
+  --ifm-navbar-background-color: var(--aubergine) !important;
+  --ifm-footer-background-color: var(--aubergine) !important;
+  --ifm-footer-color: white;
+}
+
+/* bolding ToC for contrast */
+.table-of-contents__link--active {
+  font-weight: bold;
+}
+
+/* removing ToC line */
+.table-of-contents__left-border {
+  border-left: none !important;
+} 
+
+/* increasing name of SDK in sidebar */
+.sidebar-title {
+  font-size: 1.25em; /* Adjust the size as needed */
+  font-weight: bold;
+  color: #000;
+}
+
+/* removing sidebar line and adding space to match ToC */
+.theme-doc-sidebar-container {
+    border-right: none !important;
+    margin-right: 2rem;
+}
+
+/* announcement bar up top */
+div[class^="announcementBar_"] {
+  font-size: 20px;
+  height: 50px;
+  background: var(--horchata);
+}
+
+/* navbar github link */
+.navbar-github-link {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  margin-right: 6px;
+  margin-left: 6px;
+  border-radius: 50%;
+  transition: background var(--ifm-transition-fast);
+}
+
+.navbar-github-link:hover {
+  background: var(--ifm-color-emphasis-200);
+}
+
+.navbar-github-link::before {
+  content: "";
+  height: 100%;
+  display: block;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
+    no-repeat;
+}
+
+html[data-theme="dark"] .navbar-github-link::before {
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='white' d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E")
+    no-repeat;
+}
+
+/* Delineate tab blocks */
+.tabs-container {
+  border: 1px solid var(--ifm-color-primary); /* Adjust the color and thickness as needed */
+  border-radius: 5px; /* To give rounded corners */
+  padding: 0.5em; /* To add spacing inside the tab */
+}
+
+/* Docs code bubbles */
+[data-theme="light"] {
+  --code-link-background: #CFE9FE; 
+  --code-link-text:  rgb(21, 50, 59);
+
+  --method-link-background: #CDEFC4;
+  --method-link-text: rgb(0, 41, 0);
+
+  --scope-link-background: #FBF3E0; 
+  --scope-link-text: rgb(63, 46, 0);
+
+  --event-link-background: #FDDDE3;
+  --event-link-text:  rgb(74, 21, 75);
+}
+
+[data-theme="dark"] {
+  --code-link-text: white;
+  --method-link-text: white;
+  --scope-link-text: white;
+  --event-link-text: white;
+  --code-link-background: #1AB9FF50;
+  --method-link-background: #41B65850;
+  --scope-link-background: #FCC00350;
+  --event-link-background: #E3066A50;
+}
+
+a code {
+  background-color: var(--code-link-background);
+  color:  var(--code-link-text);
+}
+
+a[href^="https://api.slack.com/methods"] > code {
+  background-color: var(--method-link-background);
+  color:  var(--method-link-text);
+}
+
+a[href^="https://api.slack.com/scopes"] > code {
+  background-color: var(--scope-link-background);
+  color:  var(--scope-link-text);
+}
+
+a[href^="https://api.slack.com/events"] > code {
+  background-color: var(--event-link-background);
+  color:  var(--event-link-text);
+}
+
+.functions-section {
+  background-color: var(--ifm-code-background);
+  border-radius: 5px;
+  padding:1rem;
+  margin-bottom: 2rem;
+}
+
+.functions-section .scope-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Space between each scope */
+}
+
+/* .functions-section h2 {
+  border-bottom: 2px solid var(--aubergine);
+  padding-bottom: 0rem;
+} */
+
+.functions-section .type {
+  text-align: right;
+}
+
+.param-required-section {
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.param-container {
+  border-top: 1px solid;
+  padding-top: 1rem;
+}
+
+.param-top-row {
+  display: flex;
+  align-items: center;
+}
+
+.param-top-row .name {
+  flex: 1; /* Left align Name */
+}
+
+.param-top-row .required,
+.param-top-row .type {
+  margin-left: auto; /* Push Required and Type to the right */
+  text-align: right;
+}
+
+.param-top-row .required {
+  margin-left: 10px; /* Optional, add space between Required and Type */
+}
+
+
+
+/* 
+.parameter-table {
+  margin-bottom: 2rem;
+}
+
+.parameter-row {
+  margin-bottom: 1rem;
+}
+
+.parameter-info {
+  display: flex;
+  gap: 20px;
+}
+
+.parameter-description {
+  margin-top: 10px;
+  margin-left: 40px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  color: #333;
+}
+
+h1 {
+  color: #0055aa;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+
+
+.param-top-row {
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.param-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 5px;
+} */
+/* 
+.param-header span {
+  flex: 1;
+  text-align: left;
+}
+
+.param-header span.type {
+  text-align: center;
+}
+
+.param-header span.required {
+  text-align: right;
+}
+
+.param-description {
+  margin-top: 5px;
+  font-size: 0.95em;
+  color: #555;
+} */
+
+.info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.info-key {
+  flex: 0 0 10rem;
+  align-items: center;
+}
+
+.scope-item {
+  display: inline-block;
+}
+
+.page-selector {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+}
+
+.page-selector select {
+  margin-left: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  appearance: none;
+  cursor: pointer;
+}
+
+
+/* Styles for the page located at /docs/reference/connectors/connectors */
+.docs-doc-id-reference-connectors-connectors table {
+  width: 100%;
+  table-layout: fixed;
+}
