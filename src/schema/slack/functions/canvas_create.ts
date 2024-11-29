@@ -49,7 +49,12 @@ export default DefineFunction({
         description: "Canvas link",
         title: "Canvas link",
       },
+      title: {
+        type: SchemaTypes.string,
+        description: "Canvas title",
+        title: "Canvas title",
+      },
     },
-    required: ["canvas_id"],
+    required: ["canvas_id", "title"],
   },
 });
