@@ -1,0 +1,40 @@
+{
+  "id": "Fn05QJSLAVDX",
+  "callback_id": "send_sms",
+  "title": "Send SMS",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "recipient",
+      "description": "Enter recipient's number",
+      "title": "Recipient's number",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "messsage_text",
+      "description": "Enter Message Text",
+      "title": "Message",
+      "is_required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "recipient",
+      "description": "Recipient's number",
+      "title": "Recipient's number",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05PYKVP6SF",
+  "category_label": "Twilio",
+  "app_id": "A05PYKVP6SF",
+  "date_created": 1693376910,
+  "date_released": 0,
+  "date_updated": 1693993445,
+  "date_deleted": 0,
+  "form_enabled": false
+}

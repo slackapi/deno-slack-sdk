@@ -1,0 +1,55 @@
+{
+  "name": "share_canvas",
+  "description": "Share a canvas",
+  "schema_reference": "slack#/functions/share_canvas.md",
+  "schema_id": "Schema.slack.functions.ShareCanvas",
+  "category": "Canvas",
+  "scopes": [
+    "chat:write",
+    "im:write",
+    "chat:write.public",
+    "groups:write",
+    "canvases:read",
+    "canvases:write"
+  ],
+  "input_parameters": [
+    {
+      "type": "Schema.slack.types.canvas_id",
+      "name": "canvas_id",
+      "description": "Select a canvas",
+      "required": true
+    },
+    {
+      "type": "Schema.types.array",
+      "name": "channel_ids",
+      "description": "Select channels. Maximum is 10.",
+      "required": false
+    },
+    {
+      "type": "Schema.types.array",
+      "name": "user_ids",
+      "description": "Select people. Maximum is 10.",
+      "required": false
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "access_level",
+      "description": "Select access level. Options are `view` or `edit`.",
+      "required": true
+    },
+    {
+      "type": "Schema.slack.types.rich_text",
+      "name": "message",
+      "description": "Add a message",
+      "required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "Schema.slack.types.canvas_id",
+      "name": "canvas_id",
+      "description": "Canvas link",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "id": "Fn05S59GN475",
+  "callback_id": "create_card",
+  "title": "Create a card",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "collection_id",
+      "description": "Select a collection",
+      "title": "Collection",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_collections",
+        "inputs": {
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "guru_access_token": {
+            "value": "{{input_parameters.guru_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.collections}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        },
+        "validation": {
+          "function": "#/functions/get_collection",
+          "inputs": {
+            "collection_id": {
+              "value": "{{input_parameters.collection_id}}"
+            },
+            "guru_access_token": {
+              "value": "{{input_parameters.guru_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.collection_info}}"
+            },
+            "value_path": "id",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "card_title",
+      "description": "Enter text",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "share_status",
+      "description": "Please select an option",
+      "title": "Access",
+      "is_required": true,
+      "enum": [
+        "TEAM",
+        "PRIVATE"
+      ],
+      "choices": [
+        {
+          "title": "Team",
+          "value": "TEAM"
+        },
+        {
+          "title": "Private",
+          "value": "PRIVATE"
+        }
+      ],
+      "default": "TEAM"
+    },
+    {
+      "type": "string",
+      "name": "content",
+      "description": "Enter text",
+      "title": "Content",
+      "is_required": false,
+      "long": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "guru_access_token",
+      "description": "Whose account should be used?",
+      "title": "Guru Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "guru",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "card_id",
+      "title": "Card ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "card_title",
+      "description": "Title of the card",
+      "title": "Card title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "card_url",
+      "description": "URL of the card",
+      "title": "Card URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "verification_state",
+      "description": "Verification state of the card",
+      "title": "Verification state",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05RT1HSRRU",
+  "category_label": "Guru",
+  "app_id": "A05RT1HSRRU",
+  "date_created": 1694605795,
+  "date_released": 0,
+  "date_updated": 1719560660,
+  "date_deleted": 0,
+  "form_enabled": false
+}

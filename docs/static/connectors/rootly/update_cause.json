@@ -1,0 +1,104 @@
+{
+  "id": "Fn05TC2Q0EAG",
+  "callback_id": "update_cause",
+  "title": "Update a cause",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "cause_id",
+      "description": "Select the cause",
+      "title": "Cause",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_causes",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.causes}}"
+          },
+          "value_path": "id",
+          "label_path": "attributes.name"
+        },
+        "validation": {
+          "function": "#/functions/get_cause",
+          "inputs": {
+            "id": {
+              "value": "{{input_parameters.cause_id}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.cause}}"
+            },
+            "value_path": "id",
+            "label_path": "attributes.name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter the text",
+      "title": "Cause name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter the text",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "number",
+      "name": "position",
+      "description": "Enter the number",
+      "title": "Position",
+      "is_required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "cause_id",
+      "description": "Cause ID",
+      "title": "Cause ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "title": "Cause name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "number",
+      "name": "position",
+      "title": "Position",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05TUC2EWBA",
+  "category_label": "Rootly",
+  "app_id": "A05TUC2EWBA",
+  "date_created": 1695271409,
+  "date_released": 0,
+  "date_updated": 1719817822,
+  "date_deleted": 0,
+  "form_enabled": false
+}

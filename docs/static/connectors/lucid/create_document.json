@@ -1,0 +1,90 @@
+{
+  "id": "Fn05CTFWFKGC",
+  "callback_id": "create_document",
+  "title": "Create a document",
+  "description": "Create a Lucid document",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter a title...",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "product",
+      "description": "Valid options are: lucidchart, lucidspark",
+      "title": "Choose a document type",
+      "is_required": true,
+      "enum": [
+        "lucidchart",
+        "lucidspark"
+      ],
+      "choices": [
+        {
+          "title": "Lucidchart",
+          "value": "lucidchart"
+        },
+        {
+          "title": "Lucidspark",
+          "value": "lucidspark"
+        }
+      ]
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "lucid_access_token",
+      "description": "Lucid Credential to use",
+      "title": "Lucid Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "lucid"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Title of the document",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "view_url",
+      "description": "View the document using this URL",
+      "title": "View document URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "edit_url",
+      "description": "Edit the document using this URL",
+      "title": "Edit document URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "product",
+      "description": "Lucid document type",
+      "title": "Document type",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "document_id",
+      "description": "Document ID",
+      "title": "Document ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A059SAQK6MC",
+  "category_label": "Lucid",
+  "app_id": "A059SAQK6MC",
+  "date_created": 1686843912,
+  "date_released": 0,
+  "date_updated": 1692807537,
+  "date_deleted": 0,
+  "form_enabled": false
+}

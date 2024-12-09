@@ -1,0 +1,138 @@
+{
+  "id": "Fn064P7CN4TA",
+  "callback_id": "create_panel",
+  "title": "Create a panel",
+  "description": "Create a panel for an interview",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "opportunity_id",
+      "description": "Please select an option",
+      "title": "Opportunity",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_opportunities",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.opportunities}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "perform_as",
+      "description": "Please select an option",
+      "title": "Perform this create on behalf of a specified user",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "timezone",
+      "description": "Enter text",
+      "title": "Timezone",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "note",
+      "description": "Enter text",
+      "title": "Note for panel",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "location",
+      "description": "Enter text",
+      "title": "Interview location",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "subject",
+      "description": "Enter text",
+      "title": "Interview subject",
+      "is_required": true
+    },
+    {
+      "type": "number",
+      "name": "duration",
+      "description": "Enter text",
+      "title": "Interview duration in minutes",
+      "is_required": true,
+      "minimum": 1
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "date",
+      "description": "Enter text",
+      "title": "Interview date",
+      "is_required": true
+    },
+    {
+      "type": "array",
+      "name": "interviewers",
+      "description": "Please select options",
+      "title": "Interviewers",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "inputs": {
+          "access_role": {
+            "value": "interviewer"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      },
+      "items": {
+        "type": "string"
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "panel_id",
+      "description": "New panel ID",
+      "title": "Panel ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "panel_url",
+      "description": "new panel URL",
+      "title": "Panel URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A063ZSXC719",
+  "category_label": "Lever",
+  "app_id": "A063ZSXC719",
+  "date_created": 1698939445,
+  "date_released": 0,
+  "date_updated": 1720772742,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,133 @@
+{
+  "id": "Fn0790Q14676",
+  "callback_id": "add_task_to_section",
+  "title": "Add task to a section",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "asana_access_token",
+      "description": "Asana credential to use",
+      "title": "Asana Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "asana"
+    },
+    {
+      "type": "string",
+      "name": "workspace_gid",
+      "title": "Workspace",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_workspaces",
+        "inputs": {
+          "asana_access_token": {
+            "value": "{{input_parameters.asana_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.asana_workspaces}}"
+          },
+          "value_path": "gid",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "project",
+      "title": "Project",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_projects",
+        "inputs": {
+          "project_name": {
+            "value": "{{client.query}}"
+          },
+          "workspace_gid": {
+            "value": "{{input_parameters.workspace_gid}}"
+          },
+          "asana_access_token": {
+            "value": "{{input_parameters.asana_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.asana_projects}}"
+          },
+          "value_path": "gid",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "section_gid",
+      "title": "Section",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_sections",
+        "inputs": {
+          "project_gid": {
+            "value": "{{input_parameters.project}}"
+          },
+          "asana_access_token": {
+            "value": "{{input_parameters.asana_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.asana_project_sections}}"
+          },
+          "value_path": "gid",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "task_gid",
+      "title": "Task",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_tasks_from_project",
+        "inputs": {
+          "project_gid": {
+            "value": "{{input_parameters.project}}"
+          },
+          "asana_access_token": {
+            "value": "{{input_parameters.asana_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.asana_tasks}}"
+          },
+          "value_path": "gid",
+          "label_path": "name"
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "response_code",
+      "title": "Response code",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05KUFPF86S",
+  "category_label": "Asana",
+  "app_id": "A05KUFPF86S",
+  "date_created": 1718868193,
+  "date_released": 1722020000,
+  "date_updated": 1723457842,
+  "date_deleted": 0,
+  "form_enabled": false
+}

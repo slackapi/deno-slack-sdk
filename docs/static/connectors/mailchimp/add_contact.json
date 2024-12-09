@@ -1,0 +1,94 @@
+{
+  "id": "Fn05TQ20UKJA",
+  "callback_id": "add_contact",
+  "title": "Add a contact to audience",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "mailchimp_access_token",
+      "title": "Mailchimp access token",
+      "is_required": true,
+      "oauth2_provider_key": "mailchimp"
+    },
+    {
+      "type": "string",
+      "name": "audience",
+      "description": "Select audience",
+      "title": "Audience",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_audiences",
+        "inputs": {
+          "mailchimp_access_token": {
+            "value": "{{input_parameters.mailchimp_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 2
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.audiences}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "first_name",
+      "description": "Enter text",
+      "title": "First name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "last_name",
+      "description": "Enter text",
+      "title": "Last name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "email",
+      "description": "Enter email",
+      "title": "Email",
+      "is_required": true,
+      "format": "email"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "title": "Contact ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "full_name",
+      "title": "Full name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "title": "Status",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05TPV44YKG",
+  "category_label": "Mailchimp",
+  "app_id": "A05TPV44YKG",
+  "date_created": 1695705956,
+  "date_released": 0,
+  "date_updated": 1697606913,
+  "date_deleted": 0,
+  "form_enabled": false
+}

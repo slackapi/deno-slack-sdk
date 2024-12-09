@@ -1,0 +1,59 @@
+{
+  "name": "create_channel",
+  "description": "Create a new channel",
+  "schema_reference": "slack#/functions/create_channel.md",
+  "schema_id": "Schema.slack.functions.CreateChannel",
+  "scopes": ["channels:manage", "groups:write"],
+  "category": "Channel management",
+  "related_methods": ["conversations.create"],
+  "input_parameters": [
+    {
+      "type": "Schema.types.string",
+      "name": "channel_name",
+      "description": "The name of the channel; the function will attempt to create a channel name that follows Slack's channel name guidelines, but the channel's name may end up being different than the exact string provided.",
+      "required": true,
+      "examples": [
+        "team-devrel-running-buddies",
+        "proj-remove-all-oxford-commas",
+        "farewell-jesse"
+      ]
+    },
+    {
+      "type": "SlackTypes.team_id",
+      "name": "team_id",
+      "description": "Select a workspace",
+      "examples": ["T1234567890"],
+      "required": false
+    },
+    {
+      "type": "Schema.types.boolean",
+      "name": "is_private",
+      "description": "Set to `true` if the channel should be private, set to `false` if the channel should be public.",
+      "required": false,
+      "examples": ["true", "false"]
+    },
+    {
+      "type": "Schema.types.array",
+      "name": "manager_ids",
+      "description": "Select Channel Manager(s)",
+      "required": false,
+      "examples": ["[\"U111AAA111\",\"U222BBB222\"]"]
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "Schema.slack.types.channel_id",
+      "name": "channel_id",
+      "description": "The conversation ID for the channel you created",
+      "required": true,
+      "examples": ["C123456", "D123ABC456"]
+    },
+    {
+      "type": "Schema.types.array",
+      "name": "manager_ids",
+      "description": "Person(s) who were made channel manager",
+      "required": false,
+      "examples": ["[\"U111AAA111\",\"U222BBB222\"]"]
+    }
+  ]
+}

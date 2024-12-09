@@ -1,0 +1,144 @@
+{
+  "id": "Fn0527NLDKNE",
+  "callback_id": "read_record",
+  "title": "Read a record",
+  "description": "Read a Salesforce record",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "salesforce_object_name",
+      "description": "Salesforce Object",
+      "title": "Salesforce object",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_salesforce_objects",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "salesforce_access_token": {
+            "value": "{{input_parameters.salesforce_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.salesforce_objects}}"
+          },
+          "value_path": "QualifiedApiName",
+          "label_path": "Label"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "record_id",
+      "title": "Record",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_records_by_object",
+        "inputs": {
+          "search_text": {
+            "value": "{{client.query}}"
+          },
+          "salesforce_object": {
+            "value": "{{input_parameters.salesforce_object_name}}"
+          },
+          "salesforce_access_token": {
+            "value": "{{input_parameters.salesforce_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 3
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.records}}"
+          },
+          "value_path": "Id",
+          "label_path": "customLabel"
+        },
+        "validation": {
+          "function": "#/functions/read_record_validation",
+          "inputs": {
+            "record_id": {
+              "value": "{{current.item}}"
+            },
+            "salesforce_access_token": {
+              "value": "{{input_parameters.salesforce_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.record}}"
+            },
+            "value_path": "Id",
+            "label_path": "Name"
+          }
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "salesforce_access_token",
+      "title": "Salesforce Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "salesforce",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "object",
+      "name": "record",
+      "title": "Record fields",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_fields",
+        "inputs": {
+          "salesforce_object_name": {
+            "value": "{{input_parameters.salesforce_object_name}}"
+          },
+          "salesforce_access_token": {
+            "value": "{{input_parameters.salesforce_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.fields}}"
+          },
+          "key_path": "name",
+          "label_path": "label",
+          "property_type_path": "type"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "salesforce_object_type",
+      "title": "Salesforce Object Type",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "record_url",
+      "title": "Record URL",
+      "is_required": false,
+      "format": "url"
+    }
+  ],
+  "category_id": "A04T99UKKQE",
+  "category_label": "Salesforce",
+  "app_id": "A04T99UKKQE",
+  "date_created": 1680824641,
+  "date_released": 0,
+  "date_updated": 1729666557,
+  "date_deleted": 0,
+  "form_enabled": false
+}

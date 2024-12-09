@@ -1,0 +1,90 @@
+{
+  "id": "Fn04S70QL0PM",
+  "callback_id": "resolve_incident",
+  "title": "Resolve an incident",
+  "description": "Resolve a Pagerduty incident",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "description": "Enter incident ID...",
+      "title": "Incident ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "resolution_note",
+      "description": "Enter a resolution note...",
+      "title": "Resolution note",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "pagerduty_access_token",
+      "description": "Pagerduty access token",
+      "title": "PagerDuty access token",
+      "is_required": true,
+      "oauth2_provider_key": "pagerduty"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "description": "Incident id",
+      "title": "Incident ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "incident_url",
+      "description": "Incident url",
+      "title": "Incident URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "incident_title",
+      "description": "Incident title",
+      "title": "Incident title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "description": "Status",
+      "title": "Status",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "resolution_note",
+      "description": "Resolution note",
+      "title": "Resolution note",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "last_status_change_by",
+      "description": "Last status change by",
+      "title": "Last status change by...",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "last_status_change_at",
+      "description": "Last status change at",
+      "title": "Last status change at...",
+      "is_required": true
+    }
+  ],
+  "category_id": "A04RSGH23L7",
+  "category_label": "PagerDuty",
+  "app_id": "A04RSGH23L7",
+  "date_created": 1677826676,
+  "date_released": 0,
+  "date_updated": 1729793988,
+  "date_deleted": 0,
+  "form_enabled": false
+}

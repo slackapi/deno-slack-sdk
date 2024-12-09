@@ -1,0 +1,34 @@
+{
+  "name": "update_channel_topic",
+  "description": "Update a channel's topic",
+  "schema_reference": "slack#/functions/update_channel_topic.md",
+  "schema_id": "Schema.slack.functions.UpdateChannelTopic",
+  "category": "Channel management",
+  "scopes": ["channels:manage"],
+  "related_methods": ["conversations.setTopic"],
+  "input_parameters": [
+    {
+      "type": "Schema.slack.types.channel_id",
+      "name": "channel_id",
+      "description": "The ID of the channel to have its topic changed",
+      "required": true,
+      "examples": ["C123456", "D123ABC456"]
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "topic",
+      "description": "The topic to change to, as a string.",
+      "required": true,
+      "examples": ["If you were a sales team, you'd all starve"]
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "Schema.types.string",
+      "name": "topic",
+      "description": "The new topic",
+      "required": true,
+      "examples": ["This week we're talking turkey stuffing recipes"]
+    }
+  ]
+}

@@ -1,0 +1,280 @@
+{
+  "id": "Fn05SDJSG8G2",
+  "callback_id": "create_approval_request_update_flag",
+  "title": "Create approval request to update a feature flag's state",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "project_key",
+      "description": "Please select an option",
+      "title": "Project",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_projects",
+        "inputs": {
+          "key": {
+            "value": "{{client.query}}"
+          },
+          "launchdarkly_access_token": {
+            "value": "{{input_parameters.launchdarkly_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.projects}}"
+          },
+          "value_path": "key",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "feature_flag_key",
+      "description": "Please select an option",
+      "title": "Feature flag key",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_feature_flags",
+        "inputs": {
+          "key": {
+            "value": "{{client.query}}"
+          },
+          "project_key": {
+            "value": "{{input_parameters.project_key}}"
+          },
+          "launchdarkly_access_token": {
+            "value": "{{input_parameters.launchdarkly_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.feature_flags}}"
+          },
+          "value_path": "key",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "environment_key",
+      "description": "Please select an option",
+      "title": "Environment key",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_environments",
+        "inputs": {
+          "key": {
+            "value": "{{client.query}}"
+          },
+          "project_key": {
+            "value": "{{input_parameters.project_key}}"
+          },
+          "launchdarkly_access_token": {
+            "value": "{{input_parameters.launchdarkly_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.environments}}"
+          },
+          "value_path": "key",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "feature_flag_state",
+      "description": "Please select an option",
+      "title": "Feature flag state",
+      "is_required": true,
+      "enum": [
+        "turnFlagOn",
+        "turnFlagOff"
+      ],
+      "choices": [
+        {
+          "title": "On",
+          "value": "turnFlagOn"
+        },
+        {
+          "title": "Off",
+          "value": "turnFlagOff"
+        }
+      ]
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Add a brief description of the change",
+      "title": "Reason",
+      "is_required": true
+    },
+    {
+      "type": "array",
+      "name": "notify_teams",
+      "description": "Please select one or many teams",
+      "title": "Notify team",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_teams",
+        "inputs": {
+          "key": {
+            "value": "{{client.query}}"
+          },
+          "launchdarkly_access_token": {
+            "value": "{{input_parameters.launchdarkly_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.teams}}"
+          },
+          "value_path": "key",
+          "label_path": "name"
+        }
+      },
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "array",
+      "name": "notify_members",
+      "description": "Please select one or many members",
+      "title": "Notify reviewers",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_members",
+        "inputs": {
+          "key": {
+            "value": "{{client.query}}"
+          },
+          "launchdarkly_access_token": {
+            "value": "{{input_parameters.launchdarkly_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.members}}"
+          },
+          "value_path": "_id",
+          "label_path": "email"
+        }
+      },
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "string",
+      "name": "comment",
+      "description": "Add comments",
+      "title": "Comment",
+      "is_required": false
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "launchdarkly_access_token",
+      "description": "LaunchDarkly Credential to use",
+      "title": "LaunchDarkly access token",
+      "is_required": true,
+      "oauth2_provider_key": "launchdarkly"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "description": "Approval request identifier",
+      "title": "Approval request ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "review_status",
+      "description": "Approval request review status",
+      "title": "Approval request review status",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "key",
+      "description": "Feature flag key",
+      "title": "Feature flag key",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "environment_key",
+      "description": "Environment key",
+      "title": "Environment key",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Approval request description",
+      "title": "Approval request description",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "comment",
+      "description": "Approval request comment",
+      "title": "Approval request comment",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "feature_flag_state",
+      "description": "Feature flag state",
+      "title": "Feature flag state",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05RF94AFB3",
+  "category_label": "LaunchDarkly",
+  "app_id": "A05RF94AFB3",
+  "date_created": 1694709411,
+  "date_released": 0,
+  "date_updated": 1718866104,
+  "date_deleted": 0,
+  "form_enabled": false
+}

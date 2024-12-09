@@ -1,0 +1,78 @@
+{
+  "id": "Fn05S7TR250C",
+  "callback_id": "send_agreement",
+  "title": "Send an agreement",
+  "description": "Send an Adobe Acrobat Sign agreement based on a document template",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "adobe_sign_access_token",
+      "description": "Adobe Sign Credential to use",
+      "title": "Adobe Sign Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "adobesign"
+    },
+    {
+      "type": "string",
+      "name": "template_id",
+      "description": "Please select an option",
+      "title": "Template",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_templates",
+        "inputs": {
+          "adobe_sign_access_token": {
+            "value": "{{input_parameters.adobe_sign_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.templates}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "recipient_name",
+      "description": "Enter text",
+      "title": "Recipient name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "recipient_email",
+      "description": "Enter text",
+      "title": "Recipient email",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "agreement_name",
+      "description": "Enter text",
+      "title": "Agreement name",
+      "is_required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "agreement_id",
+      "description": "New agreement ID",
+      "title": "Agreement ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05S5D4750A",
+  "category_label": "Adobe Acrobat Sign",
+  "app_id": "A05S5D4750A",
+  "date_created": 1694606712,
+  "date_released": 0,
+  "date_updated": 1698820954,
+  "date_deleted": 0,
+  "form_enabled": false
+}

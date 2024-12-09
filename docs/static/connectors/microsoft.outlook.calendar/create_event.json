@@ -1,0 +1,99 @@
+{
+  "id": "Fn05Q4D765QF",
+  "callback_id": "create_event",
+  "title": "Create a calendar event",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "outlook_access_token",
+      "description": "Outlook credential to use",
+      "title": "Outlook access token",
+      "is_required": false,
+      "oauth2_provider_key": "outlook",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "event_title",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "start_time",
+      "title": "Start time",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "end_time",
+      "title": "End time",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "timezone",
+      "description": "Select a timezone",
+      "title": "Timezone",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_timezones",
+        "inputs": {
+          "outlook_access_token": {
+            "value": "{{input_parameters.outlook_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.timezones}}"
+          },
+          "value_path": "alias",
+          "label_path": "displayName"
+        }
+      }
+    },
+    {
+      "type": "array",
+      "name": "attendees",
+      "description": "Search all people...",
+      "title": "Attendees",
+      "is_required": true,
+      "items": {
+        "type": "slack#/types/user_id"
+      },
+      "default": []
+    },
+    {
+      "type": "array",
+      "name": "additional_attendees",
+      "description": "Enter email addresses",
+      "title": "Additional attendees",
+      "is_required": false,
+      "hint": "Enter email addresses",
+      "items": {
+        "type": "string",
+        "format": "email"
+      },
+      "default": []
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "event_url",
+      "title": "Event URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05QGEFR3SP",
+  "category_label": "Microsoft Outlook Calendar",
+  "app_id": "A05QGEFR3SP",
+  "date_created": 1693539968,
+  "date_released": 0,
+  "date_updated": 1725525083,
+  "date_deleted": 0,
+  "form_enabled": false
+}

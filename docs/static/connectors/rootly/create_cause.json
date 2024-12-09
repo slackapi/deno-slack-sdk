@@ -1,0 +1,47 @@
+{
+  "id": "Fn05T2VDQSH4",
+  "callback_id": "create_cause",
+  "title": "Create a cause",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter the text",
+      "title": "Cause name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter the text",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "number",
+      "name": "position",
+      "description": "Enter the number",
+      "title": "Position",
+      "is_required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "cause_id",
+      "description": "Cause ID",
+      "title": "Cause ID",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05TUC2EWBA",
+  "category_label": "Rootly",
+  "app_id": "A05TUC2EWBA",
+  "date_created": 1695271409,
+  "date_released": 0,
+  "date_updated": 1719817822,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,83 @@
+{
+  "id": "Fn05QCACNP7Y",
+  "callback_id": "create_meeting",
+  "title": "Create a meeting",
+  "description": "Creates an online meeting in Microsoft Teams",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "teams_access_token",
+      "description": "Microsoft credential to use",
+      "title": "Microsoft access token",
+      "is_required": true,
+      "oauth2_provider_key": "teams",
+      "require_end_user_auth": true
+    },
+    {
+      "type": "string",
+      "name": "subject",
+      "description": "Enter text",
+      "title": "Subject",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "start_time",
+      "title": "Start time",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "end_time",
+      "title": "End time",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "timezone",
+      "description": "Select a timezone",
+      "title": "Timezone",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_timezones",
+        "inputs": {
+          "teams_access_token": {
+            "value": "{{input_parameters.teams_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.timezones}}"
+          },
+          "value_path": "alias",
+          "label_path": "displayName"
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "meeting_url",
+      "title": "Meeting URL",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "meeting_id",
+      "description": "Meeting ID",
+      "title": "Meeting ID",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05Q9UPHBDL",
+  "category_label": "Microsoft Teams Calls",
+  "app_id": "A05Q9UPHBDL",
+  "date_created": 1693540131,
+  "date_released": 0,
+  "date_updated": 1693995270,
+  "date_deleted": 0,
+  "form_enabled": false
+}

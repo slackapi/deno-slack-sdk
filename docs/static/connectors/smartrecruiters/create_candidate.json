@@ -1,0 +1,78 @@
+{
+  "id": "Fn05U1D621BP",
+  "callback_id": "create_candidate",
+  "title": "Create a candidate",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "first_name",
+      "description": "Enter text",
+      "title": "First name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "last_name",
+      "description": "Enter text",
+      "title": "Last name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "email",
+      "description": "Enter email",
+      "title": "Email",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "phone_number",
+      "description": "Enter phone number",
+      "title": "Phone number",
+      "is_required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "candidate_id",
+      "title": "Candidate ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "first_name",
+      "title": "First name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "last_name",
+      "title": "Last name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "email",
+      "title": "Email",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "phone_number",
+      "title": "Phone number",
+      "is_required": false,
+      "nullable": true
+    }
+  ],
+  "category_id": "A05UG19KZ3K",
+  "category_label": "SmartRecruiters",
+  "app_id": "A05UG19KZ3K",
+  "date_created": 1695810149,
+  "date_released": 0,
+  "date_updated": 1696442994,
+  "date_deleted": 0,
+  "form_enabled": false
+}

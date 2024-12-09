@@ -1,0 +1,203 @@
+{
+  "id": "Fn050SU1SNTG",
+  "callback_id": "select_spreadsheet_row",
+  "title": "Select a spreadsheet row",
+  "description": "Select a row in a Google Sheet",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "spreadsheet_id",
+      "description": "Select a spreadsheet",
+      "title": "Spreadsheet",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/fetch_spreadsheets",
+        "inputs": {
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "google_access_token": {
+            "value": "{{input_parameters.google_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.files}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        },
+        "validation": {
+          "function": "#/functions/fetch_sheets",
+          "inputs": {
+            "spreadsheet_id": {
+              "value": "{{input_parameters.spreadsheet_id}}"
+            },
+            "google_access_token": {
+              "value": "{{input_parameters.google_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.spreadsheet_info}}"
+            },
+            "value_path": "id",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "sheet_title",
+      "description": "Select a sheet",
+      "title": "Sheet",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/fetch_sheets",
+        "inputs": {
+          "spreadsheet_id": {
+            "value": "{{input_parameters.spreadsheet_id}}"
+          },
+          "google_access_token": {
+            "value": "{{input_parameters.google_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.sheets}}"
+          },
+          "value_path": "properties.title",
+          "label_path": "properties.title"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "column_name",
+      "description": "Select a column",
+      "title": "Choose a column to search",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/fetch_column_names",
+        "inputs": {
+          "sheet": {
+            "value": "{{input_parameters.sheet_title}}"
+          },
+          "spreadsheet": {
+            "value": "{{input_parameters.spreadsheet_id}}"
+          },
+          "google_access_token": {
+            "value": "{{input_parameters.google_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "string",
+            "value": "{{output_parameters.column_names}}"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "cell_value",
+      "description": "Add a value",
+      "title": "Cell value to find",
+      "is_required": false,
+      "render_condition": {
+        "operator": "and",
+        "conditions": [
+          {
+            "type": "hasvalue",
+            "parameter_name": "spreadsheet_id"
+          },
+          {
+            "type": "hasvalue",
+            "parameter_name": "sheet_title"
+          }
+        ],
+        "is_required": true
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "google_access_token",
+      "description": "Which account should we use to access the spreadsheet?",
+      "title": "Google Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "google"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "object",
+      "name": "column_values",
+      "title": "Column values",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/fetch_column_names",
+        "inputs": {
+          "sheet": {
+            "value": "{{input_parameters.sheet_title}}"
+          },
+          "spreadsheet": {
+            "value": "{{input_parameters.spreadsheet_id}}"
+          },
+          "google_access_token": {
+            "value": "{{input_parameters.google_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.column_names_obj_array}}"
+          },
+          "key_path": "index",
+          "label_path": "column_name",
+          "property_type_path": "type"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "row_index",
+      "description": "Row index",
+      "title": "Row index",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "spreadsheet_url",
+      "description": "Spreadsheet URL",
+      "title": "Spreadsheet URL",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "timestamp_started",
+      "description": "Time when step started",
+      "title": "Time when step started",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "timestamp_completed",
+      "description": "Time when step ended",
+      "title": "Time when step ended",
+      "is_required": true
+    }
+  ],
+  "category_id": "A04MG80N5CY",
+  "category_label": "Google Sheets",
+  "app_id": "A04MG80N5CY",
+  "date_created": 1680161131,
+  "date_released": 0,
+  "date_updated": 1730975073,
+  "date_deleted": 0,
+  "form_enabled": false
+}

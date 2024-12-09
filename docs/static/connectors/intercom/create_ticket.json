@@ -1,0 +1,118 @@
+{
+  "id": "Fn05S7JCHU3W",
+  "callback_id": "create_ticket",
+  "title": "Create a ticket",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter title",
+      "title": "Title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter description",
+      "title": "Description",
+      "is_required": true,
+      "long": true
+    },
+    {
+      "type": "string",
+      "name": "ticket_type_id",
+      "title": "Ticket type",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_ticket_types",
+        "inputs": {
+          "intercom_access_token": {
+            "value": "{{input_parameters.intercom_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.ticket_types}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "contact_email",
+      "description": "Enter email ID",
+      "title": "Email",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "intercom_access_token",
+      "title": "Intercom access token",
+      "is_required": true,
+      "oauth2_provider_key": "intercom"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "ticket_id",
+      "title": "Ticket ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "ticket_url",
+      "title": "Ticket URL",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "title": "Title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "object",
+      "name": "ticket_type",
+      "title": "Ticket type",
+      "is_required": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "archived": {
+          "type": "boolean"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    }
+  ],
+  "category_id": "A05S4UJGUQK",
+  "category_label": "Intercom",
+  "app_id": "A05S4UJGUQK",
+  "date_created": 1694602292,
+  "date_released": 0,
+  "date_updated": 1719560653,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,172 @@
+{
+  "id": "Fn06404TE3B5",
+  "callback_id": "create_interview",
+  "title": "Create an interview",
+  "description": "Create an interview for an opportunity",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "opportunity_id",
+      "description": "Please select an option",
+      "title": "Opportunity",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_opportunities",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.opportunities}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "perform_as",
+      "description": "Please select an option",
+      "title": "Perform this create on behalf of a specified user",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "panel_id",
+      "description": "Please select an option",
+      "title": "Panel",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_panels",
+        "inputs": {
+          "opportunity_id": {
+            "value": "{{input_parameters.opportunity_id}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.panels}}"
+          },
+          "value_path": "id",
+          "label_path": "note"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "subject",
+      "description": "Enter text",
+      "title": "Interview subject",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "location",
+      "description": "Enter text",
+      "title": "Interview location",
+      "is_required": false
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "date",
+      "description": "Enter text",
+      "title": "Interview date",
+      "is_required": true
+    },
+    {
+      "type": "number",
+      "name": "duration",
+      "description": "Enter text",
+      "title": "Interview duration in minutes",
+      "is_required": true,
+      "minimum": 1
+    },
+    {
+      "type": "array",
+      "name": "interviewers",
+      "description": "Please select options",
+      "title": "Interviewers",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "inputs": {
+          "access_role": {
+            "value": "interviewer"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      },
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "string",
+      "name": "feedback_template_id",
+      "description": "Please select an option",
+      "title": "Feedback template",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_feedback_templates",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.templates}}"
+          },
+          "value_path": "id",
+          "label_path": "text"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "note",
+      "description": "Enter text",
+      "title": "Note for panel",
+      "is_required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "interview_id",
+      "description": "New interview ID",
+      "title": "Interview ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "interview_url",
+      "description": "interview URL",
+      "title": "Interview URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A063ZSXC719",
+  "category_label": "Lever",
+  "app_id": "A063ZSXC719",
+  "date_created": 1698939445,
+  "date_released": 0,
+  "date_updated": 1720772742,
+  "date_deleted": 0,
+  "form_enabled": false
+}

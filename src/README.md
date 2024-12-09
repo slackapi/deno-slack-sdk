@@ -32,8 +32,7 @@ be part of [a Slack paid plan](https://slack.com/pricing).**
 ### Install the Slack CLI
 
 You need to install and configure the Slack CLI. Step-by-step instructions can
-be found on our
-[install & authorize page](https://api.slack.com/automation/cli/install).
+be found in our [docs](https://tools.slack.dev/slack-cli).
 
 ## Creating an app
 

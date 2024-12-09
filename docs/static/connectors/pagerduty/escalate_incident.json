@@ -1,0 +1,128 @@
+{
+  "id": "Fn04SWQPSU0G",
+  "callback_id": "escalate_incident",
+  "title": "Change escalation level",
+  "description": "Change escalation level of a PagerDuty incident",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "description": "Enter incident ID...",
+      "title": "Incident ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "escalation_level",
+      "description": "Ex: 2",
+      "title": "PagerDuty escalation level",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "pagerduty_access_token",
+      "description": "Pagerduty access token",
+      "title": "PagerDuty access token",
+      "is_required": true,
+      "oauth2_provider_key": "pagerduty"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "description": "Incident ID",
+      "title": "Incident ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "incident_url",
+      "description": "Incident url",
+      "title": "Incident URL",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "incident_title",
+      "description": "Incident title",
+      "title": "Incident title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "incident_details",
+      "description": "Incident details",
+      "title": "Incident details",
+      "is_required": false
+    },
+    {
+      "type": "array",
+      "name": "assignments",
+      "description": "Assignments",
+      "title": "Assignments",
+      "is_required": false,
+      "items": {
+        "type": "#/types/assignment"
+      }
+    },
+    {
+      "type": "object",
+      "name": "escalation_policy",
+      "description": "Escalation Policy",
+      "title": "Escalation policy",
+      "is_required": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Escalation policy ID"
+        },
+        "summary": {
+          "type": "string",
+          "title": "Escalation policy summary"
+        },
+        "html_url": {
+          "type": "string",
+          "title": "Escalation policy URL"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "name": "service",
+      "description": "Service",
+      "title": "Service",
+      "is_required": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Service ID"
+        },
+        "summary": {
+          "type": "string",
+          "title": "Service summary"
+        },
+        "html_url": {
+          "type": "string",
+          "title": "Service URL"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "escalation_level",
+      "description": "Escalation level",
+      "title": "Escalation level",
+      "is_required": false
+    }
+  ],
+  "category_id": "A04RSGH23L7",
+  "category_label": "PagerDuty",
+  "app_id": "A04RSGH23L7",
+  "date_created": 1677826676,
+  "date_released": 0,
+  "date_updated": 1729793988,
+  "date_deleted": 0,
+  "form_enabled": false
+}
