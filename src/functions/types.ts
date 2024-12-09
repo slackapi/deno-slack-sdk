@@ -80,6 +80,7 @@ type FunctionInputRuntimeType<
       | typeof SlackSchemaTypes.canvas_id
       | typeof SlackSchemaTypes.canvas_template_id
       | typeof SlackSchemaTypes.date
+      | typeof SlackSchemaTypes.salesforce_record_id
       | typeof SlackSchemaTypes.message_ts ? string
     : Param["type"] extends
       | typeof SchemaTypes.integer
@@ -96,10 +97,9 @@ type FunctionInputRuntimeType<
         infer RP
       > ? TypedObjectFunctionInputRuntimeType<P, RP, Param>
       : UnknownRuntimeType
-    : Param["type"] extends typeof SlackSchemaTypes.rich_text
-      ? UnknownRuntimeType
-    : Param["type"] extends typeof SlackSchemaTypes.expanded_rich_text
-      ? UnknownRuntimeType
+    : Param["type"] extends
+      | typeof SlackSchemaTypes.rich_text
+      | typeof SlackSchemaTypes.expanded_rich_text ? UnknownRuntimeType
     : UnknownRuntimeType;
 
 // deno-lint-ignore no-explicit-any
