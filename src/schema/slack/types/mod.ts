@@ -11,6 +11,7 @@ const SlackPrimitiveTypes = {
   message_ts: "slack#/types/message_ts",
   oauth2: "slack#/types/credential/oauth2",
   rich_text: "slack#/types/rich_text",
+  salesforce_record_id: "slack#/types/salesforce_record_id",
   team_id: "slack#/types/team_id",
   timestamp: "slack#/types/timestamp",
   user_id: "slack#/types/user_id",
