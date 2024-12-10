@@ -8,12 +8,12 @@ import { DefineWorkflow } from "../../../workflows/mod.ts";
 import { ManifestFunctionSchema } from "../../../manifest/manifest_schema.ts";
 import SchemaTypes from "../../schema_types.ts";
 import SlackTypes from "../schema_types.ts";
-import CanvasUpdateContent from "./canvas_update_content.ts";
+import CanvasUpdateContent from "./canvas_update_content_v2.ts";
 
 Deno.test("CanvasUpdateContent generates valid FunctionManifest", () => {
   assertEquals(
     CanvasUpdateContent.definition.callback_id,
-    "slack#/functions/canvas_update_content",
+    "slack#/functions/canvas_update_content_v2",
   );
   const expected: ManifestFunctionSchema = {
     source_file: "",
@@ -35,7 +35,17 @@ Deno.test("CanvasUpdateContent generates valid FunctionManifest", () => {
           description: "Search standalone canvases",
           title: "Select a canvas",
         },
+        canvas_tab: {
+          type: SchemaTypes.string,
+          description: "Select an option",
+          title: "Choose which canvas to update",
+        },
         section_id: {
+          type: SchemaTypes.string,
+          description: "Select an option",
+          title: "Choose which section to update",
+        },
+        canvas_tab_section_id: {
           type: SchemaTypes.string,
           description: "Select an option",
           title: "Choose which section to update",
@@ -81,7 +91,7 @@ Deno.test("CanvasUpdateContent can be used as a Slack function in a workflow ste
   });
   const actual = testWorkflow.steps[0].export();
 
-  assertEquals(actual.function_id, "slack#/functions/canvas_update_content");
+  assertEquals(actual.function_id, "slack#/functions/canvas_update_content_v2");
   assertEquals(actual.inputs, { action: "test", content: "test" });
 });
 
