@@ -1,0 +1,106 @@
+{
+  "id": "Fn04U906DL7P",
+  "callback_id": "get_translated_gif",
+  "title": "Search for a GIF",
+  "description": "Search for a Giphy GIF",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "search_term",
+      "description": "Enter search terms...",
+      "title": "Giphy search terms",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "weirdness",
+      "description": "From 1 (not very weird) to 10 (very weird)",
+      "title": "Weirdness",
+      "is_required": false,
+      "enum": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "choices": [
+        {
+          "title": "0 (not very weird)",
+          "value": "0"
+        },
+        {
+          "title": "1",
+          "value": "1"
+        },
+        {
+          "title": "2",
+          "value": "2"
+        },
+        {
+          "title": "3",
+          "value": "3"
+        },
+        {
+          "title": "4",
+          "value": "4"
+        },
+        {
+          "title": "5 (getting weirder)",
+          "value": "5"
+        },
+        {
+          "title": "6",
+          "value": "6"
+        },
+        {
+          "title": "7",
+          "value": "7"
+        },
+        {
+          "title": "8",
+          "value": "8"
+        },
+        {
+          "title": "9",
+          "value": "9"
+        },
+        {
+          "title": "10 (very weird)",
+          "value": "10"
+        }
+      ]
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "gif_title_url",
+      "description": "The title and URL for the GIF",
+      "title": "Giphy GIF",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "search_term",
+      "description": "The search term used to find the GIF",
+      "title": "Search terms",
+      "is_required": true
+    }
+  ],
+  "category_id": "A04U5QUE5EX",
+  "category_label": "Giphy",
+  "app_id": "A04U5QUE5EX",
+  "date_created": 1678991166,
+  "date_released": 0,
+  "date_updated": 1696841075,
+  "date_deleted": 0,
+  "form_enabled": false
+}

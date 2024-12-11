@@ -1,0 +1,171 @@
+{
+  "id": "Fn05UBPC81EW",
+  "callback_id": "create_project",
+  "title": "Create a project",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "project_name",
+      "description": "Enter text",
+      "title": "Project name",
+      "is_required": true,
+      "maxLength": 255
+    },
+    {
+      "type": "string",
+      "name": "company_name",
+      "description": "Enter text",
+      "title": "Client name",
+      "is_required": true,
+      "long": true,
+      "maxLength": 255
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter text",
+      "title": "Description",
+      "is_required": false,
+      "long": true
+    },
+    {
+      "type": "string",
+      "name": "owner",
+      "description": "Select owner of the project",
+      "title": "Owner",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "firstName"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "due_date",
+      "title": "Due on",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "project_type",
+      "title": "Project type",
+      "is_required": true,
+      "enum": [
+        "RFP",
+        "RFI",
+        "DDQ",
+        "SQ",
+        "PP",
+        "OTHER"
+      ],
+      "choices": [
+        {
+          "title": "RFP (Request for Proposal)",
+          "value": "RFP"
+        },
+        {
+          "title": "RFI (Request for Information)",
+          "value": "RFI"
+        },
+        {
+          "title": "SQ (Security Questionnaire)",
+          "value": "SQ"
+        },
+        {
+          "title": "DDQ (Due Diligence Questionnaire)",
+          "value": "DDQ"
+        },
+        {
+          "title": "PP (Proactive Proposal)",
+          "value": "PP"
+        }
+      ]
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "project_id",
+      "title": "Project ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "project_name",
+      "title": "Project name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "title": "Description",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "created_date",
+      "description": "The datetime the project is created on",
+      "title": "Created on",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "due_date",
+      "description": "The datetime the project is due on",
+      "title": "Due on",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "title": "Status",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "company_name",
+      "title": "Client name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "owner",
+      "title": "Owner",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "creator",
+      "title": "Creator",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05UAJ4398T",
+  "category_label": "Loopio",
+  "app_id": "A05UAJ4398T",
+  "date_created": 1695911107,
+  "date_released": 0,
+  "date_updated": 1718975933,
+  "date_deleted": 0,
+  "form_enabled": false
+}

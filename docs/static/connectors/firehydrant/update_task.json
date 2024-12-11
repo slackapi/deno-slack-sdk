@@ -1,0 +1,194 @@
+{
+  "id": "Fn05TBCPAJT1",
+  "callback_id": "update_task",
+  "title": "Update a task",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "description": "Select an incident",
+      "title": "Incident",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_incidents",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.incidents}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        },
+        "validation": {
+          "function": "#/functions/get_incident",
+          "inputs": {
+            "incident_id": {
+              "value": "{{input_parameters.incident_id}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.incident}}"
+            },
+            "value_path": "id",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "task_id",
+      "description": "Select a task",
+      "title": "Task",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_tasks",
+        "inputs": {
+          "incident_id": {
+            "value": "{{input_parameters.incident_id}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.tasks}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        },
+        "validation": {
+          "function": "#/functions/get_task",
+          "inputs": {
+            "task_id": {
+              "value": "{{input_parameters.task_id}}"
+            },
+            "incident_id": {
+              "value": "{{input_parameters.incident_id}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.task}}"
+            },
+            "value_path": "id",
+            "label_path": "title"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter text",
+      "title": "Task title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter text",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "state",
+      "description": "Select state",
+      "title": "State",
+      "is_required": false,
+      "enum": [
+        "open",
+        "in_progress",
+        "cancelled",
+        "done"
+      ],
+      "choices": [
+        {
+          "title": "Open",
+          "value": "open"
+        },
+        {
+          "title": "In progress",
+          "value": "in_progress"
+        },
+        {
+          "title": "Cancelled",
+          "value": "cancelled"
+        },
+        {
+          "title": "Done",
+          "value": "done"
+        }
+      ],
+      "default": "open"
+    },
+    {
+      "type": "string",
+      "name": "assignee_id",
+      "description": "Select a user",
+      "title": "User",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "task_id",
+      "title": "Task ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "task_description",
+      "title": "Task description",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "title": "Task title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "state",
+      "title": "State",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05TG2LEXPV",
+  "category_label": "FireHydrant",
+  "app_id": "A05TG2LEXPV",
+  "date_created": 1695638603,
+  "date_released": 0,
+  "date_updated": 1719567249,
+  "date_deleted": 0,
+  "form_enabled": false
+}

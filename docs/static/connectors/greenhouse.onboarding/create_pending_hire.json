@@ -1,0 +1,109 @@
+{
+  "id": "Fn05UYHANQMS",
+  "callback_id": "create_pending_hire",
+  "title": "Create pending hire",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "first_name",
+      "description": "Enter first name",
+      "title": "First name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "last_name",
+      "description": "Enter last name",
+      "title": "Last name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "email",
+      "description": "Enter email ID",
+      "title": "Email",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "work_country_code",
+      "description": "Select a country code",
+      "title": "Work country code",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_country_code",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.countries}}"
+          },
+          "value_path": "countryCode",
+          "label_path": "countryCode"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "employment_status",
+      "title": "Employment status",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_employment_status",
+        "options": {
+          "target_array": {
+            "type": "string",
+            "value": "{{output_parameters.employment_statuses}}"
+          }
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "title": "Hire ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "first_name",
+      "title": "First name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "last_name",
+      "title": "Last name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "email",
+      "title": "Email",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "work_country_code",
+      "title": "Work country code",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "employment_status",
+      "title": "Employment status",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05RY71E6UE",
+  "category_label": "Greenhouse Onboarding",
+  "app_id": "A05RY71E6UE",
+  "date_created": 1696318742,
+  "date_released": 0,
+  "date_updated": 1696402402,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,81 @@
+{
+  "id": "Fn05U9AVFXB4",
+  "callback_id": "create_project",
+  "title": "Create a project",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "domain",
+      "description": "Select an account",
+      "title": "Account",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/fetch_accounts",
+        "inputs": {
+          "basecamp_access_token": {
+            "value": "{{input_parameters.basecamp_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.accounts}}"
+          },
+          "value_path": "href",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter project name",
+      "title": "Project name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter project description",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "basecamp_access_token",
+      "title": "Basecamp access token",
+      "is_required": true,
+      "oauth2_provider_key": "basecamp"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "title": "Project ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "title": "Project name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "url",
+      "title": "Project URL",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05UU55CFFA",
+  "category_label": "Basecamp",
+  "app_id": "A05UU55CFFA",
+  "date_created": 1695879470,
+  "date_released": 0,
+  "date_updated": 1723464095,
+  "date_deleted": 0,
+  "form_enabled": false
+}

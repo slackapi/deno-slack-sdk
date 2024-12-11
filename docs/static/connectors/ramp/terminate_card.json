@@ -1,0 +1,86 @@
+{
+  "id": "Fn066LK56B0D",
+  "callback_id": "terminate_card",
+  "title": "Terminate a card",
+  "description": "Terminate a card permanently. This action is irreversible.",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "user_id",
+      "description": "Select a user",
+      "title": "User",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "inputs": {
+          "email_query": {
+            "value": "{{client.query}}"
+          },
+          "ramp_access_token": {
+            "value": "{{input_parameters.ramp_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "email"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "card_id",
+      "description": "Select a card",
+      "title": "Card",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_cards",
+        "inputs": {
+          "user_id": {
+            "value": "{{input_parameters.user_id}}"
+          },
+          "ramp_access_token": {
+            "value": "{{input_parameters.ramp_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.cards}}"
+          },
+          "value_path": "id",
+          "label_path": "display_name"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "ramp_access_token",
+      "description": "Ramp Credential to use",
+      "title": "Ramp access token",
+      "is_required": true,
+      "oauth2_provider_key": "ramp",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "deferred_task_id",
+      "title": "Deferred task ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A066PC9JKJ7",
+  "category_label": "Ramp",
+  "app_id": "A066PC9JKJ7",
+  "date_created": 1700564099,
+  "date_released": 0,
+  "date_updated": 1700822092,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,183 @@
+{
+  "id": "Fn07BFV15J5S",
+  "callback_id": "create_incident",
+  "title": "Create an incident",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "short_description",
+      "description": "Enter text",
+      "title": "Short description",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "caller_id",
+      "description": "Select caller ID",
+      "title": "Caller ID",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/search_users",
+        "inputs": {
+          "search_term": {
+            "value": "{{client.query}}"
+          },
+          "servicenow_access_token": {
+            "value": "{{input_parameters.servicenow_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "sys_id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "object",
+      "name": "metadata",
+      "description": "Select an field",
+      "title": "Name",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_incident_fields",
+        "inputs": {
+          "servicenow_access_token": {
+            "value": "{{input_parameters.servicenow_access_token}}"
+          }
+        },
+        "selection_type": "key-value",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.incident_fields}}"
+          },
+          "key_path": "field_schema.name",
+          "label_path": "field_schema.label",
+          "is_required_path": "field_schema.mandatory",
+          "value": {
+            "type_path": "field_schema.base_type",
+            "selection_type_path": "field_schema.type",
+            "options_present": {
+              "target_array": {
+                "type": "object",
+                "value": "{{selected_option.field_schema.choices}}"
+              },
+              "value_path": "value",
+              "label_path": "label"
+            },
+            "dynamic_options": {
+              "inputs": {
+                "search_term": {
+                  "value": "{{client.query}}"
+                },
+                "reference_table": {
+                  "value": "{{selected_option.field_schema.reference}}"
+                },
+                "reference_display_field": {
+                  "value": "{{selected_option.field_schema.reference_display_field}}"
+                },
+                "servicenow_access_token": {
+                  "value": "{{input_parameters.servicenow_access_token}}"
+                }
+              },
+              "options": {
+                "label_path": "label",
+                "value_path": "value",
+                "target_array": {
+                  "type": "object",
+                  "value": "{{output_parameters.result}}"
+                }
+              },
+              "function": "#/functions/search_references"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "servicenow_access_token",
+      "description": "Servicenow Credential to use",
+      "title": "Servicenow Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "servicenow"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "incident_id",
+      "description": "Incident ID",
+      "title": "Incident ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "incident_url",
+      "description": "Incident URL",
+      "title": "Incident URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "incident_number",
+      "description": "Incident number",
+      "title": "Incident number",
+      "is_required": true
+    },
+    {
+      "type": "object",
+      "name": "incident",
+      "title": "Incident",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_incident_outputs",
+        "inputs": {
+          "selected_metadata": {
+            "value": "{{input_parameters.metadata}}"
+          },
+          "servicenow_access_token": {
+            "value": "{{input_parameters.servicenow_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.incident_outputs}}"
+          },
+          "key_path": "field_name",
+          "label_path": "field_schema.label",
+          "property_type_path": "field_schema.base_type"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "timestamp_started",
+      "description": "Time when step started",
+      "title": "Time when step started",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "timestamp_completed",
+      "description": "Time when step completed",
+      "title": "Time when step completed",
+      "is_required": true
+    }
+  ],
+  "category_id": "A07AYPT9X4P",
+  "category_label": "ServiceNow",
+  "app_id": "A07AYPT9X4P",
+  "date_created": 1720420948,
+  "date_released": 1722841200,
+  "date_updated": 1727784340,
+  "date_deleted": 0,
+  "form_enabled": false
+}

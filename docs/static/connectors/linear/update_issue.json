@@ -1,0 +1,220 @@
+{
+  "id": "Fn05UYH5LD36",
+  "callback_id": "update_issue",
+  "title": "Update an issue",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "issue_update_id",
+      "description": "Select an issue",
+      "title": "Issue",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_issues",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "linear_access_token": {
+            "value": "{{input_parameters.linear_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.issues}}"
+          },
+          "value_path": "id",
+          "label_path": "title"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "team_id",
+      "description": "Select a team",
+      "title": "Team",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_user_teams",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "linear_access_token": {
+            "value": "{{input_parameters.linear_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.teams}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "project_id",
+      "description": "Select a project",
+      "title": "Project",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_projects",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "team_id": {
+            "value": "{{input_parameters.team_id}}"
+          },
+          "linear_access_token": {
+            "value": "{{input_parameters.linear_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.projects}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter title of the issue",
+      "title": "Title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter description of the issue",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "assignee_id",
+      "description": "Select an assignee",
+      "title": "Assignee",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "linear_access_token": {
+            "value": "{{input_parameters.linear_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "state_id",
+      "description": "Select issue state",
+      "title": "State",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_state",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "team_id": {
+            "value": "{{input_parameters.team_id}}"
+          },
+          "linear_access_token": {
+            "value": "{{input_parameters.linear_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.workflow_states}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "linear_access_token",
+      "title": "Linear access token",
+      "is_required": true,
+      "oauth2_provider_key": "linear"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "issue_id",
+      "description": "Id of the issue",
+      "title": "Issue ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Title of the issue",
+      "title": "Title",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Description of the issue",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "assignee_email",
+      "title": "Assignee email",
+      "is_required": false,
+      "format": "email",
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "state",
+      "title": "State",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "url",
+      "title": "URL",
+      "is_required": false,
+      "format": "url",
+      "nullable": true
+    }
+  ],
+  "category_id": "A05ULH1PNMA",
+  "category_label": "Linear",
+  "app_id": "A05ULH1PNMA",
+  "date_created": 1696318667,
+  "date_released": 0,
+  "date_updated": 1723463970,
+  "date_deleted": 0,
+  "form_enabled": false
+}

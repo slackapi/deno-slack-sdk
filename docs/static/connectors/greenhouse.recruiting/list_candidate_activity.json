@@ -1,0 +1,75 @@
+{
+  "id": "Fn05S7JLKA4C",
+  "callback_id": "list_candidate_activity",
+  "title": "Candidate activity",
+  "description": "Retrieve a candidate activity feed",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "integer",
+      "name": "candidate_id",
+      "title": "Candidate email",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_candidates",
+        "inputs": {
+          "email": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.candidates}}"
+          },
+          "value_path": "id",
+          "label_path": "first_name"
+        },
+        "validation": {
+          "function": "#/functions/fetch_candidate",
+          "inputs": {
+            "candidate_id": {
+              "value": "{{input_parameters.candidate_id}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.candidate}}"
+            },
+            "value_path": "id",
+            "label_path": "first_name"
+          }
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "array",
+      "name": "notes",
+      "title": "Notes",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "array",
+      "name": "activities",
+      "title": "Activities",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    }
+  ],
+  "category_id": "A05QS03T4MB",
+  "category_label": "Greenhouse Recruiting",
+  "app_id": "A05QS03T4MB",
+  "date_created": 1694602414,
+  "date_released": 0,
+  "date_updated": 1719917062,
+  "date_deleted": 0,
+  "form_enabled": false
+}

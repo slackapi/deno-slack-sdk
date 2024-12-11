@@ -1,0 +1,117 @@
+{
+  "id": "Fn063KMC3JCF",
+  "callback_id": "create_opportunity",
+  "title": "Create an opportunity",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "perform_as",
+      "description": "Please select an option",
+      "title": "Perform this create on behalf of a specified user",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_users",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.users}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter text",
+      "title": "Contact full name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "headline",
+      "description": "Enter text",
+      "title": "Contact headline",
+      "is_required": false
+    },
+    {
+      "type": "array",
+      "name": "emails",
+      "description": "Enter text",
+      "title": "Contact emails",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "string",
+      "name": "origin",
+      "description": "Enter text",
+      "title": "Origin",
+      "is_required": false,
+      "enum": [
+        "agency",
+        "private",
+        "internal",
+        "referred",
+        "sourced",
+        "university"
+      ],
+      "choices": [
+        {
+          "title": "Agency",
+          "value": "agency"
+        },
+        {
+          "title": "Private",
+          "value": "private"
+        },
+        {
+          "title": "Internal",
+          "value": "internal"
+        },
+        {
+          "title": "Referred",
+          "value": "referred"
+        },
+        {
+          "title": "Sourced",
+          "value": "sourced"
+        },
+        {
+          "title": "University",
+          "value": "university"
+        }
+      ],
+      "default": "sourced"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "opportunity_id",
+      "description": "New opportunity ID",
+      "title": "Opportunity ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "opportunity_url",
+      "description": "New opportunity url",
+      "title": "Opportunity URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A063ZSXC719",
+  "category_label": "Lever",
+  "app_id": "A063ZSXC719",
+  "date_created": 1698939445,
+  "date_released": 0,
+  "date_updated": 1720772742,
+  "date_deleted": 0,
+  "form_enabled": false
+}

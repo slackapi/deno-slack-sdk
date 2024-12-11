@@ -1,0 +1,196 @@
+{
+  "id": "Fn066GTPECAJ",
+  "callback_id": "create_spend_request",
+  "title": "Create spend request",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "display_name",
+      "description": "Enter text",
+      "title": "Display name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter text",
+      "title": "Description",
+      "is_required": true,
+      "long": true
+    },
+    {
+      "type": "string",
+      "name": "icon",
+      "title": "Template icon",
+      "is_required": true,
+      "enum": [
+        "AdvertisingIcon",
+        "CardIcon",
+        "EducationStipendIcon",
+        "LunchOrderingIcon",
+        "OnboardingIcon",
+        "PerDiemCardIcon",
+        "SaasSubscriptionIcon",
+        "SoftwareTrialIcon",
+        "TravelExpensesIcon",
+        "WellnessIcon"
+      ],
+      "choices": [
+        {
+          "title": "Advertising",
+          "value": "AdvertisingIcon"
+        },
+        {
+          "title": "Card",
+          "value": "CardIcon"
+        },
+        {
+          "title": "Education stipend",
+          "value": "EducationStipendIcon"
+        },
+        {
+          "title": "Lunch ordering",
+          "value": "LunchOrderingIcon"
+        },
+        {
+          "title": "Onboarding",
+          "value": "OnboardingIcon"
+        },
+        {
+          "title": "Per diem card",
+          "value": "PerDiemCardIcon"
+        },
+        {
+          "title": "Saas subscription",
+          "value": "SaasSubscriptionIcon"
+        },
+        {
+          "title": "Software trial",
+          "value": "SoftwareTrialIcon"
+        },
+        {
+          "title": "Travel Expenses",
+          "value": "TravelExpensesIcon"
+        },
+        {
+          "title": "Wellness",
+          "value": "WellnessIcon"
+        }
+      ],
+      "default": "CardIcon"
+    },
+    {
+      "type": "boolean",
+      "name": "primary_card_enabled",
+      "title": "Allow spending with physical card",
+      "is_required": true,
+      "hint": "Allow employees to link their physical card, if they have one, to the issued Virtual Card."
+    },
+    {
+      "type": "boolean",
+      "name": "reimbursements_enabled",
+      "title": "Allow spending through reimbursement",
+      "is_required": true,
+      "hint": "Give employees the flexibility to use their own payment methods and submit reimbursements against the issued card’s limit."
+    },
+    {
+      "type": "boolean",
+      "name": "issue_physical_card_if_needed",
+      "title": "Issue physical card if employee doesn’t have one",
+      "is_required": false,
+      "hint": "A physical card tied to this Virtual Card will be issued to employees who don’t have one yet. Takes 5–7 business days to arrive."
+    },
+    {
+      "type": "number",
+      "name": "amount_limit",
+      "description": "Enter amount",
+      "title": "Amount",
+      "is_required": true,
+      "hint": "Total amount limit per interval. Currently we expect the currency to be USD and the amount needs to be denominated in cents."
+    },
+    {
+      "type": "string",
+      "name": "interval",
+      "description": "Select an interval",
+      "title": "Interval",
+      "is_required": true,
+      "hint": "Time interval to apply limit to",
+      "enum": [
+        "ANNUAL",
+        "DAILY",
+        "MONTHLY",
+        "QUARTERLY",
+        "TERTIARY",
+        "TOTAL",
+        "WEEKLY",
+        "YEARLY"
+      ],
+      "choices": [
+        {
+          "title": "Daily",
+          "value": "DAILY"
+        },
+        {
+          "title": "Weekly",
+          "value": "WEEKLY"
+        },
+        {
+          "title": "Monthly",
+          "value": "MONTHLY"
+        },
+        {
+          "title": "Quarterly",
+          "value": "QUARTERLY"
+        },
+        {
+          "title": "Tertiary",
+          "value": "TERTIARY"
+        },
+        {
+          "title": "Yearly",
+          "value": "YEARLY"
+        },
+        {
+          "title": "Annually",
+          "value": "ANNUAL"
+        },
+        {
+          "title": "Total",
+          "value": "TOTAL"
+        }
+      ]
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "ramp_access_token",
+      "description": "Ramp Credential to use",
+      "title": "Ramp access token",
+      "is_required": true,
+      "oauth2_provider_key": "ramp"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "spend_id",
+      "title": "Spend ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "spend_program_url",
+      "title": "Spend program url",
+      "is_required": true
+    }
+  ],
+  "category_id": "A066PC9JKJ7",
+  "category_label": "Ramp",
+  "app_id": "A066PC9JKJ7",
+  "date_created": 1700564099,
+  "date_released": 0,
+  "date_updated": 1700822092,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,93 @@
+{
+  "id": "Fn06053S5XNU",
+  "callback_id": "create_project",
+  "title": "Create a project",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter text",
+      "title": "Project name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Enter description of the issue",
+      "title": "Description",
+      "is_required": true
+    },
+    {
+      "type": "array",
+      "name": "team_ids",
+      "description": "Select a team",
+      "title": "Team",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_user_teams",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "linear_access_token": {
+            "value": "{{input_parameters.linear_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.teams}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      },
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "linear_access_token",
+      "title": "Linear access token",
+      "is_required": true,
+      "oauth2_provider_key": "linear"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "project_id",
+      "title": "Project ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "title": "Project name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "title": "Description",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "state",
+      "title": "State",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05ULH1PNMA",
+  "category_label": "Linear",
+  "app_id": "A05ULH1PNMA",
+  "date_created": 1696318667,
+  "date_released": 0,
+  "date_updated": 1723463970,
+  "date_deleted": 0,
+  "form_enabled": false
+}

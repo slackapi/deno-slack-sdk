@@ -1,0 +1,27 @@
+{
+  "name": "archive_channel",
+  "description": "Archive a channel",
+  "schema_id": "Schema.slack.functions.ArchiveChannel",
+  "schema_reference": "slack#/functions/archive_channel",
+  "related_methods": ["conversations.archive"],
+  "category": "Channel management",
+  "scopes": ["channels:write", "im:write", "groups:write", "mpim:write"],
+  "input_parameters": [
+    {
+      "type": "Schema.slack.types.channel_id",
+      "name": "channel_id",
+      "description": "The conversation ID for the channel you are archiving",
+      "required": true,
+      "examples": ["C123456", "D123ABC456"]
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "Schema.slack.types.channel_id",
+      "name": "channel_id",
+      "description": "The conversation ID for the channel you archived",
+      "required": true,
+      "examples": ["C123456", "D123ABC456"]
+    }
+  ]
+}

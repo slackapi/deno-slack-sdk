@@ -1,0 +1,58 @@
+{
+  "name": "add_bookmark",
+  "description": "Add a bookmark to a channel",
+  "schema_id": "Schema.slack.functions.AddBookmark",
+  "schema_reference": "slack#/functions/add_bookmark",
+  "scopes": ["bookmarks:write"],
+  "category": "Bookmarks",
+  "input_parameters": [
+    {
+      "type": "Schema.slack.types.channel_id",
+      "name": "channel_id",
+      "description": "The ID for the channel you are bookmarking the item in",
+      "required": true,
+      "examples": ["C123ABC456", "D123ABC456"],
+      "default": ""
+    },
+    {
+      "type": "Schema.types.string",
+      "name": "name",
+      "description": "Bookmark name",
+      "examples": ["Luke's road trip plans"],
+      "required": true
+    },
+    {
+      "type": "Schema.types.string",
+      "description": "Bookmark URL",
+      "name": "link",
+      "examples": ["https://example.slack.com/lists/T012AB3CD/F01ABC2DE3F"],
+      "required": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "name": "channel_id",
+      "type": "Schema.slack.types.channel_id",
+      "description": "The ID for the channel",
+      "examples": ["C123ABC456", "D123ABC456"],
+      "default": "",
+      "required": true
+    },
+    {
+      "name": "bookmark_name",
+      "type": "Schema.slack.types.string",
+      "description": "Name of the bookmark",
+      "examples": ["Great Wisconsin Cheese Festival schedule of events"],
+      "default": "",
+      "required": true
+    },
+    {
+      "name": "bookmark_link",
+      "type": "Schema.slack.types.string",
+      "description": "URL of the bookmark",
+      "examples": ["https://cheesefest.org/"],
+      "default": "",
+      "required": true
+    }
+  ]
+}

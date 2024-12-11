@@ -1,0 +1,291 @@
+{
+  "id": "Fn04UDSNDFSM",
+  "callback_id": "edit_issue",
+  "title": "Edit an issue",
+  "description": "Edit a JIRA Cloud issue",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "atlassian_access_token",
+      "title": "Atlassian Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "atlassian"
+    },
+    {
+      "type": "string",
+      "name": "jira_domain",
+      "title": "Jira domain",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_jira_domains",
+        "inputs": {
+          "atlassian_access_token": {
+            "value": "{{input_parameters.atlassian_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.domains}}"
+          },
+          "value_path": "id",
+          "label_path": "url"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "project",
+      "title": "Project",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_jira_projects",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "jira_domain": {
+            "value": "{{input_parameters.jira_domain}}"
+          },
+          "atlassian_access_token": {
+            "value": "{{input_parameters.atlassian_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.projects}}"
+          },
+          "value_path": "key",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "issue_id",
+      "description": "Search issue",
+      "title": "Issue key",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_issues",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "project": {
+            "value": "{{input_parameters.project}}"
+          },
+          "jira_domain": {
+            "value": "{{input_parameters.jira_domain}}"
+          },
+          "atlassian_access_token": {
+            "value": "{{input_parameters.atlassian_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.issues}}"
+          },
+          "value_path": "key",
+          "label_path": "key"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "priority",
+      "description": "Select an option...",
+      "title": "Priority",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_priorities",
+        "inputs": {
+          "jira_domain": {
+            "value": "{{input_parameters.jira_domain}}"
+          },
+          "atlassian_access_token": {
+            "value": "{{input_parameters.atlassian_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.priorities}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "assignee",
+      "description": "Select an option...",
+      "title": "Assignee",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/search_assignee_by_project",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "jira_domain": {
+            "value": "{{input_parameters.jira_domain}}"
+          },
+          "project_key": {
+            "value": "{{input_parameters.project}}"
+          },
+          "atlassian_access_token": {
+            "value": "{{input_parameters.atlassian_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.assignees}}"
+          },
+          "value_path": "accountId",
+          "label_path": "displayName"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "summary",
+      "description": "Summary of the bug or issue...",
+      "title": "Summary",
+      "is_required": false,
+      "maxLength": 255
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Description of the bug or issue...",
+      "title": "Description",
+      "is_required": false,
+      "default": ""
+    },
+    {
+      "type": "object",
+      "name": "custom_fields",
+      "title": "Additional inputs",
+      "is_required": false,
+      "dynamic_options": {
+        "function": "#/functions/list_custom_fields_for_edit",
+        "inputs": {
+          "issue_id": {
+            "value": "{{input_parameters.issue_id}}"
+          },
+          "jira_domain": {
+            "value": "{{input_parameters.jira_domain}}"
+          },
+          "project_key": {
+            "value": "{{input_parameters.project}}"
+          },
+          "atlassian_access_token": {
+            "value": "{{input_parameters.atlassian_access_token}}"
+          }
+        },
+        "selection_type": "key-value",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.fields}}"
+          },
+          "key_path": "field_name",
+          "label_path": "field_schema.name",
+          "value": {
+            "type_path": "field_schema.schema.type",
+            "selection_type_path": "selection_type",
+            "options_present": {
+              "target_array": {
+                "type": "object",
+                "value": "{{selected_option.field_schema.allowedValues}}"
+              },
+              "value_path": "value",
+              "label_path": "value"
+            },
+            "dynamic_options": {
+              "inputs": {
+                "uri": {
+                  "value": "{{selected_option.field_schema.autoCompleteUrl}}"
+                },
+                "query": {
+                  "value": "{{client.query}}"
+                },
+                "atlassian_access_token": {
+                  "value": "{{input_parameters.atlassian_access_token}}"
+                }
+              },
+              "options": {
+                "label_path": "label",
+                "value_path": "value",
+                "target_array": {
+                  "type": "object",
+                  "value": "{{output_parameters.options}}"
+                }
+              },
+              "function": "#/functions/fetch_nested_options"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "response",
+      "description": "Response",
+      "title": "Response",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "project",
+      "description": "Project",
+      "title": "Project",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "issue_id",
+      "description": "Issue ID",
+      "title": "Issue ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "issue_url",
+      "title": "Issue URL",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "summary",
+      "description": "Summary",
+      "title": "Summary",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "description",
+      "description": "Description",
+      "title": "Description",
+      "is_required": false,
+      "nullable": true
+    }
+  ],
+  "category_id": "A04T6GE3LEB",
+  "category_label": "JIRA Cloud",
+  "app_id": "A04T6GE3LEB",
+  "date_created": 1678873541,
+  "date_released": 0,
+  "date_updated": 1719205477,
+  "date_deleted": 0,
+  "form_enabled": false
+}

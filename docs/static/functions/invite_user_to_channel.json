@@ -1,0 +1,47 @@
+{
+  "name": "invite_user_to_channel",
+  "description": "Invite a user to a channel",
+  "schema_reference": "slack#/functions/invite_user_to_channel.md",
+  "schema_id": "Schema.slack.functions.InviteUserToChannel",
+  "category": "Channel management",
+  "scopes": ["channels:manage", "groups:write"],
+  "input_parameters": [
+    {
+      "type": "Schema.types.array",
+      "name": "channel_id",
+      "description": "An array of 1 conversation IDs for the you are inviting users to. Only accepts 1 channel ID presented as an array.",
+      "required": true,
+      "examples": ["[\"C123456\"]", "[\"D123ABC456\"]"]
+    },
+    {
+      "name": "usergroup_ids",
+      "type": "Schema.types.array",
+      "description": "A list of usergroup IDs to add to the conversation.",
+      "examples": ["[\"S111AAA111\",\"S222BBB222\"]"],
+      "required": false
+    },
+    {
+      "name": "user_ids",
+      "type": "Schema.types.array",
+      "description": "A list of user IDs to add to the conversation.",
+      "examples": ["[\"U111AAA111\",\"U222BBB222\"]"],
+      "required": false
+    }
+  ],
+  "output_parameters": [
+    {
+      "name": "usergroup_ids",
+      "type": "Schema.types.array",
+      "description": "A list of usergroup IDs added to the conversation.",
+      "examples": ["[\"S111AAA111\",\"S222BBB222\"]"],
+      "required": false
+    },
+    {
+      "name": "user_ids",
+      "type": "Schema.types.array",
+      "description": "A list of user IDs added to the conversation.",
+      "examples": ["[\"U111AAA111\",\"U222BBB222\"]"],
+      "required": false
+    }
+  ]
+}

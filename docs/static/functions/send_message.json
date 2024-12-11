@@ -1,0 +1,35 @@
+{
+  "name": "send_message",
+  "description": "Send a message to a Slack channel",
+  "schema_id": "Schema.slack.functions.SendMessage",
+  "schema_reference": "slack#/functions/send_message",
+  "scopes": ["chat:write", "channels:read"],
+  "input_parameters": [
+    {
+      "name": "channel_id",
+      "required": true,
+      "type": "string",
+      "description": "The ID of the Slack channel"
+    },
+    {
+      "name": "message",
+      "required": true,
+      "type": "string",
+      "description": "The content of the message"
+    }
+  ],
+  "output_parameters": [
+    {
+      "name": "message_timestamp",
+      "required": true,
+      "type": "string",
+      "description": "Timestamp of the sent message"
+    },
+    {
+      "name": "message_link",
+      "required": false,
+      "type": "string",
+      "description": "Link to the sent message"
+    }
+  ]
+}

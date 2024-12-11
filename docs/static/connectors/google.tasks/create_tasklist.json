@@ -1,0 +1,46 @@
+{
+  "id": "Fn05RSTZV91C",
+  "callback_id": "create_tasklist",
+  "title": "Create a task list",
+  "description": "Creates an empty list",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter a name",
+      "title": "List name",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "google_access_token",
+      "description": "Whose account should be used to create the tasks?",
+      "title": "Google access token",
+      "is_required": true,
+      "oauth2_provider_key": "google"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "title",
+      "title": "Task title",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "tasklist_id",
+      "title": "Tasklist ID",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05RZA1NU7L",
+  "category_label": "Google Tasks",
+  "app_id": "A05RZA1NU7L",
+  "date_created": 1694525395,
+  "date_released": 0,
+  "date_updated": 1698905510,
+  "date_deleted": 0,
+  "form_enabled": false
+}

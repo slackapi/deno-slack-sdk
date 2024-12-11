@@ -1,0 +1,161 @@
+{
+  "id": "Fn067ASMHVBQ",
+  "callback_id": "create_sign_request",
+  "title": "Create a sign request with a template",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "template",
+      "description": "Please select a template",
+      "title": "Template",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_templates",
+        "inputs": {
+          "box_access_token": {
+            "value": "{{input_parameters.box_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.templates}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "parent_folder_id",
+      "description": "Select the parent folder",
+      "title": "Parent folder",
+      "is_required": true,
+      "hint": "You cannot select your root folder. It can take up to 10 mins for a newly created folder to be searchable.",
+      "dynamic_options": {
+        "function": "#/functions/search_folders",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "box_access_token": {
+            "value": "{{input_parameters.box_access_token}}"
+          }
+        },
+        "request_config": {
+          "search": {
+            "min_query_length": 1
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.folders}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        },
+        "validation": {
+          "function": "#/functions/fetch_folder",
+          "inputs": {
+            "box_access_token": {
+              "value": "{{input_parameters.box_access_token}}"
+            },
+            "parent_folder_id": {
+              "value": "{{input_parameters.parent_folder_id}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.folder}}"
+            },
+            "value_path": "id",
+            "label_path": "name"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "signer_email",
+      "description": "Enter an email address",
+      "title": "Signer email",
+      "is_required": true,
+      "format": "email"
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "description": "Enter text",
+      "title": "Name of the request",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "email_subject",
+      "description": "Enter text",
+      "title": "Email subject",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "email_message",
+      "description": "Enter text",
+      "title": "Email message",
+      "is_required": false
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "box_access_token",
+      "title": "Box Access Token",
+      "is_required": true,
+      "oauth2_provider_key": "box",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "id",
+      "title": "ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "email_message",
+      "title": "Email message",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "email_subject",
+      "title": "Email subject",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "name",
+      "title": "Request name",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "status",
+      "title": "Request status",
+      "is_required": false
+    }
+  ],
+  "category_id": "A05TC5525DZ",
+  "category_label": "Box Sign",
+  "app_id": "A05TC5525DZ",
+  "date_created": 1701123772,
+  "date_released": 0,
+  "date_updated": 1712733609,
+  "date_deleted": 0,
+  "form_enabled": false
+}

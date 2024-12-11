@@ -1,0 +1,54 @@
+{
+  "id": "Fn05S27R7JPP",
+  "callback_id": "list_job_candidates",
+  "title": "List job candidates",
+  "description": "List all candidates for a job request",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "integer",
+      "name": "job_id",
+      "title": "Job",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_jobs",
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.jobs}}"
+          },
+          "value_path": "id",
+          "label_path": "name"
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "array",
+      "name": "candidate_emails",
+      "title": "Candidate emails",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    },
+    {
+      "type": "array",
+      "name": "candidate_names",
+      "title": "Candidates names",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    }
+  ],
+  "category_id": "A05QS03T4MB",
+  "category_label": "Greenhouse Recruiting",
+  "app_id": "A05QS03T4MB",
+  "date_created": 1694602414,
+  "date_released": 0,
+  "date_updated": 1719917062,
+  "date_deleted": 0,
+  "form_enabled": false
+}

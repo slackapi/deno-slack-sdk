@@ -1,0 +1,117 @@
+{
+  "id": "Fn061G09P7QW",
+  "callback_id": "restart_build",
+  "title": "Restart build",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "repo_slug",
+      "title": "Repository",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_repository",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.repositories}}"
+          },
+          "value_path": "slug",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "branch",
+      "description": "Select a branch",
+      "title": "Branch",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_branches",
+        "inputs": {
+          "query": {
+            "value": "{{client.query}}"
+          },
+          "repo_slug": {
+            "value": "{{input_parameters.repo_slug}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.branches}}"
+          },
+          "value_path": "name",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "integer",
+      "name": "build_id",
+      "description": "Select a build ID",
+      "title": "Build ID",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_builds",
+        "inputs": {
+          "repo_slug": {
+            "value": "{{input_parameters.repo_slug}}"
+          },
+          "branch_name": {
+            "value": "{{input_parameters.branch}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.builds}}"
+          },
+          "value_path": "id",
+          "label_path": "number"
+        }
+      }
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "integer",
+      "name": "build_id",
+      "title": "Build ID",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "branch",
+      "title": "Branch",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "repository",
+      "title": "Repository",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "build_url",
+      "title": "Build URL",
+      "is_required": false
+    }
+  ],
+  "category_id": "A0619K2GN2W",
+  "category_label": "Travis CI",
+  "app_id": "A0619K2GN2W",
+  "date_created": 1697620664,
+  "date_released": 0,
+  "date_updated": 1719904920,
+  "date_deleted": 0,
+  "form_enabled": false
+}

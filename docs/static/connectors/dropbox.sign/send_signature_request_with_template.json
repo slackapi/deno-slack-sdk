@@ -1,0 +1,190 @@
+{
+  "id": "Fn062VL8734N",
+  "callback_id": "send_signature_request_with_template",
+  "title": "Send signature request using a template",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter text",
+      "title": "Title of the request",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "template_id",
+      "description": "Please select an option",
+      "title": "Template",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/list_templates",
+        "inputs": {
+          "dropbox_sign_access_token": {
+            "value": "{{input_parameters.dropbox_sign_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.templates}}"
+          },
+          "value_path": "template_id",
+          "label_path": "title"
+        },
+        "validation": {
+          "function": "#/functions/fetch_template",
+          "inputs": {
+            "template_id": {
+              "value": "{{input_parameters.template_id}}"
+            },
+            "dropbox_sign_access_token": {
+              "value": "{{input_parameters.dropbox_sign_access_token}}"
+            }
+          },
+          "options": {
+            "target": {
+              "type": "object",
+              "value": "{{output_parameters.template}}"
+            },
+            "value_path": "template_id",
+            "label_path": "title"
+          }
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "signer_role",
+      "description": "Please select an option",
+      "title": "Signer role",
+      "is_required": true,
+      "dynamic_options": {
+        "function": "#/functions/get_template_signer_roles",
+        "inputs": {
+          "template_id": {
+            "value": "{{input_parameters.template_id}}"
+          },
+          "dropbox_sign_access_token": {
+            "value": "{{input_parameters.dropbox_sign_access_token}}"
+          }
+        },
+        "options": {
+          "target_array": {
+            "type": "object",
+            "value": "{{output_parameters.signer_roles}}"
+          },
+          "value_path": "name",
+          "label_path": "name"
+        }
+      }
+    },
+    {
+      "type": "string",
+      "name": "signer_name",
+      "description": "Enter text",
+      "title": "Signer name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "signer_email_address",
+      "description": "Enter text",
+      "title": "Signer email",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "email_subject",
+      "description": "Enter text",
+      "title": "Email subject",
+      "is_required": false
+    },
+    {
+      "type": "string",
+      "name": "email_message",
+      "description": "Enter text",
+      "title": "Email message",
+      "is_required": false
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "dropbox_sign_access_token",
+      "description": "Dropbox Sign Credential to use",
+      "title": "Dropbox Sign access token",
+      "is_required": true,
+      "oauth2_provider_key": "dropbox_sign",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "signature_request_id",
+      "description": "Signature request ID",
+      "title": "Signature request ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Signature request title",
+      "title": "Signature request title",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "subject",
+      "description": "Email subject",
+      "title": "Email subject",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "message",
+      "description": "Email message",
+      "title": "Email message",
+      "is_required": false,
+      "nullable": true
+    },
+    {
+      "type": "string",
+      "name": "signing_url",
+      "description": "Signature signing URL",
+      "title": "Signature signing URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "details_url",
+      "description": "Signature details URL",
+      "title": "Signature details URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "signer_name",
+      "description": "Signer name",
+      "title": "Signer name",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "signer_email_address",
+      "description": "Signature request title",
+      "title": "Signature request title",
+      "is_required": true
+    }
+  ],
+  "category_id": "A060Q1RQSCE",
+  "category_label": "Dropbox Sign",
+  "app_id": "A060Q1RQSCE",
+  "date_created": 1698382586,
+  "date_released": 0,
+  "date_updated": 1701968447,
+  "date_deleted": 0,
+  "form_enabled": false
+}

@@ -1,0 +1,114 @@
+{
+  "id": "Fn0513U2EMQ9",
+  "callback_id": "create_meeting",
+  "title": "Create a meeting",
+  "description": "Create a scheduled Webex meeting",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "title",
+      "description": "Enter a meeting title",
+      "title": "Title",
+      "is_required": true,
+      "maxLength": 128
+    },
+    {
+      "type": "string",
+      "name": "agenda",
+      "description": "Enter a meeting agenda",
+      "title": "Agenda",
+      "is_required": false,
+      "maxLength": 1300
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "start_time",
+      "description": "The date, time, and timezone when the meeting starts",
+      "title": "Start time",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/timestamp",
+      "name": "end_time",
+      "description": "The date, time, and timezone when the meeting ends",
+      "title": "End time",
+      "is_required": true
+    },
+    {
+      "type": "array",
+      "name": "invitees",
+      "description": "Invitees for the meeting",
+      "title": "Invitees",
+      "is_required": false,
+      "items": {
+        "type": "slack#/types/user_id"
+      },
+      "default": []
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "webex_access_token",
+      "title": "Webex access token",
+      "is_required": true,
+      "oauth2_provider_key": "webex",
+      "require_end_user_auth": true
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "meeting_id",
+      "description": "A unique identifier for meeting",
+      "title": "Meeting ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "meeting_link",
+      "description": "A link to a meeting information page where the meeting client is launched if the meeting is ready to start or join",
+      "title": "Meeting link",
+      "is_required": true,
+      "format": "url"
+    },
+    {
+      "type": "number",
+      "name": "meeting_number",
+      "description": "The meeting number which can be used to join the meeting",
+      "title": "Meeting number",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "site_url",
+      "description": "The Webex site URL",
+      "title": "Site URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "host_webex_id",
+      "description": "A unique identifier for the meeting host",
+      "title": "Host Webex ID",
+      "is_required": true
+    },
+    {
+      "type": "array",
+      "name": "invitee_emails",
+      "description": "Comma-separated list of invitee emails",
+      "title": "Invitee emails",
+      "is_required": false,
+      "items": {
+        "type": "string"
+      }
+    }
+  ],
+  "category_id": "A050R5T1K6X",
+  "category_label": "Webex",
+  "app_id": "A050R5T1K6X",
+  "date_created": 1680052095,
+  "date_released": 0,
+  "date_updated": 1697814366,
+  "date_deleted": 0,
+  "form_enabled": false
+}

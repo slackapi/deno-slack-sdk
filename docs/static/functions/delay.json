@@ -1,0 +1,17 @@
+{
+  "name": "delay",
+  "description": "Pause a workflow for a specified amount of time",
+  "schema_reference": "slack#/functions/delay.md",
+  "schema_id": "Schema.slack.functions.Delay",
+  "category": "Helpers",
+  "input_parameters": [
+    {
+      "name": "minutes_to_delay",
+      "type": "Schema.types.integer",
+      "description": "Length of time (in minutes) to wait before proceeding. Maximum allowed value is `10080` minutes (7 days).",
+      "examples": ["4", "8", "15", "16", "23", "42"],
+      "default": "",
+      "required": true
+    }
+  ]
+}

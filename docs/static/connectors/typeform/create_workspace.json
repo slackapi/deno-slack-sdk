@@ -1,0 +1,51 @@
+{
+  "id": "Fn05TXGGH0JF",
+  "callback_id": "create_workspace",
+  "title": "Create a workspace",
+  "description": "",
+  "type": "app",
+  "input_parameters": [
+    {
+      "type": "string",
+      "name": "workspace_name",
+      "description": "Enter text",
+      "title": "Workspace name",
+      "is_required": true
+    },
+    {
+      "type": "slack#/types/credential/oauth2",
+      "name": "typeform_access_token",
+      "title": "Typeform access token",
+      "is_required": true,
+      "oauth2_provider_key": "typeform"
+    }
+  ],
+  "output_parameters": [
+    {
+      "type": "string",
+      "name": "workspace_url",
+      "title": "Workspace URL",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "workspace_id",
+      "title": "Workspace ID",
+      "is_required": true
+    },
+    {
+      "type": "string",
+      "name": "workspace_name",
+      "title": "Workspace name",
+      "is_required": true
+    }
+  ],
+  "category_id": "A05T70HT5E1",
+  "category_label": "Typeform",
+  "app_id": "A05T70HT5E1",
+  "date_created": 1695719094,
+  "date_released": 0,
+  "date_updated": 1709543926,
+  "date_deleted": 0,
+  "form_enabled": false
+}
