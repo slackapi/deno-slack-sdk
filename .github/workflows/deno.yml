@@ -11,6 +11,12 @@ on:
 jobs:
   deno:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        deno-version:
+          - v1.x
+          - v2.x
     permissions:
       contents: read
     steps:
@@ -19,10 +25,10 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup Deno
+      - name: Setup Deno ${{ matrix.deno-version }}
         uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
         with:
-          deno-version: v1.x
+          deno-version: ${{ matrix.deno-version }}
 
       - name: Run tests
         run: deno task test
@@ -32,6 +38,7 @@ jobs:
 
       - name: Upload coverage to CodeCov
         uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5.4.3
+        if: ${{ matrix.deno-version }} == 'v2.x'
         with:
-          file: ./lcov.info
+          files: ./lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}

@@ -13,6 +13,7 @@ jobs:
   samples:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         sample:
           - slack-samples/deno-issue-submission
@@ -21,13 +22,16 @@ jobs:
           - slack-samples/deno-message-translator
           - slack-samples/deno-request-time-off
           - slack-samples/deno-simple-survey
+        deno-version:
+          - v1.x
+          - v2.x
     permissions:
       contents: read
     steps:
-      - name: Setup Deno
+      - name: Setup Deno ${{ matrix.deno-version }}
         uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
         with:
-          deno-version: v1.x
+          deno-version: ${{ matrix.deno-version }}
 
       - name: Checkout the sdk
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -42,13 +46,13 @@ jobs:
           path: ./sample
           persist-credentials: false
 
-      - name: Set imports.deno-slack-sdk/ to ../deno-slack-sdk/src/ in import_map.json
+      - name: Set imports.deno-slack-sdk/ to ../deno-slack-sdk/src/ in imports
         run: >
           deno run
           --allow-read --allow-write 
-          deno-slack-sdk/scripts/import_map/update.ts 
-          --import-map "./sample/import_map.json"
-          --sdk "../deno-slack-sdk/src/"
+          deno-slack-sdk/scripts/imports/update.ts 
+          --import-file "./sample/deno.jsonc"
+          --sdk "./deno-slack-sdk/"
 
       - name: Deno check **/*.ts
         working-directory: ./sample

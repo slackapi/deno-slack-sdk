@@ -135,7 +135,7 @@ export class TypedWorkflowStepDefinition<
     }
   }
 
-  registerFunction(manifest: SlackManifest) {
+  override registerFunction(manifest: SlackManifest) {
     if (this.isLocalFunctionReference()) {
       manifest.registerFunction(this.definition as ManifestFunction);
     }
