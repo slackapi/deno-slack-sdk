@@ -13,6 +13,12 @@ on:
 jobs:
   build:
     runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        deno-version:
+          - v1.x
+          - v2.x
     permissions:
       contents: read
     steps:
@@ -27,10 +33,10 @@ jobs:
           node-version: latest
           registry-url: https://registry.npmjs.org/
 
-      - name: Setup Deno
+      - name: Setup Deno ${{ matrix.deno-version }}
         uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
         with:
-          deno-version: v1.x
+          deno-version: ${{ matrix.deno-version }}
 
       - name: Run build_npm.ts
         run: deno run -A scripts/build_npm.ts
