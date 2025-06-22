@@ -17,14 +17,16 @@ export const greenText = (text: string) => green + text + reset;
 export const yellowText = (text: string) => yellow + text + reset;
 export const redText = (text: string) => red + text + reset;
 
-// TODO: once List steps work in code, bring this back
 const FUNCTIONS_TO_IGNORE = [
+  // TODO: once List steps work in code, bring this back
   "update_list_record",
   "share_list_users",
   "lists_activity_feed",
   "list_add_record",
   "delete_list_record",
   "copy_list",
+  // canvas_update_content functionality got moved to canvas_update_content_v2
+  "canvas_update_content",
 ];
 
 export async function getSlackFunctions(
