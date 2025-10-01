@@ -20,7 +20,13 @@
   },
   "lint": {
     "include": ["src", "tests", "scripts"],
-    "exclude": ["src/schema/slack/functions/_scripts/functions.json", "**/*.md"]
+    "exclude": [
+      "src/schema/slack/functions/_scripts/functions.json",
+      "**/*.md"
+    ],
+    "rules": {
+      "exclude": ["no-import-prefix"]
+    }
   },
   "tasks": {
     "test": "deno fmt --check && deno lint && deno run --allow-run --allow-env --allow-read scripts/bundle.ts && deno test --allow-read --allow-run --parallel src/ tests/",
