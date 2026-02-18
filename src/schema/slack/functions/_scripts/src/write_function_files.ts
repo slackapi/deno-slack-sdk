@@ -4,7 +4,7 @@ import {
   SlackTestFunctionTemplate,
 } from "./templates/mod.ts";
 import { getSlackFunctions, greenText, redText } from "./utils.ts";
-import { FunctionRecord } from "./types.ts";
+import type { FunctionRecord } from "./types.ts";
 
 const VALID_FILENAME_REGEX = /^[0-9a-zA-Z_\-]+$/;
 

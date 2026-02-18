@@ -1,5 +1,3 @@
-export { SlackAPI } from "https://deno.land/x/deno_slack_api@2.8.0/mod.ts";
-export type {
-  SlackAPIClient,
-  Trigger,
-} from "https://deno.land/x/deno_slack_api@2.8.0/types.ts";
+// @slack/api on JSR exports "." and "./types". Use ^ range for latest compatible.
+export { SlackAPI } from "jsr:@slack/api@^2.9.0";
+export type { SlackAPIClient, Trigger } from "jsr:@slack/api@^2.9.0/types";

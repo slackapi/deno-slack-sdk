@@ -56,15 +56,15 @@ of your local `deno-slack-sdk` repo:
 {
   "imports": {
     "deno-slack-sdk/": "../../tools/deno-slack-sdk/src/",
-    "deno-slack-api/": "https://deno.land/x/deno_slack_api@1.5.0/"
+    "deno-slack-api/": "jsr:@slack/api@2.9.0/"
   }
 }
 ```
 
 #### With remote changes
 
-To test with changes on a remote repo, commit your intended history to a remote
-branch and note the full commit SHA. (e.g.
+To test with unreleased changes on a remote repo, commit your intended history
+to a remote branch and note the full commit SHA. (e.g.
 `fc0a0a1f0722e28fecb7782513d045522d7c0d6f`).
 
 Then in your sample app's `import_map.json` file, replace the `deno-slack-sdk`
@@ -74,7 +74,7 @@ import url with:
 {
   "imports": {
     "deno-slack-sdk/": "https://raw.githubusercontent.com/slackapi/deno-slack-sdk/<commit-SHA-goes-here>/src/",
-    "deno-slack-api/": "https://deno.land/x/deno_slack_api@1.5.0/"
+    "deno-slack-api/": "jsr:@slack/api@2.9.0/"
   }
 }
 ```
@@ -113,12 +113,27 @@ last tag is in a releasable state! At a minimum,
 
 To create a new release:
 
-1. Create a new GitHub Release from the
+1. Determine the new release version. You can start off by incrementing the
+   version to reflect a patch (i.e. 1.0.0 -> 1.0.1).
+   - Review the pull request labels of the changes since the last release (i.e.
+     `semver:minor`, `semver:patch`, `semver:major`). Tip: Your release version
+     should be based on the tag of the largest change, so if the changes include
+     a `semver:minor`, the release version should be upgraded to reflect a
+     minor.
+   - Ensure that this version adheres to [semantic versioning][semver]. See
+     [Versioning](#versioning-and-tags) for correct version format. Version tags
+     should match the following pattern: `1.0.1` (no `v` preceding the number).
+2. Create a new branch from `main` named after the release version (e.g.
+   `1.0.1`).
+3. Bump the `version` field in `deno.jsonc` to the new release version.
+4. Open a pull request from the version branch into `main` and get it
+   approved/merged.
+   1. `git commit -m 'chore(release): version 1.0.1'`
+   2. `git push -u origin 1.0.1`
+5. Create a new GitHub Release from the
    [Releases page](https://github.com/slackapi/deno-slack-sdk/releases) by
    clicking the "Draft a new release" button.
-2. Input a new version manually into the "Choose a tag" input. You can start off
-   by incrementing the version to reflect a patch. (i.e. 1.16.0 -> 1.16.1)
-
+6. Input a new version manually into the "Choose a tag" input.
    - After you input the new version, click the "Create a new tag: x.x.x on
      publish" button. This won't create your tag immediately.
    - Auto-generate the release notes by clicking the "Auto-generate release
@@ -127,23 +142,14 @@ To create a new release:
    - Edit the resulting notes to ensure they have decent messaging that are
      understandable by non-contributors, but each commit should still have it's
      own line.
-   - Flip to the preview mode and review the pull request labels of the changes
-     included in this release (i.e. `semver:minor` `semver:patch`,
-     `semver:major`). Tip: Your release version should be based on the tag of
-     the largest change, so if this release includes a `semver:minor`, the
-     release version in your tag should be upgraded to reflect a minor.
-   - Ensure that this version adheres to [semantic versioning][semver]. See
-     [Versioning](#versioning-and-tags) for correct version format. Version tags
-     should match the following pattern: `1.0.1` (no `v` preceding the number).
-
-3. Set the "Target" input to the "main" branch.
-4. Name the release title after the version tag.
-5. Make any adjustments to generated release notes to make sure they are
+7. Set the "Target" input to the "main" branch.
+8. Name the release title after the version tag.
+9. Make any adjustments to generated release notes to make sure they are
    accessible and approachable and that an end-user with little context about
    this project could still understand.
-6. Publish the release by clicking the "Publish release" button!
-7. After a few minutes, the corresponding version will be available on
-   <https://deno.land/x/deno_slack_sdk>.
+10. Publish the release by clicking the "Publish release" button!
+11. After a few minutes, the corresponding version will be available on
+    <https://deno.land/x/deno_slack_api> and <https://jsr.io/@slack/sdk>.
 
 ## Workflow
 

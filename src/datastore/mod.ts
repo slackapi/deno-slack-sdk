@@ -1,6 +1,6 @@
-import { SlackManifest } from "../manifest/mod.ts";
-import { ManifestDatastoreSchema } from "../manifest/manifest_schema.ts";
-import {
+import type { SlackManifest } from "../manifest/mod.ts";
+import type { ManifestDatastoreSchema } from "../manifest/manifest_schema.ts";
+import type {
   ISlackDatastore,
   SlackDatastoreAttributes,
   SlackDatastoreDefinition,

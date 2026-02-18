@@ -1,9 +1,9 @@
 import { pascalCase } from "../../../../../../dev_deps.ts";
-import { FunctionProperty, FunctionRecord } from "../types.ts";
+import type { FunctionProperty, FunctionRecord } from "../types.ts";
 import SchemaTypes from "../../../../../schema_types.ts";
 import SlackTypes from "../../../../schema_types.ts";
 import { InternalSlackTypes } from "../../../../types/custom/mod.ts";
-import { AllowedTypeValue, AllowedTypeValueObject } from "./types.ts";
+import type { AllowedTypeValue, AllowedTypeValueObject } from "./types.ts";
 import { isCustomType } from "../../../../../../types/mod.ts";
 import { isArrayFunctionProperty, isObjectFunctionProperty } from "../utils.ts";
 

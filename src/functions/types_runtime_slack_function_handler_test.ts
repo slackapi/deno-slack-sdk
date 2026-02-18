@@ -2,7 +2,7 @@ import { assertExists } from "../dev_deps.ts";
 import { assertEqualsTypedValues } from "../test_utils.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
 import { DefineFunction } from "./mod.ts";
-import { RuntimeSlackFunctionHandler } from "./types.ts";
+import type { RuntimeSlackFunctionHandler } from "./types.ts";
 
 Deno.test("RuntimeSlackFunctionHandler type should not include a client property", () => {
   const TestFn = DefineFunction({

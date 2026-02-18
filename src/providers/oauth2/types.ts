@@ -1,4 +1,4 @@
-import {
+import type {
   OAuth2ProviderTypeValues,
 } from "../../schema/providers/oauth2/types.ts";
 
