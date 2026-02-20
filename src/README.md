@@ -17,7 +17,9 @@ apps.
 
 ## 📢 Important
 
-We recommend importing this package from [JSR](https://jsr.io/@slack/sdk/versions), but new releases are currently still published to `deno.land/x` as well.
+We recommend importing this package from
+[JSR](https://jsr.io/@slack/sdk/versions), but new releases are currently still
+published to `deno.land/x` as well.
 
 ## Versioning
 
