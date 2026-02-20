@@ -1,4 +1,4 @@
-import { pascalCase } from "../../../../../../dev_deps.ts";
+import { toPascalCase } from "../../../../../../dev_deps.ts";
 import type { FunctionProperty, FunctionRecord } from "../types.ts";
 import SchemaTypes from "../../../../../schema_types.ts";
 import SlackTypes from "../../../../schema_types.ts";
@@ -17,7 +17,7 @@ export function renderFunctionImport(callbackId: string): string {
 }
 
 export function getFunctionName(callbackId: string): string {
-  return pascalCase(callbackId);
+  return toPascalCase(callbackId);
 }
 
 export function getSlackCallbackId(
