@@ -2,10 +2,10 @@ import { assertExists } from "https://deno.land/std@0.152.0/testing/asserts.ts";
 import { assert, fail } from "./dev_deps.ts";
 import {
   assertEqualsTypedValues,
-  CanBe,
-  CanBeUndefined,
-  CannotBe,
-  CannotBeUndefined,
+  type CanBe,
+  type CanBeUndefined,
+  type CannotBe,
+  type CannotBeUndefined,
 } from "./test_utils.ts";
 
 Deno.test("CanBe", async (t) => {

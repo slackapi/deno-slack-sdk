@@ -1,6 +1,6 @@
-import { assert, IsExact } from "../../../../src/dev_deps.ts";
+import { assert, type IsExact } from "../../../../src/dev_deps.ts";
 import { DefineFunction, Schema } from "../../../../src/mod.ts";
-import {
+import type {
   EnrichedSlackFunctionHandler,
 } from "../../../../src/functions/types.ts";
 import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";

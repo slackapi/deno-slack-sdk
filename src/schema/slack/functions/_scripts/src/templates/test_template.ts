@@ -5,7 +5,7 @@ import {
   renderFunctionImport,
   renderTypeImports,
 } from "./utils.ts";
-import { FunctionParameter, FunctionRecord } from "../types.ts";
+import type { FunctionParameter, FunctionRecord } from "../types.ts";
 import {
   allowedHiddenParams,
   manifestFunctionFieldsToTypeScript,

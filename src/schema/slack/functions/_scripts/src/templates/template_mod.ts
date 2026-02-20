@@ -3,7 +3,7 @@ import {
   getFunctionName,
   renderFunctionImport,
 } from "./utils.ts";
-import { FunctionRecord } from "../types.ts";
+import type { FunctionRecord } from "../types.ts";
 
 export const SlackFunctionModTemplate = (
   functionRecords: FunctionRecord[],

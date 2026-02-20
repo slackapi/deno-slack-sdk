@@ -1,11 +1,11 @@
-import { assert, IsAny, IsExact } from "../../../../src/dev_deps.ts";
-import {
+import { assert, type IsAny, type IsExact } from "../../../../src/dev_deps.ts";
+import type {
   CanBe,
   CanBeUndefined,
   CannotBeUndefined,
 } from "../../../../src/test_utils.ts";
 import { DefineFunction, DefineType, Schema } from "../../../../src/mod.ts";
-import {
+import type {
   EnrichedSlackFunctionHandler,
 } from "../../../../src/functions/types.ts";
 import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";

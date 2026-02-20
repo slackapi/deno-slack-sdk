@@ -1,10 +1,10 @@
-import {
+import type {
   OAuth2ProviderDefinitionArgs,
   OAuth2ProviderOptions,
 } from "./types.ts";
 
-import { OAuth2ProviderTypeValues } from "../../schema/providers/oauth2/types.ts";
-import { ManifestOAuth2ProviderSchema } from "../../manifest/manifest_schema.ts";
+import type { OAuth2ProviderTypeValues } from "../../schema/providers/oauth2/types.ts";
+import type { ManifestOAuth2ProviderSchema } from "../../manifest/manifest_schema.ts";
 
 export const DefineOAuth2Provider = (
   definition: OAuth2ProviderDefinitionArgs,

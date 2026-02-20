@@ -1,4 +1,4 @@
-import { SlackManifestType } from "../../manifest/types.ts";
+import type { SlackManifestType } from "../../manifest/types.ts";
 import { Manifest, SlackManifest } from "../../manifest/mod.ts";
 import { DefineOAuth2Provider, Schema } from "../../mod.ts";
 import {

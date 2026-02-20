@@ -1,19 +1,19 @@
-import { SlackManifest } from "../manifest/mod.ts";
-import {
+import type { SlackManifest } from "../manifest/mod.ts";
+import type {
   ManifestFunction,
   ManifestWorkflowStepSchema,
 } from "../manifest/manifest_schema.ts";
-import { ISlackFunctionDefinition } from "../functions/types.ts";
+import type { ISlackFunctionDefinition } from "../functions/types.ts";
 import {
   CreateUntypedObjectParameterVariable,
   ParameterVariable,
 } from "../parameters/mod.ts";
-import {
+import type {
   ParameterSetDefinition,
   ParameterVariableType,
   PossibleParameterKeys,
 } from "../parameters/types.ts";
-import { WorkflowStepInputs, WorkflowStepOutputs } from "./types.ts";
+import type { WorkflowStepInputs, WorkflowStepOutputs } from "./types.ts";
 
 const localFnPrefix = "#/functions/";
 

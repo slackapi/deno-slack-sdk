@@ -1,10 +1,10 @@
-import {
+import type {
   CustomTypeParameterDefinition,
   TypedObjectParameter,
 } from "../parameters/definition_types.ts";
-import { ManifestCustomEventSchema } from "../manifest/manifest_schema.ts";
-import { CustomEvent } from "./mod.ts";
-import { SlackManifest } from "../manifest/mod.ts";
+import type { ManifestCustomEventSchema } from "../manifest/manifest_schema.ts";
+import type { CustomEvent } from "./mod.ts";
+import type { SlackManifest } from "../manifest/mod.ts";
 
 type AcceptedEventTypes =
   | TypedObjectParameter

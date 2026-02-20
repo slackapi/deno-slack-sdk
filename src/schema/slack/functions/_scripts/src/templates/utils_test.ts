@@ -10,7 +10,7 @@ import {
   assertEquals,
   assertStringIncludes,
 } from "../../../../../../dev_deps.ts";
-import { FunctionRecord } from "../types.ts";
+import type { FunctionRecord } from "../types.ts";
 import SchemaTypes from "../../../../../schema_types.ts";
 import SlackTypes from "../../../../schema_types.ts";
 import { InternalSlackTypes } from "../../../../types/custom/mod.ts";

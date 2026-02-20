@@ -1,9 +1,12 @@
-import { ManifestFunctionType } from "../../manifest/manifest_schema.ts";
-import {
+import type { ManifestFunctionType } from "../../manifest/manifest_schema.ts";
+import type {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import { FunctionDefinitionArgs, ISlackFunctionDefinition } from "../types.ts";
+import type {
+  FunctionDefinitionArgs,
+  ISlackFunctionDefinition,
+} from "../types.ts";
 
 /**
  * Define a connector and its input and output parameters for use in a Slack application.

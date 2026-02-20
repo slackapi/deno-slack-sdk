@@ -1,14 +1,14 @@
-import {
+import type {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../parameters/types.ts";
-import {
+import type {
   EnrichedSlackFunctionHandler,
   RuntimeFunctionContext,
   RuntimeUnhandledEventContext,
   SlackFunctionType,
 } from "./types.ts";
-import { SlackFunctionDefinition } from "./definitions/mod.ts";
+import type { SlackFunctionDefinition } from "./definitions/mod.ts";
 import { enrichContext } from "./enrich-context.ts";
 import { BlockActionsRouter } from "./interactivity/block_actions_router.ts";
 import { BlockSuggestionRouter } from "./interactivity/block_suggestion_router.ts";

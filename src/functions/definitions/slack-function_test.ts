@@ -4,13 +4,13 @@ import {
   assertStrictEquals,
 } from "../../dev_deps.ts";
 import Schema from "../../schema/mod.ts";
-import { PossibleParameterKeys } from "../../parameters/types.ts";
+import type { PossibleParameterKeys } from "../../parameters/types.ts";
 import {
   DefineFunction,
   isCustomFunctionDefinition,
   SlackFunctionDefinition,
 } from "./slack-function.ts";
-import { ISlackFunctionDefinition } from "../types.ts";
+import type { ISlackFunctionDefinition } from "../types.ts";
 
 // TODO: Re-add tests to validate function execution when we've determined how to execute functions locally
 
