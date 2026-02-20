@@ -149,7 +149,7 @@ To create a new release:
    this project could still understand.
 10. Publish the release by clicking the "Publish release" button!
 11. After a few minutes, the corresponding version will be available on
-    <https://deno.land/x/deno_slack_api> and <https://jsr.io/@slack/sdk>.
+    <https://deno.land/x/deno_slack_sdk> and <https://jsr.io/@slack/sdk>.
 
 ## Workflow
 
