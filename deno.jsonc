@@ -7,9 +7,6 @@
     "./mod.ts": "./src/mod.ts",
     "./types.ts": "./src/types.ts"
   },
-  "imports": {
-    "@std/http/http-errors": "jsr:@std/http@^1.0.0/http_errors"
-  },
   "publish": {
     "exclude": ["**/*_test.ts", "**/fixtures"],
     "include": [
@@ -37,8 +34,7 @@
   "tasks": {
     "test": "deno fmt --check && deno lint && deno run --allow-run --allow-env --allow-read scripts/bundle.ts && deno test --allow-read --allow-run --parallel src/ tests/",
     "coverage": "rm -rf .coverage && deno test --reporter=dot --parallel --allow-read --coverage=.coverage src/ && deno coverage --exclude=fixtures --exclude=_test --lcov --output=lcov.info .coverage",
-    "publish:dry-run": "deno publish --dry-run",
-    "publish": "deno publish --allow-slow-types"
+    "publish:dry-run": "deno publish --allow-slow-types --dry-run"
   },
   "lock": false
 }

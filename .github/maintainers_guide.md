@@ -109,7 +109,11 @@ resemble the default values.
 Releases for this library are automatically generated off of git tags. Before
 creating a new release, ensure that everything on the `main` branch since the
 last tag is in a releasable state! At a minimum,
-[run the tests](#testing-with-deno).
+[run the tests](#testing-with-deno) and validate that the package meets JSR publishing requirements by doing a dry run of the publish command:
+
+```zsh
+deno task publish:dry-run
+```
 
 To create a new release:
 
