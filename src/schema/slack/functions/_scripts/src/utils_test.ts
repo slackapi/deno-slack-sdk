@@ -6,8 +6,8 @@ import {
   redText,
   yellowText,
 } from "./utils.ts";
-import { assert, assertEquals, IsExact } from "../../../../../dev_deps.ts";
-import {
+import { assert, assertEquals, type IsExact } from "../../../../../dev_deps.ts";
+import type {
   ArrayFunctionProperty,
   FunctionProperty,
   ObjectFunctionProperty,

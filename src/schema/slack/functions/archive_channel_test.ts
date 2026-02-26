@@ -5,7 +5,7 @@ import {
   assertNotStrictEquals,
 } from "../../../dev_deps.ts";
 import { DefineWorkflow } from "../../../workflows/mod.ts";
-import { ManifestFunctionSchema } from "../../../manifest/manifest_schema.ts";
+import type { ManifestFunctionSchema } from "../../../manifest/manifest_schema.ts";
 import SlackTypes from "../schema_types.ts";
 import ArchiveChannel from "./archive_channel.ts";
 

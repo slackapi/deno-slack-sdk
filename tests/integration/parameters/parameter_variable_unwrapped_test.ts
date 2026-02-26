@@ -1,8 +1,12 @@
 import { DefineType } from "../../../src/types/mod.ts";
 import SchemaTypes from "../../../src/schema/schema_types.ts";
 import { ParameterVariable } from "../../../src/parameters/mod.ts";
-import { assert, assertStrictEquals, IsAny } from "../../../src/dev_deps.ts";
-import { CannotBeUndefined } from "../../../src/test_utils.ts";
+import {
+  assert,
+  assertStrictEquals,
+  type IsAny,
+} from "../../../src/dev_deps.ts";
+import type { CannotBeUndefined } from "../../../src/test_utils.ts";
 
 Deno.test("ParameterVariable with unwrapped typed object with an optional Custom Type property should yield an object with a definite value for its sub-properties", () => {
   const StringType = DefineType({

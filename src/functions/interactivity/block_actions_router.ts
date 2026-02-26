@@ -1,18 +1,21 @@
-import {
+import type {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import { SlackFunctionDefinition } from "../definitions/mod.ts";
+import type { SlackFunctionDefinition } from "../definitions/mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { enrichContext } from "../enrich-context.ts";
-import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
+import type {
+  FunctionDefinitionArgs,
+  FunctionRuntimeParameters,
+} from "../types.ts";
 import type {
   ActionContext,
   BlockActionConstraint,
   BlockActionHandler,
   RuntimeActionContext,
 } from "./types.ts";
-import { BlockAction } from "./block_kit_types.ts";
+import type { BlockAction } from "./block_kit_types.ts";
 import {
   matchBasicConstraintField,
   normalizeConstraintToArray,

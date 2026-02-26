@@ -1,10 +1,10 @@
-import {
+import type {
   ParameterDefinitionWithGenerics,
   TypedObjectProperties,
   TypedObjectRequiredProperties,
 } from "../parameters/definition_types.ts";
-import { SlackManifest } from "../manifest/mod.ts";
-import { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
+import type { SlackManifest } from "../manifest/mod.ts";
+import type { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
 
 export type CustomTypeDefinition<
   Props extends TypedObjectProperties,

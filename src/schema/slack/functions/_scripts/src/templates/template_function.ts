@@ -2,7 +2,7 @@ import { isCustomType } from "../../../../../../types/mod.ts";
 import SchemaTypes from "../../../../../schema_types.ts";
 import SlackSchemaTypes from "../../../../schema_types.ts";
 import { InternalSlackTypes } from "../../../../types/custom/mod.ts";
-import {
+import type {
   FunctionParameter,
   FunctionProperties,
   FunctionProperty,
@@ -15,7 +15,7 @@ import {
   renderTypeImports,
   sanitize,
 } from "./utils.ts";
-import { AllowedTypeValue, AllowedTypeValueObject } from "./types.ts";
+import type { AllowedTypeValue, AllowedTypeValueObject } from "./types.ts";
 
 type AllowedHiddenParamsMap = Record<
   string,

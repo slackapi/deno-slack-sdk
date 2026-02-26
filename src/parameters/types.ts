@@ -1,9 +1,9 @@
-import {
+import type {
   IncreaseDepth,
   MaxRecursionDepth,
   RecursionDepthLevel,
 } from "../type_utils.ts";
-import {
+import type {
   CustomTypeParameterDefinition,
   ParameterDefinition,
   TypedObjectParameter,

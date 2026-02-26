@@ -3,7 +3,7 @@ import {
   assertInstanceOf,
   assertStrictEquals,
 } from "../../dev_deps.ts";
-import { PossibleParameterKeys } from "../../parameters/types.ts";
+import type { PossibleParameterKeys } from "../../parameters/types.ts";
 import Schema from "../../schema/mod.ts";
 import {
   ConnectorFunctionDefinition,
