@@ -1,11 +1,11 @@
-import type {
+import {
   ISlackManifestRemote,
   ISlackManifestRunOnSlack,
   SlackManifestType,
 } from "./types.ts";
-import type { ICustomType } from "../types/types.ts";
-import type { ParameterSetDefinition } from "../parameters/types.ts";
-import type {
+import { ICustomType } from "../types/types.ts";
+import { ParameterSetDefinition } from "../parameters/types.ts";
+import {
   ManifestAppHomeMessagesTabSchema,
   ManifestAppHomeSchema,
   ManifestCustomEventsSchema,

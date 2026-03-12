@@ -1,23 +1,15 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
-  "name": "@slack/sdk",
-  "version": "2.15.1",
-  "exports": {
-    ".": "./src/mod.ts",
-    "./mod.ts": "./src/mod.ts",
-    "./types.ts": "./src/types.ts"
-  },
-  "publish": {
-    "exclude": ["**/*_test.ts", "**/fixtures"],
-    "include": [
-      "README.md",
-      "LICENSE",
-      "deno.jsonc",
-      "src/**"
-    ]
-  },
   "fmt": {
-    "include": ["src", "tests", "docs", "README.md", "scripts", ".github/maintainers_guide.md", ".github/CONTRIBUTING.md"],
+    "include": [
+      "src",
+      "tests",
+      "docs",
+      "README.md",
+      "scripts",
+      ".github/maintainers_guide.md",
+      ".github/CONTRIBUTING.md"
+    ],
     "exclude": ["src/schema/slack/functions/_scripts/functions.json"],
     "semiColons": true,
     "indentWidth": 2,
@@ -28,13 +20,17 @@
   },
   "lint": {
     "include": ["src", "tests", "scripts"],
-    "exclude": ["src/schema/slack/functions/_scripts/functions.json", "**/*.md"],
-    "rules": { "exclude": ["no-import-prefix", "no-slow-types"] }
+    "exclude": [
+      "src/schema/slack/functions/_scripts/functions.json",
+      "**/*.md"
+    ],
+    "rules": {
+      "exclude": ["no-import-prefix"]
+    }
   },
   "tasks": {
     "test": "deno fmt --check && deno lint && deno run --allow-run --allow-env --allow-read scripts/bundle.ts && deno test --allow-read --allow-run --parallel src/ tests/",
-    "coverage": "rm -rf .coverage && deno test --reporter=dot --parallel --allow-read --coverage=.coverage src/ && deno coverage --exclude=fixtures --exclude=_test --lcov --output=lcov.info .coverage",
-    "publish:dry-run": "deno publish --allow-slow-types --dry-run"
+    "coverage": "rm -rf .coverage && deno test --reporter=dot --parallel --allow-read --coverage=.coverage src/ && deno coverage --exclude=fixtures --exclude=_test --lcov --output=lcov.info .coverage"
   },
   "lock": false
 }

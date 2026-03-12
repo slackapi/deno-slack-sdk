@@ -1,4 +1,4 @@
-import type {
+import {
   ISlackManifestRemote,
   ISlackManifestRunOnSlack,
   SlackManifestType,
@@ -20,7 +20,7 @@ import {
   assertStrictEquals,
   assertStringIncludes,
   fail,
-  type IsExact,
+  IsExact,
   mock,
 } from "../dev_deps.ts";
 import { DefineConnector } from "../functions/mod.ts";
