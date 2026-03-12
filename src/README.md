@@ -15,6 +15,12 @@ A Deno SDK to build Slack apps with the latest platform features. Read the
 [code samples](https://api.slack.com/automation/samples) to learn how to build
 apps.
 
+## 📢 Important
+
+We recommend importing this package from
+[JSR](https://jsr.io/@slack/sdk/versions). New releases will no longer be
+published to `deno.land/x`.
+
 ## Versioning
 
 Releases for this repository follow the [SemVer](https://semver.org/) versioning
