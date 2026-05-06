@@ -1,5 +1,5 @@
 import { DefineFunction, Schema } from "../../../../src/mod.ts";
-import type {
+import {
   EnrichedSlackFunctionHandler,
 } from "../../../../src/functions/types.ts";
 import { SlackFunctionTester } from "../../../../src/functions/tester/mod.ts";

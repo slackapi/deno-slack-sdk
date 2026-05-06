@@ -1,4 +1,4 @@
-import type {
+import {
   TypedObjectParameterDefinition,
   TypedObjectProperties,
   TypedObjectRequiredProperties,

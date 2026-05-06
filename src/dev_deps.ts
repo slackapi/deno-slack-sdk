@@ -9,10 +9,13 @@ export {
   assertStrictEquals,
   assertStringIncludes,
   fail,
-} from "jsr:@std/assert@^1.0.0";
-export * as mock from "jsr:@std/testing@^1.0.0/mock";
+} from "https://deno.land/std@0.152.0/testing/asserts.ts";
+export * as mock from "https://deno.land/std@0.152.0/testing/mock.ts";
 
-export { assertType as assert } from "jsr:@std/testing@^1.0.0/types";
-export type { IsAny, IsExact } from "jsr:@std/testing@^1.0.0/types";
+export { assert } from "https://deno.land/x/conditional_type_checks@1.0.6/mod.ts";
+export type {
+  IsAny,
+  IsExact,
+} from "https://deno.land/x/conditional_type_checks@1.0.6/mod.ts";
 
-export { toPascalCase } from "jsr:@std/text@^1.0.0";
+export { pascalCase } from "https://deno.land/x/case@v2.1.0/mod.ts";

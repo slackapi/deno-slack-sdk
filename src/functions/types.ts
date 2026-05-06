@@ -1,15 +1,15 @@
-import type { SlackAPIClient } from "../deps.ts";
-import type { Env } from "../types.ts";
-import type {
+import { SlackAPIClient } from "../deps.ts";
+import { Env } from "../types.ts";
+import {
   ManifestFunctionSchema,
   ManifestFunctionType,
 } from "../manifest/manifest_schema.ts";
-import type {
+import {
   ParameterPropertiesDefinition,
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../parameters/types.ts";
-import type {
+import {
   CustomTypeParameterDefinition,
   ParameterDefinition,
   TypedArrayParameterDefinition,
@@ -19,8 +19,8 @@ import type {
 } from "../parameters/definition_types.ts";
 import type SchemaTypes from "../schema/schema_types.ts";
 import type SlackSchemaTypes from "../schema/slack/schema_types.ts";
-import type { SlackManifest } from "../manifest/mod.ts";
-import type {
+import { SlackManifest } from "../manifest/mod.ts";
+import {
   BasicConstraintField,
   BlockActionConstraint,
   BlockActionHandler,
@@ -29,8 +29,8 @@ import type {
   ViewClosedHandler,
   ViewSubmissionHandler,
 } from "./interactivity/types.ts";
-import type { ICustomType } from "../types/types.ts";
-import type {
+import { ICustomType } from "../types/types.ts";
+import {
   IncreaseDepth,
   MaxRecursionDepth,
   RecursionDepthLevel,

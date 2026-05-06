@@ -1,13 +1,13 @@
-import type {
+import {
   ManifestFunctionSchema,
   ManifestFunctionType,
 } from "../../manifest/manifest_schema.ts";
-import type { SlackManifest } from "../../mod.ts";
-import type {
+import { SlackManifest } from "../../mod.ts";
+import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import type {
+import {
   ISlackFunctionDefinition,
   SlackFunctionDefinitionArgs,
 } from "../types.ts";

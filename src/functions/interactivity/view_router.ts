@@ -1,14 +1,11 @@
-import type {
+import {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import type { SlackFunctionDefinition } from "../definitions/mod.ts";
+import { SlackFunctionDefinition } from "../definitions/mod.ts";
 import { UnhandledEventError } from "../unhandled-event-error.ts";
 import { enrichContext } from "../enrich-context.ts";
-import type {
-  FunctionDefinitionArgs,
-  FunctionRuntimeParameters,
-} from "../types.ts";
+import { FunctionDefinitionArgs, FunctionRuntimeParameters } from "../types.ts";
 import {
   matchBasicConstraintField,
   normalizeConstraintToArray,
@@ -21,7 +18,7 @@ import type {
   ViewConstraintObject,
   ViewSubmissionHandler,
 } from "./types.ts";
-import type { View, ViewEvents } from "./view_types.ts";
+import { View, ViewEvents } from "./view_types.ts";
 
 export const ViewsRouter = <
   InputParameters extends ParameterSetDefinition,

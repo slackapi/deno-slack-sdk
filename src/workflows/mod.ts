@@ -1,7 +1,7 @@
-import type { SlackManifest } from "../manifest/mod.ts";
-import type { ManifestWorkflowSchema } from "../manifest/manifest_schema.ts";
-import type { ISlackFunctionDefinition } from "../functions/types.ts";
-import type {
+import { SlackManifest } from "../manifest/mod.ts";
+import { ManifestWorkflowSchema } from "../manifest/manifest_schema.ts";
+import { ISlackFunctionDefinition } from "../functions/types.ts";
+import {
   ParameterSetDefinition,
   ParameterVariableType,
   PossibleParameterKeys,
@@ -10,9 +10,9 @@ import { ParameterVariable } from "../parameters/mod.ts";
 import {
   TypedWorkflowStepDefinition,
   UntypedWorkflowStepDefinition,
-  type WorkflowStepDefinition,
+  WorkflowStepDefinition,
 } from "./workflow-step.ts";
-import type {
+import {
   ISlackWorkflow,
   SlackWorkflowDefinitionArgs,
   WorkflowInputs,

@@ -1,4 +1,4 @@
-import type {
+import {
   ManifestAppDirectorySchema,
   ManifestAppHomeMessagesTabSchema,
   ManifestAppHomeSchema,
@@ -13,10 +13,10 @@ import type {
   ManifestWorkflow,
   ManifestWorkflowStepsSchemaLegacy,
 } from "./manifest_schema.ts";
-import type { OAuth2Provider } from "../providers/oauth2/mod.ts";
-import type { ICustomType } from "../types/types.ts";
-import type { CamelCasedPropertiesDeep } from "./types_util.ts";
-import type { ICustomEvent } from "../events/types.ts";
+import { OAuth2Provider } from "../providers/oauth2/mod.ts";
+import { ICustomType } from "../types/types.ts";
+import { CamelCasedPropertiesDeep } from "./types_util.ts";
+import { ICustomEvent } from "../events/types.ts";
 
 /** Manifest definition.
  *

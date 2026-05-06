@@ -1,11 +1,10 @@
-import type SchemaTypes from "../schema/schema_types.ts";
-import type { ValidSchemaTypes } from "../schema/schema_types.ts";
-import type {
+import SchemaTypes, { ValidSchemaTypes } from "../schema/schema_types.ts";
+import {
   SlackPrimitiveTypes,
   ValidSlackPrimitiveTypes,
 } from "../schema/slack/types/mod.ts";
-import type { LooseStringAutocomplete } from "../type_utils.ts";
-import type { ICustomType } from "../types/types.ts";
+import { LooseStringAutocomplete } from "../type_utils.ts";
+import { ICustomType } from "../types/types.ts";
 
 export type ParameterDefinition = TypedParameterDefinition;
 

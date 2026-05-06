@@ -1,6 +1,6 @@
-import type { SlackManifest } from "../manifest/mod.ts";
-import type { ManifestCustomEventSchema } from "../manifest/manifest_schema.ts";
-import type {
+import { SlackManifest } from "../manifest/mod.ts";
+import { ManifestCustomEventSchema } from "../manifest/manifest_schema.ts";
+import {
   CustomEventDefinition,
   DefineEventSignature,
   ICustomEvent,
