@@ -29,7 +29,7 @@ jobs:
       contents: read
     steps:
       - name: Setup Deno ${{ matrix.deno-version }}
-        uses: denoland/setup-deno@667a34cdef165d8d2b2e98dde39547c9daac7282 # v2.0.4
+        uses: denoland/setup-deno@ff4860f9d7236f320afa0f82b7e6457384805d05 # v2.0.4
         with:
           deno-version: ${{ matrix.deno-version }}
 
