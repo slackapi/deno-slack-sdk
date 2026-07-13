@@ -3,7 +3,7 @@ import type {
   ISlackManifestRunOnSlack,
   SlackManifestType,
 } from "./types.ts";
-import { Manifest, SlackManifest } from "./mod.ts";
+import { Manifest, SlackManifest, validateOutgoingDomains } from "./mod.ts";
 import {
   DefineDatastore,
   DefineEvent,
@@ -26,6 +26,7 @@ import {
 import { DefineConnector } from "../functions/mod.ts";
 import { InternalSlackTypes } from "../schema/slack/types/custom/mod.ts";
 import { DuplicateCallbackIdError, DuplicateNameError } from "./errors.ts";
+import { assertThrows } from "https://deno.land/std@0.152.0/testing/asserts.ts";
 
 Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
   const definition: SlackManifestType = {
@@ -1171,4 +1172,67 @@ Deno.test("Manifest throws error when CustomEvents with duplicate name are added
     assertInstanceOf(error, DuplicateNameError);
     assertStringIncludes(error.message, "CustomEvent");
   }
+});
+
+Deno.test("Manifest correctly parses valid domains", () => {
+  const def = {
+    outgoingDomains: [
+      "https://slack.com",
+      "http://salesforce.com",
+      "https://api.slack.com",
+    ],
+  };
+  const expected = ["slack.com", "salesforce.com", "api.slack.com"];
+
+  const definition: SlackManifestType = {
+    runOnSlack: false,
+    name: "test",
+    description: "description",
+    backgroundColor: "#FFF",
+    longDescription:
+      "The book is a roman à clef, rooted in autobiographical incidents. The story follows its protagonist, Raoul Duke, and his attorney, Dr. Gonzo, as they descend on Las Vegas to chase the American Dream...",
+    displayName: "displayName",
+    icon: "icon.png",
+    botScopes: ["channels:history", "chat:write", "commands"],
+  };
+  const manifest = Manifest(definition);
+
+  manifest.outgoing_domains = validateOutgoingDomains(
+    def.outgoingDomains || [],
+  );
+
+  assertEquals(manifest.outgoing_domains, expected);
+});
+
+Deno.test("Manifest throws error for invalid domains", () => {
+  const def = {
+    outgoingDomains: [
+      "slack",
+      "htt*ps://api.slack.com",
+      "https://api slack.com",
+    ],
+  };
+
+  assertThrows(
+    () => {
+      const definition: SlackManifestType = {
+        runOnSlack: false,
+        name: "test",
+        description: "description",
+        backgroundColor: "#FFF",
+        longDescription:
+          "The book is a roman à clef, rooted in autobiographical incidents. The story follows its protagonist, Raoul Duke, and his attorney, Dr. Gonzo, as they descend on Las Vegas to chase the American Dream...",
+        displayName: "displayName",
+        icon: "icon.png",
+        botScopes: ["channels:history", "chat:write", "commands"],
+      };
+      const manifest = Manifest(definition);
+
+      manifest.outgoing_domains = validateOutgoingDomains(
+        def.outgoingDomains || [],
+      );
+    },
+    Error,
+    "Invalid outgoing domain",
+  );
 });
