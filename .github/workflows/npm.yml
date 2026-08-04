@@ -34,7 +34,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Setup Deno ${{ matrix.deno-version }}
-        uses: denoland/setup-deno@ff4860f9d7236f320afa0f82b7e6457384805d05 # v2.0.4
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.4
         with:
           deno-version: ${{ matrix.deno-version }}
 
