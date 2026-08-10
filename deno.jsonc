@@ -9,15 +9,19 @@
   },
   "publish": {
     "exclude": ["**/*_test.ts", "**/fixtures"],
-    "include": [
-      "README.md",
-      "LICENSE",
-      "deno.jsonc",
-      "src/**"
-    ]
+    "include": ["README.md", "LICENSE", "deno.jsonc", "src/**"]
   },
   "fmt": {
-    "include": ["src", "tests", "docs", "README.md", "scripts", ".github/maintainers_guide.md", ".github/CONTRIBUTING.md"],
+    "include": [
+      "src",
+      "tests",
+      "docs",
+      "README.md",
+      "scripts",
+      ".github/maintainers_guide.md",
+      ".github/CONTRIBUTING.md",
+      "AGENTS.md"
+    ],
     "exclude": ["src/schema/slack/functions/_scripts/functions.json"],
     "semiColons": true,
     "indentWidth": 2,
@@ -28,7 +32,10 @@
   },
   "lint": {
     "include": ["src", "tests", "scripts"],
-    "exclude": ["src/schema/slack/functions/_scripts/functions.json", "**/*.md"],
+    "exclude": [
+      "src/schema/slack/functions/_scripts/functions.json",
+      "**/*.md"
+    ],
     "rules": { "exclude": ["no-import-prefix", "no-slow-types"] }
   },
   "tasks": {
