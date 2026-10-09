@@ -39,6 +39,7 @@ export class SlackManifest {
 
   export() {
     const def = this.definition;
+
     const manifest: ManifestSchema = {
       _metadata: {
         // todo: is there a more idiomatic way of defining this? constant file?
@@ -54,6 +55,7 @@ export class SlackManifest {
       oauth_config: {
         scopes: {
           bot: this.ensureBotScopes(),
+          user: def.userScopes,
         },
       },
       features: {
@@ -275,10 +277,9 @@ export class SlackManifest {
     manifest.app_directory = def.appDirectory;
 
     //OauthConfig
-    manifest.oauth_config.scopes.user = def.userScopes;
     manifest.oauth_config.redirect_urls = def.redirectUrls;
 
-    // Remote-hosted Slack apps manage their own tokens
+    // Remote-hosted Slack apps always manage their own tokens
     manifest.oauth_config.token_management_enabled = true;
 
     // Remote Features
@@ -293,8 +294,8 @@ export class SlackManifest {
   private assignRunOnSlackManifestProperties(manifest: ManifestSchema) {
     const def = this.definition as ISlackManifestRunOnSlack;
 
-    // Run on Slack Apps do not manage access tokens
-    // This is set by default as false
+    // Oauth Config
+    // Run On Slack don't manage their own tokens
     manifest.oauth_config.token_management_enabled = false;
 
     // Required App Settings for run on slack apps
