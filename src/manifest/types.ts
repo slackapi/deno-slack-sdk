@@ -60,26 +60,26 @@ export interface ISlackManifestRemote extends ISlackManifestShared {
   socketModeEnabled?: boolean;
   tokenRotationEnabled?: boolean;
   appDirectory?: ManifestAppDirectorySchema;
-  userScopes?: Array<string>;
   redirectUrls?: Array<string>;
   features?: ISlackManifestRemoteFeaturesSchema;
 }
 
 /* Shared app manifest properties */
 interface ISlackManifestShared {
-  name: string;
   backgroundColor?: string;
+  botScopes: Array<string>;
+  datastores?: ManifestDatastore[];
   description: string;
   displayName?: string;
+  events?: ICustomEvent[];
+  functions?: ManifestFunction[];
   icon: string;
   longDescription?: string;
-  botScopes: Array<string>;
-  functions?: ManifestFunction[];
-  workflows?: ManifestWorkflow[];
+  name: string;
   outgoingDomains?: Array<string>;
-  events?: ICustomEvent[];
   types?: ICustomType[];
-  datastores?: ManifestDatastore[];
+  userScopes?: Array<string>;
+  workflows?: ManifestWorkflow[];
 }
 
 interface ISlackManifestRunOnSlackFeaturesSchema {
