@@ -1,7 +1,7 @@
-import { ICustomType } from "../types/types.ts";
-import { ManifestDatastoreSchema } from "../manifest/manifest_schema.ts";
-import { SlackManifest } from "../manifest/mod.ts";
-import { SlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
+import type { ICustomType } from "../types/types.ts";
+import type { ManifestDatastoreSchema } from "../manifest/manifest_schema.ts";
+import type { SlackManifest } from "../manifest/mod.ts";
+import type { SlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
 import type { ValidSchemaTypes } from "../schema/schema_types.ts";
 import type { ValidSlackPrimitiveTypes } from "../schema/slack/types/mod.ts";
 import type { LooseStringAutocomplete } from "../type_utils.ts";
@@ -27,9 +27,11 @@ export type SlackDatastoreDefinition<
   Name extends string,
   Attributes extends SlackDatastoreAttributes,
   PrimaryKey extends keyof Attributes,
+  TimeToLiveAttribute extends keyof Attributes,
 > = {
   name: Name;
   "primary_key": PrimaryKey;
+  "time_to_live_attribute"?: TimeToLiveAttribute;
   attributes: Attributes;
 };
 

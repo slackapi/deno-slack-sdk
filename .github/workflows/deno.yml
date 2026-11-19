@@ -2,22 +2,33 @@ name: Deno
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   deno:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        deno-version:
+          - v1.x
+          - v2.x
+    permissions:
+      contents: read
     steps:
       - name: Setup repo
-        uses: actions/checkout@v3
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@v1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          deno-version: v1.x
+          persist-credentials: false
+
+      - name: Setup Deno ${{ matrix.deno-version }}
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.4
+        with:
+          deno-version: ${{ matrix.deno-version }}
 
       - name: Run tests
         run: deno task test
@@ -26,6 +37,8 @@ jobs:
         run: deno task coverage
 
       - name: Upload coverage to CodeCov
-        uses: codecov/codecov-action@v3.1.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        if: matrix.deno-version == 'v2.x'
         with:
-          file: ./lcov.info
+          files: ./lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}

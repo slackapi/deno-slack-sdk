@@ -1,6 +1,6 @@
 import { assertEquals } from "../dev_deps.ts";
 import { SlackFunctionTester } from "./tester/mod.ts";
-import { BaseRuntimeSlackFunctionHandler } from "./types.ts";
+import type { BaseRuntimeSlackFunctionHandler } from "./types.ts";
 
 // These tests are to ensure our Function Handler types are supporting the use cases we want to
 // Any "failures" here will most likely be reflected in Type errors

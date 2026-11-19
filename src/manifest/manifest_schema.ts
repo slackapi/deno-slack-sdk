@@ -1,10 +1,11 @@
-import { ISlackDatastore } from "../datastore/types.ts";
-import { ISlackFunctionDefinition } from "../functions/types.ts";
+import type { ISlackDatastore } from "../datastore/types.ts";
+import type { ISlackFunctionDefinition } from "../functions/types.ts";
 import type { ParameterSetDefinition } from "../parameters/types.ts";
 import type { ParameterDefinition } from "../parameters/definition_types.ts";
-import { OAuth2ProviderTypeValues } from "../schema/providers/oauth2/types.ts";
+import type { OAuth2ProviderTypeValues } from "../schema/providers/oauth2/types.ts";
 import type { ICustomType } from "../types/types.ts";
-import { ISlackWorkflow } from "../workflows/types.ts";
+import type { ISlackWorkflow } from "../workflows/types.ts";
+import type { OAuth2ProviderOptions } from "../providers/oauth2/types.ts";
 
 // ----------------------------------------------------------------------------
 // Manifest Schema Types
@@ -272,6 +273,7 @@ export type ManifestCustomTypesSchema = {
 export type ManifestDatastore = ISlackDatastore;
 export type ManifestDatastoreSchema = {
   primary_key: string;
+  time_to_live_attribute?: string;
   attributes: {
     [key: string]: {
       type: string | ICustomType;
@@ -296,10 +298,7 @@ export type ManifestOAuth2Schema = {
 
 export type ManifestOAuth2ProviderSchema = {
   provider_type: OAuth2ProviderTypeValues;
-  options: {
-    // deno-lint-ignore no-explicit-any
-    [key: string]: any;
-  };
+  options: OAuth2ProviderOptions;
 };
 
 export interface ManifestExternalAuthProviders {

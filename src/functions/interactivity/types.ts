@@ -1,14 +1,14 @@
-import {
+import type {
   BaseRuntimeFunctionContext,
   FunctionContextEnrichment,
   FunctionDefinitionArgs,
   FunctionParameters,
   FunctionRuntimeParameters,
 } from "../types.ts";
-import { BlockActionsBody } from "./block_actions_types.ts";
-import { BlockSuggestionBody } from "./block_suggestion_types.ts";
-import { BlockAction } from "./block_kit_types.ts";
-import {
+import type { BlockActionsBody } from "./block_actions_types.ts";
+import type { BlockSuggestionBody } from "./block_suggestion_types.ts";
+import type { BlockAction } from "./block_kit_types.ts";
+import type {
   View,
   ViewClosedBody,
   ViewEvents,

@@ -1,15 +1,15 @@
 import { DefineProperty } from "../../../src/parameters/define_property.ts";
 import { ParameterVariable } from "../../../src/parameters/mod.ts";
-import { SingleParameterVariable } from "../../../src/parameters/types.ts";
+import type { SingleParameterVariable } from "../../../src/parameters/types.ts";
 import { DefineType } from "../../../src/types/mod.ts";
 import SchemaTypes from "../../../src/schema/schema_types.ts";
 import {
   assert,
   assertStrictEquals,
-  IsAny,
-  IsExact,
+  type IsAny,
+  type IsExact,
 } from "../../../src/dev_deps.ts";
-import { CannotBeUndefined } from "../../../src/test_utils.ts";
+import type { CannotBeUndefined } from "../../../src/test_utils.ts";
 /**
  * Typed Object required/optional property definitions should never yield undefined ParameterVariable properties
  */

@@ -1,5 +1,5 @@
 import { SlackAPI } from "../deps.ts";
-import {
+import type {
   BaseRuntimeFunctionContext,
   FunctionContextEnrichment,
 } from "./types.ts";

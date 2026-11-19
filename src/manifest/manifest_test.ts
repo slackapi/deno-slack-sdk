@@ -1,4 +1,4 @@
-import {
+import type {
   ISlackManifestRemote,
   ISlackManifestRunOnSlack,
   SlackManifestType,
@@ -8,7 +8,6 @@ import {
   DefineDatastore,
   DefineEvent,
   DefineFunction,
-  DefineOAuth2Provider,
   DefineType,
   DefineWorkflow,
   Schema,
@@ -16,13 +15,17 @@ import {
 import {
   assert,
   assertEquals,
+  assertInstanceOf,
+  AssertionError,
   assertStrictEquals,
   assertStringIncludes,
-  IsExact,
+  fail,
+  type IsExact,
   mock,
 } from "../dev_deps.ts";
 import { DefineConnector } from "../functions/mod.ts";
 import { InternalSlackTypes } from "../schema/slack/types/custom/mod.ts";
+import { DuplicateCallbackIdError, DuplicateNameError } from "./errors.ts";
 
 Deno.test("SlackManifestType correctly resolves to a Hosted App when runOnSlack = true", () => {
   const definition: SlackManifestType = {
@@ -956,67 +959,6 @@ Deno.test("SlackManifest.export() allows overriding app home features", () => {
   );
 });
 
-Deno.test("SlackManifest() oauth2 providers get set properly", () => {
-  const providerKey = "test_provider";
-
-  const Provider = DefineOAuth2Provider({
-    provider_key: providerKey,
-    provider_type: Schema.providers.oauth2.CUSTOM,
-    options: {
-      "client_id": "123.456",
-      "scope": ["scope_a", "scope_b"],
-    },
-  });
-
-  const definition: SlackManifestType = {
-    name: "Name",
-    description: "Description",
-    icon: "icon.png",
-    botScopes: [],
-    externalAuthProviders: [Provider],
-  };
-
-  const Manifest = new SlackManifest(definition);
-  const exportedManifest = Manifest.export();
-  assertEquals(definition.externalAuthProviders, [Provider]);
-  assertEquals(exportedManifest.external_auth_providers, {
-    "oauth2": { "test_provider": Provider.export() },
-  });
-});
-
-Deno.test("SlackManifest() oauth2 providers are undefined when not configured", () => {
-  const definition: SlackManifestType = {
-    name: "Name",
-    description: "Description",
-    icon: "icon.png",
-    botScopes: [],
-  };
-
-  const Manifest = new SlackManifest(definition);
-
-  const exportedManifest = Manifest.export();
-
-  assertEquals(definition.externalAuthProviders, undefined);
-  assertEquals(exportedManifest.external_auth_providers, undefined);
-});
-
-Deno.test("SlackManifest() oauth2 providers are undefined when set to the empty array", () => {
-  const definition: SlackManifestType = {
-    name: "Name",
-    description: "Description",
-    icon: "icon.png",
-    botScopes: [],
-    externalAuthProviders: [],
-  };
-
-  const Manifest = new SlackManifest(definition);
-
-  const exportedManifest = Manifest.export();
-
-  assertEquals(definition.externalAuthProviders, []);
-  assertEquals(exportedManifest.external_auth_providers, undefined);
-});
-
 Deno.test("Manifest supports multiple workflows with parameters", () => {
   const workflow1 = DefineWorkflow({
     callback_id: "test",
@@ -1094,4 +1036,159 @@ Deno.test("Manifest() does not register connectors used by workflows", () => {
     [Workflow.id]: Workflow.export(),
   });
   assertEquals(manifest.functions, {});
+});
+
+Deno.test("Manifest throws error when workflows with duplicate callback_id are added", () => {
+  const workflow1 = DefineWorkflow({
+    callback_id: "test",
+    title: "workflow1",
+    input_parameters: {
+      properties: {},
+      required: [],
+    },
+  });
+
+  const workflow2 = DefineWorkflow({
+    callback_id: "test",
+    title: "workflow2",
+    input_parameters: {
+      properties: {},
+      required: [],
+    },
+  });
+
+  try {
+    Manifest({
+      name: "Name",
+      description: "Description",
+      botScopes: [],
+      icon: "icon.png",
+      workflows: [workflow1, workflow2],
+    });
+    fail("Manifest() should have thrown an error");
+  } catch (error) {
+    if (error instanceof AssertionError) throw error;
+    assertInstanceOf(error, DuplicateCallbackIdError);
+    assertStringIncludes(error.message, "Workflow");
+  }
+});
+
+Deno.test("Manifest throws error when functions with duplicate callback_id are added", () => {
+  const function1 = DefineFunction({
+    callback_id: "test",
+    title: "function1",
+    source_file: `functions/test.ts`,
+  });
+
+  const function2 = DefineFunction({
+    callback_id: "test",
+    title: "function2",
+    source_file: `functions/test.ts`,
+  });
+
+  try {
+    Manifest({
+      name: "Name",
+      description: "Description",
+      botScopes: [],
+      icon: "icon.png",
+      functions: [function1, function2],
+    });
+    fail("Manifest() should have thrown an error");
+  } catch (error) {
+    if (error instanceof AssertionError) throw error;
+    assertInstanceOf(error, DuplicateCallbackIdError);
+    assertStringIncludes(error.message, "Function");
+  }
+});
+
+Deno.test("Manifest throws error when customType with duplicate name are added", () => {
+  const customType1 = DefineType({
+    name: "customType",
+    type: Schema.types.string,
+  });
+
+  const customType2 = DefineType({
+    name: "customType",
+    type: Schema.types.string,
+  });
+
+  try {
+    Manifest({
+      name: "Name",
+      description: "Description",
+      botScopes: [],
+      icon: "icon.png",
+      types: [customType1, customType2],
+    });
+    fail("Manifest() should have thrown an error");
+  } catch (error) {
+    if (error instanceof AssertionError) throw error;
+    assertInstanceOf(error, DuplicateNameError);
+    assertStringIncludes(error.message, "CustomType");
+  }
+});
+
+Deno.test("Manifest throws error when Datastores with duplicate name are added", () => {
+  const datastore1 = DefineDatastore({
+    name: "Test store",
+    attributes: {
+      datastore1: { type: "string" },
+    },
+    primary_key: "datastore1",
+  });
+
+  const datastore2 = DefineDatastore({
+    name: "Test store",
+    attributes: {
+      datastore2: { type: "string" },
+    },
+    primary_key: "datastore2",
+  });
+
+  try {
+    Manifest({
+      name: "Name",
+      description: "Description",
+      botScopes: [],
+      icon: "icon.png",
+      datastores: [datastore1, datastore2],
+    });
+    fail("Manifest() should have thrown an error");
+  } catch (error) {
+    if (error instanceof AssertionError) throw error;
+    assertInstanceOf(error, DuplicateNameError);
+    assertStringIncludes(error.message, "Datastore");
+  }
+});
+
+Deno.test("Manifest throws error when CustomEvents with duplicate name are added", () => {
+  const customEvent1 = DefineEvent({
+    name: "test",
+    title: "customEvent1",
+    type: Schema.types.object,
+    properties: {},
+  });
+
+  const customEvent2 = DefineEvent({
+    name: "test",
+    title: "customEvent2",
+    type: Schema.types.object,
+    properties: {},
+  });
+
+  try {
+    Manifest({
+      name: "Name",
+      description: "Description",
+      botScopes: [],
+      icon: "icon.png",
+      events: [customEvent1, customEvent2],
+    });
+    fail("Manifest() should have thrown an error");
+  } catch (error) {
+    if (error instanceof AssertionError) throw error;
+    assertInstanceOf(error, DuplicateNameError);
+    assertStringIncludes(error.message, "CustomEvent");
+  }
 });

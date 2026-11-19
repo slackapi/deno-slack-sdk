@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(deno check:*)",
+      "Bash(deno coverage:*)",
+      "Bash(deno fmt:*)",
+      "Bash(deno info:*)",
+      "Bash(deno lint:*)",
+      "Bash(deno run:*)",
+      "Bash(deno task:*)",
+      "Bash(deno test:*)",
+      "Bash(echo:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh label list:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr status:*)",
+      "Bash(gh pr update-branch:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh search code:*)",
+      "Bash(git diff:*)",
+      "Bash(git grep:*)",
+      "Bash(git log:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(git show:*)",
+      "Bash(git status:*)",
+      "Bash(grep:*)",
+      "Bash(head:*)",
+      "Bash(jq:*)",
+      "Bash(ls:*)",
+      "WebFetch(domain:docs.slack.dev)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:npmjs.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ]
+  }
+}

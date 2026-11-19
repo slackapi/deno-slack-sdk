@@ -4,48 +4,42 @@
 name: Build & Deploy to NPM
 
 on:
-  push:    
-    tags:        
-      - '*.*.*'
-    
+  push:
+    tags:
+      - "*.*.*"
 
 jobs:
-
   build:
     runs-on: macos-latest
-    
+    permissions:
+      contents: read
     steps:
       - name: Actions checkout
-        uses: actions/checkout@v3
-      
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: latest
           registry-url: https://registry.npmjs.org/
-          
+
       - name: Setup Deno
-        uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.4
         with:
-          deno-version: v1.x
+          deno-version: v2.x
 
       - name: Get the tag name
         id: get_tag_name
-        run: echo ::set-output name=TAG::${GITHUB_REF#refs/*/}
-        
+        run: echo "TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
       - name: Run build_npm.ts
-        run: deno run -A scripts/build_npm.ts ${{steps.get_tag_name.outputs.TAG}}
-        
-      - name: Publish to NPM    
+        run: deno run -A scripts/build_npm.ts "$TAG"
+        env:
+          TAG: ${{steps.get_tag_name.outputs.TAG}}
+
+      - name: Publish to NPM
         run: cd npm && npm publish --access=public
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}                 
-      
-        
-         
-    
-    
-
-      
-
-
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

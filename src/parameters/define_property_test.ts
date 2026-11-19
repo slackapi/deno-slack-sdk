@@ -1,6 +1,6 @@
 import { DefineProperty } from "./define_property.ts";
 import SchemaTypes from "../schema/schema_types.ts";
-import { assert, IsExact } from "../dev_deps.ts";
+import { assert, type IsExact } from "../dev_deps.ts";
 
 Deno.test("DefineProperty should allow for object property names to be specified in the required field", () => {
   const obj = DefineProperty({

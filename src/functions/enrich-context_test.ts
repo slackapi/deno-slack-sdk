@@ -1,6 +1,6 @@
 import { assertExists } from "../dev_deps.ts";
 import { enrichContext } from "./enrich-context.ts";
-import { BaseRuntimeFunctionContext } from "./types.ts";
+import type { BaseRuntimeFunctionContext } from "./types.ts";
 
 Deno.test("enrichContext with no env.SLACK_API_URL", () => {
   // deno-lint-ignore no-explicit-any

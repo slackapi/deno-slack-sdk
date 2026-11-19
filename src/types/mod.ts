@@ -1,8 +1,8 @@
-import { SlackManifest } from "../manifest/mod.ts";
-import { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
-import { CustomTypeDefinition, ICustomType } from "./types.ts";
+import type { SlackManifest } from "../manifest/mod.ts";
+import type { ManifestCustomTypeSchema } from "../manifest/manifest_schema.ts";
+import type { CustomTypeDefinition, ICustomType } from "./types.ts";
 import { isTypedArray, isTypedObject } from "../parameters/mod.ts";
-import {
+import type {
   TypedObjectProperties,
   TypedObjectRequiredProperties,
 } from "../parameters/definition_types.ts";

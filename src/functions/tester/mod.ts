@@ -1,11 +1,11 @@
 import { SlackAPI } from "../../deps.ts";
-import {
+import type {
   ParameterSetDefinition,
   PossibleParameterKeys,
 } from "../../parameters/types.ts";
-import { SlackFunctionDefinition } from "../definitions/mod.ts";
+import type { SlackFunctionDefinition } from "../definitions/mod.ts";
 import type { FunctionRuntimeParameters } from "../types.ts";
-import {
+import type {
   CreateFunctionContext,
   SlackFunctionTesterSignature,
 } from "./types.ts";

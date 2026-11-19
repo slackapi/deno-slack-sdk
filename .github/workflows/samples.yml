@@ -3,14 +3,17 @@ name: Samples Integration Type-checking
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   samples:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         sample:
           - slack-samples/deno-issue-submission
@@ -19,30 +22,37 @@ jobs:
           - slack-samples/deno-message-translator
           - slack-samples/deno-request-time-off
           - slack-samples/deno-simple-survey
-
+        deno-version:
+          - v1.x
+          - v2.x
+    permissions:
+      contents: read
     steps:
-      - name: Setup Deno
-        uses: denoland/setup-deno@v1
+      - name: Setup Deno ${{ matrix.deno-version }}
+        uses: denoland/setup-deno@22d081ff2d3a40755e97629de92e3bcbfa7cf2ed # v2.0.4
         with:
-          deno-version: v1.x
+          deno-version: ${{ matrix.deno-version }}
 
       - name: Checkout the sdk
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: ./deno-slack-sdk
+          persist-credentials: false
+
       - name: Checkout the ${{ matrix.sample }} sample
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: ${{ matrix.sample }}
           path: ./sample
+          persist-credentials: false
 
-      - name: Set imports.deno-slack-sdk/ to ../deno-slack-sdk/src/ in import_map.json
-        run: > 
+      - name: Set imports.deno-slack-sdk/ to ../deno-slack-sdk/src/ in imports
+        run: >
           deno run
           --allow-read --allow-write 
-          deno-slack-sdk/scripts/import_map/update.ts 
-          --import-map "./sample/import_map.json"
-          --sdk "../deno-slack-sdk/src/"
+          deno-slack-sdk/scripts/imports/update.ts 
+          --import-file "./sample/deno.jsonc"
+          --sdk "./deno-slack-sdk/"
 
       - name: Deno check **/*.ts
         working-directory: ./sample
